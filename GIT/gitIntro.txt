@@ -9,3 +9,57 @@ https://www.cnblogs.com/EasonWu/archive/2012/11/27/git-windows-setup-by-cygwin.h
 3.2 pro git
 3.3  git blog
 http://blog.51cto.com/fsjoy/244397
+
+
+4.common command
+
+4.1 精简的日志信息，可以使用
+git log –pretty=oneline 指令
+$ git log --pretty=oneline
+320ae781d7642c4496f13d6002680126e59bd914 (HEAD -> master, origin/master) rename gitIntro1.txt
+f9456b1ec8df97b2d54102d806eb7f6c8107cc9b delete test dir
+e226a62673cd7e47fb715616d5f2a0377c5ddc72 Create test.txt
+ec2fe5427f1ae421d7d63d044304ce8c3c5ede7d Add files via upload
+bc479cd51f9c4da18889da488eccfb91d63a2b1f Delete Pro Git 2 中文版.pdf
+3274bede5d1bb27fcc7e45b77aefd33d11ed0b17 Delete github-git-cheat-sheet.pdf
+de075f40b96b26644ba5851e26e1c026bcbb93c9 Rename gitIntro.txt to gitIntro1.txt
+489d38c36d45e5ec12fa30a5d23dd2e6d13b3142 git introduction
+1aedb487c6dfbeb69bb749ede84f4569c4cb6821 Update git
+f451c0eabf2ab6b9afc47c21949d48b7d503b13f add git cheet sheet
+cc9ab73258c554f2c60399e4dedea6c56a0d695d Add git reference book
+de637c04a970af7aeb86c7364523ffbb5e0665e6 git introduction
+b123b2c8f9c681cdf82defeb01894429db21c5c1 gitSummary.txt
+9e1f7c8667fb1e9651c271d897eb3b2e4775e319 Initial commit
+
+4.2 查看当前的branch上最后一个commit记录
+$ git branch -vv
+* master 320ae78 rename gitIntro1.txt
+
+4.3 reflog 指令获得每次提交的版本号
+$ git reflog
+320ae78 (HEAD -> master, origin/master) HEAD@{0}: commit: rename gitIntro1.txt
+f9456b1 HEAD@{1}: commit: delete test dir
+e226a62 HEAD@{2}: pull: Fast-forward
+489d38c HEAD@{3}: clone: from https://github.com/kuailedeguisu/basicKnowledgeSummary.git
+
+git reset –hard 版本号 ，回退到任意一次提交状态
+
+4.4 commands step to step
+
+4.4.1 git clone url
+
+4.4.2 add filename into index
+touch filename
+modify filename
+git add filename
+git status
+
+4.4.3 commit code into HEAD
+git commit -m "Commit for filename"
+
+4.4.4 push code into remote location(github)
+git remote -v
+git push origin master
+
+4.4.5 将远端的改动copy到本地
+git pull
