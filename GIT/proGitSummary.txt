@@ -35,3 +35,24 @@ Git 项目的三个工作区域的概念：Git 仓库、工作目录以及暂存
 2. 暂存文件，将文件的快照放入暂存区域。
 3. 提交更新，找到暂存区域的文件，将快照永久性存储到 Git 仓库目录。
 
+git config file:
+1. /etc/gitconfig 文件: 包含系统上每一个用户及他们仓库的通用配置。 如果使用带有 --system 选项的
+git config 时，它会从此文件读写配置变量。
+2. ~/.gitconfig 或 ~/.config/git/config 文件：只针对当前用户。 可以传递 --global 选项让 Git
+读写此文件。
+3. 当前使用仓库的 Git 目录中的 config 文件（就是 .git/config）：针对该仓库。
+
+每一个级别覆盖上一级别的配置，所以 .git/config 的配置变量会覆盖 /etc/gitconfig 中的配置变量。
+
+--global只需要配置一次
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+
+查看当前的配置
+git config --list
+
+git help（不用联网就可以）
+$ git help <verb>
+$ git <verb> --help
+$ man git-<verb>
+
