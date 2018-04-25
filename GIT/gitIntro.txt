@@ -51,7 +51,7 @@ git reset –hard 版本号 ，回退到任意一次提交状态
 4.4.2 add filename into index
 touch filename
 modify filename
-git add filename
+git add filename(git add . 添加工作区内所有文件 )
 git status
 
 4.4.3 commit code into HEAD
@@ -59,7 +59,37 @@ git commit -m "Commit for filename"
 
 4.4.4 push code into remote location(github)
 git remote -v
-git push origin master
+
+将本地的仓库关联到github上
+git remote add origin https:// http://7881188.cn/自己的仓库url地址
+
+如果push failed，
+github上有一个README.md 文件没有下载下来 。我们得先
+git pull --rebase origin master
+
+上传代码到github远程仓库
+git push -u origin master
+
 
 4.4.5 将远端的改动copy到本地
 git pull
+
+4.4.6 
+
+git init 当前的目录变成可以管理的git仓库，生成隐藏.git文件。
+git add XX 把xx文件添加到暂存区去（XX可以使 单独的一个 . 表示添加工作区所有文件）
+git commit –m “XX” 提交文件 XX是这次提交的注释。
+git status 查看仓库状态
+git diff XX 查看XX文件修改了那些内容
+git log 查看历史记录
+git reset –hard HEAD^ 或者 git reset –hard HEAD~ 回退到上一个版本
+(如果想回退到100个版本，使用git reset –hard HEAD~100 )
+git reflog 查看历史记录的版本号
+git checkout – XX 把XX文件在工作区的修改全部撤销。
+git rm XX 删除XX文件
+git remote add origin https://github.com/用户id/远程仓库名.git 关联一个远程库
+git push –u(第一次要用-u 以后不需要) origin master 把当前master分支推送到远程库
+git clone https://github.com/用户id/远程仓库名.git 从远程库中克隆到本地
+
+refer to
+https://blog.csdn.net/chengzi_comm/article/details/51673802
