@@ -42,7 +42,9 @@ f9456b1 HEAD@{1}: commit: delete test dir
 e226a62 HEAD@{2}: pull: Fast-forward
 489d38c HEAD@{3}: clone: from https://github.com/kuailedeguisu/basicKnowledgeSummary.git
 
-git reset –hard 版本号 ，回退到任意一次提交状态
+
+
+log 与 reflog 的区别：可以看到 log 只能查看 commit（提交）记录，并不是所有记录，而 reflog 指令可以查看版本库的任何记录，包括回退记录
 
 4.4 commands step to step
 
@@ -72,10 +74,47 @@ git push -u origin master
 
 
 4.4.5 将远端的改动copy到本地
-git pull
+git pull origin master
 
-4.4.6 
+4.4.6 返回之前的状态
+在 commit 之前，想要返回之前的状态，可以使用checkout指令
+git checkout -- filename
 
+在commit之后，想要返回之前的状态，可以使用reset命令
+git reset –hard 版本号 ，回退到任意一次提交状态
+
+4.4.7  example for git pull and git push
+$ git remote -v
+origin  https://github.com/kuailedeguisu/basicKnowledgeSummary.git (fetch)
+origin  https://github.com/kuailedeguisu/basicKnowledgeSummary.git (push)
+
+HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+$ git pull origin master
+From https://github.com/kuailedeguisu/basicKnowledgeSummary
+ * branch            master     -> FETCH_HEAD
+Merge made by the 'recursive' strategy.
+ GIT/gitIntro.txt | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
+
+HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+$ git push -u origin master
+Username for 'https://github.com':
+Password for 'https://kuailedeguisu@github.com':
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 663 bytes | 165.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0)
+To https://github.com/kuailedeguisu/basicKnowledgeSummary.git
+   2097c25..fd074d9  master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+$
+
+
+
+更多命令请参看如下：
 git init 当前的目录变成可以管理的git仓库，生成隐藏.git文件。
 git add XX 把xx文件添加到暂存区去（XX可以使 单独的一个 . 表示添加工作区所有文件）
 git commit –m “XX” 提交文件 XX是这次提交的注释。
