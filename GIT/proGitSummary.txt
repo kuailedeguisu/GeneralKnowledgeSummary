@@ -91,4 +91,8 @@ M  test.txt
 ?? test1.txt
 
 
+git diff
+git diff 将通过文件补丁的格式显示具体哪些行发生了改变
+git diff
+
 
