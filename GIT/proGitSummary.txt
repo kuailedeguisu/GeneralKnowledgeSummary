@@ -67,7 +67,7 @@ Untracked files:(after echo or touch command to create one new file in local mac
 Changes to be committed:(after git add)
 Changes not staged for commit:(after modifing one file)
 
-git status
+git status查看状态
 git status -s(--short)
 
 $ git status -s
@@ -91,8 +91,73 @@ M  test.txt
 ?? test1.txt
 
 
-git diff
+git diff 查看变化
 git diff 将通过文件补丁的格式显示具体哪些行发生了改变
-git diff
+要查看尚未暂存的文件更新了哪些部分，不加参数直接输入 git diff, 工作目录中当前文件和暂存区域快照之间的差异
+若要查看已暂存的将要添加到下次提交里的内容，可以用 git diff --cached 命令或者git diff --staged
+
+也可以选择difftool来看
+git difftool
+
+git commit 提交
+确认所有需要的改动都暂存起来了，git status,如果有些文件没有暂存，只提交已经暂存的部分，其他的还会留在本地
+git commit -m "comments"
+git commit -a(包含git add操作)
+git commit -a -m 'added new benchmarks'
+
+git rm 删除文件
+git rm filename
+要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（确切地说，是从暂存区域移除），然后提交。(未跟踪列表中就不会有这个文件)
+如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f（译注：即 force 的首字母）。 
+git rm -f filename
+
+git mv 重命名文件
+git mv file_from file_to
+
+git log 查看提交历史
+默认不用任何参数的话，git log 会按提交时间列出所有的更新，最近的更新排在最上面
+git log -p(用来显示每次提交的内容差异)
+git log --stat(查看每次commit的简略信息)
+--stat 选项在每次提交的下面列出额所有被修改过的文件、有多少文件倍修改了以及被修改
+过的文件的哪些行被移除或是添加了。 在每次提交的最后还有一个总结
+git log --pretty=oneline（oneline 将每个提交放在一行显示，查看的提交数很大时非常有用）（short，full 和 fuller）
+git log --pretty=format
+git log --pretty=format 常用的选项
+选项 说明
+%H提交对象（commit）的完整哈希字串
+%h提交对象的简短哈希字串
+%T树对象（tree）的完整哈希字串
+%t树对象的简短哈希字串
+%P父对象（parent）的完整哈希字串
+%p父对象的简短哈希字串
+%an作者（author）的名字
+%ae作者的电子邮件地址
+%ad作者修订日期（可以用 --date= 选项定制格式）
+%ar作者修订日期，按多久以前的方式显示
+%cn提交者(committer)的名字
+%ce提交者的电子邮件地址
+%cd提交日期
+%cr提交日期，按多久以前的方式显示
+%s提交说明
+作者：修改code的人，提交者：最后合代码进git的人
+git log --graph(当oneline 或 format 与另一个 log 选项 --graph 结合使用时尤其有用。 这个选项添加了一些ASCII字符串来
+形象地展示你的分支、合并历史)
+
+git log 的常用选项
+选项 说明
+-p按补丁格式显示每个更新之间的差异。
+--stat显示每次更新的文件修改统计信息。
+--shortstat只显示 --stat 中最后的行数修改添加移除统计。
+--name-only仅在提交信息后显示已修改的文件清单。
+--name-status显示新增、修改、删除的文件清单。
+--abbrev-commit仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。
+--relative-date使用较短的相对时间显示（比如，“2 weeks ago”）。
+--graph显示 ASCII 图形表示的分支合并历史。
+--pretty使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和
+format（后跟指定格式）。
+
+
+
+
 
 
