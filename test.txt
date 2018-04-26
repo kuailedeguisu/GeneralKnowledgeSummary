@@ -1,1 +1,2 @@
 test for git status -s
+test for git status -s
