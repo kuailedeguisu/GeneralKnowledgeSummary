@@ -1,1 +1,2 @@
 This is for master branch git summary.
+This is for fast branch git summary to version two.
