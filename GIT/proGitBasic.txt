@@ -206,7 +206,50 @@ git clone 命令会自动设置本地 master 分支跟踪克隆的远程仓库�
 
 git push 推送到远程仓库
 git push [remote-name] [branch-name]
-git push origin master
+git push origin master(当git push 失败，我们需要先用git pull将远端的改动合并到本地)
+
+查看远程仓库
+git remote show origin
+
+远程仓库的移除与重命名
+git remote rename repo_from repo_to
+git remote rm repo_name
+
+打标签：
+Git 使用两种主要类型的标签：轻量标签（lightweight）与附注标签（annotated）
+一个轻量标签很像一个不会改变的分支 - 它只是一个特定提交的引用。
+然而，附注标签是存储在 Git 数据库中的一个完整对象。 它们是可以被校验的；其中包含打标签者的名字、电子
+邮件地址、日期时间；还有一个标签信息；并且可以使用  GNU  Privacy  Guard  （GPG）签名与验证。
+通常建议创建附注标签，这样你可以拥有以上所有信息；但是如果你只是想用一个临时的标签，或者因为某些原
+因不想要保存那些信息，轻量标签也是可用的。
+创建附注标签:
+git tag -a V1.0 -m "Version 1.0"
+查看特定标签的信息：
+git show V1.0(标签信息与对应的提交信息)
+创建轻量标签，不需要使用 -a、-s 或 -m 选项，只需要提供标签名字：
+git tag V1.1
+后期打标签
+git tag -a V1.2 commitId
+
+共享标签
+默认情况下，git push 命令并不会传送标签到远程仓库服务器上。 在创建完标签后你必须显式地推送标签到
+共享服务器上。 这个过程就像共享远程分支一样 - 你可以运行 git push origin [tagname]
+
+git 别名
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.ci commit
+$ git config --global alias.st status
+$ git config --global alias.last 'log -1 HEAD'
+$ git config --global alias.unstage 'reset HEAD --'
+可以将这些添加到这个repo的上一级目录下的.bashrc文件中，重新打开bash就可以生效（这样.bashrc可以各个repo公用）
+这里的--global可以换成--system（区别是什么？）
+
+git co
+git br
+git ci
+git st
+
 
 
 
