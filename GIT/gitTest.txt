@@ -1,1 +1,1 @@
-This is for git summary.
+This is for fast branch git summary.
