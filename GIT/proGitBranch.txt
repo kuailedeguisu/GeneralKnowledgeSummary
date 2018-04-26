@@ -1,1 +1,40 @@
 This is for summary git branch
+
+git branch testing(创建branch testing)
+git branch（查看当前branch）
+git checkout testing（切换branch从master到testing）
+touch test.txt
+git add .
+git commit -m "***"（branch testing上的改动commit到local repo中）
+
+git checkout master(切换branch从testing到master)
+git merge testing（合并branch testing到branch master）
+git push origin master（将master上的改动push到remote repo）
+git branch -d testing(删除不用的branch testing)
+
+if branch master and branch testing both modify test.txt and committed to the local repo, when merging testing modification to master branch,it will have the conflict.We need fix the conflict manually.
+$ git merge fast(都在本地的git 版本库中，没有和远端的git版本库交互)
+Auto-merging GIT/gitTest.txt
+CONFLICT (content): Merge conflict in GIT/gitTest.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ git diff master fast
+diff --git a/GIT/gitTest.txt b/GIT/gitTest.txt
+index 9d0fcb3..1dceff1 100644
+--- a/GIT/gitTest.txt
++++ b/GIT/gitTest.txt
+@@ -1 +1 @@
+-This is for master branch git summary.
++This is for fast branch git summary to version two.
+
+查看各个分支最近的一次commit
+git branch -v
+git branch --merged(查看已经merged的branch)
+git branch --no-merged（产看没有merged的branch，如果不需要merge，删除这个branch用git branch -D branchname）
+
+“origin” 并无特殊含义
+远程仓库名字 “origin” 与分支名字 “master” 一样，在 Git 中并没有任何特别的含义一
+样。 同时 “master” 是当你运行 git init 时默认的起始分支名字，原因仅仅是它的广泛
+使用，“origin” 是当你运行 git clone 时默认的远程仓库名字。 如果你运行 git clone
+-o booyah，那么你默认的远程分支名字将会是 booyah/master。
+
