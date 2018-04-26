@@ -155,6 +155,47 @@ git log 的常用选项
 --graph显示 ASCII 图形表示的分支合并历史。
 --pretty使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和
 format（后跟指定格式）。
+-n(从最近时间开始的n条commit记录，git log有分页机制，可以不用这个选项)
+--since(git log --since=1.hour)
+--until
+--author
+--grep
+--all-match(如果多个选项同时满足，需要加--all-match)
+-S 筛选选项是 -S，可以列出那些添加或移除了某些字符串的提交
+
+ 限制 git log 输出的选项
+选项 说明
+-(n)仅显示最近的 n 条提交
+--since, --after 仅显示指定时间之后的提交。
+--until, --before 仅显示指定时间之前的提交。
+--author仅显示指定作者相关的提交。
+--committer仅显示指定提交者相关的提交。
+--grep仅显示含指定关键字的提交
+-S仅显示添加或移除了某个关键字的提交
+
+git commit --amend(修改最后一次commit中的commit message，在git log中查看会覆盖原来的commit记录)
+这个命令会将暂存区中的文件提交。  如果自上次提交以来你还未做任何修改（例如，在上次提交后马上执行了
+此命令），那么快照会保持不变，而你所修改的只是提交信息。
+
+git reset取消已经在暂存区域中的文件
+git reset --hard HEAD（修改暂存区域与工作目录）
+git reset(只会修改暂存区域)
+
+git checkout撤销在工作目录中的修改，回到上次提交时的状态
+git checkout -- filename
+ git checkout -- [file] 是一个危险的命令，这很重要。 你对那个
+文件做的任何修改都会消失 - 你只是拷贝了另一个文件来覆盖它。 除非你确实清楚不
+想要那个文件了，否则不要使用这个命令。
+在 Git 中任何 已提交的 东西几乎总是可以恢复的。 甚至那些被删除的分支中的提交或使用 --amend 选
+项覆盖的提交也可以恢复（阅读 数据恢复 了解数据恢复）。 然而，任何你未提交的东西丢失后很可能再也找不
+到了。
+
+
+远程仓库
+git remote查看远程仓库
+git remote 它会列出你指定的每一个远程服务器的简写
+git remote -v 选项 -v，会显示需要读写远程仓库使用的 Git 保存的简写与其对应的 URL。
+
 
 
 
