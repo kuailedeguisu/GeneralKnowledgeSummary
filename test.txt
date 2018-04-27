@@ -1,3 +1,9 @@
-test for git status -s
-test for git status -s
-test for git diff
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	cout << "Hello World!" << endl;
+	return 0;
+}
