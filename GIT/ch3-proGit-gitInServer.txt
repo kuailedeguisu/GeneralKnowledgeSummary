@@ -13,4 +13,10 @@ git remote add local_proj /opt/git/project.git
 存你的代码在其他服务器，且某些组织不允许此作法。  这将直接了当的决定哪个作法或组合的方式较适合你或
 你的组织。
 
+如果你在push code到remote repo时，提示rejected
+原因是有人已经push code到remote repo，需要你
+git fetch origin
+git merge origin/master
+
+
 
