@@ -82,10 +82,10 @@ $ git status -s
  M test.txt
 ?? test1.txt
 
-HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+
 $ git add test.txt
 
-HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+
 $ git status -s
 M  test.txt
 ?? test1.txt
