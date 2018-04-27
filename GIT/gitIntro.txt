@@ -96,7 +96,7 @@ Merge made by the 'recursive' strategy.
  GIT/gitIntro.txt | 34 ++++++++++++++++++++++++++++++++--
  1 file changed, 32 insertions(+), 2 deletions(-)
 
-HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+
 $ git push -u origin master
 Username for 'https://github.com':
 Password for 'https://kuailedeguisu@github.com':
@@ -109,7 +109,7 @@ To https://github.com/kuailedeguisu/basicKnowledgeSummary.git
    2097c25..fd074d9  master -> master
 Branch 'master' set up to track remote branch 'master' from 'origin'.
 
-HCL@LP-2Q2ZKC2 ~/basicKnowledgeSummary
+
 $
 
 
