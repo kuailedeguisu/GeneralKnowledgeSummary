@@ -1,0 +1,36 @@
+git log 
+git show SHA-1(查看某次commit的详细信息，包括具体改动)
+git log --abbrev-commit --pretty=oneline（SHA-1默认7位，但是为了避免SHA-1歧义，有时是8到10位）
+
+git show branchname(显示branchname上最新的一次改动内容)
+git log -1 branchname(同上)
+
+git rev-parse branchname(显示branchname最新一次commit的SHA-1)
+
+git reflog当你在工作时， Git 会在后台保存一个引用日志(reflog)，引用日志记录了最近几个月你的 HEAD 和分支引用所指向的历史。
+$ git reflog
+51d72fb (HEAD -> featureA, origin/featureA) HEAD@{0}: commit: commit for testForFA in branch featureA
+80c76fb (master) HEAD@{1}: checkout: moving from featureB to featureA
+f8b3846 (origin/featureB, featureB) HEAD@{2}: commit: Commit featureB testForB
+80c76fb (master) HEAD@{3}: checkout: moving from featureA to featureB
+80c76fb (master) HEAD@{4}: checkout: moving from master to featureA
+80c76fb (master) HEAD@{5}: commit (initial): commit for feature A
+
+git show HEAD@{5}查看仓库中 HEAD 在五次前的所指向的提交
+$ git show HEAD@{5}
+commit 80c76fb38794efb30be01212529f9aadf77bc625 (master)
+Date:   Fri Apr 27 11:48:41 2018 +0800
+
+    commit for feature A
+
+diff --git a/testForFA.txt b/testForFA.txt
+new file mode 100644
+index 0000000..d0955f5
+--- /dev/null
++++ b/testForFA.txt
+@@ -0,0 +1 @@
++This is test for featureA
+
+
+
+
