@@ -31,6 +31,55 @@ index 0000000..d0955f5
 @@ -0,0 +1 @@
 +This is test for featureA
 
+HEAD^和HEAD~都是指向第一父提交
+
+git log branch1...branch2(查看在branch1中而不在branch2中的commit)
+如果运行 git add 时使用 -i 或者 --interactive 选项，Git 将会进入一个交互式终端模式，显示类
+似下面的东西：
+$ git add -i
+           staged unstaged path
+  1: unchanged +0/-1 TODO
+  2: unchanged +1/-1 index.html
+  3: unchanged +5/-1 lib/simplegit.rb
+*** Commands ***
+  1: status 2: update 3: revert 4: add untracked
+  5: patch 6: diff 7: quit 8: help
+What now>
+输入某个数字后按操作进行，下次直接按回车确认，然后再次进入交互命令中
+6同git diff --catched
+4同git add filename
+1同git status
+3同git reset
+2同将文件放入暂存区域
+
+运行 git stash --all 来移除每一样东西并存放在栈中。不用git clean
+git clean -d -n删除前看看要删除哪些untracked文件
+git clean -d -n -x删除前看看要删除哪些untracked文件和*.o文件
+
+git grep -n keyword(-n显示行号，keyword是要匹配的字符)
+--count显示简略信息
+如果你想看匹配的行是属于哪一个方法或者函数，你可以传入 -p 选项（git grep -p keyword *.c）
+
+git日志搜索
+git log -S**** --oneline
+
+树 用途
+HEAD     上一次提交的快照，下一次提交的父结点
+Index    预期的下一次提交的快照
+Working Directory    沙盒
+
+git cat-file -p HEAD
+HEAD 是当前分支引用的指针，它总是指向该分支上的最后一次提交。
+git ls-files -s显示出索引当前的样子
+
+工作目录将.git中的文件解包成文件来编辑
+
+当git init时，master branch还没有创建出来，当git commit时才会产生master branch
+
+
+
+
+
 
 
 
