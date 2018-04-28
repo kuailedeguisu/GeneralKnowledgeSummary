@@ -77,7 +77,17 @@ git ls-files -s显示出索引当前的样子
 当git init时，master branch还没有创建出来，当git commit时才会产生master branch
 
 
+使用 -L 选项来限制输出范围在第12至22行：
+git blame -L 12,22 simplegit.rb
+执行带 -C 参数的blame命令，你就可以看到代码块的原始出处
+git blame -C 12.,22 simplegit.rb
 
+打包给别人：
+git bundle create repo.bundle HEAD master
+将别人的包解包在本地：
+git clone repo.bundle repo
+check 包是否是git有效包
+git bundle verify ../commits.bundle
 
 
 
