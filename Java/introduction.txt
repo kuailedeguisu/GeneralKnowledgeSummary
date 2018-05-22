@@ -1,0 +1,21 @@
+1.27天成为java大神
+https://github.com/DuGuQiuBai/Java
+
+2.book
+《Head First Java》
+《Thinking in Java》 
+《 Java 核心技术 》
+《Java并发编程实战》
+《深入理解Java 虚拟机》
+《Head First Design》
+《设计模式》
+《effective java》
+《J2EE development without EJB》
+ 严蔚敏的《数据结构》
+《算法》
+《敏捷软件开发， 原则，模式，实践》
+
+3.source code
+JDK java connection
+JUnit
+SprintSide
