@@ -1,0 +1,11 @@
+1.virtualBox download
+https://www.virtualbox.org/wiki/Downloads
+"windows hosts"
+
+2.ubuntu image download
+http://cdimage.ubuntu.com/ubuntu/
+
+3. install virtualBox
+install virtualBox step to step to the disk E:\ rather than C:\
+
+4. install ubuntu in virtualBox
