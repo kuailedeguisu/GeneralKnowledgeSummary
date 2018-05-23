@@ -3,9 +3,17 @@ https://www.virtualbox.org/wiki/Downloads
 "windows hosts"
 
 2.ubuntu image download
-http://cdimage.ubuntu.com/ubuntu/
+http://cdimage.ubuntu.com/ubuntu/ # no GUI
+http://releases.ubuntu.com/18.04/ # desktop version will have GUI
 
 3. install virtualBox
 install virtualBox step to step to the disk E:\ rather than C:\
 
 4. install ubuntu in virtualBox
+https://jingyan.baidu.com/article/7f766daff541cd4101e1d0cd.html
+
+5. install essential software in ubuntu
+https://blog.csdn.net/woaixiaozhe/article/details/7925409
+
+6.windows and ubuntu shared folders setting
+https://jingyan.baidu.com/article/656db918cca831e381249cce.html
