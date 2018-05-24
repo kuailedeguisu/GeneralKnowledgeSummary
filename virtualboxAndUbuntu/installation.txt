@@ -30,6 +30,7 @@ add:
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 then run "sudo apt-get update" again
+In the network, it will ask you to modify /etc/apt/source.list or /etc/resolvconf/resolve.conf/base then "sudo resolvconf -u", but it can't work for me.
 
 6.windows and ubuntu shared folders setting
 https://jingyan.baidu.com/article/656db918cca831e381249cce.html
