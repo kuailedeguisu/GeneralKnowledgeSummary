@@ -23,6 +23,14 @@ sudo apt install mysql-server
 For special software,you need run the following commands:
 sudo apt install gcc(g++,vim,gdb,python,eclipse,openssh-server,mysql-server)
 
+Note:if you encounter the issue "sudo apt-get update"===> can't resolve us.archive.ubuntu.com or others,
+you can
+sudo vi /etc/resolv.conf
+add:
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+then run "sudo apt-get update" again
+
 6.windows and ubuntu shared folders setting
 https://jingyan.baidu.com/article/656db918cca831e381249cce.html
 https://segmentfault.com/a/1190000004362463
