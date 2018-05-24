@@ -14,6 +14,13 @@ https://jingyan.baidu.com/article/7f766daff541cd4101e1d0cd.html
 
 5. install essential software in ubuntu
 https://blog.csdn.net/woaixiaozhe/article/details/7925409
+sudo apt-get update
+sudo apt install build-essential
+sudo apt install eclipse
+sudo apt install openssh-server
+sudo apt install mysql-server
+
+For special software,you need run the following commands:
 sudo apt install gcc(g++,vim,gdb,python,eclipse,openssh-server,mysql-server)
 
 6.windows and ubuntu shared folders setting
