@@ -46,3 +46,6 @@ https://www.linuxidc.com/Linux/2016-04/129851.htm
 右Ctrl＋A 调整屏幕
 
 右Ctrl+ C 开启/关闭 Scale Mode（找回菜单栏）
+
+8.实现windows和virtualBox的文本复制粘贴
+https://jingyan.baidu.com/article/cbf0e500f88a4f2eaa289338.html
