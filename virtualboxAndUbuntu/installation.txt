@@ -35,3 +35,14 @@ In the network, it will ask you to modify /etc/apt/source.list or /etc/resolvcon
 6.windows and ubuntu shared folders setting
 https://www.linuxidc.com/Linux/2016-04/129851.htm
 
+7.Virtualbox的常用快捷键
+
+备自己查询用：
+
+右Ctrl 转换鼠标
+
+右Ctrl＋f 全屏或退出全屏
+
+右Ctrl＋A 调整屏幕
+
+右Ctrl+ C 开启/关闭 Scale Mode（找回菜单栏）
