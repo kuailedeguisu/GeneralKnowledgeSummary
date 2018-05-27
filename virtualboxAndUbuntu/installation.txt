@@ -49,3 +49,6 @@ https://www.linuxidc.com/Linux/2016-04/129851.htm
 
 8.实现windows和virtualBox的文本复制粘贴
 https://jingyan.baidu.com/article/cbf0e500f88a4f2eaa289338.html
+
+9. install visual studio code in windows:
+https://code.visualstudio.com/docs/?dv=win
