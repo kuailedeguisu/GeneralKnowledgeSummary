@@ -1,15 +1,15 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
+
 int max(const int& a, const int& b)
 {
     int* pInt = NULL;
-    cout << *pInt << endl;
+    printf("%d",*pInt);
     return a > b ? a : b;
 }
 
 int main()
 {
     int a = 5, b = 6;
-    cout << max(a,b) << endl;
+    printf("%d", max(a,b));
     return 0;
 }
