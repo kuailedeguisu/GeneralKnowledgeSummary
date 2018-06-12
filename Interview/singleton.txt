@@ -1,0 +1,43 @@
+class Singleton
+{
+private:
+    static Singleton* instance;
+    Singleton();
+    //Singleton(const Singleton& src);
+    //Singleton& operator=(const Singleton& src);
+public:
+    static Singleton* getInstance();
+    Singleton(const Singleton& src) = delete;
+    Singleton& operator=(const Singleton& src) = delete;
+    ~Singleton();
+};
+
+Singleton* Singleton::instance = NULL;
+
+Singleton* Singleton::getInstance()
+{
+    if (instance == NULL)
+        instance = new Singleton();
+    
+    return instance;
+}
+
+Singleton::Singleton()
+{
+
+}
+
+Singleton::~Singleton()
+{
+    delete instance;
+    instance = NULL;
+}
+
+int main()
+{
+    Singleton* s = Singleton::getInstance();
+    Singleton* t = Singleton::getInstance();
+
+    cout << s << endl;
+    cout << t << endl;
+}
