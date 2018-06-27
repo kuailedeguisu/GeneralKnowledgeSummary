@@ -1,3 +1,9 @@
 1.Effective C++
 2.Effective STL
 3.C++ primer
+
+1.C++中的static变量
+https://www.cnblogs.com/jhmu0613/p/7131997.html
+
+2.C++11中的新特性
+
