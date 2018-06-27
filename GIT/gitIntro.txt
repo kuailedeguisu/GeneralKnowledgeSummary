@@ -133,3 +133,14 @@ git clone https://github.com/用户id/远程仓库名.git 从远程库中克隆�
 
 refer to
 https://blog.csdn.net/chengzi_comm/article/details/51673802
+
+
+If you meet an issue with error info "can't resolve github.com"
+1)sudo vi /etc/resolv.conf
+add the lines:
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+2)sudo vi /etc/hosts
+10.0.2.15 https://github.com #10.0.2.15 is your virtual IP
+
+
