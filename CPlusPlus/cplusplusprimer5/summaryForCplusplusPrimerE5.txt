@@ -1,10 +1,25 @@
-1.C++是一种静态数据类型，在程序编译的时候进行数据类型检查。
+基本概念：
+对象：具有某种数据类型的内存空间
 
-2.C++的常见数据结构
-简单的内置类型（bool, char, wchar_t, char16_t, char32_t, short, int, long, long long, float, double, long double）
-字符串string
+可寻址的最小内存单元叫字节（byte），8 bits
+
+C++是一种静态数据类型，在程序编译的时候进行数据类型检查。
+
+unsigned int 和int类型进行运算后，会将int类型的负数变为unsigned int处理
+
+1.C++的常见数据结构
+
+简单的内置类型（bool-1, char-1, wchar_t-2, char16_t-2, char32_t-4, short-2, int-2, long-4, long long-8, float-6, double-10, long double-10）(long long:c++11)
+
+字符串string(可变长的字符序列)
+
 向量
+
 数组array
+
 类类型
 
-3.一个类没有构造函数，如何构造对象？
+
+2.一个类没有构造函数，如何构造对象？
+
+3.
