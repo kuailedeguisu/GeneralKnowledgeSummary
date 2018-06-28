@@ -33,16 +33,28 @@ int *p1, *p2;//not mislead
 
 9.对于比较复杂的变量声明，原则是从右向左看，
 int *&r = p;//r is a reference to a int type of pointer
+
 10.const
 const变量声明的时候必须初始化,并且以后不可以修改它
 const int bufSize = 512;
 默认情况下，const变量仅在文件内有效
 如果想让多个文件共享该const变量而不重复定义，只在一个文件中定义它，在其他文件中声明并使用它；可以在每次const变量的声明和定义处都加extern
+
 常量引用和常量指针：只是规定不可以通过引用或者指针改变引用或指针指向的对象，而不是说该被指的对象不变，可以是其他方式改变
+const *:指针指向的内容不可以通过指针来改变
 int iVal = 60;
 const int* pInt = &iVal;//ok
 *pInt = 80;//not ok
 const int& rInt = iVal;//ok
 rInt = 90;//not ok
+
+const指针
+*const 指针中存放的地址不变
+int *const pInt = &iVal;
+
+常量表达式：
+编译的时候就可以知道它的值的表达式，而调用的函数在运行的时候才可以知道结果，所以调用函数不是常量表达式
+constexpr会让编译器去验证常量表达式，调用的函数是constexpr的也可以是常量表达式
+如果一个变量是常量表达式，我们就声明为constexpr
 
 
