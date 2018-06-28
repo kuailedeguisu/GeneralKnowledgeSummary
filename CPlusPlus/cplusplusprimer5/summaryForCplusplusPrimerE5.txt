@@ -1,4 +1,4 @@
-1.基本概念：
+1.基本概念总结：
 对象：具有某种数据类型的内存空间
 
 可寻址的最小内存单元叫字节（byte），8 bits
@@ -37,6 +37,11 @@ int* p1, p2;//p1 is pointer, p2 is int,mislead
 int* p1;
 int* p2;//suggested only one declaration
 int *p1, *p2;//not mislead
+
+对于比较复杂的变量声明，原则是从右向左看，
+int *&r = p;//r is a reference to a int type of pointer
+
+
 
 2.C++的常见数据结构
 
