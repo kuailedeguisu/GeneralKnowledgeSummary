@@ -31,8 +31,12 @@ extern类型的变量：
 int char。。。。。
 
 复合数据类型：
-引用：对象的别名，包含左值引用和右值引用（c++11引入），声明时必须初始化
-指针
+引用：对象的别名，包含左值引用和右值引用（c++11引入），声明时必须初始化,引用只能指向一个对象
+指针:指向的对象可以变化，指针一般定义时必须初始化为某个对象，或者初始化为nullptr
+int* p1, p2;//p1 is pointer, p2 is int,mislead
+int* p1;
+int* p2;//suggested only one declaration
+int *p1, *p2;//not mislead
 
 2.C++的常见数据结构
 
