@@ -55,6 +55,22 @@ int *const pInt = &iVal;
 常量表达式：
 编译的时候就可以知道它的值的表达式，而调用的函数在运行的时候才可以知道结果，所以调用函数不是常量表达式
 constexpr会让编译器去验证常量表达式，调用的函数是constexpr的也可以是常量表达式
-如果一个变量是常量表达式，我们就声明为constexpr
+如果一个变量是常量表达式，我们就声明为constexpr，并且在编译阶段可以知道它的值，字面值常量
+constexpr指针必须初始化为nullptr或0或者某个存储于固定地址的对象
+const int* p = nullptr;//p is a pointer, pointed to a const int object
+constexpr int* p = nullptr;//p is a const pointer
+
+顶层const：指向变量的常量指针
+底层const：指向常量的指针
+
+11 类型别名：
+typedef double wages;
+typedef wages base, *p;
+using SI = Sales_item;
+
+12 auto
+编译器通过表达式的初始值来自动去分析表达式的类型
+auto变量必须有初始值并且声明多个变量时，这些变量必须是同一类型
+
 
 
