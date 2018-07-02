@@ -17,3 +17,9 @@ using namespace::name;// write name instead of namespace::name
     string s5 = string(20, 'a');//copy initialization, string tmp(20,'a'); string s5 = tmp;
 
 4. string operation
+empty() //bool
+size() //not include "\0"
+getline() //include blank until return-line
+str3 = str1 + "," + str2;//str1 and str2 must be string type
+字符串字面值常量和string是两种不同的类型，所以字符串字面值常量不支持+
+
