@@ -4,3 +4,16 @@ string, 向量和数组
 string：可变长字符串
 vector：可变长的集合
 array：内置类型
+
+2.using声明
+using namespace::name;// write name instead of namespace::name
+头文件中不要添加using声明
+
+3.string initialization
+    string s1;//default initialization
+    string s2 = s1;//copy initialization
+    string s3 = "Hello world!";//copy initialization
+    string s4(10,'c');//direct initialization
+    string s5 = string(20, 'a');//copy initialization, string tmp(20,'a'); string s5 = tmp;
+
+4. string operation
