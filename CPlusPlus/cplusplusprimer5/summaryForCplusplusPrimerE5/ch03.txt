@@ -76,7 +76,7 @@ v1 != vw
 < <= > >=
 
 Note: we can't add items into vector by the following way:
-because ivec doesn't include any items
+because ivec doesn't include any items, we can't visit its index
 vector<int> ivec;
 for (decltype(ivec.size()) item = 0; item != 10; ++item)
     ivec[item] = item;//not ok, we should use push_back
