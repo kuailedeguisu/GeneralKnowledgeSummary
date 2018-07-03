@@ -55,7 +55,7 @@ vector<T> vec;
 vector<T> vec1(vec);
 vector<T> vec2 = vec;
 vector<T> vec3(n, element);//n 个element
-vector<T> vec4(n);//n个默认值的元素
+vector<T> vec4(n);//n个默认值的元素，如果T为int，就是10个0
 vector<T> vec6{ele1, ele2, ele3,...};//列表初始化
 vector<T> vec7 = {ele1, ele2, ele3,...};
 
@@ -64,5 +64,15 @@ vector<T> vec7 = {ele1, ele2, ele3,...};
 vector<string> svec{10,"hi"}//10个“hi”
 vector<string> svec("hi");//nok because we can't use string literal to initialize vector
 
+4.3 vector operation
+v.empty()
+v.size()
+v.push_back(t)
+v[i]
+v1 = v2
+v1 = {a, b, c };//用列表中的元素替换v1中的元素
+v1 == v2
+v1 != vw
+< <= > >=
 
 
