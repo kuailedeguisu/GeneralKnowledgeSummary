@@ -23,3 +23,18 @@ getline() //include blank until return-line
 str3 = str1 + "," + str2;//str1 and str2 must be string type
 字符串字面值常量和string是两种不同的类型，所以字符串字面值常量不支持+
 
+isalnum(c):c为字母或者数字时为真
+isalpha(c):当c是字母时为真
+iscntrl（c）：当c时控制字符时为真
+isdigit(c) : 当c时数字时为真
+isgraph（c）：当c不是空格但可打印时为真
+islower（c）：当c是小写字母时为真
+isprint（c）：当c是可打印字符（包含空格）
+ispunct（c） : 当c是标点符号时为真
+isspace（c）：当c是空白时为真
+isupper（c）：当c是大写字母时为真
+isxdigit（c）：当c是十六进制数字时为真
+tolower(c):如果c是大写字母就输出小写字母，否则原样输出
+toupper（c）：如果c是小写字母就输出大写字母，否则原样输出
+
+
