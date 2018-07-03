@@ -97,5 +97,6 @@ string::iterator siter;//siter can read and write the items in string
 vector<int>::const_iterator ciiter;//ciiter can only read the items in vector
 string::const_iterator csiter;//csiter can only read the items in string
 
+cbegin,cend---const_iterator
+const_iterator can't modify the items pointed to
 
-  
