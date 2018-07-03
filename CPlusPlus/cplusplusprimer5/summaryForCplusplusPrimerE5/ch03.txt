@@ -37,4 +37,11 @@ isxdigit（c）：当c是十六进制数字时为真
 tolower(c):如果c是大写字母就输出小写字母，否则原样输出
 toupper（c）：如果c是小写字母就输出大写字母，否则原样输出
 
+We must check legal index then use [index]
+index type is string::size_type, which can be got by decltype(str.size())
+
+for (decltype(str.size()) index = 0 ; index != str.size(); ++index)
+    str[index] = toupper(str[index]);
+cout << str << endl;
+    
 
