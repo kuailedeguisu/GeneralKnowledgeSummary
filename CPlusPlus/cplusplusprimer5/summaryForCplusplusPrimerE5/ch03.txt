@@ -103,3 +103,13 @@ const_iterator can't modify the items pointed to
 (*iter).empty()
 iter->empty()
 
+
+6.array
+数组的大小固定，并且不可以在数组中加入元素
+vector的元素个数可以变化
+数组不可以用auto通过初始化列表推断类型
+
+type:int，char
+char a[6] = "Daniel";//nok because it needs 7 bytes including "\0"
+char a[6] = {'C','+','+'};//ok, 'C','+','+',' ', ' ', '+'
+char a[6] = "hello";//ok,"hello\n"
