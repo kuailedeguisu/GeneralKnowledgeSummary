@@ -45,3 +45,7 @@ for (decltype(str.size()) index = 0 ; index != str.size(); ++index)
 cout << str << endl;
     
 
+4.vector
+4.1概念
+vector是类模板，需要实例化为某种类型才可以使用，vector中的对象可以是内置类型和自定义类型
+但是不存在包含引用的vector，因为引用不是对象
