@@ -113,3 +113,9 @@ type:int，char
 char a[6] = "Daniel";//nok because it needs 7 bytes including "\0"
 char a[6] = {'C','+','+'};//ok, 'C','+','+',' ', ' ', '+'
 char a[6] = "hello";//ok,"hello\n"
+
+不允许用一个数组对另外一个数组初始化或者赋值
+
+由内向外判断复合类型的数组
+int (*ptr)[10] = &arr;// a pointer pointed to an array with 10 int items
+int *(&ref)[10] = arr;// a reference refered to an array with 10 int* items
