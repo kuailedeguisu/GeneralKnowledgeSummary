@@ -119,3 +119,8 @@ char a[6] = "hello";//ok,"hello\n"
 由内向外（括号内到括号外）, 然后从右向左判断复合类型的数组
 int (*ptr)[10] = &arr;// a pointer pointed to an array with 10 int items
 int *(&ref)[10] = arr;// a reference refered to an array with 10 int* items
+
+int arr[] = {0,1,2,3,4,5,6,7,8,9};
+auto arr1(arr);//arr1 is a pointer pointed to arr[0]
+decltype(arr) arr2 = {9,9,9,9,9,9,9,9,9,9};//arr2 is an array with 10 int items
+
