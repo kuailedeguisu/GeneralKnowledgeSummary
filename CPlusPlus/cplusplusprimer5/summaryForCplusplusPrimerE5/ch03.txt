@@ -88,6 +88,14 @@ for (decltype(ivec.size()) item = 0; item != 10; ++item)
 5.iterator
 string and vector both support index operation and iterator operation to get the value in special location
 
+!= for iterator, for general containers
+< for index operation, only for string, vector and other standard class
+
+vector<int>::iterator iiter;//iiter can read and write the items in vector
+string::iterator siter;//siter can read and write the items in string
+
+vector<int>::const_iterator ciiter;//ciiter can only read the items in vector
+string::const_iterator csiter;//csiter can only read the items in string
 
 
   
