@@ -9,14 +9,15 @@ array：内置类型
 using namespace::name;// write name instead of namespace::name
 头文件中不要添加using声明
 
-3.string initialization
+3.string
+3.1 string initialization
     string s1;//default initialization
     string s2 = s1;//copy initialization
     string s3 = "Hello world!";//copy initialization
     string s4(10,'c');//direct initialization
     string s5 = string(20, 'a');//copy initialization, string tmp(20,'a'); string s5 = tmp;
 
-4. string operation
+3.2 string operation
 empty() //bool
 size() //not include "\0"
 getline() //include blank until return-line
@@ -37,6 +38,7 @@ isxdigit（c）：当c是十六进制数字时为真
 tolower(c):如果c是大写字母就输出小写字母，否则原样输出
 toupper（c）：如果c是小写字母就输出大写字母，否则原样输出
 
+3.3 index operation
 We must check legal index then use [index]
 index type is string::size_type, which can be got by decltype(str.size())
 
@@ -46,7 +48,7 @@ cout << str << endl;
     
 
 4.vector
-4.1概念
+4.1 概念
 vector是类模板，需要实例化为某种类型才可以使用，vector中的对象可以是内置类型和自定义类型
 但是不存在包含引用的vector，因为引用不是对象
 
@@ -80,5 +82,12 @@ because ivec doesn't include any items, we can't visit its index
 vector<int> ivec;
 for (decltype(ivec.size()) item = 0; item != 10; ++item)
     ivec[item] = item;//not ok, we should use push_back
-    
+ 
+试图通过下标的方式访问一个不存在的元素，会在运行时产生一个不可预知的值，编译阶段无法识别出来
+
+5.iterator
+string and vector both support index operation and iterator operation to get the value in special location
+
+
+
   
