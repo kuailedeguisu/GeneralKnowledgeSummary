@@ -140,7 +140,7 @@ std::for_each(std::begin<int>(arr), std::end<int>(arr),
 #include<cstring.h>
 
 7.2 C风格字符串常用的函数
-strlen(str)//计算str的长度，不包含空字符'\n'
+strlen(str)//计算str的长度，不包含空字符'\0',直至遇到空字符'\0'才停下来
 strcmp(p1,p2)//p1==p2, return 0; p1 > p2, return 正数;p1 < p2, return 负数
 strcat(p1,p2)//p2 附加在p1之后，并且返回p1
 strcpy(p1, p2)//p2 copied to p1 ,then return p1
