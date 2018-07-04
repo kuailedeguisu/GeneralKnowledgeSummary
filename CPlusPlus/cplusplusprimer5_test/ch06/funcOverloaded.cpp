@@ -36,11 +36,29 @@ void print(const int arr[], size_t sz)
     cout << endl;
 }
 
+const string& shorterString(const string& str1, const string& str2)
+{
+    return str1.size() < str2.size() ? str1 : str2;
+}
+
+string& shorterString(string& str1, string& str2)
+{
+    auto &r = shorterString(const_cast<const string&>(str1), const_cast<const string&>(str2));
+    return const_cast<string&> (r);
+}
+
 int main()
 {
     int arrInt[] = {0,1,2,3,4,5};
     print("Hello World!");
     print(arrInt, end(arrInt) - begin(arrInt));
     print(begin(arrInt), end(arrInt));
+    cout << shorterString("Hello", "Hello World!") << endl;
+
+    string str1, str2;
+    cin >>str1 >> str2;
+
+    cout << shorterString(str1, str2) << endl;
+
     return 0;
 }
