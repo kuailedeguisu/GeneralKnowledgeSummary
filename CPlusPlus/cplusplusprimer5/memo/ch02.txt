@@ -82,5 +82,3 @@ delctype(f()) sum = x;
 预处理器：
 #include（预处理阶段将其替换为头文件中的内容）
 头文件保护符（防止文件被某个文件重复包含）：#ifdef #ifndef #define #endif
-
-
