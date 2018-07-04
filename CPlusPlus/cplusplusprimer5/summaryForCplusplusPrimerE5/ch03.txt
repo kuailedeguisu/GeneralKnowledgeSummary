@@ -105,6 +105,7 @@ iter->empty()
 
 
 6.array
+6.1
 数组的大小固定，并且不可以在数组中加入元素
 vector的元素个数可以变化
 数组不可以用auto通过初始化列表推断类型
@@ -124,3 +125,22 @@ int arr[] = {0,1,2,3,4,5,6,7,8,9};
 auto arr1(arr);//arr1 is a pointer pointed to arr[0]
 decltype(arr) arr2 = {9,9,9,9,9,9,9,9,9,9};//arr2 is an array with 10 int items
 
+6.2 begin and end in c++11
+#include <iterator>//for begin and end
+#include <algorithm>//for for_each
+std::for_each(std::begin<int>(arr), std::end<int>(arr),
+    [](int n){
+        cout << n << " ";
+});
+
+
+7.C风格字符串
+7.1
+字符串字面值，以'\n'结尾的字符串，通过指针进行操作每个字符；C++尽量少用，因为容易出现问题
+#include<cstring.h>
+
+7.2 C风格字符串常用的函数
+strlen(str)//计算str的长度，不包含空字符'\n'
+strcmp(p1,p2)//p1==p2, return 0; p1 > p2, return 正数;p1 < p2, return 负数
+strcat(p1,p2)//p2 附加在p1之后，并且返回p1
+strcpy(p1, p2)//p2 copied to p1 ,then return p1
