@@ -23,3 +23,9 @@ C++11规定商一定向0去整
 递增和递减运算符：
 建议使用前置版本：++i,会对i增加1后返回增加后的值；后置版本i++,先对i增加1，然后返回原来的值
 *iter++:例外，向将iter向前移动一个位置，然后计算iter的原来位置的值（++优先级高于*）
+
+2.数组
+int arr[10];
+int* p = arr;//p pointed to the first element of arr
+
+but decltype,sizeof,&(get pointer),typeif not.
