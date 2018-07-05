@@ -29,3 +29,9 @@ int arr[10];
 int* p = arr;//p pointed to the first element of arr
 
 but decltype,sizeof,&(get pointer),typeif not.
+
+3.指针的转换
+0或者nullptr可以转换为任意指针类型；
+指向任意非常量的指针可以转换为void*
+指向任意对象的指针可以转换为const void*
+
