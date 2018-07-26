@@ -1,0 +1,8 @@
+1.顶层const和底层const的区别
+https://blog.csdn.net/qq_19528953/article/details/50922303
+顶层const：指针是常量指针，不可以改变指针的地址
+底层const：指针指向的内容不可以通过指针的解引用*来改变
+执行对象拷贝时有限制，常量的底层const不能赋值给非常量的底层const。
+使用命名的强制类型转换函数const_cast时，需要能够分辨底层const和顶层const，因为const_cast只能改变运算对象的底层const
+
+2.
