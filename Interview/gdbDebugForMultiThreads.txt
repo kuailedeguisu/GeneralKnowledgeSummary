@@ -1,0 +1,312 @@
+https://blog.csdn.net/snow_5288/article/details/72982594
+一，gdb的基础知识
+
+1>介绍： gdb是Linux环境下的代码调试工具。
+2>使用：需要在源代码生成的时候加上 -g 选项.
+3>开始使用： gdb binFile
+4>退出：ctrl + d 或 quit
+5>调试过程中的常用命令：
+
+   list／l 行号：显示binFile源代码，接着上次的位置往下列，每次列10行。
+   list／l 函数名：列出某个函数的源代码。
+   r或run：运行程序。
+   s或step：进入函数调用
+   breaktrace（bt)：查看各级函数调用及参数
+   info（i) locals：查看当前栈帧局部变量的值
+   info break ：查看断点信息。
+   finish：执行到当前函数返回，然后挺下来等待命令
+   print(p)：打印表达式的值，通过表达式可以修改变量的值或者调用函数
+   set var：修改变量的值
+   quit：退出gdb
+   break(b) 行号：在某一行设置断点
+   break 函数名：在某个函数开头设置断点
+   continue(或c)：从当前位置开始连续而非单步执行程序
+   run(或r)：从开始连续而非单步执行程序
+   delete breakpoints：删除所有断点
+   delete breakpoints n：删除序号为n的断点
+   disable breakpoints：禁用断点
+   enable breakpoints：启用断点
+   info(或i) breakpoints：参看当前设置了哪些断点
+   display 变量名：跟踪查看一个变量，每次停下来都显示它的值
+   undisplay：取消对先前设置的那些变量的跟踪
+   until X行号：跳至X行
+   p 变量：打印变量值
+   n 或 next：单条执行
+
+
+
+二，使用gdb调试多进程
+
+1 ,调试代码
+
+  1 /**************************************
+  2 *文件说明:process.c
+  3 *作者:段晓雪
+  4 *创建时间:2017年06月10日 星期六 10时59分14秒
+  5 *开发环境:Kali Linux/g++ v6.3.0
+  6 ****************************************/
+  7 
+  8 #include<stdio.h>
+  8 #include<stdio.h>
+  9 #include<unistd.h>
+ 10 #include<sys/types.h>
+ 11 #include<sys/wait.h>
+ 12 
+ 13 int main()
+ 14 {
+ 15     pid_t pid = fork();//创建子进程
+ 16 
+ 17     if(pid == -1)
+ 18     {
+ 19         perror("fork error");
+ 20         return -1;
+ 21     }
+ 22     else if(pid == 0)//child
+ 23     {
+ 24         printf("i am a child:my pid is %d,my father is %d\n",getpid(),getppid());
+ 25     }
+ 26     else//father
+ 27     {
+ 28         printf("i am a father:my pid is %d\n",getpid());
+ 29         wait(NULL);//等待子进程
+ 30     }
+ 31 
+ 32     return 0;
+ 33 
+ 34 }
+
+
+2，默认设置下，在调试多进程程序时GDB只会调试主进程。但是GDB（>V7.0）支持多进程的分别以及同时调试，换句话说，GDB可以同时调试多个程序。只需要设置follow-fork-mode(默认值：parent)和detach-on-fork（默认值：on）即可。
+
+follow-fork-mode detach-on-fork 说明：
+
+parent                   on               只调试主进程（GDB默认）
+child                    on               只调试子进程
+parent                   off              同时调试两个进程，gdb跟主进程，子进程block在fork位置
+child                    off              同时调试两个进程，gdb跟子进程，主进程block在fork位置
+
+
+1>进入gdb调试模式：
+这里写图片描述
+
+2>查看系统默认的follow-fork-mode 和 detach-on-fork：
+
+show follow-fork-mode
+show detach-on-fork
+
+    1
+    2
+
+这里写图片描述
+
+3>设置follow-fork-mode 和 detach-on-fork：
+
+set follow-fork-mode [parent|child]   
+set detach-on-fork [on|off]
+
+  
+
+这里写图片描述
+
+4>用l/list命令查看源代码（按enter翻页），分别在子进程和父进程相应位置下断点：
+这里写图片描述
+下断点：
+这里写图片描述
+
+5>运行程序,查询正在调试的进程：
+显示GDB调试的所有inferior，GDB会为他们分配ID。其中带有*的进程是正在调试的inferior。（ GDB将每一个被调试程序的执行状态记录在一个名为inferior的结构中。一般情况下一个inferior对应一个进程，每个不同的inferior有不同的地址空间。inferior有时候会在进程没有启动的时候就存在。）
+
+run
+info inferiors
+
+    1
+    2
+
+这里写图片描述
+
+6> 切换调试的进程：
+
+ inferior <infer number>
+
+    1
+
+这里写图片描述
+
+7>其他
+
+(1)add-inferior [-copies n] [-exec executable]
+
+    1
+
+添加新的调试进程,可以用file executable来分配给inferior可执行文件。增加n个inferior并执行程序为executable。如果不指定n只增加一个inferior。如果不指定executable，则执行程序留空，增加后可使用file命令重新指定执行程序。这时候创建的inferior其关联的进程并没启动。
+
+(2)remove-inferiors infno
+
+    1
+
+删除一个infno号的inferior。如果inferior正在运行，则不能删除，所以删除前需要先kill或者detach这个inferior。
+
+(3)clone-inferior [-copies n] [infno]
+
+    1
+
+复制n个编号是infno的inferior。如果不指定n的话，就只复制一个inferior。如果不指定infno，则就复制正在调试的inferior。
+
+ (4)detach inferior
+
+    1
+
+detach掉编号是infno的inferior。注意这个inferior还存在，可以再次用run命令执行它。
+
+(5)kill inferior infno: 
+
+    1
+
+kill掉infno号inferior。注意这个inferior仍然存在，可以再次用run等命令执行它。
+
+(6)set schedule-multiple on|off
+
+    1
+
+设为off:只有当前inferior会执行。
+设为on：全部是执行状态的inferior都会执行。
+这个选项类似于多线程调试里的set .
+
+(7)scheduler-locking
+
+    1
+
+注意:如果scheduler-locking是指为on，即使schedule-multiple设置为on，也只有当前进程的当前线程会执行。
+show schedule-multiple： 查看schedule-multiple的状态。
+
+(8)set follow-exec-mode new|same
+
+    1
+
+设置same:当发生exec的时候，在执行exec的inferior上控制子进程。
+设置为new:新建一个inferior给执行起来的子进程。而父进程的inferior仍然保留，当前保留的inferior的程序状态是没有执行。
+
+show follow-exec-mode
+
+    1
+
+查看follow-exec-mode设置的模式。
+
+(9)set print inferior-events on|off
+
+    1
+
+用来打开和关闭inferior状态的提示信息。
+
+show print inferior-events
+
+    1
+
+查看print inferior-events设置的状态。
+
+(10)maint info program-spaces
+
+    1
+
+用来显示当前GDB一共管理了多少地址空间。
+三，gdb 调试多线程
+
+1，多线程程序举例
+
+  1 /**************************************
+  2 *文件说明:thread.c
+  3 *作者:段晓雪
+  4 *创建时间:2017年06月10日 星期六 15时24分05秒
+  5 *开发环境:Kali Linux/g++ v6.3.0
+  6 ****************************************/
+  7 
+  8 #include<stdio.h>
+  9 #include<pthread.h>
+ 10 
+ 11 void* thread1(void* arg)
+ 12 {
+ 13     printf("i am thread1,my tid is %u\n",pthread_self());
+ 14     return NULL;
+ 15 }
+ 16 
+ 17 void* thread2(void* arg)
+ 18 {
+ 19     printf("i am thread2,my tid is %u\n",pthread_self());
+ 20     return NULL;
+ 21 }
+ 22 
+ 23 int main()
+ 24 {
+ 25     pthread_t tid1,tid2;
+ 26     pthread_create(&tid1,NULL,thread1,NULL);//创建线程1
+ 27     pthread_create(&tid2,NULL,thread2,NULL);//创建线程2
+ 28 
+ 29     pthread_join(tid1,NULL);//等待线程1
+ 30     pthread_join(tid2,NULL);//等待线程2 
+ 31 
+ 32     return 0;
+ 33 }
+
+
+
+以上代码中，主线程main创建了两个子线程分别是thread1和thread2,所以线程的总数为3个。
+
+2，使用gdb对多线程程序进行调试
+在多线程编程时，当我们需要调试时，有时需要控制某些线程停在断点，有些线程继续执行。有时需要控制线程的运行顺序。有时需要中断某个线程，切换到其他线程。这些都可以通过gdb实现。
+GDB默认支持调试多线程，跟主线程，子线程block在create thread。
+
+gdb调试多线程常用命令：
+
+(1)info threads
+
+    1
+
+显示可以调试的所有线程。gdb会为每个线程分配一个ID（和tid不同），编号一般从1开始。后面的ID是指这个ID。
+
+1>在主线程处打断点
+这里写图片描述
+由于断点在第25行，线程1和线程2还没创建，所以可以调试的只有一个主线程。
+
+2>在线程1中打断点
+这里写图片描述
+断点设置在线程1中，显示可以调试的线程有3个，正在运行的为线程1.
+
+3>在线程2中打断点
+这里写图片描述
+断点设置在19行（线程2中），由于线程1已经运行完毕，所以可以调试的线程只有两个，正在运行的为线程2。
+
+(2)thread ID
+
+    1
+
+切换当前调试的线程为指定ID的线程。
+这里写图片描述
+
+(3)其他
+break FileName.cpp:LinuNum thread all:
+所有线程都在文件FileName.cpp的第LineNum行有断点。
+
+thread apply ID1 ID2 IDN command:
+让线程编号是ID1，ID2…等等的线程都执行command命令。
+
+thread apply all command：所有线程都执行command命令。
+
+set scheduler-locking off|on|step：
+在调式某一个线程时，其他线程是否执行。在使用step或continue命令调试当前被调试线程的时候，其他线程也是同时执行的，如果我们只想要被调试的线程执行，而其他线程停止等待，那就要锁定要调试的线程，只让他运行。
+
+off:不锁定任何线程，默认值。
+on:锁定其他线程，只有当前线程执行。
+
+step:在step（单步）时，只有被调试线程运行。
+
+set non-stop on/off:
+当调式一个线程时，其他线程是否运行。
+
+set pagination on/off:
+在使用backtrace时，在分页时是否停止。
+
+set target-async on/ff:
+同步和异步。同步，gdb在输出提示符之前等待程序报告一些线程已经终止的信息。而异步的则是直接返回。
+
+show scheduler-locking：
+查看当前锁定线程的模式
