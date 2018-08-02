@@ -1,0 +1,74 @@
+https://blog.csdn.net/yasaken/article/details/7243757
+大端模式处理器的字节序到网络字节序不需要转换，此时ntohs(n)=n，ntohl =n；
+而小端模式处理器的字节序到网络字节必须要进行转换
+
+大小端问题
+
+    最近工作中，有两次遇到大小端问题，所以花时间写这篇日志，总结一下。
+
+
+1.      实际需求
+         (1) 前段时间写了一个修复损坏的gzip文件的tool，在Linux Server上编译运行没有问题。但是在Solaris Server上运编译运行，结果总是和预期的不一致，跟踪发现是由大小端问题导致的；
+        (2) 最近在写一个跨平台的编译脚本，编译参数里有目标可执行程序运行平台大小端这个参数；
+
+2.     大小端解析
+        端模式出自Jonathan Swift书写的《格列佛游记》一书，这本书根据将鸡蛋敲开的方法不同将所有的人分为两类，从圆头开始将鸡蛋敲开的人被归为Big Endian，从尖头开始将鸡蛋敲开的人被归为Littile Endian。小人国的内战就源于吃鸡蛋时是究竟从大头（Big-Endian）敲开还是从小头（Little-Endian）敲开。
+        在计算机业Big Endian和Little Endian也几乎引起一场战争。在计算机业界，Endian表示数据在存储器中的存放顺序。
+        大端：高位存在低地址，低位存在高地址；
+        小端：高位存在高地址，低位存在低地址；（intel的x86，ARM普遍都是属于小端）
+
+        举个例子，从内存地址0x0000开始有以下数据
+        0x0000    0x12
+        0x0001    0x34
+        0x0002    0xab
+        0x0003    0xcd
+    
+        如果我们去读取一个地址为0x0000的四个字节变量：
+                若字节序为big-endian，则读出结果为0x1234abcd；
+                若字节序位little-endian，则读出结果为0xcdab3412.
+
+        如果我们将0x1234abcd写入到以0x0000开始的内存中，则结果为：
+                         big-endian      little-endian
+        0x0000          0x12                  0xcd
+        0x0001          0x23                  0xab
+        0x0002          0xab                  0x34
+        0x0003          0xcd                  0x12
+        
+        Intelx86系列以及ARM系列CPU都是little-endian的字节序.
+
+3.    大小端问题的解决
+       (1) 下面贴一个很简单的判断大小端的函数
+
+    int checkCPUendian()//返回1，为小端；反之，为大端；
+    {
+        union
+        {
+            unsigned int  a;
+            unsigned char b;
+        }c;
+        c.a = 1;
+        return 1 == c.b;
+    }
+
+       (2) 大端模式处理器的字节序到网络字节序不需要转换，此时ntohs(n)=n，ntohl =n；而小端模式处理器的字节序到网络字节必须要进行转换(同理，有时候需要将大端字节顺序转换成小端字节顺序，也用这个函数，因为这个函数本来就是用来颠倒字节顺序的)，转换如下：
+
+  
+
+    #if defined(BIG_ENDIAN) && !defined(LITTLE_ENDIAN)
+     
+     
+       #define htons(A)  (A)
+       #define htonl(A)  (A)
+       #define ntohs(A)  (A)
+       #define ntohl(A)  (A)
+     
+     
+    #elif defined(LITTLE_ENDIAN) && !defined(BIG_ENDIAN)
+     
+     
+       #define htons(A)  ((((uint16_t)(A) & 0xff00) >> 8 ) | \\
+                          (((uint16_t)(A) & 0x00ff) << 8 ))
+       #define htonl(A)  ((((uint32_t)(A) & 0xff000000) >> 24)  | \\
+                          (((uint32_t)(A) & 0x00ff0000) >> 8 )  | \\
+                          (((uint32_t)(A) & 0x0000ff00) << 8 )  | \\
+                          (((uint32_t)(A) & 0x000000ff) << 24))
