@@ -1,0 +1,10 @@
+1.hash Table introduction
+https://blog.csdn.net/c602273091/article/details/54798805
+
+2.unordered_map and unordered_set
+C++ use these two types container to implement hash search
+http://www.cplusplus.com/reference/unordered_set/unordered_set/?kw=unordered_set
+http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map
+
+3. for a-z and A-Z
+0-255, 256 in total
