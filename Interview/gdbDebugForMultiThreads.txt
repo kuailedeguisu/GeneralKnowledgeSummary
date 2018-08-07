@@ -76,7 +76,8 @@ https://blog.csdn.net/snow_5288/article/details/72982594
  34 }
 
 
-2，默认设置下，在调试多进程程序时GDB只会调试主进程。但是GDB（>V7.0）支持多进程的分别以及同时调试，换句话说，GDB可以同时调试多个程序。只需要设置follow-fork-mode(默认值：parent)和detach-on-fork（默认值：on）即可。
+2，默认设置下，在调试多进程程序时GDB只会调试主进程。但是GDB（>V7.0）支持多进程的分别以及同时调试，
+换句话说，GDB可以同时调试多个程序。只需要设置follow-fork-mode(默认值：parent)和detach-on-fork（默认值：on）即可。
 
 follow-fork-mode detach-on-fork 说明：
 
@@ -112,7 +113,10 @@ set detach-on-fork [on|off]
 这里写图片描述
 
 5>运行程序,查询正在调试的进程：
-显示GDB调试的所有inferior，GDB会为他们分配ID。其中带有*的进程是正在调试的inferior。（ GDB将每一个被调试程序的执行状态记录在一个名为inferior的结构中。一般情况下一个inferior对应一个进程，每个不同的inferior有不同的地址空间。inferior有时候会在进程没有启动的时候就存在。）
+显示GDB调试的所有inferior，GDB会为他们分配ID。其中带有*的进程是正在调试的inferior。
+（ GDB将每一个被调试程序的执行状态记录在一个名为inferior的结构中。
+一般情况下一个inferior对应一个进程，每个不同的inferior有不同的地址空间。
+inferior有时候会在进程没有启动的时候就存在。）
 
 run
 info inferiors
@@ -133,7 +137,10 @@ info inferiors
 (1)add-inferior [-copies n] [-exec executable]
 
 
-添加新的调试进程,可以用file executable来分配给inferior可执行文件。增加n个inferior并执行程序为executable。如果不指定n只增加一个inferior。如果不指定executable，则执行程序留空，增加后可使用file命令重新指定执行程序。这时候创建的inferior其关联的进程并没启动。
+添加新的调试进程,可以用file executable来分配给inferior可执行文件。
+增加n个inferior并执行程序为executable。如果不指定n只增加一个inferior。
+如果不指定executable，则执行程序留空，增加后可使用file命令重新指定执行程序。
+这时候创建的inferior其关联的进程并没启动。
 
 (2)remove-inferiors infno
 
@@ -143,7 +150,8 @@ info inferiors
 (3)clone-inferior [-copies n] [infno]
 
 
-复制n个编号是infno的inferior。如果不指定n的话，就只复制一个inferior。如果不指定infno，则就复制正在调试的inferior。
+复制n个编号是infno的inferior。如果不指定n的话，就只复制一个inferior。
+如果不指定infno，则就复制正在调试的inferior。
 
  (4)detach inferior
 
@@ -165,14 +173,16 @@ kill掉infno号inferior。注意这个inferior仍然存在，可以再次用run�
 (7)scheduler-locking
 
 
-注意:如果scheduler-locking是指为on，即使schedule-multiple设置为on，也只有当前进程的当前线程会执行。
+注意:如果scheduler-locking是指为on，即使schedule-multiple设置为on，
+也只有当前进程的当前线程会执行。
 show schedule-multiple： 查看schedule-multiple的状态。
 
 (8)set follow-exec-mode new|same
 
 
 设置same:当发生exec的时候，在执行exec的inferior上控制子进程。
-设置为new:新建一个inferior给执行起来的子进程。而父进程的inferior仍然保留，当前保留的inferior的程序状态是没有执行。
+设置为new:新建一个inferior给执行起来的子进程。而父进程的inferior仍然保留，
+当前保留的inferior的程序状态是没有执行。
 
 show follow-exec-mode
 
@@ -238,7 +248,8 @@ show print inferior-events
 以上代码中，主线程main创建了两个子线程分别是thread1和thread2,所以线程的总数为3个。
 
 2，使用gdb对多线程程序进行调试
-在多线程编程时，当我们需要调试时，有时需要控制某些线程停在断点，有些线程继续执行。有时需要控制线程的运行顺序。有时需要中断某个线程，切换到其他线程。这些都可以通过gdb实现。
+在多线程编程时，当我们需要调试时，有时需要控制某些线程停在断点，有些线程继续执行。
+有时需要控制线程的运行顺序。有时需要中断某个线程，切换到其他线程。这些都可以通过gdb实现。
 GDB默认支持调试多线程，跟主线程，子线程block在create thread。
 
 gdb调试多线程常用命令：
@@ -278,7 +289,9 @@ thread apply ID1 ID2 IDN command:
 thread apply all command：所有线程都执行command命令。
 
 set scheduler-locking off|on|step：
-在调式某一个线程时，其他线程是否执行。在使用step或continue命令调试当前被调试线程的时候，其他线程也是同时执行的，如果我们只想要被调试的线程执行，而其他线程停止等待，那就要锁定要调试的线程，只让他运行。
+在调式某一个线程时，其他线程是否执行。在使用step或continue命令调试当前被调试线程的时候，
+其他线程也是同时执行的，如果我们只想要被调试的线程执行，
+而其他线程停止等待，那就要锁定要调试的线程，只让他运行。
 
 off:不锁定任何线程，默认值。
 on:锁定其他线程，只有当前线程执行。
@@ -292,7 +305,8 @@ set pagination on/off:
 在使用backtrace时，在分页时是否停止。
 
 set target-async on/ff:
-同步和异步。同步，gdb在输出提示符之前等待程序报告一些线程已经终止的信息。而异步的则是直接返回。
+同步和异步。同步，gdb在输出提示符之前等待程序报告一些线程已经终止的信息。
+而异步的则是直接返回。
 
 show scheduler-locking：
 查看当前锁定线程的模式
