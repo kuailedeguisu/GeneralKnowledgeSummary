@@ -14,7 +14,7 @@ https://blog.csdn.net/snow_5288/article/details/72982594
    backtrace（bt)：查看各级函数调用及参数
    info（i) locals：查看当前栈帧局部变量的值
    info break ：查看断点信息。
-   finish：执行到当前函数返回，然后挺下来等待命令
+   finish：执行到当前函数返回，然后停下来等待命令
    print(p)：打印表达式的值，通过表达式可以修改变量的值或者调用函数
    set var：修改变量的值
    quit：退出gdb
