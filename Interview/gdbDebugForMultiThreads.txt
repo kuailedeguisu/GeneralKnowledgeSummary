@@ -11,7 +11,7 @@ https://blog.csdn.net/snow_5288/article/details/72982594
    list／l 函数名：列出某个函数的源代码。
    r或run：运行程序。
    s或step：进入函数调用
-   breaktrace（bt)：查看各级函数调用及参数
+   backtrace（bt)：查看各级函数调用及参数
    info（i) locals：查看当前栈帧局部变量的值
    info break ：查看断点信息。
    finish：执行到当前函数返回，然后挺下来等待命令
