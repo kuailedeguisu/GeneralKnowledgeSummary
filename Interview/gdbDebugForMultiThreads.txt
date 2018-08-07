@@ -94,8 +94,6 @@ child                    off              同时调试两个进程，gdb跟子�
 show follow-fork-mode
 show detach-on-fork
 
-    1
-    2
 
 这里写图片描述
 
@@ -119,8 +117,6 @@ set detach-on-fork [on|off]
 run
 info inferiors
 
-    1
-    2
 
 这里写图片描述
 
@@ -128,7 +124,7 @@ info inferiors
 
  inferior <infer number>
 
-    1
+
 
 这里写图片描述
 
@@ -136,37 +132,31 @@ info inferiors
 
 (1)add-inferior [-copies n] [-exec executable]
 
-    1
 
 添加新的调试进程,可以用file executable来分配给inferior可执行文件。增加n个inferior并执行程序为executable。如果不指定n只增加一个inferior。如果不指定executable，则执行程序留空，增加后可使用file命令重新指定执行程序。这时候创建的inferior其关联的进程并没启动。
 
 (2)remove-inferiors infno
 
-    1
 
 删除一个infno号的inferior。如果inferior正在运行，则不能删除，所以删除前需要先kill或者detach这个inferior。
 
 (3)clone-inferior [-copies n] [infno]
 
-    1
 
 复制n个编号是infno的inferior。如果不指定n的话，就只复制一个inferior。如果不指定infno，则就复制正在调试的inferior。
 
  (4)detach inferior
 
-    1
 
 detach掉编号是infno的inferior。注意这个inferior还存在，可以再次用run命令执行它。
 
 (5)kill inferior infno: 
 
-    1
 
 kill掉infno号inferior。注意这个inferior仍然存在，可以再次用run等命令执行它。
 
 (6)set schedule-multiple on|off
 
-    1
 
 设为off:只有当前inferior会执行。
 设为on：全部是执行状态的inferior都会执行。
@@ -174,39 +164,35 @@ kill掉infno号inferior。注意这个inferior仍然存在，可以再次用run�
 
 (7)scheduler-locking
 
-    1
 
 注意:如果scheduler-locking是指为on，即使schedule-multiple设置为on，也只有当前进程的当前线程会执行。
 show schedule-multiple： 查看schedule-multiple的状态。
 
 (8)set follow-exec-mode new|same
 
-    1
 
 设置same:当发生exec的时候，在执行exec的inferior上控制子进程。
 设置为new:新建一个inferior给执行起来的子进程。而父进程的inferior仍然保留，当前保留的inferior的程序状态是没有执行。
 
 show follow-exec-mode
 
-    1
 
 查看follow-exec-mode设置的模式。
 
 (9)set print inferior-events on|off
 
-    1
 
 用来打开和关闭inferior状态的提示信息。
 
 show print inferior-events
 
-    1
+
 
 查看print inferior-events设置的状态。
 
 (10)maint info program-spaces
 
-    1
+
 
 用来显示当前GDB一共管理了多少地址空间。
 三，gdb 调试多线程
