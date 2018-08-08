@@ -1,0 +1,16 @@
+1.C++ OO的特点
+封装，继承，多态
+
+2.智能指针之间的区别和实现原理
+
+3.array的内部实现原理
+
+4.vector的内部实现原理
+
+5.如何判断一个list是环形的
+
+6.const char* substr(const char* pSrc, const char* pTarget)
+判断pTarget是否是pSrc的子串，如果是，返回这个开始的index
+例如pSrc：abcdef
+pTarget：cd
+返回pSrc中c字符的地址
