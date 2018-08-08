@@ -14,3 +14,5 @@
 例如pSrc：abcdef
 pTarget：cd
 返回pSrc中c字符的地址
+
+7.gdb中有可执行文件和coredump文件，不用再run来获取代码调用关系，这种情况如何不用重头run来调到某个函数上去
