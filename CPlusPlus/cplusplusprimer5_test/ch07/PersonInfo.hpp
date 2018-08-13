@@ -6,8 +6,8 @@
 
 struct PersonInfo
 {
-    string name;
-    vector<string> phoneNos;
+    std::string name;
+    std::vector<std::string> phoneNos;
 };
 
 #endif

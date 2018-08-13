@@ -6,6 +6,29 @@
 
 using namespace std;
 
+bool isValid(const string& str)
+{
+    for (auto& ch : str)
+    {
+        if ((ch - '0' >= 0) && (ch - '0' <= 9))
+        {
+            continue;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//I am not sure if the implementation is right
+string format(const string& str)
+{
+    return str;
+}
+
 int main()
 {
     vector<PersonInfo> people;
@@ -27,20 +50,43 @@ int main()
         people.push_back(info);
     }
 
-    for (auto& person : people)
+    /*for (auto& person : people)
     {
-        ostringstream out;
-        out << person.name << " ";
+        cout << person.name << " ";
 
         for (auto& no : person.phoneNos)
         {
-            out << no << " ";
+            cout << no << " ";
         }
 
-        out << "\n";
+        cout << "\n";
     }
+    cout << endl;*/
+    for (const auto& entry : people)
+    {
+        ostringstream formatted, badNums;
 
-    cout << endl;
+        for (const auto& no : entry.phoneNos)
+        {
+            if (!isValid(no))
+            {
+                badNums << " " << no;
+            }
+            else
+            {
+                formatted << " " << format(no);
+            }
+        }
+
+        if (badNums.str().empty())
+        {
+            cout << entry.name << " " << formatted.str() << endl;
+        }
+        else
+        {
+            cerr << "input error:" << entry.name << " With wrong phone numbers" << endl;
+        }
+    }
 
     return 0;
 }
