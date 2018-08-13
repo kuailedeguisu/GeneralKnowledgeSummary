@@ -32,6 +32,11 @@ Sales_data& operator=(const Sales_data& rhs)
     return *this;
 
 }*/
+Sales_data::Sales_data(std::istream& is)
+{
+    read(is, *this);
+}
+
 Sales_data& Sales_data::combine(const Sales_data& rhs)
 {
     units_sold += rhs.units_sold;
@@ -63,7 +68,7 @@ Sales_data add(const Sales_data& lhs, const Sales_data& rhs)
 std::ostream& print(std::ostream& os, const Sales_data& item)
 {
     os << item.isbn() << "," << item.units_sold
-       << "," << item.revenue << "," << item.avg_price();
+       << "," << item.revenue << "," << item.avg_price() << std::endl;
 
     return os;
 
