@@ -54,7 +54,6 @@ std::string contents;
 mutable size_t access_cnt;
 
 };
-};
 
 /*class Link_screen
 {
