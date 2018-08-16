@@ -18,3 +18,11 @@ pTarget：cd
 7.gdb中有可执行文件和coredump文件，不用再run来获取代码调用关系，这种情况如何不用重头run来调到某个函数上去
 
 8.gcc编译的时候加了调试信息，但是之后又不想用这些调试信息，如何去掉调试信息？
+
+9.redefinition of "class *"
+https://blog.csdn.net/mantis_1984/article/details/53725642
+in header file,
+add condition compilation 
+#ifndef _SCREEN_H_
+#define _SCREEN_H_
+#endif
