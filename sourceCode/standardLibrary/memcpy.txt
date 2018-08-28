@@ -1,0 +1,15 @@
+https://baike.baidu.com/item/memcpy/659918
+
+
+函数原型
+void *memcpy(void *dest, const void *src, size_t n);
+
+功能
+从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中
+
+所需头文件
+C语言：#include<string.h>
+C++：#include<cstring>
+
+返回值
+函数返回指向dest的指针。
