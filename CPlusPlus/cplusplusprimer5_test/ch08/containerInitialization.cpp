@@ -16,7 +16,7 @@ int main()
     }
     cout << endl;
 
-    vector<string> strVec(10, 'abc');
+    vector<string> strVec(10, "abc");
     cout << "Second print:" << endl;
     for (auto iter = strVec.cbegin(); iter != strVec.cend(); ++iter)
     {
