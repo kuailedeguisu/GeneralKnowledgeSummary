@@ -26,3 +26,9 @@ add condition compilation
 #ifndef _SCREEN_H_
 #define _SCREEN_H_
 #endif
+
+10.static静态对象何时构造
+https://blog.csdn.net/xd_122/article/details/44536303
+分析：在一个类中，如果存在其他类的成员，先进行构造其他类的成员，若这个类对象是static的，静态对象是在所有其他对象之前进行构造，若这个静态对象要是继承某个父类，应先构造父类，在构造派生类。
+析构的顺序与其相反 进行，静态函数最后 析构。
+
