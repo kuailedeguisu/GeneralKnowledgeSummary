@@ -90,3 +90,10 @@ https://blog.csdn.net/xd_122/article/details/44536303
 26.僵死进程和孤儿进程
 
 
+C++ standard libary source code location:
+/usr/include/c++/4.4.*/
+/usr/include/c++/4.4.*/bits
+
+gcc version: 4.9.2
+
+
