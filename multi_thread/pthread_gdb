@@ -1,0 +1,5 @@
+pthread:
+https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
+
+gdb to debug multi_thread:
+http://crossbridge.io/docs/gdb_nonstop.html
