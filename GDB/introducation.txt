@@ -1,0 +1,5 @@
+1. Debugging Multi-threaded Applications with gdb
+http://crossbridge.io/docs/gdb_nonstop.html
+
+2. POSIX thread (pthread) libraries
+https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html
