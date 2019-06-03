@@ -1,0 +1,38 @@
+The website to download JDK:
+https://www.oracle.com/technetwork/java/javase/downloads/index.html
+Java for Developers->Java SE->Download
+
+JDK-Java Development Kit, include JRE
+JRE-Java Runtime Environment, include JVM
+JVM-Java Virtual Machine, different JVM for different OS
+
+You only need download JDK for special OS, which will includes JRE(JVM)
+
+For example, 12.0.1
+cmd
+d:
+cd Develop\Java\jdk-12.0.1\bin
+java
+javac
+java -version
+
+new one file in dir D:\Develop\Java\jdk-12.0.1\bin
+helloWorld.java
++++++++++++++
+class HelloWorld {
+	public static void main(String[] args) {
+		System.out.println("Hello World!");
+	}
+}
++++++++++++++++++++
+javac HelloWorld.java
+
+after refresh dir
+we can see one file named HelloWorld.class generated, which is byte code file
+*.class file can be understanded and run by JVM 
+
+java HelloWord 
+Don't need add .class when using java command
+
+The result is :
+Hello World！
