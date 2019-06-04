@@ -50,6 +50,8 @@ path环境变量：
 D:\Develop\code
 如果想在任意地方使用javac和java，可以在path中设置java环境变量，在环境变量中加java的bin目录
 让exe结尾的文件在任意目录下可用
+
+第一种配置环境变量的方法：
 将java的bin目录添加到path中的最左边，并且最左边加分号
 ;C:\Program Files\Microsoft VS Code\bin;D:\Develop\Java\jdk-12.0.1\bin
 一般用系统变量，这样多个用户都有这个设置
@@ -59,8 +61,22 @@ HOME会到最前面，然后粘贴java bin目录， 然后加分号
 比如
 C:\Program Files (x86)\Tencent\WeChat
 WeChat
-
 java编译检查基本的语法
+
+如果电脑有多个版本的jdk，引入JAVA_HOME(jdk的安装路径)
+第二种java环境变量的配置方式：
+JAVA_HOME：D:\Develop\Java\jdk-12.0.1
+Path: %JAVA_HOME%\bin
+
+
+classpath:
+让class文件能在任意路径下可以运行
+如果有多个class文件同名，首先找classpath中设置的目录下的文件
+classpath:D:\Develop\code(只找这个目录下的class文件)
+classpath: D:\Develop\code;.（先找这个目录下的class文件，如果这个目录找不到才会去当前目录找class文件）
+
+path：
+让javac可以在任意路径下执行
 
 
 
