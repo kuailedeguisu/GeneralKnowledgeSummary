@@ -1,0 +1,3 @@
+JVM-Java Virtual Machine, different OS has different JVM
+JDK-Java Development Kit, including JRE
+JRE-Java Runtime Environment, including JVM
