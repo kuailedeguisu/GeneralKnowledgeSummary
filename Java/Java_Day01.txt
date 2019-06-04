@@ -1,8 +1,12 @@
 Day 01:
 java开源，跨平台（针对不同的OS提供不同的JVM）
+javaSE
+javaME-Android
+javaEE-企业版
+
 JVM-Java Virtual Machine, different OS has different JVM
-JDK-Java Development Kit, including JRE
-JRE-Java Runtime Environment, including JVM
+JDK-Java Development Kit, including JRE（JDK=JRE+tools）
+JRE-Java Runtime Environment, including JVM（JRE = JVM+ class libraries）
 
 Downloaded java location:
 https://www.oracle.com/technetwork/java/javase/downloads/index.html
@@ -53,7 +57,7 @@ D:\Develop\code
 让exe结尾的文件在任意目录下可用
 
 第一种配置环境变量的方法：
-将java的bin目录添加到path中的最左边，并且最左边加分号
+将java的bin目录添加到Path中的最左边，并且加分号
 ;C:\Program Files\Microsoft VS Code\bin;D:\Develop\Java\jdk-12.0.1\bin
 一般用系统变量，这样多个用户都有这个设置
 HOME会到最前面，然后粘贴java bin目录， 然后加分号
@@ -127,3 +131,4 @@ DOS命令不区分大小写，比如C盘的Program Files，在dos命令中完全
 （11）清除屏幕命令 CLS
 
 
+建议所有与开发有关的软件，不要安装在中文或者带空格的目录
