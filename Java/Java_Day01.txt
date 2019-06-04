@@ -1,4 +1,5 @@
 Day 01:
+java开源，跨平台（针对不同的OS提供不同的JVM）
 JVM-Java Virtual Machine, different OS has different JVM
 JDK-Java Development Kit, including JRE
 JRE-Java Runtime Environment, including JVM
@@ -79,8 +80,50 @@ path：
 让javac可以在任意路径下执行
 
 
+总结：
+path环境变量里面记录的是可执行文件，如exe文件，对可执行文件先在当前路径查找，如果没找到就去path环境变量中配置的路径去找
+classpath环境变量记录的是java类的运行文件所在的目录
 
 
+安装nodepad++
+显示行号，配对的括号，颜色
+设置-》首选项-》新建-》默认语言-》Java， ANSI， Windows
+new a java file, then add java code lines with color
 
+DOS命令
+进入盘符 d:
+目录切换 cd Develop\code
+目录回退 cd ..  cd \
+清屏 cls
+退出 exit
+创建目录
+删除目录
+创建文件
+删除文件
+显示目录下的内容
+删除带内容的目录
+
+打开命令提示符窗口的方式：
+
+win+R ＞ 输入cmd ＞ 回车（最简单）
+开始 ＞ 搜索程序和文件的框中输入 cmd ＞ 回车开始 ＞ 所有程序 ＞ 附件 ＞ 命令提示符（win10系统）
+
+使用技巧
+
+DOS命令不区分大小写，比如C盘的Program Files，在dos命令中完全可以用"progra~1"代替，加上英文引号是因为名称的中间有空格（即多于一个词），这一点是初学者经常忽略的。
+
+常用命令：
+
+（1）查看目录内容命令 DIR
+（2）指定可执行文件搜索目录 PATH
+（3）创建目录命令 MD
+（4）打开指定目录命令 CD
+（5）删除当前指定的子目录命令 RD
+（6）改变当前盘符命令 C:
+（7）文件复制命令 COPY
+（8）显示文本文件内容命令 TYPE
+（9）更改文件名命令 REN
+（10）删除文件命令 DEL
+（11）清除屏幕命令 CLS
 
 
