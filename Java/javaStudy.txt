@@ -1,3 +1,33 @@
+Day 01:
 JVM-Java Virtual Machine, different OS has different JVM
 JDK-Java Development Kit, including JRE
 JRE-Java Runtime Environment, including JVM
+
+Downloaded java location:
+https://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+Installed location:
+D:\Develop\Java\jdk-12.0.1
+
+run->cmd
+d:
+cd Develp\Java\jdk-12.0.1\bin
+
+new one java file HelloWord.java in the dir
+HelloWord.java:
++++++++++++++++++++++++++++++++++++++++++++
+class HelloWorld {
+	public static void main(String[] args) {
+		System.out.println("Hello World!");
+	}
+}
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+compile java file and generate HelloWorld.class
+javac HelloWorld.java
+
+run java file
+java HelloWorld
+
+The result is:
+Hello World!
