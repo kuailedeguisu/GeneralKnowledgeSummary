@@ -31,3 +31,40 @@ java HelloWorld
 
 The result is:
 Hello World!
+
+You'd better make the name of class and the name of file consistent.
+If you call class Demo, call file HelloWorld.java
+javac HelloWorld.java
+generate Demo.class
+java Demo
+
+java is case sensitive.
+
+If you enconter the ilegal letters \65307, it is chinese issue
+{} ()
+if you miswrite main into mian, compiling won't report error, but runnig will report error with not finding the main function.
+
+
+path环境变量：
+我们一般不应该把code直接放在bin目录下，因为文件会越来越多，容易误删别人的文件
+D:\Develop\code
+如果想在任意地方使用javac和java，可以在path中设置java环境变量，在环境变量中加java的bin目录
+让exe结尾的文件在任意目录下可用
+将java的bin目录添加到path中的最左边，并且最左边加分号
+;C:\Program Files\Microsoft VS Code\bin;D:\Develop\Java\jdk-12.0.1\bin
+一般用系统变量，这样多个用户都有这个设置
+HOME会到最前面，然后粘贴java bin目录， 然后加分号
+
+你能设置任何有exe文件的目录到环境中，然后在cmd中直接输入exe文件的名字
+比如
+C:\Program Files (x86)\Tencent\WeChat
+WeChat
+
+java编译检查基本的语法
+
+
+
+
+
+
+
