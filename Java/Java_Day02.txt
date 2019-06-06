@@ -179,5 +179,8 @@ float f = (float)123.45;//not recommended, because it is changed from double to 
 float f = 123.45F;//recommended
 
 XJad:反编译工具
+可以读懂反编译工具
+
+
 
 
