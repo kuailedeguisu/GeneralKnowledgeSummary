@@ -201,5 +201,16 @@ XJad:反编译工具
 字符变量
 字符变量在内存中是二进制存在的
 'a' 97
+'A' 65
+'0' 48
+
+字符串和其他数据类型做运算，结果是字符串，+是连接符
+		System.out.println('a');
+		System.out.println('a' + 1);//98
+		System.out.println("Hello" + 'a' + 1);//Helloa1
+		System.out.println('a' + 1 +"Hello");//98Hello
+		System.out.println("5+5=" + 5 + 5);//5+5=55
+		System.out.println(5 + 5 +"5+5=");//105+5=
+
 
 
