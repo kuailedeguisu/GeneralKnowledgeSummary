@@ -151,8 +151,21 @@ byte:-128-127
 引用数据类型：
 class, interface, []
 
+默认类型转换：
 我们在运算时，要求运算的数据类型必须一致，但是有的时候不相同时，有的可以做默认类型转换，从小到大的转换(byte,short,char-int-long-float-double)
 byte,short,char相互之间不转换，他们参与的前提是先转换为int类型
 在运算过程中，小类型转换为大类型，没有大类型转换为小类型，因为会损失精度
 boolean类型不可以转换为其他类型
-
+		byte  a = 4;
+		int b = 4;
+		byte c = a + b;//编译失败：error:incompatible types:possible lossy conversion from int to byte
+		System.out.println(c);
+		
+强制类型转换：
+从大类型到小类型转换
+因为可能会损失精度，所以少用强制类型转换
+目标数据类型 变量 = （目标数据类型） （被转换的数据类型）
+		byte  a = 4;
+		int b = 4;
+		byte c = (byte)(a + b);
+		System.out.println(c);
