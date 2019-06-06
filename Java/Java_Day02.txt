@@ -88,6 +88,71 @@ BCD码
 +7       0        0000111
 -7       1        1111001
   
+Practice:
+原码是10110100B，求补码和反码
+            符号位        数值位
+原码          1          0110100
+反码          1          1001011
+补码          1          1001100
 
+补码是11101110B，求原码
+            符号位        数值位
+补码         1            1101110
+反码         1            1101101
+原码         1            0010010
 
+5.变量
+变量：程序运行过程中，其值是可以在一定范围内改变
+数据类型：限定
+变量名：运算用空间中的值，给空间取一个名字
+初始化值
+数据类型 变量名 = 初始化值
+
+java是强类型语言，所以每个变量要有数据类型
+基本数据类型：
+4类8种
+A:整数（byte, long, short, int）
+	byte            1
+	short           2
+	int             4
+	long            8
+B:浮点数
+	float           4
+	double          8
+C:字符
+	 char           1
+D:布尔
+	 boolean        1
+整数默认int，小数默认double
+
+		byte b = 10;
+		int i = 100;
+		short s = 34;
+		long l = 1000000000L;
+		float f = 19.88F;
+		double d = 10000.998;
+		char c = 'a';
+		boolean bl = true;
+		System.out.println(b);
+		System.out.println(i);
+		System.out.println(s);
+		System.out.println(l);
+		System.out.println(f);
+		System.out.println(d);
+		System.out.println(c);
+		System.out.println(bl);
+1)注意是否整数越界
+byte:-128-127
+2)long 末尾加L
+3）float末尾加F
+4）作用域
+5）定义变量的时候最好给初始值，如果没有，但是在用之前一定要赋值
+
+引用数据类型：
+class, interface, []
+
+我们在运算时，要求运算的数据类型必须一致，但是有的时候不相同时，有的可以做默认类型转换，从小到大的转换(byte,short,char-int-long-float-double)
+byte,short,char相互之间不转换，他们参与的前提是先转换为int类型
+在运算过程中，小类型转换为大类型，没有大类型转换为小类型，因为会损失精度
+boolean类型不可以转换为其他类型
 
