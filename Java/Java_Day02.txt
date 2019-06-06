@@ -169,3 +169,15 @@ boolean类型不可以转换为其他类型
 		int b = 4;
 		byte c = (byte)(a + b);
 		System.out.println(c);
+		
+float f = (float)123.45;//not recommended, because it is changed from double to float
+
+		byte b1 = 3, b2 = 4, b;
+		b = b1 + b2;// b1:bycompliling error with possible lossy conversion from int to byte
+		b = 3 + 4;//常量，先把计算结果计算出来，然后看是否在byte的范围内，如果在就不报错
+		byte b = 130;
+float f = 123.45F;//recommended
+
+XJad:反编译工具
+
+
