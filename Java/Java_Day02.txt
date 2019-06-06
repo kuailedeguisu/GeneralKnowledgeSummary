@@ -172,15 +172,34 @@ boolean类型不可以转换为其他类型
 		
 float f = (float)123.45;//not recommended, because it is changed from double to float
 
-		byte b1 = 3, b2 = 4, b;
-		b = b1 + b2;// b1:bycompliling error with possible lossy conversion from int to byte
-		b = 3 + 4;//常量，先把计算结果计算出来，然后看是否在byte的范围内，如果在就不报错
-		byte b = 130;
+byte b1 = 3, b2 = 4, b;
+b = b1 + b2;// b1 and b2 are computed into int, compliling error with possible lossy conversion from int to byte
+b = 3 + 4;//常量，先把计算结果计算出来，然后看是否在byte的范围内，如果在就不报错
+byte b = 130;//compliling error with possible lossy conversion from int to byte;because byte is -127-128,130不在此范围内，可以使用强制类型              //转换 byte b = (byte)130;//-126
+130 10000010
+130 int（4byte） 00000000 00000000 00000000 10000010
+补码是00000000 000000000 00000000 1000010
+byte截取的也是补码 1000010
+反码 1000001
+原码 1111110 -126
+
+练习：
+byte b = (byte)300;
+原码 00000000 00000000 00000001 00101100
+补码 00000000 00000000 00000001 00101100
+截取1byte后的补码
+补码 00101100
+反码 00101011
+原码 01010100 
+十进制 84？（为啥程序运行结果是44？）
+
 float f = 123.45F;//recommended
 
 XJad:反编译工具
 可以读懂反编译工具
 
-
+字符变量
+字符变量在内存中是二进制存在的
+'a' 97
 
 
