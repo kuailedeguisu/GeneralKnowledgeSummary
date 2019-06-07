@@ -1,0 +1,21 @@
+-128:10000000, 1既是符号位又是数值位
++128:10000000
+
+byte b1 = 128;//-128
+byte b2 = 129;//-127
+byte b3 = 130;/-126
+byte:-128-127
+
+byte,short,char---int----long---float----double
+long: 8 byte
+float:4 byte
+他们在内存中存储的方式不同
+float表示的数据范围比long范围大
+
+JAVA语言中的char可以存储一个中文汉字吗？为什么？
+可以，因为java中char占用2个字节；java语言采用Unicode编码
+
+int x = 3;
+int y = 4;
+System.out.println(x*1.0/y);//0.75
+System.out.println("x:"+x);//x:3
