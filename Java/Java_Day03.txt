@@ -39,7 +39,9 @@ System.out.println("x:"+x);//x:3
 ||：
 单&和&&的区别：
   A：最终结果相同
-  B：单&第一个表达式为false,还会计算第二个表达式；&&第一个表达式为false，不会计算第二个表达式
+  B：单&第一个表达式为false,还会计算第二个表达式；&&具有短路效果，第一个表达式为false，不会计算第二个表达式
+  C：单|和||同理
+  D:开发中常用&&，||，！
   class OperatorDemo4 {
 	public static void main(String[] args) {
 		int x = 3;
