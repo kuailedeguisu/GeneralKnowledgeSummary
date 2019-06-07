@@ -29,3 +29,27 @@ System.out.println("x:"+x);//x:3
  
 扩展的赋值运算符：隐含着强制类型转换
 
+
+逻辑运算符：
+逻辑与 & ：有false即为false
+逻辑或 | ：有true即为true
+逻辑异或 ^：相同为false，不同为true；false^false=false, true^true = false, false^true=true, true^false=true
+!： !false=true,偶数个！不改变
+&&：
+||：
+单&和&&的区别：
+  A：最终结果相同
+  B：单&第一个表达式为false,还会计算第二个表达式；&&第一个表达式为false，不会计算第二个表达式
+  class OperatorDemo4 {
+	public static void main(String[] args) {
+		int x = 3;
+		int y = 4;
+		//boolean b1 = (x++ == 3 & y++ == 4);//4,5,true
+		//boolean b1 = (x++ == 3 && y++ == 4);//4,5,true
+		//boolean b1 = (++x == 3 & ++y == 4);//4,5,false
+		boolean b1 = (++x == 3 && ++y == 4);//4,4,false
+		System.out.println("x:"+x);
+		System.out.println("y:"+y);
+		System.out.println("b1:"+b1);
+	}
+}
