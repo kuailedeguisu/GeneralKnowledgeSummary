@@ -158,3 +158,24 @@ C:通过对象获取数据
 	int x = sc.nextInt();
 
 		
+选择性语句结构：
+1.if (关系表达式) {
+	statement1;
+}
+2. if (关系表达式) {
+	statement1;
+} else {
+	statement2;
+}
+3.if (关系表达式1) {
+	statement1;
+} else if(关系表达式2) {
+	statement2;
+}
+} else if(关系表达式3) {
+	statement3;
+}
+......
+} else {
+	statementn;
+}
