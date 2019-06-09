@@ -182,3 +182,10 @@ class BreakDemo2 {
 	}
 }
 
+continue:
+只能在loop中用
+也可以带标签使用
+跳出一次循环,进行下次循环
+
+return:
+更常用的是退出方法
