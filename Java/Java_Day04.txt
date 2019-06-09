@@ -25,3 +25,18 @@ x / 10 ^ (n - 1) % 10;//n为从右数第n位
 三位数，每位上的数字的立方和等于这个三位数
 153 = 1*1*1 + 5*5*5 + 3*3*3
 
+如果明确范围，用for循环；如果不确定要做多少次，用while
+
+Ex：一张足够大的纸，厚度是0.01m，珠穆朗玛峰高度是8848m，请问折叠多少次可以达到珠穆朗玛峰的高度？
+class WhileDemo4 {
+	public static void main(String[] args) {
+		int count = 0;
+		int start = 1;
+		int end = 884800;
+		while (start < end) {
+			count++;
+			start *= 2;
+		}
+		System.out.println("The total count is " + count);
+	}
+}
