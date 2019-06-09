@@ -43,4 +43,5 @@ class WhileDemo4 {
 }
 
 do...while至少执行一次循环体，然后再判断条件是否成立；而while和for循环都是先判断条件是否成立
+优先考虑for，然后考虑while，最后考虑do...while
 
