@@ -189,3 +189,25 @@ continue:
 
 return:
 更常用的是退出方法
+
+
+class WhileDemo5 {
+	public static void main(String[] args) {
+		int dayCount = 1;
+		double daySum = 0;
+		double dayMoney = 2.5;
+		double result = 100;
+		while(true) {
+			daySum += dayMoney;
+			if (daySum >= result) {
+				System.out.println("It is enough for 100 yuan");
+				break;
+			}
+			if (dayCount % 5 == 0) {
+				daySum -= 6;
+			}
+			dayCount++;
+		}
+		System.out.println(dayCount);
+	}
+}
