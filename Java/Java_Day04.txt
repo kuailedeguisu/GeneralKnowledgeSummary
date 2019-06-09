@@ -36,7 +36,11 @@ class WhileDemo4 {
 		while (start < end) {
 			count++;
 			start *= 2;
+			System.out.println(start);
 		}
 		System.out.println("The total count is " + count);
 	}
 }
+
+do...while至少执行一次循环体，然后再判断条件是否成立；而while和for循环都是先判断条件是否成立
+
