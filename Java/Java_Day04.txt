@@ -109,3 +109,76 @@ class LoopDemo8 {
 		}
 	}
 }
+
+转义字符：
+'\t' tab
+'\r' return
+'\n' next line
+
+程序跳转：
+break 中断，只能在switch或者loop中使用，跳出
+continue 继续
+return 返回
+
+break：
+A:跳出单层循环
+B:跳出多层循环 
+	带标签的语句 
+	标签名:语句
+/*
+默认只跳出最内层的循环
+**
+**
+**
+*/
+class BreakDemo {
+	public static void main(String[] args) {
+		for (int i=0; i<3; ++i) {
+			for (int j=0; j<4; ++j) {
+				if (j == 2) {
+					break;
+				}
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+	}
+}
+
+/*
+跳出内层循环
+**
+**
+**
+*/
+class BreakDemo1 {
+	public static void main(String[] args) {
+		wc:for (int i=0; i<3; ++i) {
+			nc:for (int j=0; j<4; ++j) {
+				if (j == 2) {
+					break nc;
+				}
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+	}
+}
+/*
+跳出外层循环
+**
+*/
+class BreakDemo2 {
+	public static void main(String[] args) {
+		wc:for (int i=0; i<3; ++i) {
+			nc:for (int j=0; j<4; ++j) {
+				if (j == 2) {
+					break wc;
+				}
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+	}
+}
+
