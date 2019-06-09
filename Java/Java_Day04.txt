@@ -61,6 +61,8 @@ class LoopDemo6 {
 	}
 }
 
+行列数据的forfor循环：外循环控制行数，内循环控制列数
+
 System.out.println();//只有换行功能
 System.out.println("*");//有换行
 System.out.print("*");//没有换行
