@@ -128,3 +128,31 @@ B：java.lang.NullPointerExeption，原因：数组已经不再指向堆内存�
 		}
 		return result;
 	}
+
+//数组逆序
+	public static void reverseArray1(int[] arr) {
+		int len = arr.length;
+		for (int i = 0; i < len / 2 ; ++i) {
+			int tmp = arr[i];
+			arr[i] = arr[len - 1 - i];
+			arr[len - 1 - i] = tmp;
+		}
+	}
+	
+	public static void reverseArray2(int[] arr) {
+		int len = arr.length;
+		for (int start = 0, end = len - 1; start <= end ; start++, end--) {
+			int tmp = arr[start];
+			arr[start] = arr[end];
+			arr[end] = tmp;
+		}
+	}
+	public static void reverseArray3(int[] arr) {
+		int len = arr.length;
+		for (int i = 0; i < len / 2 ; ++i) {
+			arr[i] = arr[i] ^ arr[len-1-i];
+			arr[len-1-i] = arr[i] ^ arr[len-1-i];
+			arr[i] = arr[i] ^ arr[len-1-i];
+		}
+	}
+
