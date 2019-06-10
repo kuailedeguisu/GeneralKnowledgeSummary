@@ -156,3 +156,28 @@ B：java.lang.NullPointerExeption，原因：数组已经不再指向堆内存�
 		}
 	}
 
+数组查找法：arr[index]
+
+数组元素查找（找出指定元素在数组中第一次出现的索引）
+	public static int getFirstIndex1(int[] arr, int target) {
+		int len = arr.length;
+		for (int i = 0; i < len; ++i) {
+			if (target == arr[i]) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static int getFirstIndex2(int[] arr, int target) {
+		int len = arr.length;
+		int index = -1;
+		for (int i = 0; i < len; ++i) {
+			if (target == arr[i]) {
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
+
