@@ -100,3 +100,7 @@ C：使用完成后就变成了垃圾，但是并没有立即回收，会在垃�
 栈内存的两个引用指向同一个堆内存，无论是对它们中谁的操作，都是对该堆内存的操作。
 
 
+数组问题：
+A：java.lang.ArrayIndexOutOfBoundsExeption,原因：访问了不存在的索引
+B：java.lang.NullPointerExeption，原因：数组已经不再指向堆内存了，而你还用数组名去访问元素
+
