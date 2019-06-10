@@ -26,3 +26,26 @@ class FunctionDemo1 {
 		return a + b;
 	}
 }
+
+class FunctionDemo1 {
+/* 	public static int sum(int a, int b) {
+		return a + b;
+	} */
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int result = sum(a, b);
+		System.out.println(result);
+	}
+	public static int sum(int a, int b) {
+		return a + b;
+	}
+}
+
+main方法会在调用函数处，匹配被调用函数名，参数类型
+方法和方法是平级关系，不能嵌套定义
+
+方法重载：在同一个类中，方法名相同，参数列表不同
+
+
+
