@@ -1,0 +1,66 @@
+二维数组：
+格式：
+1)数据类型[][] 变量名 = new 数据类型[m][n];
+m表示这个二维数组有多少个一维数组，n表示每一个一维数组的元素个数
+arr[m][n]表示获取第m+1个一维数组的第n+1个元素
+
+2)数据类型[] 数组名[] new 数据类型[m][n];
+int[] x, y[];//x一维数组，二维数组
+[[
+
+
+ex:
+class Array2Demo1 {
+	public static void main(String[] args) {
+		int[][] arr ={{1,2,3,3},{4,5,6,6},{7,8,9,9}};
+
+		System.out.println(arr);
+		
+		for (int i = 0; i < 3; ++i) {
+			System.out.println(arr[i]);
+		}
+		
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				if (j == 3) {
+					System.out.println(arr[i][j]);
+				} else {
+					System.out.print(arr[i][j]+",");
+				}
+			}
+		}
+		System.out.println("----------------");
+		
+		int[][] arr1 = new int[3][4];
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				if (j == 3) {
+					System.out.println(arr1[i][j]);
+				} else {
+					System.out.print(arr1[i][j]+",");
+				}
+			}
+		}
+	}
+}
+
+result:
+C:\develop\code>javac Array2Demo1.java
+
+C:\develop\code>java Array2Demo1
+[[I@24d46ca6 //二维数组的地址有[[
+[I@4517d9a3  //一维数组的地址有[
+[I@372f7a8d
+[I@2f92e0f4
+1,2,3,3
+4,5,6,6
+7,8,9,9
+----------------
+0,0,0,0
+0,0,0,0
+0,0,0,0
+
+
+
+
+
