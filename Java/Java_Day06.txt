@@ -320,3 +320,49 @@ for (int i=0; i<index; ++i) {
 }
 System.out.println();
 
+--------------------------------------------------------
+需求：输入一个不多于8位的整数，对其加密后输出
+加密规则：
+1）先取这个整数的逆序
+2）然后各位加5，并把每位的和对10取余
+3）将第一位和最后一位交换位置
+code：
+import java.util.Scanner;
+class JiaMiDemo2 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter an integer(less than 99999999):");
+		int num = sc.nextInt();
+		System.out.println(getEncodedData(num));
+	}
+	public static String getEncodedData(int num) {
+		int[] arr = new int[8];
+		int index = 0;
+		while (num > 0) {
+			arr[index] = num %10;
+			index++;
+			num /= 10;
+		}
+		
+		for (int i=0; i<index; ++i) {
+			System.out.print(arr[i]);
+		}
+		System.out.println();
+
+		for ( int i=0; i<index; ++i) {
+			arr[i] = (arr[i]+5)%10;
+		}
+		
+		int tmp = arr[0];
+		arr[0] = arr[index-1];
+		arr[index-1] = tmp;
+		
+		String s = "";
+		
+		for ( int i=0; i<index; ++i) {
+			s +=arr[i];
+		}
+		
+		return s;
+	}
+}
