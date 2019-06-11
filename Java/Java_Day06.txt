@@ -8,6 +8,9 @@ arr[m][n]表示获取第m+1个一维数组的第n+1个元素
 int[] x, y[];//x一维数组，二维数组
 [[
 
+3）数据类型[][] 变量名 = new 数据类型[m][];//列是变化的
+
+
 
 ex:
 class Array2Demo1 {
@@ -62,5 +65,60 @@ C:\develop\code>java Array2Demo1
 
 
 
+一维数组是引用，默认值是null
 
+ex:
+class Array2Demo2 {
+	public static void main(String[] args) {
+		int[][] arr = new int[3][];
+		System.out.println(arr);
+		for (int i = 0; i < 3; ++i) {
+			System.out.println(arr[i]);
+		}
+		System.out.println("----------------");
+		
+		arr[0] = new int[4];
+		arr[1] = new int[2];
+		arr[2] = new int[5];
+		System.out.println(arr);
+		
+		for (int i = 0; i < 3; ++i) {
+			System.out.println(arr[i]);
+		}
+		System.out.println("----------------");
+		
+		System.out.print(arr[0][0]+" ");
+		System.out.print(arr[0][1]+" ");
+		System.out.print(arr[0][2]+" ");
+		System.out.println(arr[0][3]);
+		
+		System.out.print(arr[1][0]+" ");
+		System.out.println(arr[1][1]);
+		
+		System.out.print(arr[2][0]+" ");
+		System.out.print(arr[2][1]+" ");
+		System.out.print(arr[2][2]+" ");
+		System.out.print(arr[2][3]+" ");
+		System.out.println(arr[2][4]);
+		
+		System.out.println("----------------");
+	}
+}
+result:
+C:\develop\code>javac Array2Demo2.java
 
+C:\develop\code>java Array2Demo2
+[[I@24d46ca6
+null
+null
+null
+----------------
+[[I@24d46ca6
+[I@4517d9a3
+[I@372f7a8d
+[I@2f92e0f4
+----------------
+0 0 0 0
+0 0
+0 0 0 0 0
+----------------
