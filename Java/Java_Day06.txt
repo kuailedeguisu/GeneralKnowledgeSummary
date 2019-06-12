@@ -478,6 +478,15 @@ ex：
 
 -------------------------
 
+class StudentDemo {
+	public static void main(String[] args) {
+		Student stu = new Student();
+		stu.study();
+		stu.eat();
+		stu.sleep();
+	}
+}
+
 class Student {
 	String name;
 	int age;
