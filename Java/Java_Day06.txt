@@ -477,10 +477,15 @@ ex：
 班长 对象
 
 -------------------------
-
 class StudentDemo {
 	public static void main(String[] args) {
 		Student stu = new Student();
+		
+		stu.name = "Emma";
+		stu.age = 18;
+		stu.address = "No.1 Avenue Road";
+		
+		stu.print();
 		stu.study();
 		stu.eat();
 		stu.sleep();
@@ -493,7 +498,7 @@ class Student {
 	String address;
 	
 	public void study() {
-		System.out.println("He loves to study.");
+		System.out.println(" loves to study.");
 		
 	}
 	public void eat() {
@@ -502,7 +507,10 @@ class Student {
 	public void sleep() {
 		System.out.println("If he is tired, need to eat.");
 		
-	}	
+	}
+	public void print() {
+		System.out.println(name+","+age+","+address);
+	}
 }
 ---------------------------------------
 class Phone {
