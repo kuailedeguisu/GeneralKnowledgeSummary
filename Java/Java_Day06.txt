@@ -481,6 +481,7 @@ class StudentDemo {
 	public static void main(String[] args) {
 		Student stu = new Student();
 		
+		
 		stu.name = "Emma";
 		stu.age = 18;
 		stu.address = "No.1 Avenue Road";
@@ -512,6 +513,13 @@ class Student {
 		System.out.println(name+","+age+","+address);
 	}
 }
+result:
+C:\develop\code>java StudentDemo
+null,0,null
+Emma,18,No.1 Avenue Road
+ loves to study.
+If he is hungry, need to eat.
+If he is tired, need to eat.
 ---------------------------------------
 class Phone {
 	String brand;
