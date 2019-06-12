@@ -476,10 +476,45 @@ ex：
 学生 类
 班长 对象
 
+-------------------------
 
+class Student {
+	String name;
+	int age;
+	String address;
+	
+	public void study() {
+		System.out.println("He loves to study.");
+		
+	}
+	public void eat() {
+		System.out.println("If he is hungry, need to eat.");
+	}
+	public void sleep() {
+		System.out.println("If he is tired, need to eat.");
+		
+	}	
+}
+---------------------------------------
+class Phone {
+	String brand;
+	int price;
+	String color;
+	
+	public void call() {
+		System.out.println("It can be used to call.");
+	}
+	
+	public void watchVideos() {
+		System.out.println("It can be used to call.");
+	}
+	
+	public void playGames() {
+		System.out.println("It can be used to call.");
+	}
+}
 
-
-
+---------------------------------------
 
 
 
