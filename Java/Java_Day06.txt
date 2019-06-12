@@ -366,3 +366,104 @@ class JiaMiDemo2 {
 		return s;
 	}
 }
+
+
+------------------------------------------------
+类
+面向过程的语言：C语言
+面向对象的语言： C++， Java
+
+封装：功能类似的方法放在一个类中
+
+面向过程：强调每个功能的步骤
+面向对象：强调对象，然后由对象调用方法
+-----------------------------------
+面向对象和面向过程的例子：
+	1.买电脑 
+	面向过程：了解电脑->了解需求->了解参数->确定选哪款电脑->去买->讨价还价->付账
+	面向对象：我要买电脑->别人帮我买->付钱
+	2.洗衣服
+	面向过程：换衣服->找盆->放洗衣液和水->泡->搓洗->投衣服->晾衣服
+	面向对象：换衣服->放进洗衣机->晾衣服
+------------------------------------
+万事万物皆对象
+把大象放进冰箱
+
+代码区别：
+面向过程：main方法内调用各个步骤需要的方法，问题是不同类别的方法放在一起，不太好查找
+面向对象：UML，名词提取法
+------------------------------------
+ex:
+需求：
+把大象装进冰箱
+
+步骤：
+打开冰箱
+装入大象
+关闭冰箱
+
+面向过程：
+class ProcessDemo {
+    public static void main(String[] args) {
+        open();
+        in();
+        close();
+    }
+    public static void open() {
+        ......
+    }
+    public static void in() {
+        ......
+    }
+    public static void close() {
+        ......
+    }
+}
+
+面向对象（名词提取法）：
+大象类 进入冰箱
+冰箱类 打开 关闭
+主类 main方法
+
+class ObjectDemo {
+    public static void main(String[] args) {
+        Elephant elephant;
+        Fridge fridge;
+       
+        fridge.open();
+        elephant.in();
+        fridge.close();
+    }
+}
+
+class Elephant {
+    public static void in() {
+       
+    }
+}
+
+class Fridge {
+    public static void open() {
+       
+    }
+    public static void close() {
+       
+    }
+}
+----------------------------------
+面向对象开发：不断创建对象，通过指挥对象做事情
+面向对象设计：管理和维护对象和对象之间的关系
+
+面向对象的特征：
+封装 (encapsulation)
+继承 (inheritance)
+多态 (polymorphism)
+
+类：
+属性：描述
+行为：功能
+
+
+
+
+
