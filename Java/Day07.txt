@@ -21,6 +21,75 @@
 
 方法的形式参数是一个类，其实是类的对象
 
+ 匿名对象：没有名字的对象
+ 调用方法，仅仅调用一次的时候
+ 调用多次的时候不适用
+ 好处是：匿名对象调用完毕后就是垃圾，可以被垃圾回收器回收
+ 匿名对象可以作为实际参数传递
+ 
+ ex:
+ code:
+ -----------------------------------
+ class Student {
+	String name;
+	public void show() {
+		System.out.println("I love to study!");
+	}
+	public void change(String inName) {
+		System.out.println("Before change:"+name);
+		name = inName;
+		System.out.println("Before change:"+name);
+	}
+}
+
+class StudentDemo {
+	public void method(Student s) {
+		s.show();
+		s.change("Emma");
+	}
+}
+class Anonymity {
+	public static void main(String[] args) {
+		Student s = new Student();
+		s.name = "Bob";
+		StudentDemo sd = new StudentDemo();
+		sd.method(s);
+		System.out.println("----------------");
+		
+		new Student().show();
+		new Student().name = "Tom";
+		new Student().change("Poly");
+		System.out.println("----------------");
+		
+		StudentDemo sd1 = new StudentDemo();
+		sd1.method(new Student());
+		System.out.println("----------------");
+    
+    new StudentDemo().method(new Student());
+    System.out.println("-----------------");
+	}
+}
+------------------------------
+result:
+C:\develop\code>java Anonymity
+I love to study!
+Before change:Bob
+Before change:Emma
+----------------
+I love to study!
+Before change:null
+Before change:Poly
+----------------
+I love to study!
+Before change:null
+Before change:Emma
+----------------
+I love to study!
+Before change:null
+Before change:Emma
+-----------------
+
+
  
   
 
