@@ -271,10 +271,14 @@ deconstructor
 格式: 
 	方法名和类名相同，没有返回值类型，连void都没有，没有具体的返回值
 特点：
-	当没有定义构造函数时，会有一个default构造函数，会把成员变量初始化为不同数据类型对应的默认值；
+	当没有定义构造函数时，会有一个default构造函数（无参），会把成员变量初始化为不同数据类型对应的默认值；
 	当定义构造函数时，default构造函数会失效，只能构造定义的构造函数的对象；
 	如果想既保留default构造函数，也保留自定义的构造函数，
-	我们需要同时定义default构造函数和自定义构造函数
+	我们需要同时定义default构造函数和自定义构造函数（构造函数的重载问题）
+
+给成员变量赋值的两种方式：
+	1.setXxx()
+	2.构造方法
 --------------------------------------
 ex:
 class Student {
@@ -283,9 +287,6 @@ class Student {
 	private String address;
 	
 	public Student() {
-		name = null;
-		age = 0;
-		address = null;
 	}
 	
 	public Student(String name, int age, String address) {
@@ -352,5 +353,86 @@ Emma----20-----Avenue Road
 Tom----30-----Tower Road
 ---------------
 
-
 -----------------------------------------
+类的组成：
+	成员变量 private
+	成员方法 返回值是void或者非void；空参方法或者非空参方法
+	构造方法 无返回值
+
+-----------------------------------
+ex:
+class Phone {
+	private String brand;
+	private int price;
+	private String color;
+	
+	public Phone() {}
+	
+	public Phone(String brand, int price, String color) {
+		this.brand = brand;
+		this.price = price;
+		this.color = color;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
+	public String getBrand() {
+		return brand;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+	public String getColor() {
+		return color;
+	}
+}
+
+class PhoneDemo {
+	public static void main(String[] args) {
+		Phone phone = new Phone();
+		System.out.println("Brand:"+phone.getBrand()+"\n"+"Price:"+phone.getPrice()+"\n"+"Color:"+phone.getColor());
+		System.out.println("-------------------");
+		phone.setBrand("Apple");
+		phone.setPrice(8000);
+		phone.setColor("Black");
+		System.out.println("Brand:"+phone.getBrand()+"\n"+"Price:"+phone.getPrice()+"\n"+"Color:"+phone.getColor());
+		System.out.println("-------------------");
+		Phone p = new Phone("Samsung", 2000, "White");
+		System.out.println("Brand:"+p.getBrand()+"\n"+"Price:"+p.getPrice()+"\n"+"Color:"+p.getColor());
+		System.out.println("-------------------");
+		p.setBrand("Huawei");
+		p.setPrice(3000);
+		p.setColor("Black");
+		System.out.println("Brand:"+p.getBrand()+"\n"+"Price:"+p.getPrice()+"\n"+"Color:"+p.getColor());
+	}
+}
+-------------------
+result:
+C:\develop\code>java PhoneDemo
+Brand:null
+Price:0
+Color:null
+-------------------
+Brand:Apple
+Price:8000
+Color:Black
+-------------------
+Brand:Samsung
+Price:2000
+Color:White
+-------------------
+Brand:Huawei
+Price:3000
+Color:Black
+--------------------------------------------------
