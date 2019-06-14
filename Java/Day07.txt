@@ -264,4 +264,93 @@ this:当前类的对象引用
 注意：谁调用这个方法，this就代表哪个对象
 this场景：解决局部变量隐藏成员变量
 
+------------------------------
+构造方法：给对象的数据进行初始化
+constructor
+deconstructor
+格式: 
+	方法名和类名相同，没有返回值类型，连void都没有，没有具体的返回值
+特点：
+	当没有定义构造函数时，会有一个default构造函数，会把成员变量初始化为不同数据类型对应的默认值；
+	当定义构造函数时，default构造函数会失效，只能构造定义的构造函数的对象；
+	如果想既保留default构造函数，也保留自定义的构造函数，
+	我们需要同时定义default构造函数和自定义构造函数
+--------------------------------------
+ex:
+class Student {
+	private String name;
+	private int age;
+	private String address;
+	
+	public Student() {
+		name = null;
+		age = 0;
+		address = null;
+	}
+	
+	public Student(String name, int age, String address) {
+		this.name = name;
+		this.age = age;
+		this.address = address;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+}
 
+class ConstructDemo {
+	public static void main(String[] args) {
+		Student s = new Student();
+		System.out.println(s.getName()+"----"+s.getAge()+"-----"+s.getAddress());
+		System.out.println("---------------");
+		s.setName("Bob");
+		s.setAge(29);
+		s.setAddress("Big Road");
+		System.out.println(s.getName()+"----"+s.getAge()+"-----"+s.getAddress());
+		System.out.println("---------------");
+		
+		Student sc = new Student("Emma", 20, "Avenue Road");
+		System.out.println(sc.getName()+"----"+sc.getAge()+"-----"+sc.getAddress());
+		System.out.println("---------------");
+		sc.setName("Tom");
+		sc.setAge(30);
+		sc.setAddress("Tower Road");
+		System.out.println(sc.getName()+"----"+sc.getAge()+"-----"+sc.getAddress());
+		System.out.println("---------------");
+	}
+}
+--------------------------------
+result:
+C:\develop\code>java ConstructDemo
+null----0-----null
+---------------
+Bob----29-----Big Road
+---------------
+Emma----20-----Avenue Road
+---------------
+Tom----30-----Tower Road
+---------------
+
+
+-----------------------------------------
