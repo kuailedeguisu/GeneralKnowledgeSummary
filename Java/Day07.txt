@@ -129,8 +129,135 @@ age:0
 name:Emma
 age:-28
 
+----------------------------------------------------------
 
-  
 
-  
- 
+private：可以修饰成员（成员变量和成员方法），只能在本类中使用，但是可以通过public方法类访问类中的private成员
+
+
+封装和private的应用：
+A:把成员变量用private修饰
+B：提高对象的getXxx()和setXxx（）方法
+-----------------------------------------
+code：
+class Student {
+	private String name;
+	private int age;
+	
+	public void setName(String inName) {
+		name = inName;
+	}
+	
+	public void setAge(int inAge) {
+		age = inAge;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+}
+
+class StudentDemo2 {
+	public static void main(String[] args) {
+		Student s = new Student();
+		s.setName("Emma");
+		System.out.println(s.getName());
+		s.setAge(19);
+		System.out.println(s.getAge());
+	}
+}
+----------------------------------------------------------------------
+result：
+C:\develop\code>java StudentDemo2
+Emma
+19
+-------------------------------------------------------------------------
+数据校验在标准代码中不用做，因为有地方会做这个
+
+ 起名字要做到见名知意
+ ------------------------------------------------
+ java中有问题：因为就近原则，都用的是形式参数中的name
+ public void setName(String name) {
+	name = name;
+}
+-------------------------------------
+class Student {
+	private String name;
+	private int age;
+	
+	public void setName(String name) {
+		name = name;
+	}
+	
+	public void setAge(int age) {
+		age = age;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+}
+
+class StudentDemo2 {
+	public static void main(String[] args) {
+		Student s = new Student();
+		s.setName("Emma");
+		System.out.println(s.getName());
+		s.setAge(19);
+		System.out.println(s.getAge());
+	}
+}
+
+retult:
+C:\develop\code>java StudentDemo2
+null
+0
+
+形式参数中的值，没有改变成员变量的值
+需要修正
+----------------------------------------
+class Student {
+	private String name;
+	private int age;
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+}
+
+class StudentDemo2 {
+	public static void main(String[] args) {
+		Student s = new Student();
+		s.setName("Emma");
+		System.out.println(s.getName());
+		s.setAge(19);
+		System.out.println(s.getAge());
+	}
+}
+
+result:
+C:\develop\code>java StudentDemo2
+Emma
+19
+------------------------------------------------
+
