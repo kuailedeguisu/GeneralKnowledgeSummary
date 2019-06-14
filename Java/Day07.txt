@@ -89,8 +89,47 @@ Before change:null
 Before change:Emma
 -----------------
 
+对对象去给成员变量赋值，可以赋值一些非法的数据，这是不合理的，在赋值之气那，需要先对数据进行判断
+判断到底在哪里做比较合适呢？
+StudentDemo1类是一个测试类，测试类只创建对象，调用方法，应该在Student类中
+而我们在成员变量的位置不可以做数据校验，必须依靠一些逻辑语句
 
- 
+private: 私有的，可以修饰成员变量和成员方法，并且只能在本类内使用
+封装的思想:private,不让类外访问
+封装：隐藏对象的属性和实现细节，仅对外提供公共访问方式
+-------------------------------------------------------------------
+code
+------------------------------------------------------------
+ class Student {
+	String name;
+	int age;
+	
+	public void show() {
+		System.out.println("name:"+name);
+		System.out.println("age:"+age);
+	}
+}
+
+class StudentDemo1 {
+	public static void main(String[] args) {
+		Student s = new Student();
+		s.show();
+		System.out.println("--------------");
+		s.name = "Emma";
+		s.age = -28;
+		s.show();
+	}
+}
+--------------------------------------------------------------
+result:
+C:\develop\code>java StudentDemo1
+name:null
+age:0
+--------------
+name:Emma
+age:-28
+
+
   
 
   
