@@ -448,3 +448,69 @@ Student s = new Student();
 	E.给成员变量进行显示初始化
 -------------------------------------------------------------
 
+注意所有import必须在所有的class之前
+-----------------------------
+import java.util.Scanner;
+class Employee {
+	private int id;
+	private String name;
+	private int age;
+	private String title;
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+}
+
+class EmployeeTest {
+	public static void main(String[] args) {
+		Employee em = new Employee();
+		System.out.println(em.getId()+","+em.getName()+","+em.getAge()+","+em.getTitle());
+		System.out.println("-----------");
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter id:");
+		int id = sc.nextInt();
+		System.out.println("Please enter name:");
+		String name = sc.next();
+		System.out.println("Please enter age:");
+		int age = sc.nextInt();
+		System.out.println("Please enter title:");
+		String title = sc.next();
+		
+		em.setId(id);
+		em.setName(name);
+		em.setAge(age);
+		em.setTitle(title);
+		System.out.println(em.getId()+","+em.getName()+","+em.getAge()+","+em.getTitle());
+	}
+}
+-------------------------------------------
