@@ -39,8 +39,6 @@ C:\develop\code>
 static:
 ----------------------
 class ArrayTool {
-  private ArrayTool() {}
-  
 	public static void printArray(int[] arr) {
 		for (int i = 0; i < arr.length; ++i) {
 			if (i == arr.length - 1) {
@@ -50,12 +48,112 @@ class ArrayTool {
 			}
 		}
 	}
+	
+	public static int getMax(int[] arr) {
+		int max = arr[0];
+		
+		for (int i = 1; i < arr.length; ++i) {
+			if (arr[i] > max) {
+				max = arr[i];
+			}
+		}
+		
+		return max;
+	}
+	
+	public static int getIndex(int[] arr, int value) {
+		int index = -1;
+		for (int i = 0; i < arr.length; ++i) {
+			if (value == arr[i]) {
+				index = i;
+				break;
+			}
+		}
+		
+		return index;
+	}
 }
 class ArrayTest {
 	public static void main(String[] args) {
 		int[] arr = {10, 20, 30, 40};
-		ArrayTool.printArray(arr);//using class name to call static method
+		ArrayTool.printArray(arr);
+		System.out.println("max:"+ArrayTool.getMax(arr));
+		System.out.println("Index:"+ArrayTool.getIndex(arr, 30));
 	}
 }
 ------------------------------
 把构造方法private，外界就不可以创建对象了，并且类中的成员函数都是static的
+----------------------
+在实际的项目中，我们得到的tool类都是class文件，不是java文件，你无法看到原码---->说明书
+/**
+*
+......
+*/
+-------------------
+/**
+* This is an array class
+* @author Emma
+* @version 1.0
+*/
+public class ArrayTool {
+	/**
+	* This method is used to print all the elements of an array
+	* @param  arr
+	*/
+	public static void printArray(int[] arr) {
+		for (int i = 0; i < arr.length; ++i) {
+			if (i == arr.length - 1) {
+				System.out.println(arr[i]);
+			} else {
+				System.out.print(arr[i] + ",");
+			}
+		}
+	}
+	
+	/**
+	* This method is used to get the max value of an array
+	* @param  arr
+	* @return int
+	*/	
+	public static int getMax(int[] arr) {
+		int max = arr[0];
+		
+		for (int i = 1; i < arr.length; ++i) {
+			if (arr[i] > max) {
+				max = arr[i];
+			}
+		}
+		
+		return max;
+	}
+	/**
+	* This method is used to get the index of an array for the special value
+	* @param  arr, int value
+	* @return int
+	*/
+	public static int getIndex(int[] arr, int value) {
+		int index = -1;
+		for (int i = 0; i < arr.length; ++i) {
+			if (value == arr[i]) {
+				index = i;
+				break;
+			}
+		}
+		
+		return index;
+	}
+}
+--------------------------------
+javadoc -d 目录 -author -version *.java
+如果当前目录下没有这个目录，系统会帮忙创建一个新目录
+javadoc -d doc -author -version ArrayTool.java
+
+制作帮助文档出错
+javadoc: error - No public or protected classes found to document.
+我们需要把工具类加public
+-------------------------------
+打开doc/index.html by browser
+
+
+
+
