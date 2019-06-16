@@ -514,3 +514,74 @@ class EmployeeTest {
 	}
 }
 -------------------------------------------
+针对多个对象有相同的成员变量值（在每个对象的堆内存中都会给这个成员变量分配相同的内存空间），java中引入了static关键字
+在一个对象中对static成员变量赋值a，在其他对象中，如果没有对它赋值，其他对象也会有和上一个对象中的static成员变量一样的值a
+static成员变量被所有对象共享的，修改一个对象的，其他对象也会变化
+
+static特点:
+A:随着类的加载而加载
+B:优先于对象存在
+C：被所有对象共享（ex:饮水机（static），水杯（非static））
+D：可以通过类名调用，也可以通过对象调用，但是推荐用类名调用，因为static成员变量是与类相关的类成员
+-------------------------------
+code:
+class Person {
+	private String name;
+	private int age;
+	private static String country;
+	
+	public Person() {}
+	
+	public Person(String name) {
+		this.name = name;
+	}
+	
+	public Person(String name, int age) {
+		this.age = age;
+		this.name = name;
+	}
+	
+	public Person(String name, int age, String country) {
+		this.name = name;
+		this.age = age;
+		this.country = country;
+	}
+	
+	public void show() {
+		System.out.println("Name:"+name);
+		System.out.println("Age:"+age);
+		System.out.println("Country:"+country);
+	}
+}
+
+class PersonStaticTest {
+	public static void main(String[] args) {
+		Person p1 = new Person();
+		p1.show();
+		
+		Person p2 = new Person("Emma", 20, "China");
+		p2.show();
+		
+		Person p3 = new Person("Lily", 30);
+		p3.show();
+		
+		Person p4 = new Person("Tom", 40);
+		p4.show();		
+	}
+}
+----------------------
+result:
+C:\develop\code>java PersonStaticTest
+Name:null
+Age:0
+Country:null
+Name:Emma
+Age:20
+Country:China
+Name:Lily
+Age:30
+Country:China
+Name:Tom
+Age:40
+Country:China
+---------------------------------
