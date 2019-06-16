@@ -585,3 +585,44 @@ Name:Tom
 Age:40
 Country:China
 ---------------------------------
+static内存图：
+
+1.方法区（包含class内容区域和静态区）：
+class内容区域：
+PersonDemo.class
+非static成员变量
+非static成员方法
+Person.class
+非static成员变量
+非static成员方法
+
+静态区：
+PersonDemo
+main(String[] args)
+Person
+country=null 0x01
+
+Person方法区：0x02
+构造方法
+非static成员方法
+
+2.栈区：
+main[String[] args]从静态区进栈区
+Person p1 0x0001
+
+3.堆区
+new Person
+0x0001
+this
+name: null
+age:0
+静态标记：0x01
+方法标记：0x02
+.......
+---------------------------------------------------------------------
+static注意事项：
+A：在静态方法中是没有this关键字的
+静态是随着类的加载而加载，this是对着对象的创建而存在；静态比对象先存在
+B：静态方法只能访问静态的成员变量和静态的成员方法
+静态成员方法：只能访问静态成员变量和静态成员方法
+非静态成员方法：可以访问静态成员变量和静态成员方法
