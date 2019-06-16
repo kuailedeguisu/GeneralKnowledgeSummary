@@ -1,0 +1,61 @@
+static:
+main方法是static，它调用的方法必须是static，所以测试类中的所有方法都需要是static的，这样main才可以调用
+在java中，两个类在同一个目录下的两个文件中，其实和两个类在一个文件中相同
+虚拟机编译时，会自动编译相关联的其他java文件
+------------------------
+ArrayTool.java
+---------------------
+class ArrayTool {
+	public void printArray(int[] arr) {
+		for (int i = 0; i < arr.length; ++i) {
+			if (i == arr.length - 1) {
+				System.out.println(arr[i]);
+			} else {
+				System.out.print(arr[i] + ",");
+			}
+		}
+	}
+}
+----------------------
+ArrayTest.java
+---------------------------
+class ArrayTest {
+	public static void main(String[] args) {
+		int[] arr = {10, 20, 30, 40};
+		ArrayTool at = new ArrayTool();
+		at.printArray(arr);
+	}
+}
+----------------------
+result
+----------------
+C:\develop\code>javac ArrayTest.java
+
+C:\develop\code>java ArrayTest
+10,20,30,40
+
+C:\develop\code>
+------------------------------
+static:
+----------------------
+class ArrayTool {
+  private ArrayTool() {}
+  
+	public static void printArray(int[] arr) {
+		for (int i = 0; i < arr.length; ++i) {
+			if (i == arr.length - 1) {
+				System.out.println(arr[i]);
+			} else {
+				System.out.print(arr[i] + ",");
+			}
+		}
+	}
+}
+class ArrayTest {
+	public static void main(String[] args) {
+		int[] arr = {10, 20, 30, 40};
+		ArrayTool.printArray(arr);//using class name to call static method
+	}
+}
+------------------------------
+把构造方法private，外界就不可以创建对象了，并且类中的成员函数都是static的
