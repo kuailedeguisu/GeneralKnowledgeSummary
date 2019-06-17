@@ -214,9 +214,11 @@ Bingo!
 
 代码块：
 局部代码块：局部位置，用于限制变量的生命周期，及早释放
-构造代码块：在类中的成员位置
-静态代码块：
-
+构造代码块：在类中的成员位置， 用{}括起来的代码，每次调用构造方法执行前，都会先执行构造代码块。
+	作用：可以把多个构造方法中的共同代码放在一起，对对象进行初始化
+静态代码块：在类中的成员位置，用{}括起来的代码，只不过它用static修饰了。
+	作用：一般是对类进行初始化
+------------------------------------------------
 class Code {
 	{
 		int x = 10;
@@ -230,6 +232,46 @@ class Code {
 	public Code() {}
 }
 并且执行构造函数时，都会执行构造代码块中的内容，所以提取出来相同的内容在构造代码块中
-
-
+-------------------------------------------
+静态代码块，构造代码块，构造方法的执行顺序？
+静态代码块---构造代码块--------构造方法
+静态代码块：只执行一下次
+构造代码块：每次执行构造方法时都执行
+-------------------------
+ex:
+----------------------
+code:
+class Student {
+	static {
+		System.out.println("Student static code block");
+	}
+	
+	{
+		System.out.println("Student construct code block");
+	}
+	
+	public Student() {
+		System.out.println("Student construct method");
+	}
+}
+class StudentDemo3 {
+	static {
+		System.out.println("main static code block");
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("main");
+		
+		Student st = new Student();
+	}
+}
+--------------------------------
+result:
+C:\develop\code>java StudentDemo3
+main static code block
+main
+Student static code block
+Student construct code block
+Student construct method
+---------------------------------
 
