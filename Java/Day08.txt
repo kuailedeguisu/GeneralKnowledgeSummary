@@ -463,3 +463,45 @@ C：调用成员方法
 	super.成员方法 调用父类的成员方法
 
 ------------------------------
+构造函数的关系：
+子类中所有构造函数会访问父类中的默认构造方法
+因为子类会继承父类的数据，可能还会使用父类的数据
+所以，子类初始化之前，一定要先完成父类数据的初始化
+注意：子类每一个构造方法的第一条语句默认都是：super();
+
+--------------------------------------
+code:
+class Father {
+	public Father() {
+		System.out.println("Father non-parameter construct method");
+	}
+	
+	public Father(String name) {
+		System.out.println("Father parameter construct method:"+name);
+	}
+}
+
+class Son extends Father {
+	public Son() {
+		System.out.println("Son non-parameter construct method");
+	}
+	
+	public Son(String name) {
+		System.out.println("Son parameter construct method:"+name);
+	}
+}
+
+class ConstructTest {
+	public static void main(String[] args) {
+		Son s = new Son();
+		Son sw = new Son("Emma");
+	}
+}
+
+result:
+C:\develop\code>java ConstructTest
+Father non-parameter construct method
+Son non-parameter construct method
+Father non-parameter construct method
+Son parameter construct method:Emma
+-----------------------------------------------
