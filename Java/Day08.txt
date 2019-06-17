@@ -262,7 +262,8 @@ class StudentDemo3 {
 	public static void main(String[] args) {
 		System.out.println("main");
 		
-		Student st = new Student();
+		Student st1 = new Student();
+		Student st2 = new Student();
 	}
 }
 --------------------------------
@@ -273,5 +274,76 @@ main
 Student static code block
 Student construct code block
 Student construct method
+Student construct code block
+Student construct method
 ---------------------------------
+继承：把多个类中相同的内容给提取出来定义到一个类中
+格式： class 子类名 extends 父类名 {}
+class Base {}
+class Derived extends Base {}
+好处：
+A:提高代码的维护性
+B：提高代码的复用性
+C:让类与类产生关系，为多态打好基础
+弊端：
+A：类的耦合性增强（开发原则：低耦合，高内聚；耦合：类和类的关系；内聚：自己完成某件事情的能力）
+---------------------------------------------
+
+继承特点：
+A：只支持单继承，不支持多继承
+	有些语言支持多继承：C++， 格式：extends 类1，类2，...
+B:支持多层继承 
+	class Sub extends Father {}
+	class Father extends GrandFather() {}
+	......
+-------------------------------------------------------
+继承的注意事项：
+A：子类只能继承父类所有非私有的成员（成员变量和成员方法）
+B：
+--------------
+ex：
+code：
+class Son extends Father {
+	public void function() {
+		//System.out.println(num1);
+		System.out.println(num2);
+	}
+}
+
+class Father {
+	private int num1 = 100;
+	public int num2 = 200;
+	
+	private void method() {
+		System.out.println(num1);
+		System.out.println(num2);
+	}
+	
+	public void show() {
+		System.out.println(num1);
+		System.out.println(num2);
+	}
+}
+
+class InheritanceDemo3 {
+	public static void main(String[] args) {
+		Father f = new Father();
+		//f.method();
+		f.show();
+		
+		Son s = new Son();
+		//s.method();
+		s.show();
+		s.function();
+	}
+}
+----------------------------
+result:
+C:\develop\code>java InheritanceDemo3
+100
+200
+100
+200
+200
+----------------------------------
 
