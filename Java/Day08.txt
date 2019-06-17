@@ -505,3 +505,8 @@ Son non-parameter construct method
 Father non-parameter construct method
 Son parameter construct method:Emma
 -----------------------------------------------
+如果父类没有无参构造方法，那么子类的构造方法会报错。
+解决办法：
+	A：在父类中加一个无参构造方法。
+	B：子类通过super去显示调用父类其他的带参的构造方法
+
