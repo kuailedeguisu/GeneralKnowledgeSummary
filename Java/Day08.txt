@@ -156,7 +156,7 @@ javadoc: error - No public or protected classes found to document.
 
 ----------------------------
 帮助文档的使用：
-chm格式是帮助文档
+chm格式是帮助文档，例如jdk提供的帮助文档是chm格式的
 打开帮助文档-》显示-》索引-》输入检索的关键词
 1.先看包（java.lang包下的类不用import，其他包下的需要import）
 2.再看例子
@@ -169,6 +169,48 @@ chm格式是帮助文档
 	看左边：是否静态（static用类名调用），返回值类型（人家返回什么就用什么接收）
 	看右边：方法名称，参数列表
 
+------------------------------
+ex:
+req：请通过程序产生一个随机数，然后通过键盘录入来才是否猜对了，输入直至猜中为止
+-------------------------------
+code：
+import java.util.Scanner;
+class MathTest1 {
+	public static void main(String[] args) {
+		int random1To100 = (int)(Math.random() * 100) + 1;
+		System.out.println("random(1-100):"+random1To100);
+		
+		while (true) {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Please enter an integer(1-100):");
+			int guested = sc.nextInt();
+		
+			if (guested == random1To100) {
+				System.out.println("Bingo!");
+				break;
+			} else if (guested > random1To100){
+				System.out.println("It is bigger!");
+			} else {
+				System.out.println("It is smaller!");
+			}
+		}
+
+	}
+}
+--------------------------------
+result:
+C:\develop\code>java MathTest1
+random(1-100):27
+Please enter an integer(1-100):
+20
+It is smaller!
+Please enter an integer(1-100):
+28
+It is bigger!
+Please enter an integer(1-100):
+27
+Bingo!
+----------------------------------------------------
 
 
 
