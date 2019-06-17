@@ -389,3 +389,62 @@ class InheritanceDemo4 {
 result：
 30
 -------------------------
+req：如果想访问所有的num，父类的成员变量需要加入static，通过类名来调用
+code：
+class Father {
+	public static int num = 10;
+}
+
+class Son extends Father {
+	public int num = 20;
+	
+	public void show() {
+		int num = 30;
+		System.out.println(num);
+		System.out.println(this.num);
+		System.out.println(Father.num);
+	}
+}
+
+class InheritanceDemo4 {
+	public static void main(String[] args) {
+		Son s = new Son();
+		s.show();	
+	}
+}
+-----------------------
+result：
+30
+20
+10
+-------------------
+The above is so complicated, we can introduce super for father class
+-------------
+code:
+class Father {
+	public int num = 10;
+}
+
+class Son extends Father {
+	public int num = 20;
+	
+	public void show() {
+		int num = 30;
+		System.out.println(num);
+		System.out.println(this.num);
+		System.out.println(super.num);
+	}
+}
+
+class InheritanceDemo4 {
+	public static void main(String[] args) {
+		Son s = new Son();
+		s.show();	
+	}
+}
+--------------------
+result:
+30
+20
+10
+----------------------------
