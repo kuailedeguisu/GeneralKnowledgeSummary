@@ -509,4 +509,58 @@ Son parameter construct method:Emma
 解决办法：
 	A：在父类中加一个无参构造方法。
 	B：子类通过super去显示调用父类其他的带参的构造方法
+-------------------------------------------
+如果父类和子类都有static代码块，构造代码块，构造方法，创建子类对象后的执行顺序：
+父类的static代码块-》
+子类的static代码块-》
+父类的构造代码块-》
+父类的构造方法-》
+子类的构造代码块-》
+子类的构造方法
+-------------------------------------
+code:
+class Fu {
+	static {
+		System.out.println("Fu static code block");
+	}
+	
+	{
+		System.out.println("Fu construct code block");
+	}
+	
+	public Fu() {
+		System.out.println("Fu construct method");
+	}
+	
+}
 
+class Zi extends Fu {
+	static {
+		System.out.println("Zi static code block");
+	}
+	
+	{
+		System.out.println("Zi construct code block");
+	}
+	
+	public Zi() {
+		System.out.println("Zi construct method");
+	}
+	
+}
+
+class FuZiTest {
+	public static void main(String[] args) {
+		Zi zi = new Zi();
+	}
+}
+
+result:
+C:\develop\code>java FuZiTest
+Fu static code block
+Zi static code block
+Fu construct code block
+Fu construct method
+Zi construct code block
+Zi construct method
+--------------------------------
