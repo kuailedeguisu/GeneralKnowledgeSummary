@@ -567,5 +567,160 @@ Zi construct method
 方法重载能改变返回值类型吗？可以，因为它和返回值类型无关，只是参数列表不同
 override：方法重写
 overload：方法重载
+----------------------------------------------
+ex: cat and dog
+code:
+class Cat extends Animal {
+	public Cat() {
+		System.out.println("Cat default construct.");
+	}
+	
+	public Cat(String name, int age, String color) {
+		super(name, age, color);
+		System.out.println("Cat paramer construct.");
+	}
+	
+	public void hide() {
+		System.out.println("Cat hide.");
+	}
+}
 
-this：
+class Dog extends Animal {
+	public Dog() {
+		System.out.println("Dog default construct.");
+	}
+	
+	public Dog(String name, int age, String color) {
+		super(name, age, color);
+		System.out.println("Dog parameter construct.");
+	}
+	
+	public void watchDoor() {
+		System.out.println("Dog watchDoor");
+	}
+}
+
+class Animal {
+	String name;
+	int age;
+	String color;
+	
+	public Animal() {
+		System.out.println("Animal default construct.");
+	}
+	
+	public Animal(String name, int age, String color) {
+		this.name = name;
+		this.age = age;
+		this.color = color;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
+	public String getColor() {
+		return color;
+	}
+	
+	public void eat() {
+		System.out.println("Animal Eat!");
+	}
+	
+	public void sleep() {
+		System.out.println("Animal Sleep!");
+	}
+	
+	public void show() {
+		System.out.println(name+"---"+age+"---"+color);
+	}
+}
+
+class CatDogTest {
+	public static void main(String[] args) {
+		Dog d1 = new Dog();
+		d1.eat();
+	    d1.sleep();
+		d1.watchDoor();
+		d1.show();
+		System.out.println("----------");
+		
+		d1.setName("Boli");
+		d1.setAge(2);
+		d1.setColor("white");
+		d1.show();
+		System.out.println("----------");
+		
+		Dog d2 = new Dog("Poly", 1, "black");
+		d2.watchDoor();
+		d2.show();
+		System.out.println("----------");
+		
+		Cat c1 = new Cat();
+		c1.eat();
+		c1.sleep();
+		c1.hide();
+		c1.show();
+		System.out.println("----------");
+		
+		c1.setName("Lucky");
+		c1.setAge(3);
+		c1.setColor("flower");
+		c1.show();
+		System.out.println("----------");
+		
+		Cat c2 = new Cat("Apple", 4, "yellow");
+		c2.hide();
+		c2.show();
+		System.out.println("----------");
+		
+		
+	}
+}
+---------------------
+result:
+C:\develop\code>java CatDogTest
+Animal default construct.
+Dog default construct.
+Animal Eat!
+Animal Sleep!
+Dog watchDoor
+null---0---null
+----------
+Boli---2---white
+----------
+Dog parameter construct.
+Dog watchDoor
+Poly---1---black
+----------
+Animal default construct.
+Cat default construct.
+Animal Eat!
+Animal Sleep!
+Cat hide.
+null---0---null
+----------
+Lucky---3---flower
+----------
+Cat paramer construct.
+Cat hide.
+Apple---4---yellow
+----------
+------------------------------------------------------
+
