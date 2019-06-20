@@ -817,6 +817,8 @@ FuZiTest1.java:19: error: cannot assign a value to final variable num
 1 error
 -----------------------------------------------------------------------------
 final修饰局部变量：
+A：基本数据类型：基本类型的值不能发生改变
+B：引用数据类型：引用类型的地址值不能发生改变，但是引用类型的地址指向的值可以改变
 ---------------------------
 code:
 class Student {
@@ -879,3 +881,126 @@ FinalTest.java:24: error: cannot assign a value to final variable ss
                 ^
 1 error
 --------------------------------------------------
+final修饰的变量的初始化的时机：
+A：被final修饰的变量只能赋值一次（要不在初始化时赋值，要不在默认初始化后赋值）
+B：在构造方法完毕前（非静态的常量）
+
+---------------------------------------------
+多态：同一个对象（事物），在不同的时刻体现出来的不同的状态
+Cat c = new Cat();// Cat is Cat
+Animal a = new Animal();// Cat is Animal
+从右向左念
+水（液体，固体，气态）
+
+多态的前提：
+	A：要有继承关系
+	B：要有方法重写
+	C：要有父类引用指向子类对象
+	Base b = new Derived();
+---------------------------
+code:
+class Base {
+	public Base() {
+		System.out.println("Base default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Base show");
+	}
+}
+
+class Derived extends Base {
+	public Derived() {
+		System.out.println("Derived default construct.");
+	}
+
+	public void show() {
+		System.out.println("Derived show");
+	}	
+}
+
+class PolymorphismTest {
+	public static void main(String[] args) {
+		Base b1 = new Base();
+		b1.show();
+		
+		Base b2 = new Derived();
+		b2.show();
+	}
+
+}
+---------------------
+result:
+C:\develop\code>java PolymorphismTest
+Base default construct.
+Base show
+Base default construct.
+Derived default construct.
+Derived show
+-------------------------------
+多态中的成员访问特点：
+  A：成员变量
+    编译看左边，运行看左边
+  B：构造方法
+    创建子类对象的时候，访问父类的构造方法，对父类的数据进行初始化
+  C：成员方法
+    编译看左边，运行看右边
+  D：静态方法
+    编译看左边，运行看左边
+    （静态和类相关，算不上重写，访问还是左边的）
+ 由于成员方法存在方法重写，所以它运行看右边。
+----------------------------------------------
+class Base {
+	public int num = 100;
+	public Base() {
+		System.out.println("Base default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Base show");
+	}
+	
+	public static void function() {
+		System.out.println("Base function");
+	}
+}
+
+class Derived extends Base {
+	public int num = 200;
+	public Derived() {
+		System.out.println("Derived default construct.");
+	}
+
+	public void show() {
+		System.out.println("Derived show");
+	}
+
+	public static void function() {
+		System.out.println("Derived function");
+	}	
+}
+
+class PolymorphismTest {
+	public static void main(String[] args) {
+		Base b1 = new Base();
+		b1.show();
+		
+		Base b2 = new Derived();
+		b2.show();
+		System.out.println("num:"+b2.num);
+		b2.function();
+	}
+}
+result:
+C:\develop\code>java PolymorphismTest
+Base default construct.
+Base show
+Base default construct.
+Derived default construct.
+Derived show
+num:100
+Base function
+------------------------------------------------------------
+
+ 
+
