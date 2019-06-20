@@ -1095,4 +1095,50 @@ Cat sleeps
 Cat eats fish
 Cat sleeps
 ---------------------------------------
+多态的弊端：
+不能使用子类特有的功能（Base b = new Derived();）
+
+针对这个弊端
+A：创建子类对象，调用子类方法（可以但是占用内存）(Derived d = new Derived();)
+B：把父类的引用强制转换为给子类的引用 （Derived d = new Base();）
+
+------------------------------------------------------------------------------
+class Base {
+	public Base() {}
+	
+	public void show() {
+		System.out.println("show Base");
+	}	
+}
+
+class Derived extends Base {
+	public Derived() {}
+	
+	public void show() {
+		System.out.println("show Derived");
+	}
+	
+	public void method() {
+		System.out.println("method Derived");
+	}
+}
+
+class BaseDerivedTest {
+	public static void main(String[] args) {
+		Base b1 = new Derived();
+		b1.show();
+		//b1.method();
+		
+		Derived d = (Derived)b1;
+		d.method();
+	}
+}
+result:
+C:\develop\code>java BaseDerivedTest
+show Derived
+method Derived
+---------------------------------------------------------------------------
+
+
+
 
