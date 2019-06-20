@@ -728,4 +728,154 @@ Apple---4---yellow
 有些时候，我们不想让子类去覆盖掉父类的功能，只能让他使用。
 这个时候，针对这种情况，java就提供了一个关键字：final
 final：最终的意思，它可以修饰类，方法，变量。
+特点：
+	final可以修饰类，该类不能被继承
+	final可以修饰方法，该方法不能被重写
+	final可以修饰变量,该变量不能被重新赋值
+-----------------------------------
+常量:
+	A：字面值常量
+		"hello" 
+	B：自定义常量
+		final int x = 100;
+----------------------------------------
+final class Fu {}//无法从最终Fu进行继承
 
+----------------------------------------------------
+code:
+class Fu {
+	public Fu() {
+		System.out.println("Fu default construct.");
+	}
+	
+	public final void show() {
+		System.out.println("Fu show.");
+	}
+}
+
+class Zi extends Fu {
+	public Zi() {
+		System.out.println("Zi default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Zi show");
+	}
+}
+
+class FuZiTest1 {
+	public static void main(String[] args) {
+		Zi zi = new Zi();
+		zi.show();
+	}
+}
+-------------------------
+result: it can't be compile successfully
+C:\develop\code>javac FuZiTest1.java
+FuZiTest1.java:16: error: show() in Zi cannot override show() in Fu
+        public void show() {
+                    ^
+  overridden method is final
+1 error
+-------------------------------------
+code:
+class Fu {
+	public final int num = 10;
+
+	public Fu() {
+		System.out.println("Fu default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Fu show.");
+	}
+}
+
+class Zi extends Fu {
+	public Zi() {
+		System.out.println("Zi default construct.");
+	}
+	
+	public void show() {
+		num = 20;
+		System.out.println("Zi show num:"+num);
+	}
+}
+
+class FuZiTest1 {
+	public static void main(String[] args) {
+		Zi zi = new Zi();
+		zi.show();
+	}
+}
+--------------------------
+result:
+C:\develop\code>javac FuZiTest1.java
+FuZiTest1.java:19: error: cannot assign a value to final variable num
+                num = 20;
+                ^
+1 error
+-----------------------------------------------------------------------------
+final修饰局部变量：
+---------------------------
+code:
+class Student {
+	public final int age = 10;
+}
+
+class FinalTest {
+	public static void main(String[] args) {
+		int x = 10;
+		x = 100;
+		System.out.println("x:"+x);
+		final int y = 20;
+		y = 200;
+		System.out.println("y:"+y);
+		
+		Student s = new Student();
+		System.out.println(s.age);
+		s.age = 20;
+		System.out.println(s.age);
+	}
+}
+-----------------------------
+result:
+FinalTest.java:16: error: cannot assign a value to final variable age
+                s.age = 20;
+                 ^
+1 error
+---------------------------------------
+class Student {
+	public int age = 10;
+}
+
+class FinalTest {
+	public static void main(String[] args) {
+		int x = 10;
+		x = 100;
+		System.out.println("x:"+x);
+		final int y = 20;
+		//y = 200;
+		System.out.println("y:"+y);
+		
+		Student s = new Student();
+		System.out.println(s.age);
+		s.age = 20;
+		System.out.println(s.age);
+		
+		final Student ss = new Student();
+		System.out.println(ss.age);
+		ss.age = 20;
+		System.out.println(ss.age);
+		
+		ss = new Student();
+		
+	}
+}
+-------------------------------
+C:\develop\code>javac FinalTest.java
+FinalTest.java:24: error: cannot assign a value to final variable ss
+                ss = new Student();
+                ^
+1 error
+--------------------------------------------------
