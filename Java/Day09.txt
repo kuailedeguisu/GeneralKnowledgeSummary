@@ -816,7 +816,122 @@ Cat eat fish
 Cat show
 Animal method
 -------------------------------------------------------
+abstract class Teacher {
+	public String name;
+	public int age;
+	
+	public Teacher() {
+		System.out.println("Teacher default construct");
+	}
+	
+	public Teacher(String name, int age) {
+		this.name = name;
+		this.age = age;
+		System.out.println("Teacher parameter construct");
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public abstract void teach();
+}
 
+
+class BasicClassTeacher extends Teacher {
+	public BasicClassTeacher() {
+		super();
+		System.out.println("BasicClassTeacher default construct");
+	}
+	
+	public BasicClassTeacher(String name, int age) {
+		super(name, age);
+		System.out.println("BasicClassTeacher parameter construct");
+	}
+	
+	public void teach() {
+		System.out.println("BasicClassTeach teach");
+	}
+}
+
+class JobClassTeacher extends Teacher {
+	public JobClassTeacher() {
+		super();
+		System.out.println("JobClassTeacher default construct");
+	}
+	
+	public JobClassTeacher(String name, int age) {
+		super(name, age);
+		System.out.println("JobClassTeacher parameter construct");
+	}
+	
+	public void teach() {
+		System.out.println("JobClassTeacher teach");
+	}
+}
+
+class DifferentTeacherTest {
+	public static void main(String[] args) {
+		Teacher tb = new BasicClassTeacher();
+		tb.setName("Emma");
+		tb.setAge(20);
+		System.out.println(tb.getName()+"---"+tb.getAge());
+		tb.teach();
+		System.out.println("-------------------------");
+		
+		tb = new BasicClassTeacher("Lily", 25);
+		System.out.println(tb.getName()+"---"+tb.getAge());
+		tb.teach();
+		System.out.println("-------------------------");
+		
+		tb = new JobClassTeacher();
+		tb.setName("Bob");
+		tb.setAge(40);
+		System.out.println(tb.getName()+"---"+tb.getAge());
+		tb.teach();
+		System.out.println("-------------------------");
+		
+		tb = new BasicClassTeacher("Tom", 50);
+		System.out.println(tb.getName()+"---"+tb.getAge());
+		tb.teach();
+		System.out.println("-------------------------");
+	}
+}
+
+result:
+Teacher default construct
+BasicClassTeacher default construct
+Emma---20
+BasicClassTeach teach
+-------------------------
+Teacher parameter construct
+BasicClassTeacher parameter construct
+Lily---25
+BasicClassTeach teach
+-------------------------
+Teacher default construct
+JobClassTeacher default construct
+Bob---40
+JobClassTeacher teach
+-------------------------
+Teacher parameter construct
+BasicClassTeacher parameter construct
+Tom---50
+BasicClassTeach teach
+-------------------------
+------------------------------------------------------------------------
 
 
 
