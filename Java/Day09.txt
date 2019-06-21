@@ -675,6 +675,147 @@ Animal method
 ----------------------------------------------------
 分析：从具体到抽象
 实现：从抽象到具体
+-----------------------------------------------------------------
+abstract class Animal {
+	public int num = 10;
+	public final int num2 = 100;
+	public String name;
+	public int age;
+	
+	public Animal() {
+		System.out.println("Animal default construct");
+	}
+	
+	public Animal(String name, int age) {
+		this.name = name;
+		this.age = age;
+		System.out.println("Animal parameter construct");
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public abstract void eat();
+	
+	public abstract void show();
+	
+	public void method() {
+		System.out.println("Animal method");
+	}
+	
+}
+
+class Dog extends Animal {
+	public Dog() {}
+	
+	public Dog(String name, int age) {
+		super(name, age);
+	}
+	
+	public void eat() {
+		System.out.println("Dog eat meat");
+	}
+	
+	public void show() {
+		System.out.println("Dog show");
+	}
+	
+}
+
+class Cat extends Animal {
+	public Cat() {}
+	
+	public Cat(String name, int age) {
+		super(name, age);
+	}
+	
+	public void eat() {
+		System.out.println("Cat eat fish");
+	}
+	
+    public void show() {
+		System.out.println("Cat show");
+	}
+}
+
+abstract class Tiger extends Animal {}
+
+class AbstractTest1 {
+	public static void main(String[] args) {
+		Animal sd = new Dog();
+		System.out.println(sd.num);
+		sd.num = 20;
+		System.out.println(sd.num);
+		System.out.println(sd.num2);
+		//sd.num2 = 200;
+		//System.out.println(sd.num2);
+		sd.eat();
+		sd.show();
+		sd.method();
+		sd.setName("Lucky");
+		sd.setAge(2);
+		System.out.println(sd.getName() + "-----" + sd.getAge());
+		
+		Animal sc = new Cat();
+		sc.eat();
+		sc.show();
+		sc.method();
+		sc.setName("Poly");
+		sc.setAge(3);
+		System.out.println(sc.getName() + "-----" + sc.getAge());
+
+		Animal sd1 = new Dog("Tom",  4);
+		sd1.eat();
+		sd1.show();
+		sd1.method();
+		
+		Animal sc1 = new Cat("Tom",  4);
+		sc1.eat();
+		sc1.show();
+		sc1.method();
+		
+		//Animal s = new Animal();
+		
+		//Animal st = new Tiger();
+	}
+}
+
+result:
+Animal default construct
+10
+20
+100
+Dog eat meat
+Dog show
+Animal method
+Lucky-----2
+Animal default construct
+Cat eat fish
+Cat show
+Animal method
+Poly-----3
+Animal parameter construct
+Dog eat meat
+Dog show
+Animal method
+Animal parameter construct
+Cat eat fish
+Cat show
+Animal method
+-------------------------------------------------------
 
 
 
