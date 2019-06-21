@@ -932,6 +932,279 @@ Tom---50
 BasicClassTeach teach
 -------------------------
 ------------------------------------------------------------------------
+abstract class Student {
+	String name;
+	int age;
+	int grade;
+	
+	public Student() {}
+	
+	public Student(String name, int age, int grade) {
+		this.name = name;
+		this.age = age;
+		this.grade = grade;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+	
+	public int getGrade() {
+		return grade;
+	}
+	
+	abstract void study(); 
+	
+	abstract void eat();
+}
+
+class BasicStudent extends Student {
+	public BasicStudent() {}
+	
+	public BasicStudent(String name, int age, int grade) {
+		super(name, age, grade);
+	}
+	
+	public void study() {
+		System.out.println("BasicStudent study");
+	}
+	
+	public void eat() {
+		System.out.println("BasicStudent eat");
+	}
+}
+
+class JobStudent extends Student {
+	public JobStudent() {}
+	
+	public JobStudent(String name, int age, int grade) {
+		super(name, age, grade);
+	}
+	
+	public void study() {
+		System.out.println("JobStudent study");
+	}
+	
+	public void eat() {
+		System.out.println("JobStudent eat");
+	}
+}
+
+class BasicJobStudentTest {
+	public static void main(String[] args) {
+		Student sb = new BasicStudent();
+		sb.setName("Qiang Li");
+		sb.setAge(15);
+		sb.setGrade(9);
+		System.out.println(sb.getName()+"---"+sb.getAge()+"---"+sb.getGrade());
+		sb.study();
+		sb.eat();
+		System.out.println("----------------------------------------------------");
+		
+		sb = new BasicStudent("Li Wang", 18, 12);
+		System.out.println(sb.getName()+"---"+sb.getAge()+"---"+sb.getGrade());
+		sb.study();
+		sb.eat();
+		System.out.println("----------------------------------------------------");
+
+		sb = new JobStudent();
+		sb.setName("Qiang Li");
+		sb.setAge(15);
+		sb.setGrade(9);
+		System.out.println(sb.getName()+"---"+sb.getAge()+"---"+sb.getGrade());
+		sb.study();
+		sb.eat();
+		System.out.println("----------------------------------------------------");
+		
+		sb = new JobStudent("Li Wang", 18, 12);
+		System.out.println(sb.getName()+"---"+sb.getAge()+"---"+sb.getGrade());
+		sb.study();
+		sb.eat();
+		System.out.println("----------------------------------------------------");		
+	}
+}
+
+result:
+Qiang Li---15---9
+BasicStudent study
+BasicStudent eat
+----------------------------------------------------
+Li Wang---18---12
+BasicStudent study
+BasicStudent eat
+----------------------------------------------------
+Qiang Li---15---9
+JobStudent study
+JobStudent eat
+----------------------------------------------------
+Li Wang---18---12
+JobStudent study
+JobStudent eat
+----------------------------------------------------
+--------------------------------------------------------------------------------------------------
+abstract class Employee {
+	String name;
+	int id;
+	int salary;
+	
+	public Employee() {}
+	
+	public Employee(String name, int id, int salary) {
+		this.name = name;
+		this.id = id;
+		this.salary = salary;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+		
+	public int getSalary() {
+		return salary;
+	}
+	
+	abstract void work();
+}
+
+class CommonEmployee extends Employee {
+	public CommonEmployee() {}
+	
+	public CommonEmployee(String name, int id, int salary) {
+		super(name, id, salary);
+	}
+	
+	public void work() {
+		System.out.println("CommonEmployee work");
+	}
+}
+
+class Manager extends Employee {
+	int bonus;
+	
+	public Manager() {}
+	
+	public Manager(String name, int id, int salary, int bonus) {
+		super(name, id, salary);
+		this.bonus = bonus;
+	}
+	
+	public void setBonus(int bonus) {
+		this.bonus = bonus;
+	}
+	
+	public int getBonus() {
+		return bonus;
+	}
+	
+	public void work() {
+		System.out.println("Manager work");
+	}
+}
+
+class EmployeeManagerTest {
+	public static void main(String[] args) {
+		System.out.println("Manager start");
+		Employee e = new Manager();
+		e.setName("Peter");
+		e.setId(1001);
+		e.setSalary(40000);
+		//e.setBonus(400000);
+		System.out.println(e.getName()+"---"+e.getId()+"---"+e.getSalary());
+		e.work();
+		System.out.println("----------------------");
+		
+		e = new Manager("Emma", 1002, 50000, 500000);
+		System.out.println(e.getName()+"---"+e.getId()+"---"+e.getSalary());
+		e.work();
+		System.out.println("----------------------");
+		
+		Manager m = (Manager)e;
+		m.setName("Peter");
+		m.setId(1003);
+		m.setSalary(40000);
+		m.setBonus(400000);
+		System.out.println(m.getName()+"---"+m.getId()+"---"+m.getSalary()+"---"+m.getBonus());
+		e.work();
+		System.out.println("----------------------");
+		
+	    System.out.println("CommonEmployee start");
+		Employee ce = new CommonEmployee();
+		ce.setName("Peter");
+		ce.setId(1001);
+		ce.setSalary(4000);
+		System.out.println(ce.getName()+"---"+ce.getId()+"---"+ce.getSalary());
+		ce.work();
+		System.out.println("----------------------");
+		
+		ce = new CommonEmployee("Emma", 1002, 5000);
+		System.out.println(ce.getName()+"---"+ce.getId()+"---"+ce.getSalary());
+		ce.work();
+		System.out.println("----------------------");
+		
+		CommonEmployee mce = (CommonEmployee)ce;
+		mce.setName("Peter");
+		mce.setId(1003);
+		mce.setSalary(4000);
+		System.out.println(mce.getName()+"---"+mce.getId()+"---"+mce.getSalary());
+		mce.work();
+		System.out.println("----------------------");	
+	}
+}
+
+result:
+Manager start
+Peter---1001---40000
+Manager work
+----------------------
+Emma---1002---50000
+Manager work
+----------------------
+Peter---1003---40000---400000
+Manager work
+----------------------
+CommonEmployee start
+Peter---1001---4000
+CommonEmployee work
+----------------------
+Emma---1002---5000
+CommonEmployee work
+----------------------
+Peter---1003---4000
+CommonEmployee work
+----------------------
+-----------------------------------------------------------------------
 
 
 
