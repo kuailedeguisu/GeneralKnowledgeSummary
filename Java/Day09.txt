@@ -1,0 +1,586 @@
+------------------------------------------------------
+由于继承方法中有一个现象，方法重写
+所以，父类的功能，就会被子类给覆盖掉
+有些时候，我们不想让子类去覆盖掉父类的功能，只能让他使用。
+这个时候，针对这种情况，java就提供了一个关键字：final
+final：最终的意思，它可以修饰类，方法，变量。
+特点：
+	final可以修饰类，该类不能被继承
+	final可以修饰方法，该方法不能被重写
+	final可以修饰变量,该变量不能被重新赋值
+-----------------------------------
+常量:
+	A：字面值常量
+		"hello" 
+	B：自定义常量
+		final int x = 100;
+----------------------------------------
+final class Fu {}//无法从最终Fu进行继承
+
+----------------------------------------------------
+code:
+class Fu {
+	public Fu() {
+		System.out.println("Fu default construct.");
+	}
+	
+	public final void show() {
+		System.out.println("Fu show.");
+	}
+}
+
+class Zi extends Fu {
+	public Zi() {
+		System.out.println("Zi default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Zi show");
+	}
+}
+
+class FuZiTest1 {
+	public static void main(String[] args) {
+		Zi zi = new Zi();
+		zi.show();
+	}
+}
+-------------------------
+result: it can't be compile successfully
+C:\develop\code>javac FuZiTest1.java
+FuZiTest1.java:16: error: show() in Zi cannot override show() in Fu
+        public void show() {
+                    ^
+  overridden method is final
+1 error
+-------------------------------------
+code:
+class Fu {
+	public final int num = 10;
+
+	public Fu() {
+		System.out.println("Fu default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Fu show.");
+	}
+}
+
+class Zi extends Fu {
+	public Zi() {
+		System.out.println("Zi default construct.");
+	}
+	
+	public void show() {
+		num = 20;
+		System.out.println("Zi show num:"+num);
+	}
+}
+
+class FuZiTest1 {
+	public static void main(String[] args) {
+		Zi zi = new Zi();
+		zi.show();
+	}
+}
+--------------------------
+result:
+C:\develop\code>javac FuZiTest1.java
+FuZiTest1.java:19: error: cannot assign a value to final variable num
+                num = 20;
+                ^
+1 error
+-----------------------------------------------------------------------------
+final修饰局部变量：
+A：基本数据类型：基本类型的值不能发生改变
+B：引用数据类型：引用类型的地址值不能发生改变，但是引用类型的地址指向的值可以改变
+---------------------------
+code:
+class Student {
+	public final int age = 10;
+}
+
+class FinalTest {
+	public static void main(String[] args) {
+		int x = 10;
+		x = 100;
+		System.out.println("x:"+x);
+		final int y = 20;
+		y = 200;
+		System.out.println("y:"+y);
+		
+		Student s = new Student();
+		System.out.println(s.age);
+		s.age = 20;
+		System.out.println(s.age);
+	}
+}
+-----------------------------
+result:
+FinalTest.java:16: error: cannot assign a value to final variable age
+                s.age = 20;
+                 ^
+1 error
+---------------------------------------
+class Student {
+	public int age = 10;
+}
+
+class FinalTest {
+	public static void main(String[] args) {
+		int x = 10;
+		x = 100;
+		System.out.println("x:"+x);
+		final int y = 20;
+		//y = 200;
+		System.out.println("y:"+y);
+		
+		Student s = new Student();
+		System.out.println(s.age);
+		s.age = 20;
+		System.out.println(s.age);
+		
+		final Student ss = new Student();
+		System.out.println(ss.age);
+		ss.age = 20;
+		System.out.println(ss.age);
+		
+		ss = new Student();
+		
+	}
+}
+-------------------------------
+C:\develop\code>javac FinalTest.java
+FinalTest.java:24: error: cannot assign a value to final variable ss
+                ss = new Student();
+                ^
+1 error
+--------------------------------------------------
+final修饰的变量的初始化的时机：
+A：被final修饰的变量只能赋值一次（要不在初始化时赋值，要不在默认初始化后赋值）
+B：在构造方法完毕前（非静态的常量）
+
+---------------------------------------------
+多态：同一个对象（事物），在不同的时刻体现出来的不同的状态
+Cat c = new Cat();// Cat is Cat
+Animal a = new Animal();// Cat is Animal
+从右向左念
+水（液体，固体，气态）
+
+多态的前提：
+	A：要有继承关系
+	B：要有方法重写
+	C：要有父类引用指向子类对象
+	Base b = new Derived();
+---------------------------
+code:
+class Base {
+	public Base() {
+		System.out.println("Base default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Base show");
+	}
+}
+
+class Derived extends Base {
+	public Derived() {
+		System.out.println("Derived default construct.");
+	}
+
+	public void show() {
+		System.out.println("Derived show");
+	}	
+}
+
+class PolymorphismTest {
+	public static void main(String[] args) {
+		Base b1 = new Base();
+		b1.show();
+		
+		Base b2 = new Derived();
+		b2.show();
+	}
+
+}
+---------------------
+result:
+C:\develop\code>java PolymorphismTest
+Base default construct.
+Base show
+Base default construct.
+Derived default construct.
+Derived show
+-------------------------------
+多态中的成员访问特点：
+  A：成员变量
+    编译看左边，运行看左边
+  B：构造方法
+    创建子类对象的时候，访问父类的构造方法，对父类的数据进行初始化
+  C：成员方法
+    编译看左边，运行看右边
+  D：静态方法
+    编译看左边，运行看左边
+    （静态和类相关，算不上重写，访问还是左边的）
+ 由于成员方法存在方法重写，所以它运行看右边。
+----------------------------------------------
+class Base {
+	public int num = 100;
+	public Base() {
+		System.out.println("Base default construct.");
+	}
+	
+	public void show() {
+		System.out.println("Base show");
+	}
+	
+	public static void function() {
+		System.out.println("Base function");
+	}
+}
+
+class Derived extends Base {
+	public int num = 200;
+	public Derived() {
+		System.out.println("Derived default construct.");
+	}
+
+	public void show() {
+		System.out.println("Derived show");
+	}
+
+	public static void function() {
+		System.out.println("Derived function");
+	}	
+}
+
+class PolymorphismTest {
+	public static void main(String[] args) {
+		Base b1 = new Base();
+		b1.show();
+		
+		Base b2 = new Derived();
+		b2.show();
+		System.out.println("num:"+b2.num);
+		b2.function();
+	}
+}
+result:
+C:\develop\code>java PolymorphismTest
+Base default construct.
+Base show
+Base default construct.
+Derived default construct.
+Derived show
+num:100
+Base function
+------------------------------------------------------------
+多态的好处：
+  A：提高了代码的维护性（继承保证）
+  B：提高了代码的扩展性
+
+ ---------------------------------
+ class Animal {
+	public void eat() {
+		System.out.println("eat");
+	}
+	
+	public void sleep() {
+		System.out.println("sleep");
+	}
+}
+
+class Dog extends Animal {
+	public void eat() {
+		System.out.println("Dog eats meat");
+	}
+	
+	public void sleep() {
+		System.out.println("Dog sleeps");
+	}
+}
+
+class Cat extends Animal {
+	public void eat() {
+		System.out.println("Cat eats fish");
+	}
+	
+	public void sleep() {
+		System.out.println("Cat sleeps");
+	}
+}
+
+class AnimalTool {
+/**
+* @ You can't create AnimalTool object
+*/
+	private AnimalTool() {}// not create AnimalTool object
+	
+/**
+* @ You can use any Animal
+* @param Animal
+*/	
+	public static void useAnimal(Animal c) {
+		c.eat();
+		c.sleep();
+	}
+}
+class CatDogTest1 {
+	public static void main(String[] args) {
+		Animal a1 = new Dog();
+		a1.eat();
+		a1.sleep();
+		
+		Animal a2 = new Cat();
+		a2.eat();
+		a2.sleep();
+		System.out.println("--------------");
+		
+		Animal a3 = new Dog();
+		for (int i = 0; i < 3; ++i) {
+			AnimalTool.useAnimal(a3);
+		}
+		System.out.println("--------------");
+		
+		Animal a4 = new Cat();
+		for (int i = 0; i < 3; ++i) {
+			AnimalTool.useAnimal(a4);
+		}
+
+	}
+}
+result：
+Dog eats meat
+Dog sleeps
+Cat eats fish
+Cat sleeps
+--------------
+Dog eats meat
+Dog sleeps
+Dog eats meat
+Dog sleeps
+Dog eats meat
+Dog sleeps
+--------------
+Cat eats fish
+Cat sleeps
+Cat eats fish
+Cat sleeps
+Cat eats fish
+Cat sleeps
+---------------------------------------
+多态的弊端：
+不能使用子类特有的功能（Base b = new Derived();）
+
+针对这个弊端
+A：创建子类对象，调用子类方法（可以但是占用内存）(Derived d = new Derived();)
+B：把父类的引用强制转换为给子类的引用 （Derived d = new Base();）
+
+------------------------------------------------------------------------------
+class Base {
+	public Base() {}
+	
+	public void show() {
+		System.out.println("show Base");
+	}	
+}
+
+class Derived extends Base {
+	public Derived() {}
+	
+	public void show() {
+		System.out.println("show Derived");
+	}
+	
+	public void method() {
+		System.out.println("method Derived");
+	}
+}
+
+class BaseDerivedTest {
+	public static void main(String[] args) {
+		Base b1 = new Derived();
+		b1.show();
+		//b1.method();
+		
+		Derived d = (Derived)b1;
+		d.method();
+	}
+}
+result:
+C:\develop\code>java BaseDerivedTest
+show Derived
+method Derived
+---------------------------------------------------------------------------
+
+ClassCastException:类型转换中向下转型中可能会出现
+编译只检查基本语法错误，运行时还会判断是否有错误
+------------------------------------------------------------------------
+SouthPerson and NorthPerson
+code:
+class Person {
+	public Person() {
+		System.out.println("Person default construct.");
+	}
+	
+	public void eat() {
+		System.out.println("Person eat");
+	}
+}
+
+class SouthPerson extends Person {
+	public SouthPerson() {
+		System.out.println("SouthPerson default construct");
+	}
+	
+	public void eat() {
+		System.out.println("SouthPerson eat");
+	}
+	
+	public void sell() {
+		System.out.println("SouthPerson sell");
+	}
+}
+
+class NorthPerson extends Person {
+	public NorthPerson() {
+		System.out.println("NorthPerson default construct");
+	}
+	
+	public void eat() {
+		System.out.println("NorthPerson eat");
+	}
+	
+	public void research() {
+		System.out.println("NorthPerson research");
+	}
+}
+
+class SouthNorthPersonTest {
+	public static void main(String[] args) {
+		Person ps = new SouthPerson();
+	    ps.eat();
+		SouthPerson s = (SouthPerson)ps;
+		s.sell();
+	
+	    Person pn = new NorthPerson();
+	    pn.eat();
+		NorthPerson n = (NorthPerson)pn;
+		n.research();
+	}
+}
+result:
+C:\develop\code>java SouthNorthPersonTest
+Person default construct.
+SouthPerson default construct
+SouthPerson eat
+SouthPerson sell
+Person default construct.
+NorthPerson default construct
+NorthPerson eat
+NorthPerson research
+-------------------------------------------------------
+多态的成员访问特点：
+  方法：编译看左边，运行看右边
+继承的时候：
+  子类中有和父类中一样的方法，叫重写
+  子类中没有和父类中出现过的方法，方法就被继承过来
+------------------------------------------------------------
+class A {
+	public void show() {
+		show2();
+	}
+	
+	public void show2() {
+		System.out.println("I");
+	}
+}
+
+class B extends A {
+	public void show2() {
+		System.out.println("love");
+	}
+}
+
+class C extends B {
+	public void show() {
+		super.show();
+	}
+	
+	public void show2() {
+		System.out.println("you");
+	}
+}
+
+class PolymorphismTest2 {
+	public static void main(String[] args) {
+		A a = new B();
+		a.show();
+		
+		B b = new C();
+		b.show();
+	}
+}
+result:
+love
+you
+---------------------------------------------------------
+抽象类：一个没有方法体的方法应该定义为抽象方法，而类中如果有抽象方法，该类必须定义为抽象类
+抽象类的特点：
+  A：抽象类和抽象方法必须用abstract关键字修饰
+  B：抽象类中不一定有抽象方法，但是有抽象方法的类必须是抽象类
+  C：抽象类不能实例化，因为它不是具体的
+抽象类有构造方法，但是不能实例化，主要用于子类访问父类数据的初始化
+  D：抽象的子类
+    a：如果不想重写抽象方法，抽象类的子类是一个抽象类
+    b:重写所有的抽象方法，这个时候子类是一个具体的类
+  抽象类的实例化其实是靠具体的子类实现的，是多态的方式
+  
+空方法体 abstract void eat() {}
+无方法体 abstract void eat();
+--------------------------------------------
+abstract class Animal {
+	public abstract void eat();
+	
+}
+
+class Dog extends Animal {
+	public void eat() {
+		System.out.println("Dog eat meat");
+	}
+	
+}
+
+class Cat extends Animal {
+	public void eat() {
+		System.out.println("Cat eat fish");
+	}
+}
+
+abstract class Tiger extends Animal {}
+
+class AbstractTest1 {
+	public static void main(String[] args) {
+		Animal sd = new Dog();
+		sd.eat();
+		
+		Animal sc = new Cat();
+		sc.eat();
+		
+		//Animal s = new Animal();
+		
+		//Animal st = new Tiger();
+	}
+}
+result：
+Dog eat meat
+Cat eat fish
+-----------------------------------
+
+
+
+
+
+
