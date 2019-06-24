@@ -1,1 +1,44 @@
+--------------------------------------
+修饰符
+                本类                同一个包下（子类或者无关类）。   不同包下（子类）。   不同包下（无关类）
+public           Y                      Y                        Y                    Y
+默认              Y                      Y
+protected         Y                     Y                        Y
+private           Y
 
+修饰符：
+  权限修饰符：public，默认，protected， private
+  状态修饰符：static，final
+  抽象修饰符：abstract
+  
+类：
+权限修饰符：public和默认
+状态修饰符：final
+抽象修饰符：abstract
+用的最多的是public
+
+成员变量：
+权限修饰符：public，默认，protected， private
+状态修饰符：static，final
+抽象修饰符：不可以
+用的最多的是private
+
+构造方法：
+  权限修饰符：public，默认，protected， private
+  状态修饰符：无
+  抽象修饰符：无
+用的最多的是public
+
+成员方法：
+  权限修饰符：public，默认，protected， private
+  状态修饰符：static，final
+  抽象修饰符：abstract
+ 用的最多的是public
+ 
+ 除此以外的组合，
+ 成员变量：
+  public static final
+ 成员方法：
+  public static
+  public abstract
+  public final
