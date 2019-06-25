@@ -1,0 +1,14 @@
+Java开发工具：
+  Notepad++
+  Eclipse and MyEclipse（IDE：Integrated Development Environment，将编写，编译，运行，平台集中在一起）
+Eclipse:免费，免安装，不同的插件可以安装不同版本的
+MyEclipse:插件收费，WEB开发用的系统架构平台
+
+http://eclipse.org/
+
+
+自动编译
+outline中可以通过不同图形和颜色看变量的属性
+console 看程序运行结果
+选中类的文件，然后按F4可以看继承关系
+
