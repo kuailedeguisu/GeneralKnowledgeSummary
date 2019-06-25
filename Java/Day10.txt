@@ -1,4 +1,430 @@
---------------------------------------
+运动员和教练的例子：
+code：
+interface English {
+    void studyEnglish();
+}
+
+abstract class Person {
+    String name;
+    int age;
+
+    public Person() {}
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    abstract void eat();
+
+    public void sleep() {
+        System.out.println("Person sleep");
+    }
+}
+
+abstract class Player extends Person {
+    public Player() {}
+
+    public Player(String name, int age) {
+        super(name, age);
+    }
+
+    abstract void study();   
+}
+
+abstract class Coach extends Person {
+    public Coach() {}
+
+    public Coach(String name, int age) {
+        super(name, age);
+    }
+
+    abstract void teach();   
+}
+
+class PingPangPlayer extends Player implements English {
+    public PingPangPlayer() {}
+
+    public PingPangPlayer(String name, int age) {
+        super(name, age);
+    }
+
+    public void studyEnglish() {
+        System.out.println("PingPangPlayer studyEnglish");
+    }
+
+    public void study() {
+        System.out.println("PingPangPlayer study PingPang");
+    }
+
+    public void eat() {
+        System.out.println("PingPangPlayer eat meat and cabbage");
+    }
+}
+
+class PingPangCoach extends Coach {
+    public PingPangCoach() {}
+
+    public PingPangCoach(String name, int age) {
+        super(name, age);
+    }
+
+    public void studyEnglish() {
+        System.out.println("PingPangCoach studyEnglish");
+    }
+
+    public void teach() {
+        System.out.println("PingPangCoach teach PingPang");
+    }
+
+    public void eat() {
+        System.out.println("PingPangCoach eat meat and porridge");
+    }
+}
+
+class BasketballPlayer extends Player {
+    public BasketballPlayer() {}
+
+    public BasketballPlayer(String name, int age) {
+        super(name, age);
+    }
+
+    public void study() {
+        System.out.println("BasketballPlayer study Basketball");
+    }
+
+    public void eat() {
+        System.out.println("BasketballPlayer eat fish and rice");
+    }
+}
+
+class BasketballCoach extends Coach {
+    public BasketballCoach() {}
+
+    public BasketballCoach(String name, int age) {
+        super(name, age);
+    }
+
+    public void teach() {
+        System.out.println("BasketballCoach teach Basketball");
+    }
+
+    public void eat() {
+        System.out.println("BasketballCoach eat fish and porridge");
+    }
+}
+
+class InterfaceTest5 {
+    public static void main(String[] args) {
+        PingPangCoach ppc = new PingPangCoach("Peter", 40);
+        ppc.eat();
+        ppc.sleep();
+        ppc.studyEnglish();
+        ppc.teach();
+        PingPangPlayer ppp = new PingPangPlayer("Tom", 20);
+        ppp.eat();
+        ppp.sleep();
+        ppp.study();
+        ppp.studyEnglish();
+
+        BasketballCoach bbc = new BasketballCoach("Bob", 45);
+        bbc.eat();
+        bbc.sleep();
+        bbc.teach();
+
+        BasketballPlayer bbp = new BasketballPlayer("Poly", 25);
+        bbp.eat();
+        bbp.sleep();
+        bbp.study();
+    }
+}
+
+result：
+PingPangCoach eat meat and porridge
+Person sleep
+PingPangCoach studyEnglish
+PingPangCoach teach PingPang
+PingPangPlayer eat meat and cabbage
+Person sleep
+PingPangPlayer study PingPang
+PingPangPlayer studyEnglish
+BasketballCoach eat fish and porridge
+Person sleep
+BasketballCoach teach Basketball
+BasketballPlayer eat fish and rice
+Person sleep
+BasketballPlayer study Basketball
+------------------------------------------------------------------
+形式参数和返回值的问题的深入研究：
+形式参数：
+  基本类型
+  引用类型：
+    类：需要的是该类的对象
+    抽象类:需要的是该抽象类的子类对象
+    接口：需要的是该接口的实现类对象
+--------------------------------------------------
+code：
+class Student {
+    public void study() {
+        System.out.println("Good Good Study, Day Day Up.");
+    }
+}
+
+class StudentDemo {
+    public void method(Student s) {
+        s.study();
+    }
+}
+
+class ClassParameterTest {
+    public static void main(String[] args) {
+        StudentDemo sd = new StudentDemo();
+        Student s = new Student();
+        sd.method(s);
+
+        new StudentDemo().method(new Student());
+    }
+}
+
+result:
+Good Good Study, Day Day Up.
+Good Good Study, Day Day Up.
+-------------------------------------------
+abstract class Person {
+    public abstract void study(); 
+}
+
+class Student extends Person {
+    public void study() {
+        System.out.println("Good Good Study, Day Day Up");
+    }
+}
+
+class PersonDemo {
+    public void method(Person p) {
+        p.study();
+    }
+}
+
+class AbstractClassParameterTest {
+    public static void main(String[] args) {
+        Person p = new Student();
+        PersonDemo pd = new PersonDemo();
+        pd.method(p);
+
+        new PersonDemo().method(new Student());
+    }
+}
+
+result:
+Good Good Study, Day Day Up
+Good Good Study, Day Day Up
+----------------------------------
+interface Hobby {
+    public void hobby();
+}
+
+class Teacher implements Hobby {
+    public void hobby() {
+        System.out.println("Teacher loves to teach");
+    }
+}
+
+class HobbyDemo {
+    public void method(Hobby h) {
+        h.hobby();
+    } 
+}
+
+class InterfaceParameterTest {
+    public static void main(String[] args) {
+        HobbyDemo hd = new HobbyDemo();
+        Hobby h = new Teacher();
+        hd.method(h);
+    }
+}
+
+result:
+Teacher loves to teach
+------------------------------------
+返回值类型：
+  基本类型
+  引用类型
+    类：真正返回的是该类的对象
+    抽象类:真正返回的是抽象类的子类对象
+    接口：真正返回的是接口的实现类的对象
+ -------------------------
+ class Student {
+    public void study() {
+        System.out.println("Good Good Study, Day Day Up!");
+    }
+}
+
+class StudentDemo {
+    public Student getStudent() {
+        return new Student();
+    }
+}
+
+class ReturnClassParameterTest {
+    public static void main(String[] args) {
+        StudentDemo sd = new StudentDemo();
+        sd.getStudent().study();
+    }
+}
+
+result：
+Good Good Study, Day Day Up!
+---------------------------------------------------------
+abstract class Person {
+    public abstract void study(); 
+}
+
+class Student extends Person {
+    public void study() {
+        System.out.println("Good Good Study, Day Day Up");
+    }
+}
+
+class PersonDemo {
+    public Person getStudent() {
+        return new Student();
+    }
+}
+
+class ReturnAbstractClassTest {
+    public static void main(String[] args) {
+        PersonDemo pd = new PersonDemo();
+        pd.getStudent().study();
+    }
+}
+
+result：
+Good Good Study, Day Day Up
+-----------------------------------------------------
+interface Hobby {
+    public void hobby();
+}
+
+class Teacher implements Hobby {
+    public void hobby() {
+        System.out.println("Teacher loves to teach");
+    }
+}
+
+class HobbyDemo {
+    public Hobby getTeacher() {
+        return new Teacher();
+    } 
+}
+
+class ReturnInterfaceTest {
+    public static void main(String[] args) {
+        HobbyDemo hd = new HobbyDemo();
+        hd.getTeacher().hobby();
+    }
+}
+
+result:
+Teacher loves to teach
+-------------------------------------------------------
+链式编程：
+  特点：每次调用完毕方法后，返回的是一个对象
+---------------------------------------------------------
+包：
+  就是文件夹
+  作用：
+    a：对类进行分类管理
+    b：把相投的类名放在不同的包中
+  包的定义：
+    package 包名；
+      多级包用.分开即可
+   注意事项：
+     A：package语句必须是程序第一条可执行的代码
+     B：package语句在一个文件中只能有一个
+     C：如果没有package表示无包名
+   带包的编译与运行：
+   A：手动式
+     a：编写一个带包的java文件
+     b：通过javac命令编译java文件
+     c：手动创建包名
+     d：把b步骤的class文件放到c步骤的最底层包
+     e：回到和包的根目录在同一个目录的地方，然后运行
+   B：自动式
+     a：编写带包的java文件
+     b：java编译的时候带上-d即可
+       javac -d . *.java
+     c:运行该文件
+        java *
+  --------------------------
+  package cn.itcast;
+
+class PacketTest {
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
+}
+
+result:
+C:\develop\code>javac -d . PacketTest.java
+
+C:\develop\code>java cn.itcast.PacketTest
+Hello World!
+---------------------------------------------
+导包：
+  格式：import 包名
+  这种方式导入时到类的名称
+package，import和class的顺序关系：
+  package > import > class
+  package:只能有一个
+  import：可以有多个
+  class：可以有多个，以后建议一个
+---------------------------------------
+MorePackageDemo.java
+package com.liuyi;
+
+public class MorePackageDemo {
+    public int sum(int a, int b) {
+        return a + b;
+    }
+}
+
+MorePackageTest.java
+package cn.itcast;
+import com.liuyi.MorePackageDemo;
+
+class MorePackageTest {
+    public static void main(String[] args) {
+        //com.liuyi.MorePackageDemo d = new com.liuyi.MorePackageDemo();
+        MorePackageDemo d = new MorePackageDemo();
+        System.out.println(d.sum(10, 20));
+    }
+}
+
+result:
+C:\develop\code>javac -d . MorePackageDemo.java
+
+C:\develop\code>javac -d . MorePackageTest.java
+
+C:\develop\code>java cn.itcast.MorePackageTest
+30
+----------------------------------------------------------------------------------------------------
 修饰符
                 本类                同一个包下（子类或者无关类）。   不同包下（子类）。   不同包下（无关类）
 public           Y                      Y                        Y                    Y
