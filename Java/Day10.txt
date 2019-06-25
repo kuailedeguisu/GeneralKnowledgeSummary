@@ -477,3 +477,366 @@ private           Y
 内部类的位置：
   成员位置：在成员位置定义的类，被称为成员内部类
   局部位置：在局部位置定义的类，被称为局部内部类
+--------------------------------------------------
+class Body {
+    class Heart {
+        public void show() {
+            System.out.println("Heart show");
+        }
+    }
+}
+
+class InnerClassTest2 {
+    public static void main(String[] args) {
+        Body.Heart bh = new Body().new Heart();
+        bh.show();
+    }
+}
+
+result:
+Heart show
+----------------------------------------------------------
+class Body {
+    private class Heart {
+        public void operator() {
+            System.out.println("Heart need operation");
+        }
+    }
+
+    public void method() {
+        Heart h = new Heart();
+        h.operator();
+    }
+}
+
+class InnerClassTest2 {
+    public static void main(String[] args) {
+        Body b = new Body();
+        b.method();
+    }
+}
+
+result:
+Heart need operation
+-----------------------------------------------------
+内部类的修饰符：
+private：保证安全性
+static：为了方便访问数据，
+        内部类用static修饰，因为可以看成外部类的成员
+        静态累不累访问的外部类数据必须用static修饰
+        外部类名.内部类名 对象名 = new 外部类名.内部类名();
+-----------------------------------------------------------
+内部类与外部类没有继承关系
+通过外部类名限定this关系
+Outer.this
+----------------------------------------
+class Body {
+    private int num = 10;
+    private static int num2 = 20;
+
+    public static class Heart {
+        public void show() {
+            System.out.println(num2);
+        }
+
+        public static void show2() {
+            System.out.println(num2);
+        }
+    }
+}
+
+class InnerClassTest3 {
+    public static void main(String[] args) {
+        Body.Heart bh = new Body.Heart();
+        bh.show();
+        bh.show2();
+        Body.Heart.show2();
+    }
+}
+
+result:
+20
+20
+20
+--------------------------------------------------------
+
+class Outer {
+    public int num = 10;
+
+    class Inner {
+        public int num = 20;
+
+        public void show() {
+            int num = 30;
+            System.out.println(num);
+            System.out.println(this.num);
+            System.out.println(Outer.this.num);
+        }
+    }
+}
+
+class InnerTest {
+    public static void main(String[] args) {
+        //Outer.Inner i = new Outer.Inner();
+        //i.show();
+        new Outer().new Inner().show();
+    }
+}
+
+result:
+30
+20
+10
+-------------------------------------------
+class Outer {
+    public int num = 10;
+    public void method() {
+        class Inner {
+            public int num = 20;
+
+            public void show() {
+                int num = 30;
+                System.out.println(num);
+                System.out.println(this.num);
+                System.out.println(Outer.this.num);
+            }
+        }
+        Inner i = new Inner();
+        i.show();
+    }
+}
+
+class LocalInnerClassTest {
+    public static void main(String[] args) {
+        Outer o = new Outer();
+        o.method();
+    }
+    
+}
+
+result:
+30
+20
+10
+-----------------------------------------------------------------------
+局部内部类：
+A：可以直接访问外部类的成员
+B：在局部位置，可以创建内部类对象，通过对象调用内部类方法，来使用局部内部类功能
+
+面试题：
+局部内部类访问局部变量的注意事项？
+A：局部内部类访问局部变量必须用final
+B：为什么？
+因为局部变量随着方法的调用而调用，随着调用完毕而消失，而堆内存的内容并不会立即消失，所以加入final修饰
+加入final修饰后，这个变量就变成了常量，既然是常量，你消失了，我在内存中存储的是数据20，所以，我还是有数据在使用
+------------------------------
+class Outer {
+    public int num = 10;
+
+    public void method() {
+        final int num2 = 100;
+        //int num2 = 100;
+
+        class Inner {
+            public int num = 20;
+
+            public void show() {
+                int num = 30;
+                System.out.println(num);
+                System.out.println(this.num);
+                System.out.println(Outer.this.num);
+                System.out.println(num2);
+            }
+        }
+
+        Inner i = new Inner();
+        i.show();
+    }
+}
+
+class LocalInnerClassTest {
+    public static void main(String[] args) {
+        Outer o = new Outer();
+        o.method();
+    }
+    
+}
+
+result:
+30
+20
+10
+100
+-----------------------------------------
+匿名内部类的格式和理解：
+匿名内部类：
+  就是内部类的简化写法
+前提：
+  存在一个类或者接口
+  这里的类可以是具体类也可以是抽象类
+ 格式：
+   new 类名或者接口名（） {
+   重写方法；
+   }
+ 本质：
+   是一个继承了该类或实现了该接口的子类匿名对象
+ --------------------------------------------------------
+ interface Inter {
+    public abstract void show();
+}
+
+class Outer {
+    public void method() {
+        new Inter() {
+            public void show() {
+                System.out.println("show");
+            }
+        }.show();
+    }
+}
+class AnonymityTest {
+    public static void main(String[] args) {
+        Outer o = new Outer();
+        o.method();
+    }      
+}
+
+result:
+show
+---------------------------------------------------------
+interface Inter {
+    public abstract void show();
+    public abstract void show2();
+}
+
+class Outer {
+    public void method() {
+        /*new Inter() {
+            public void show() {
+                System.out.println("show");
+            }
+
+            public void show2() {
+                System.out.println("show2");
+            }
+        }.show();
+
+        new Inter() {
+            public void show() {
+                System.out.println("show");
+            }
+
+            public void show2() {
+                System.out.println("show2");
+            }
+        }.show2();*/
+        Inter i = new Inter() {
+            public void show() {
+                System.out.println("show");
+            }
+
+            public void show2() {
+                System.out.println("show2");
+            }
+        };
+        i.show();
+        i.show2();
+    }
+}
+class AnonymityTest2 {
+    public static void main(String[] args) {
+        Outer o = new Outer();
+        o.method();
+    }      
+}
+
+result:
+show
+show2
+------------------------------
+interface Person {
+    public abstract void study();
+}
+
+class PersonDemo {
+    public void method(Person p) {
+        p.study();
+    }
+}
+
+class Student implements Person {
+    public void study() {
+        System.out.println("Study hard");
+    }
+}
+
+class AnonymityTest3 {
+    public static void main(String[] args) {
+        PersonDemo pd = new PersonDemo();
+        pd.method(new Student());
+        System.out.println("-----------");
+
+        pd.method(new Person() {
+            public void study() {
+                System.out.println("Study hard");
+            }
+        });
+        System.out.println("-----------");
+
+        Person p = new Student();
+        pd.method(p);
+    }      
+}
+
+result:
+Study hard
+-----------
+Study hard
+-----------
+Study hard
+------------------------------------------------------------
+interface Inter {
+    public abstract void show();
+}
+
+class Outer {
+    public static void method() {
+        new Inter() {
+            public void show() {
+                System.out.println("Hello World!");
+            }
+        }.show();
+    }
+}
+
+class AnonymityTest4 {
+    public static void main(String[] args) {
+        Outer.method();
+    }
+}
+
+result:
+Hello World!
+--------------------------------------
+interface Inter {
+    public abstract void show();
+}
+
+class Outer {
+    public static Inter method() {
+        return new Inter() {
+            public void show() {
+                System.out.println("Hello World!");
+            }};
+    }
+}
+
+class AnonymityTest5 {
+    public static void main(String[] args) {
+        Outer.method().show();
+    }
+}
+
+result:
+Hello World!
+----------------------------
