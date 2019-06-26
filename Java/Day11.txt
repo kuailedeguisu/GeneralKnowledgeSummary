@@ -42,4 +42,20 @@ https://zhidao.baidu.com/question/242615527612688404.html?qbl=relate_question_1&
 选中代码alt+上/下箭头
 6. 查看原码
    F3或者Ctrl+鼠标点击
- 
+ ----------------------------
+jar包：多个class文件的压缩包
+打包：选定project-》export-〉Java-》JAR-〉save it on the special dir
+导包：复制jar包，粘贴到指定project，在新的project中选定这个jar，选择build path-》add into build path-〉then you can see all class files in the jar generating below ”Referenced Libraries“
+Then you need export javadoc, too.
+Browse:/Users/chunhongliu/Desktop/doc
+"Yes to all"
+In general, jar package and doc are used at the same time for using the tool package
+-------------
+Debug：
+设置断点：有效程序行最左边双击即可
+在每个方法的第一条有效语句处都设置断点
+右键-》Debug as-〉Java Application
+click “Step over” or F6 to run one line once， then you can check the variables change
+remove all breakpoints:
+In Debug mode, find "breakpoints" and choose all breakpoints then click double "X"
+
