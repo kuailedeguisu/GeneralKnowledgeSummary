@@ -11,4 +11,35 @@ http://eclipse.org/
 outline中可以通过不同图形和颜色看变量的属性
 console 看程序运行结果
 选中类的文件，然后按F4可以看继承关系
+---------------------------------
+常用快捷键：
+1. Alt+/ 单词联想功能
+其实应用下面的方法后，不用Alt+/也可以实现单词的联想
 
+如果这个不好用可以试试如下方法：
+https://zhidao.baidu.com/question/242615527612688404.html?qbl=relate_question_1&word=eclipse%20alt%2B/%B2%BB%BA%C3%D3%C3
+----------------------------------------------------------------
+1、此方法用于没有一点提示的情况：
+依次打开eclipse上面的windows ——preferences ——java ——editor —— content assist 。
+在右上方有一行“select the proposal kinds contained in the 'default' content assist list” 下面，勾选Java Prolosals 复选框，保存退出即可。
+
+2、此种方法用于打出单词缩写没有提示的情况（例如：打出syso没有提示）：
+依次打开eclipse上面的windows ——preferences ——java ——editor —— content assist，在右边部分偏下的地方找到“Auto activation triggers for java:”这一项，后面是一个文本框，在后面的文本框输入字母abcd，然后点击 applay-->OK 保存退出。
+
+选择导出 File —— General —— Export 选择preferences 再选中Export all 复选框（下面的不需要管），并指定导出文件的名字和路径（注意只能导出.epf格式的文件）。
+
+然后在你指定的路径下找到刚刚导出的文件epf文件，（可以用记事本）打开它，再找到刚刚输入的abcd（或者abc），再在其后添加其余的22个英文字母，保存后，再用eclipse的导入功能把该文件导入到eclipse中，就可以实现单词联想提示功能。 
+--------------------------------------------------------------
+
+2. ctrl+shift+F 格式化一个区域内的代码
+3. ctrl+shift+o 导包(建议自己导)
+4. 注释
+单行注释 ctrl+/ 
+取消单行注释：再来一次 ctrl+/
+多行注释 ctrl+shift+/
+取消多行注释 ctrl+shift+\
+5.代码上下移动
+选中代码alt+上/下箭头
+6. 查看原码
+   F3或者Ctrl+鼠标点击
+ 
