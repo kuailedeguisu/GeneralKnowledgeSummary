@@ -59,3 +59,523 @@ click “Step over” or F6 to run one line once， then you can check the varia
 remove all breakpoints:
 In Debug mode, find "breakpoints" and choose all breakpoints then click double "X"
 
+API
+Application Programming Interface
+You can get the api documents here
+https://www.oracle.com/technetwork/cn/java/javase/documentation/api-jsp-136079-zhs.html
+
+Common Classes:
+Object
+Scanner
+......
+
+
+Object
+Class Object
+
+    java.lang.Object 
+
+    public class Object
+
+    Class Object is the root of the class hierarchy. Every class has Object as a superclass. 
+	All objects, including arrays, implement the methods of this class.
+
+
+Object Class:
+1.hashCode
+public int hashCode()
+
+Returns a hash code value for the object. This method is supported for the benefit of hash tables such as those provided by HashMap.
+
+The general contract of hashCode is:
+
+    Whenever it is invoked on the same object more than once during an execution of a Java application,
+	the hashCode method must consistently return the same integer, provided no information used in equals 
+	comparisons on the object is modified. This integer need not remain consistent from one execution of an application to another execution of the same application.
+    If two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result.
+    It is not required that if two objects are unequal according to the equals(java.lang.Object) method, 
+	then calling the hashCode method on each of the two objects must produce distinct integer results. 
+	However, the programmer should be aware that producing distinct integer results for unequal objects may improve the performance of hash tables. 
+
+As much as is reasonably practical, the hashCode method defined by class Object does return distinct integers for distinct objects. 
+(The hashCode may or may not be implemented as some function of an object's memory address at some point in time.)
+
+Returns:
+    a hash code value for this object.
+See Also:
+    equals(java.lang.Object), System.identityHashCode(java.lang.Object) 
+	
+Note: hashCode is not the pointer of one class, while it is an integer deduced from the pointer of one class
+
+2.getClass
+public final Class<?> getClass()
+
+Returns the runtime class of this Object. The returned Class object is the object that is 
+locked by static synchronized methods of the represented class.
+
+The actual result type is Class<? extends |X|> where |X| is the erasure of the static type 
+of the expression on which getClass is called. For example, no cast is required in this code fragment:
+
+Number n = 0;
+Class<? extends Number> c = n.getClass();
+
+Returns:
+    The Class object that represents the runtime class of this object.
+////////////////////////////////////////////////////////////
+If you want to return the runtime class name, please use Class method getName();
+
+public String getName()
+
+Returns the name of the entity (class, interface, array class, primitive type, or void) represented by this Class object, as a String.
+////////////////////////
+Student s = new Student();
+System.out.println(s.getClass().getName()); 
+--------------------------
+package cn.itcast_03;
+
+public class ObjectTest {
+
+	public static void main(String[] args) {
+		Student s1 = new Student();
+		System.out.println(s1.hashCode());
+		
+		Student s2 = new Student();
+		System.out.println(s2.hashCode());
+		
+		Student s3 = s1;
+		System.out.println(s3.hashCode());
+		
+		Student s4 = new Student();
+		Class c1 = s4.getClass();
+		String str = c1.getName();
+		System.out.println(str);
+		
+		String str2 = s4.getClass().getName();
+		System.out.println(str2);
+
+	}
+
+}
+result:
+1159190947
+925858445
+1159190947
+cn.itcast_03.Student
+cn.itcast_03.Student
+---------------------------------------------------
+3. toString
+
+    toString
+
+    public String toString()
+
+    Returns a string representation of the object. In general, the toString method returns a string 
+	that "textually represents" this object. The result should be a concise but informative representation 
+	that is easy for a person to read. It is recommended that all subclasses override this method.
+
+    The toString method for class Object returns a string consisting of the name of the class of 
+	which the object is an instance, the at-sign character `@', and the unsigned hexadecimal representation 
+	of the hash code of the object. In other words, this method returns a string equal to the value of:
+
+         getClass().getName() + '@' + Integer.toHexString(hashCode())
+         
+
+    Returns:
+        a string representation of the object.
+
+the default toString in the subclass of Object is not meaning, we need rewrite it
+We need make toString return the values of  the member vars
+Generally, we use eclipse to generate it automatically
+
+---------------------------------------
+Student.java
+--------------------------------------
+package cn.itcast_04;
+
+public class Student {
+	private String name;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String name, int age) {
+		super();
+		this.name = name;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public void show() {
+		System.out.println(name+"---"+age);
+	}
+
+	public String toString() {
+		return "Student [name=" + name + ", age=" + age + "]";
+	}
+	
+//	public String toString() {
+//		return "name:"+name+",age"+age;
+//	}
+	
+}
+-------------------------------------------
+StudentDemo.java
+-------------------------------------
+package cn.itcast_04;
+
+public class StudentTest {
+
+	public static void main(String[] args) {
+		Student s1 = new Student();
+		s1.setName("Emma");
+		s1.setAge(10);
+		System.out.println(s1.hashCode());
+		System.out.println(s1.getClass().getName());
+		System.out.println(s1.toString());
+		System.out.println(s1.getClass().getName() + '@' + Integer.toHexString(s1.hashCode()));
+		System.out.println(s1);
+	}
+
+}
+----------
+1159190947
+cn.itcast_04.Student
+Student [name=Emma, age=10]
+cn.itcast_04.Student@4517d9a3
+Student [name=Emma, age=10]
+---------------------------------------------------
+4.equals
+equals
+
+public boolean equals​(Object obj)
+
+Indicates whether some other object is "equal to" this one.
+
+The equals method implements an equivalence relation on non-null object references:
+
+    It is reflexive: for any non-null reference value x, x.equals(x) should return true.
+    It is symmetric: for any non-null reference values x and y, x.equals(y) should return true if and only if y.equals(x) returns true.
+    It is transitive: for any non-null reference values x, y, and z, if x.equals(y) returns true and y.equals(z) returns true, then x.equals(z) should return true.
+    It is consistent: for any non-null reference values x and y, multiple invocations of x.equals(y) 
+	consistently return true or consistently return false, provided no information used in equals comparisons on the objects is modified.
+    For any non-null reference value x, x.equals(null) should return false. 
+
+The equals method for class Object implements the most discriminating possible equivalence relation on objects; 
+that is, for any non-null reference values x and y, this method returns true if and only if x and y refer to the same object (x == y has the value true).
+
+Note that it is generally necessary to override the hashCode method whenever this method is overridden, 
+so as to maintain the general contract for the hashCode method, which states that equal objects must have equal hash codes.
+
+Parameters:
+    obj - the reference object with which to compare.
+Returns:
+    true if this object is the same as the obj argument; false otherwise.
+	
+public boolean equals?(Object obj)
+Indicates whether some other object is "equal to" this one. 
+
+The implementation by default:
+    public boolean equals(Object obj) {
+        return (this == obj);
+    }
+
+==:
+basic data types: compare whether the values are equal or not
+reference data types: compare whether the pointer addresses of objects are equal or not
+
+equals:
+Object.equals()
+only for reference data types, it compares whether the pointer addresses of objects are equal or not by default
+However, we will rewrite it and make it compare the values of each member var of objects
+Generally, we use the automatic version
+---------------------------------------------------------
+Student.java
+-------------------------------------------------------
+package cn.itcast_05;
+
+public class Student {
+	private String name;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String name, int age) {
+		super();
+		this.name = name;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public void show() {
+		System.out.println(name+"---"+age);
+	}
+
+	public String toString() {
+		return "Student [name=" + name + ", age=" + age + "]";
+	}
+
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (age != other.age)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+	
+//	public boolean equals(Object obj) {
+//              if (this == obj)
+//                return true;
+//              if (!(obj instanceof Student))
+//                return false;
+//
+//		Student s = (Student)obj;
+//		return (this.age == s.age && this.name.equals(s.name));
+//	}
+	
+//	public String toString() {
+//		return "name:"+name+",age"+age;
+//	}
+	
+}
+
+-----------------------
+StudentDemo.java
+----------------------
+package cn.itcast_05;
+
+public class StudentTest {
+
+	public static void main(String[] args) {
+		Student s1 = new Student("Emma", 10);
+		Student s2 = new Student("Emma", 10);
+		Student s3 = s1;
+		System.out.println(s1 == s2);
+		System.out.println(s1 == s3);
+		System.out.println(s1.equals(s2));
+		System.out.println(s1.equals(s3));
+	}
+}
+
+result:
+false
+true
+true
+true
+--------------------------------------------------------
+(objectName instanceof className) return boolean
+----------------------------------------
+5.finalize and clone
+--------------------------
+finalize
+
+@Deprecated(since="9")
+protected void finalize()
+                 throws Throwable
+
+Called by the garbage collector on an object when garbage collection determines 
+that there are no more references to the object. 
+A subclass overrides the finalize method to dispose of system resources or to perform other cleanup. 
+We seldomly use it.
+-----------------------------------
+clone
+
+protected Object clone()
+                throws CloneNotSupportedException
+
+Creates and returns a copy of this object. The precise meaning of "copy" may depend on 
+the class of the object. The general intent is that, for any object x, the expression:
+
+     x.clone() != x
+
+will be true, and that the expression:
+
+     x.clone().getClass() == x.getClass()
+
+will be true, but these are not absolute requirements. While it is typically the case that:
+
+     x.clone().equals(x)
+
+will be true, this is not an absolute requirement. 
+/////////////////////////
+Note: If you want to make clone not throw CloneNotSupportedException,
+you need make your class implements interface Cloneable
+////////////////////////////
+---------------------------------------------
+Student.java
+--------------------
+package cn.itcast_06;
+
+public class Student implements Cloneable {
+	private String name;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String name, int age) {
+		super();
+		this.name = name;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public void show() {
+		System.out.println(name+"---"+age);
+	}
+
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+}
+------------------
+StudentTest.java
+--------------------------
+package cn.itcast_06;
+
+public class StudentTest {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Student s1 = new Student("Emma", 10);
+		System.out.println(s1.getName()+"---"+s1.getAge());
+		Object o = s1.clone();
+		Student s2 = (Student)o;
+		System.out.println(s2.getName()+"---"+s2.getAge());
+		
+	}
+}
+----------------------
+result:
+Emma---10
+Emma---10
+-----------------------
+package cn.itcast_06;
+
+public class StudentTest {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Student s1 = new Student("Emma", 10);
+		System.out.println(s1.getName()+"---"+s1.getAge());
+		
+		Object o = s1.clone();
+		Student s2 = (Student)o;
+		System.out.println(s2.getName()+"---"+s2.getAge());
+		
+		Student s3 = s1;
+		System.out.println(s3.getName()+"---"+s3.getAge());
+		System.out.println("-------------");
+		
+		s3.setName("Peter");
+		s3.setAge(20);
+		System.out.println(s1.getName()+"---"+s1.getAge());
+		System.out.println(s2.getName()+"---"+s2.getAge());
+		System.out.println(s3.getName()+"---"+s3.getAge());
+		System.out.println("-------------");
+		
+		s2.setName("Bob");
+		s2.setAge(15);
+		System.out.println(s1.getName()+"---"+s1.getAge());
+		System.out.println(s2.getName()+"---"+s2.getAge());
+		System.out.println(s3.getName()+"---"+s3.getAge());
+		System.out.println("-------------");
+	}
+}
+
+result:
+Emma---10
+Emma---10
+Emma---10
+-------------
+Peter---20
+Emma---10
+Peter---20
+-------------
+Peter---20
+Bob---15
+Peter---20
+-------------
+
+--------------------------------------------
+※ == : compare
+Basic data types compare values;
+Reference types compare address values.
+Does the equals (Object o) :
+1) basic data types cannot be compared. Basic data types are not class types;
+2) a. When comparing reference types (this method inherits from Object and compares address values in Object), it is equivalent to "==";
+Method in Object class, so in every Java class, there will be this method,
+ because every Java class is a direct or indirect subclass of Object class, which will inherit this method.
+2) b. if the equals method has been overridden in the class I write,
+ install a user-defined method to compare the equality of two objects.
+ If the equals method has not been overridden, the equals method in the parent class (Object) will be called to compare, 
+ i.e., to compare the address values.
+Note: some implementation classes (JDK) override equals methods to compare content (java.lang.string)
+In a custom class, if you compare objects, you can override the equals method to define the comparison rules.
+
+
