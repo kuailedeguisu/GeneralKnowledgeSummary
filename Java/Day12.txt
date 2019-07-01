@@ -1,0 +1,839 @@
+Class Scanner
+
+    java.lang.Object
+        java.util.Scanner 
+
+    All Implemented Interfaces:
+        Closeable, AutoCloseable, Iterator<String>
+
+    public final class Scanner
+    extends Object
+    implements Iterator<String>, Closeable
+
+    A simple text scanner which can parse primitive types and strings using regular expressions.
+
+    A Scanner breaks its input into tokens using a delimiter pattern, which by default matches whitespace. 
+	The resulting tokens may then be converted into values of different types using the various next methods. 
+
+constructor methods:
+System.in
+Scanner(InputStream source)
+
+Member methods:
+Scanner
+----------------------------------
+Scanner??hasNextXxx()?nextXxx()
+hasNextXxx() judge whether the next input is matched with Xxx,Xxx:basic data types, such as Int, Double
+public boolean hasNextXxx();// return boolean
+
+nextXxx() input the next matched basic data types
+public Xxx nextXxx();//  return Xxx
+----------------------------------------------------
+Input int type of data
+public int nextInt();       // Input Int
+public String nextLine();   //Input String
+---------------
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class ScannerDemo {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int a = sc.nextInt();
+		String s = sc.nextLine();
+		System.out.println("a:"+a+",s:"+s);
+
+	}
+
+}
+
+result:
+10
+a:10,s:
+-----------------------------
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class ScannerDemo {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int a = sc.nextInt();
+		Scanner sc2 = new Scanner(System.in);
+		String s = sc2.nextLine();
+		System.out.println("a:"+a+",s:"+s);
+
+	}
+
+}
+
+result:
+10
+hello
+a:10,s:hello
+---------------------------------------------------
+------------------------------------------------------
+String
+String literals or String constructor methods
+
+
+Constructor methods:
+
+String() empty parameters	
+Initializes a newly created String object so that it represents an empty character sequence.
+
+String(byte[] bytes) 	Change byte array into String
+Constructs a new String by decoding the specified array of bytes using the platform's default charset.
+
+String(byte[] bytes, int offset, int length) Change byte array begining with offset(index) with the length	
+Constructs a new String by decoding the specified subarray of bytes using the platform's default charset.
+
+String(char[] value) 	change char array to String
+Allocates a new String so that it represents the sequence of characters currently contained in the character array argument.
+
+String(char[] value, int offset, int count) change char array begining with offset(index) with the length		
+Allocates a new String that contains characters from a subarray of the character array argument.
+
+String?(String original) Copy one String
+Initializes a newly created String object so that it represents the same sequence of characters as the argument; in other words, the newly created string is a copy of the argument string.
+
+String s = "hello";
+
+String features:
+1) Once String is assigned one value, it can't be changed
+it refers to the content instead of reference
+
+Note: 
+1) byte[0-127]
+byte[] bys = {87, 98, 123};
+
+2) byte[] String,ASCII Code
+
+byte[] by = { 97, 98, 99, 100, 101, 102, 103 };
+String str3 = new String(by, 2, 3);
+System.out.println(str3 + "," + "length:" + str3.length());
+
+result:
+cde,length:3
+
+3) test
+3.1) length
+package cn.itcast_01;
+
+public class StringLengthTest {
+
+	public static void main(String[] args) {
+		String str = "Hello world!";
+		System.out.println(str + "," + "length:" + str.length());
+		char[] ch = { 'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd' };
+		String str2 = new String(ch, 6, 5);
+		System.out.println(str2 + "," + "length:" + str2.length());
+		byte[] by = { 97, 98, 99, 100, 101, 102, 103 };
+		String str3 = new String(by, 2, 3);
+		System.out.println(str3 + "," + "length:" + str3.length());
+		String str4 = new String(str);
+		System.out.println(str4 + "," + "length:" + str4.length());
+		String str5 = new String("abcde");
+		System.out.println(str5 + "," + "length:" + str5.length());
+		String str6 = "qwert";//???
+		System.out.println(str6 + "," + "length:" + str6.length());
+	}
+
+}
+
+result:
+Hello world!,length:12
+world,length:5
+cde,length:3
+Hello world!,length:12
+abcde,length:5
+qwert,length:5
+3.2)
+package cn.itcast_01;
+
+public class StringAssignmentTest {
+
+	public static void main(String[] args) {
+		String str = "hello";
+		str += " world";
+		System.out.println(str);
+		str = "abcd";
+		System.out.println(str);
+		str = "bdg";
+		System.out.println(str);
+	}
+
+}
+
+result:
+hello world
+abcd
+bdg
+
+3.3) The difference between "String s = new String("hello")" and "String s = "hello""
+==:     for reference data types, it compares the pointer addresses of the objects
+equals: String.equals(),override Object equals method
+
+--------------------------------------------
+package cn.itcast_01;
+
+public class StringConstructorTest {
+
+	public static void main(String[] args) {
+		String s1 = new String("hello");
+		System.out.println(s1+"---"+s1.length());
+		String s2 = "hello";
+		System.out.println(s2+"---"+s2.length());
+		System.out.println(s1 == s2);//false
+		System.out.println(s1.equals(s2));//true
+	}
+
+}
+
+result:
+hello---5
+hello---5
+false
+true
+--------------------------------------
+String append:
+String s1 = new String("hello")
+stack: String s1-0x0001->heap: 0x0001(new String():address:0x001)->method area:char const pool(ìhelloî 0x001)
+String s2 = "hello"
+stack:String s2-0x001->method area:char const pool(ìhelloî 0x001)
+-----------------------------------------------------------
+package cn.itcast_01;
+
+public class StringDemo {
+
+	public static void main(String[] args) {
+		String s1 = new String("hello");
+		String s2 = new String("hello");
+		System.out.println(s1 == s2);//false
+		System.out.println(s1.equals(s2));//true
+		
+		String s3 = new String("hello");
+		String s4 = "hello";
+		System.out.println(s3 == s4);//false
+		System.out.println(s3.equals(s4));//true
+		
+		String s5 = "hello";
+		String s6 = "hello";
+		System.out.println(s5 == s6);//true
+		System.out.println(s5.equals(s6));//true
+
+	}
+
+}
+result:
+false
+true
+false
+true
+true
+true
+---------------------------------------------------
+The same String literals will locate on the same method area::char const pool
+But for string append, 
+1) var append
+allocate memory at first, then append
+2) String literals append
+append directly
+------------------------------------------
+package cn.itcast_01;
+
+public class StringDemo2 {
+
+	public static void main(String[] args) {
+		String s1 = "hello";
+		String s2 = "world";
+		String s3 = "helloworld";
+
+		System.out.println(s3 == s1 + s2);// false
+		System.out.println(s3.equals(s1 + s2));// true
+		System.out.println(s3 == "hello" + "world");// true
+		System.out.println(s3.equals("hello" + "world"));// true
+	}
+}
+
+result:
+false
+true
+true
+true
+------------------------------------------------------------------------------
+You can use decompiler tool Xjad to check what's happened
+s3 == s1 + s2;                 => s3 == (new StringBuilder(String.valueOf(s1))).append(s2).toString();
+s3.equals(s1 + s2);            => s3.equals((new StringBuilder(String.valueOf(s1))).append(s2).toString()));
+s3 == "hello" + "world";       => s3 == "helloworld";
+s3.equals("hello" + "world");  => s3.equals("helloworld");
+
+-------------------------------------------------------------
+String member methods:
+1.length
+
+    public int length()
+
+    Returns the length of this string. The length is equal to the number of Unicode code units in the string.
+
+    Specified by:
+        length in interface CharSequence
+    Returns:
+        the length of the sequence of characters represented by this object.
+
+2. judgement
+boolean 	equals(Object anObject)       // Compare the value distingushing cases
+Compares this string to the specified object.
+
+boolean 	equalsIgnoreCase?(String anotherString)    // Compare the value ignoring cases
+Compares this String to another String, ignoring case considerations.
+
+boolean 	contains(CharSequence s)      // Include the substring s
+Returns true if and only if this string contains the specified sequence of char values.
+
+boolean 	isEmpty() 	// check if it is empty string
+Returns true if, and only if, length() is 0.
+
+boolean 	startsWith(String prefix)   // Check if it starts with one string
+Tests if this string starts with the specified prefix.
+
+boolean 	endsWith?(String suffix) // Check if it ends with one string
+Tests if this string ends with the specified suffix.
+
+Note:
+String str1 = "";//empty string and take up the memory
+String str2 = null;// null pointer, and not take up the memory, isEmpty() throw java.lang.NullPointerException
+
+-------------------------------------
+package cn.itcast_02;
+
+public class StringJudgeFunction {
+
+	public static void main(String[] args) {
+		String str1 = "helloworld";
+		String str2 = "helloworld";
+		String str3 = "HelloWorld";
+		String str4 = "hello";
+		String str5 = "world";
+		String str6 = "";
+		String str7 = null;
+
+		System.out.println(str1.equals(str2));// true
+		System.out.println(str1.equals(str3));// false
+		System.out.println(str1.equalsIgnoreCase(str3));// true
+		System.out.println(str1.startsWith(str4));// true
+		System.out.println(str1.endsWith(str5));// true
+		System.out.println(str1.isEmpty());// false
+		System.out.println(str6.isEmpty());// true
+		//System.out.println(str7.isEmpty());// java.lang.NullPointerException
+	}
+
+}
+
+result:
+true
+false
+true
+true
+true
+false
+true
+-----------------------------------------------------
+
+login system
+--------------------------
+package cn.itcast_02;
+
+import java.util.Scanner;
+
+public class StringLoginTest {
+
+	public static void main(String[] args) {
+		String username = "admin";
+		String password = "admin";
+		System.out.println("Please enter username and password:");
+
+		for (int i = 3; i > 0; --i) {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("login:");
+			String un = sc.nextLine();
+			System.out.println("Password:");
+			String pw = sc.nextLine();
+			if (!pw.equals(password) || !un.equals(username)) {
+				if (i == 1) {
+					System.out.println("Your account is locked");
+				} else {
+					System.out.println("You can still try " + (i - 1) + " times");
+				}
+			} else {
+				System.out.println("You login successfully");
+				break;
+			}
+		}
+	}
+}
+
+result:
+login:
+ehlu
+Password:
+ss
+You can still try 2 times
+login:
+admin
+Password:
+admin
+You login successfully
+---------------------------------------------------
+
+Get char function:
+char 	charAt?(int index) 	
+Returns the char value at the specified index.
+
+int 	indexOf?(int ch) // int type of ch,	97 or a are all right for parameter
+Returns the index within this string of the first occurrence of the specified character.
+
+int 	indexOf?(int ch, int fromIndex) 	
+Returns the index within this string of the first occurrence of the specified character, 
+starting the search at the specified index.
+
+int 	indexOf?(String str) 	
+Returns the index within this string of the first occurrence of the specified substring.
+
+int 	indexOf?(String str, int fromIndex) 	
+Returns the index within this string of the first occurrence of the specified substring, 
+starting at the specified index.
+
+int 	lastIndexOf?(int ch) 	
+Returns the index within this string of the last occurrence of the specified character.
+
+int 	lastIndexOf?(int ch, int fromIndex) 	
+Returns the index within this string of the last occurrence of the specified character, 
+searching backward starting at the specified index.
+
+int 	lastIndexOf?(String str) 	
+Returns the index within this string of the last occurrence of the specified substring.
+
+int 	lastIndexOf?(String str, int fromIndex) 	
+Returns the index within this string of the last occurrence of the specified substring, 
+searching backward starting at the specified index.
+
+int 	length() 	
+Returns the length of this string.
+
+String 	substring?(int beginIndex) 	// from beginIndex to length()-1
+Returns a string that is a substring of this string.
+
+String 	substring?(int beginIndex, int endIndex) // from beginIndex to endIndex-1	
+Returns a string that is a substring of this string.
+
+----------------------------
+String traverse: 12.15
+A:length() + charAt()
+B:toCharArray() to make String into char[], then traverse char[]
+------------------------------
+Compute the occurance of upper cases, lower cases and digits
+0 48
+A 65
+a 97
+////////////////
+package cn.itcast_02;
+
+import java.util.Scanner;
+
+public class ComputeTheOccuranceTest {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter one string[0-9,a-z,A-Z]");
+		String s = sc.nextLine();
+		int digitsCount = 0;
+		int lowerCasesCount = 0;
+		int upperCasesCount = 0;
+		
+		for (int i = 0; i < s.length(); ++i) {
+			char ch = s.charAt(i);
+			if (ch >= '0' && ch <= '9') {
+				digitsCount++;
+			}
+			else if (ch >= 'a' && ch <= 'z') {
+				lowerCasesCount++;
+			}
+			else if (ch >= 'A' && ch <= 'Z') {
+				upperCasesCount++;
+			}
+		}
+		
+		System.out.println("digitsCount:"+digitsCount);
+		System.out.println("lowerCasesCount:"+lowerCasesCount);
+		System.out.println("upperCasesCount:"+upperCasesCount);
+
+	}
+
+}
+////////////////////////
+\\\\\\\\\\\\\\\\\\\\\\\\\\\
+package cn.itcast_02;
+
+import java.util.Scanner;
+
+public class ComputeTheOccuranceTest2 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter one string[0-9,a-z,A-Z]");
+		String s = sc.nextLine();
+		char[] chars = s.toCharArray();
+		int digitsCount = 0;
+		int lowerCasesCount = 0;
+		int upperCasesCount = 0;
+		
+		for (int i = 0; i < chars.length; ++i) {
+			if (chars[i] >= '0' && chars[i]  <= '9') {
+				digitsCount++;
+			}
+			else if (chars[i]  >= 'a' && chars[i]  <= 'z') {
+				lowerCasesCount++;
+			}
+			else if (chars[i]  >= 'A' && chars[i]  <= 'Z') {
+				upperCasesCount++;
+			}
+		}
+		
+		System.out.println("digitsCount:"+digitsCount);
+		System.out.println("lowerCasesCount:"+lowerCasesCount);
+		System.out.println("upperCasesCount:"+upperCasesCount);
+	}
+
+}
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+---------------------------------
+String convert function:
+String 	concat?(String str) 	// append string, (String1 + String2) is more common
+Concatenates the specified string to the end of this string.
+
+byte[] 	getBytes() 	// String into byte[]
+Encodes this String into a sequence of bytes using the platform's default charset, 
+storing the result into a new byte array.
+
+char[] 	toCharArray() 	// String into char[]
+Converts this string to a new character array.
+
+static String 	valueOf?(int i) 	// int into String, String valueOf can make any type into String
+Returns the string representation of the int argument.
+
+static String 	valueOf?(char[] data) 	// char[] into String
+Returns the string representation of the char array argument.
+
+String 	toLowerCase() 	// String into  lower cases, and generate the new String, the original String is not changed
+Converts all of the characters in this String to lower case using 
+the rules of the default locale.
+
+String 	toUpperCase() 	// String into  upper cases, and generate the new String, the original String is not changed
+Converts all of the characters in this String to upper case using 
+the rules of the default locale.
+
+//////////////////
+package cn.itcast_02;
+
+public class StringConvertTest {
+
+	public static void main(String[] args) {
+		String s = "helloworld";
+		byte[] bys = s.getBytes();
+		System.out.println(bys);              // [B@4517d9a3
+		char[] ch = s.toCharArray();
+		System.out.println(ch);               // helloworld
+		System.out.println(s.valueOf(2));     // 2
+		char[] chsub = {'h','e','l'};
+		System.out.println(s.valueOf(chsub)); // "hel"
+		String su = "HELLOWORLD";
+		System.out.println(su.toLowerCase()); // "helloworld"
+		System.out.println(s.toUpperCase());  // "HELLOWORLD"
+	}
+
+}
+///////////////////////////////////////////
+convert one String into another String: the first letter is upper case and others are lower cases
+\\\\\\\\\\\\\\\\\\\\\\
+package cn.itcast_02;
+
+public class StringConvertTest2 {
+
+	public static void main(String[] args) {
+		String s = "heLLOWorld";
+		String result = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+		System.out.println(result);
+		
+		String result1 = s.substring(0,1).toUpperCase().concat(s.substring(1).toLowerCase());
+		System.out.println(result1);
+	}
+}
+\\\\\\\\\\\\\\\\\\\\\
+String other methods: 12.20
+replace:
+String replace(char old, char new);
+String replace(String old, String new);
+
+String 	replace?(char oldChar, char newChar) 	
+Returns a string resulting from replacing all occurrences of oldChar in this string with newChar.
+
+
+remove blank:
+String trim();
+
+    trim
+
+    public String trim()
+
+    Returns a string whose value is this string, with any leading and trailing whitespace 
+	removed.
+
+    
+
+compare according to the dictionary:
+
+---------------------------
+String compareTo()
+
+    compareTo
+
+    public int compareTo?(String anotherString)
+
+    Compares two strings lexicographically. The comparison is based on the Unicode value 
+	of each character in the strings. 
+	
+	int 	compareToIgnoreCase?(String str) 	
+Compares two strings lexicographically, ignoring case differences.
+
+---------------------
+package cn.itcast_02;
+
+public class StringCompareToTest {
+
+	public static void main(String[] args) {
+		String s1 = "hello";
+		String s2 = "hel";
+		System.out.println(s1.compareTo(s2));
+		System.out.println(s2.compareTo(s1));
+		System.out.println(s1.compareTo(s1));
+		System.out.println(s2.compareTo(s2));
+		
+		String s3 = "abc";
+		String s4 = "bcd";
+		System.out.println(s3.compareTo(s4));
+		System.out.println(s4.compareTo(s3));
+		System.out.println(s3.compareTo(s3));
+		System.out.println(s4.compareTo(s4));
+		
+	}
+
+}
+-----------------------------------------------------
+    public int compareTo(String anotherString) {
+        byte v1[] = value;
+        byte v2[] = anotherString.value;
+        if (coder() == anotherString.coder()) {
+            return isLatin1() ? StringLatin1.compareTo(v1, v2)
+                              : StringUTF16.compareTo(v1, v2);
+        }
+        return isLatin1() ? StringLatin1.compareToUTF16(v1, v2)
+                          : StringUTF16.compareToLatin1(v1, v2);
+     }
+\\\\\\\\\\\\\\\\\\\\\
+if the chars on the same index are different, the result will be char difference of int type
+if the chars on the same index are the same and with different lengths, the result will be the 
+length difference.
+\\\\\\\\\\\\\\\\\\\\\\\\\\
+package cn.itcast_02;
+
+public class StringCompareToTest {
+
+	public static void main(String[] args) {
+		String s1 = "hello";
+		String s2 = "hel";
+		System.out.println(s1.compareTo(s2)); // 2
+		System.out.println(s2.compareTo(s1)); // -2
+		System.out.println(s1.compareTo(s1)); // 0
+		System.out.println(s2.compareTo(s2)); // 0
+		
+		String s3 = "abc";
+		String s4 = "zcd";
+		System.out.println(s3.compareTo(s4)); // -25
+		System.out.println(s4.compareTo(s3)); // 25
+		System.out.println(s3.compareTo(s3)); // 0
+		System.out.println(s4.compareTo(s4)); // 0
+		
+	}
+}
+-----------------------------------------------
+make int array into one String
+string + other basic data types, result string
+so we don't need String valueOf(other basic data types) to 
+convert other basic data types into String
+///////////////////////////////////
+package cn.itcast_02;
+
+public class IntArrayIntoStringTest {
+
+	public static void main(String[] args) {
+		int[] arr = {1, 2, 3, 4, 5};
+//		String str = "";
+//		str += "[";
+//		for (int i = 0; i < arr.length; i++) {
+//			if (i == arr.length - 1) {
+//				str += arr[i];
+//				str += "]";
+//			}
+//			else {
+//				str += arr[i];
+//				str += ",";
+//			}
+//		}
+//		System.out.println(str);
+		printIntArrayIntoString(arr);
+
+	}
+	
+	public static void printIntArrayIntoString(int[] arr) {
+		String str = "";
+		str += "[";
+		for (int i = 0; i < arr.length; i++) {
+			if (i == arr.length - 1) {
+				str += arr[i];
+				str += "]";
+			}
+			else {
+				str += arr[i];
+				str += ",";
+			}
+		}
+		System.out.println(str);
+	}
+}
+
+result:
+[1,2,3,4,5]
+/////////////////////////////////////////
+String reverse:
+Input : abc
+Output: cba
+
+
+package cn.itcast_02;
+
+import java.util.Scanner;
+
+public class StringReverseTest {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter a string:");
+		String str = sc.nextLine();
+		//String str = "helloworld";
+		System.out.println(reverseString(str));
+
+	}
+	
+	public static String reverseString(String str) {
+//		int len = str.length();
+//		String result = "";
+//		
+//		for (int i = 0; i < len; ++i) {
+//			result += str.charAt(len - 1 - i);
+//		}
+//		
+//		return result;
+		
+		String result = "";
+		char[] chs = str.toCharArray();
+		int len = chs.length;
+		for (int i = 0; i < len; ++i) {
+			result += chs[len - 1 - i];
+		}
+		
+		return result;
+	}
+
+}
+
+
+/////////////////////////////////////////////
+compute the occurances of substring of one String
+solution:
+1) find the index of the first occurance
+2) if find substring, count + 1, we need rewrite maxStr into the String 
+starting with index + subStr.length()
+rewrite index
+
+------------------------------------------------
+package cn.itcast_02;
+
+public class computeSubstringCountTest {
+
+	public static void main(String[] args) {
+		String str = "woaihellowozhendeaihellowozhendezhendeaihello";
+		String subStr = "hello";
+		System.out.println(computeSubstringCount(str, subStr));
+	}
+	
+	public static int computeSubstringCount(String maxStr, String minStr) {
+		int count = 0;
+		int index = maxStr.indexOf(minStr);
+		
+		while (index != -1) {
+			count++;
+			int startIndex = index + minStr.length();
+			maxStr = maxStr.substring(startIndex);
+			index = maxStr.indexOf(minStr);
+		}
+				
+		return count;
+	}
+
+}
+
+result:
+3
+-----------------------------------------------
+package cn.itcast_02;
+
+public class ComputeSubstringOccuranceTest {
+
+		public static void main(String[] args) {
+			String str = "woaihellowozhendeaihellowozhendezhendeaihello";
+			String subStr = "hello";
+			System.out.println(computeSubstringCount(str, subStr));
+		}
+		
+//		public static int computeSubstringCount(String maxStr, String minStr) {
+//			int count = 0;
+//		
+//			while (maxStr.indexOf(minStr) != -1) {
+//				count++;
+//				maxStr = maxStr.substring(maxStr.indexOf(minStr) + minStr.length());
+//			}
+//					
+//			return count;
+//		}
+		
+		public static int computeSubstringCount(String maxStr, String minStr) {
+			int count = 0;
+		
+			int index;
+			while ((index = maxStr.indexOf(minStr)) != -1) {
+				count++;
+				maxStr = maxStr.substring(index + minStr.length());
+			}
+					
+			return count;
+		}
+
+}
+	
+--------------------------------------------
