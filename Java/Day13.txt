@@ -1,0 +1,63 @@
+1.StringBuffer
+public final class StringBuffer
+extends Object
+implements Serializable, Comparable<StringBuffer>, CharSequence
+A thread-safe, mutable sequence of characters. A string buffer is like a String, but can be modified. 
+At any point in time it contains some particular sequence of characters, but the length and content of the sequence 
+can be changed through certain method calls.
+String buffers are safe for use by multiple threads. The methods are synchronized where necessary 
+so that all the operations on any particular instance behave as if they occur in some serial order 
+that is consistent with the order of the method calls made by each of the individual threads involved.
+
+The principal operations on a StringBuffer are the append and insert methods, which are overloaded 
+so as to accept data of any type. Each effectively converts a given datum to a string and then 
+appends or inserts the characters of that string to the string buffer. The append method always 
+adds these characters at the end of the buffer; the insert method adds the characters at a specified point.
+-----------------------------------------------------------
+thread-safe: sync(data can't be operated at the same time, safe)
+thread-unsafe:not sync(efficiently)
+You only have safety or efficience.We only can consider one item according to the situation.
+bank:               safe
+news and internet:  efficience
+---------------------------------------------------------
+StringBuffer: thread-safe, mutable sequene
+The difference between StringBuffer and String:
+StringBuffer: length and content of it are changed, String appending will not waste a lot of memory
+String: length and content of it are not changed, String appending will waste a lot of memory
+----------------------
+StringBuffer constructor methods:
+StringBuffer()	
+Constructs a string buffer with no characters in it and an initial capacity of 16 characters.
+StringBuffer​(int capacity)	
+Constructs a string buffer with no characters in it and the specified initial capacity.
+StringBuffer​(CharSequence seq)	
+Constructs a string buffer that contains the same characters as the specified CharSequence.
+StringBuffer​(String str)	
+Constructs a string buffer initialized to the contents of the specified string.
+--------------------
+CharSequence
+Interface CharSequence
+All Known Subinterfaces:
+Name
+All Known Implementing Classes:
+CharBuffer, Segment, String, StringBuffer, StringBuilder
+-------------------
+public StringBuffer(String str) {
+        super(str.length() + 16);
+        append(str);
+    }
+    --------------
+StringBuffer member methods:
+capacity: theorical value
+public int capacity()
+Returns the current capacity. The capacity is the amount of storage available for newly inserted characters, beyond which an allocation will occur.
+Returns:
+the current capacity
+
+length: actural value
+int length()
+Returns the length of this character sequence. The length is the number of 16-bit chars in the sequence.
+Returns:
+the number of chars in this sequence
+
+
