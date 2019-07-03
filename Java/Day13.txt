@@ -941,3 +941,838 @@ public class SortTest {
 		data[j] = temp;
 	}
 }
+
+
+
+
+1. Common Sort:
+BubbleSort:
+compare the neighber elements, put the bigger in the back, after the first time is done,
+the max value will be put on the max index, with the same rule, we can get the array with
+order.
+
+SelectionSort:
+From index 0, compare with the elements after that, put the smaller in the front,
+After the first time is done, the min value will be put on the min index,
+With the same rule, we can get an array with order.
+
+
+2. Common Search:
+Basic search: all the elements are unordered
+Binary Search: all the elements are ordered
+guest the middle element each time, and then compare with the half elements
+
+3. Binary search:
+define the min index and the max index
+compute the mid index mid = (min + max)/2
+compare the value of the mid index and target
+if arr[mid] == target, return mid
+if arr[mid] > target, max = mid - 1
+if arr[mid] < target, min = mid + 1
+
+---------------------------------
+********************************
+BinarySearch.java
+********************************
+package cn.itcast_04;
+
+public class BinarySearch {
+	public static int search(int[] arr, int target) {
+		int begin = 0;
+		int end = arr.length - 1;
+	
+		while (begin < end) {
+			int mid = (begin + end) / 2;
+			if (arr[mid] == target) {
+				return mid;
+			}
+			else if (arr[mid] > target) {
+				end = mid - 1;
+			}
+			else {
+				begin = mid + 1;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public static int search2(int[] arr, int value) {
+		int min = 0;
+		int max = arr.length - 1;
+		int mid = (min+max)/2;
+	
+		while (arr[mid] != value) {
+			if (arr[mid] > value) {
+				max = mid - 1;
+			}
+			else if (arr[mid] < value) {
+				min = mid + 1;
+			}
+			
+			if (min > max) {
+				return -1;
+			}
+			
+			mid = (min+max)/2;
+		}
+		
+		return mid;
+	}
+
+}
+**********************
+SearchTest.java
+**********************
+package cn.itcast_04;
+
+import cn_itcast_03.SelectionSort;
+
+public class SearchTest {
+
+	public static void main(String[] args) {
+		int[] arr = {11, 22, 33, 44, 55, 66, 77};
+		System.out.println("Before BinarySearch:");
+		printArray(arr);
+		int value1 = 22;
+		int index = BinarySearch.search(arr, value1);
+		System.out.println("The index of "+value1+" is "+index);
+		System.out.println("--------------");
+		
+		int[] arr2 = {11, 22, 33, 44, 55, 66, 77};
+		System.out.println("Before BinarySearch:");
+		printArray(arr2);
+		int value2 = 22;
+		int index2 = BinarySearch.search2(arr2, value2);
+		System.out.println("The index of "+value2+" is "+index2);
+		System.out.println("-----------------");
+		
+		int[] arr3 = {10, 100, 89, 23, 99};
+		System.out.println("Before SelectionSort:");
+		printArray(arr3);
+		SelectionSort.sort(arr3);
+		System.out.println("After SelectionSort:");
+		printArray(arr3);
+		int value3 = 89;
+		int index3 = BinarySearch.search2(arr3, value2);
+		System.out.println("The index of "+value2+" is "+index3);
+		System.out.println("-----------------");
+
+	}
+	
+	public static void printArray(int[] arr) {
+		System.out.print("[");
+		for (int i=0; i < arr.length; ++i) {
+			if (i == arr.length - 1) {
+				System.out.print(arr[i]);
+			}
+			else {
+				System.out.print(arr[i]+", ");
+			}
+		}
+		System.out.println("]");
+	}
+
+}
+
+********************
+result:
+*********************
+Before BinarySearch:
+[11, 22, 33, 44, 55, 66, 77]
+The index of 22 is 1
+--------------
+Before BinarySearch:
+[11, 22, 33, 44, 55, 66, 77]
+The index of 22 is 1
+-----------------
+Before SelectionSort:
+[10, 100, 89, 23, 99]
+After SelectionSort:
+[10, 23, 89, 99, 100]
+The index of 22 is -1
+-----------------
+---------------------------------------------
+Note:
+If we want to apply binary search for unordered array, 
+some people will sort it at first then use binary search
+But it is unacceptable because you have changed the order of elements
+after sorting
+For unordered array, we only can use basic search
+
+
+4. Arrays:
+Class Arrays
+
+    java.lang.Object
+        java.util.Arrays 
+
+    public class Arrays
+    extends Object
+
+    This class contains various methods for manipulating arrays 
+	(such as sorting and searching). 
+	This class also contains a static factory that allows arrays 
+	to be viewed as lists.
+
+    The methods in this class all throw a NullPointerException, 
+	if the specified array reference is null, except where noted.
+
+The version of Class and methods maybe not different, if the version of methods are
+not written, we can think it is the same as Class
+
+We don't need construct Arrays object, because Arrays object should not be created
+We only use Arrays static method to operate many types of array
+
+Arrays has many methods we can use, but some are used commonly
+static int 	binarySearch​(int[] a, int key) 	
+Searches the specified array of ints 
+for the specified value using the binary search algorithm.
+
+static void 	sort​(int[] a) 	//QuickSort
+Sorts the specified array into ascending numerical order.
+
+static String 	toString​(int[] a) 	
+Returns a string representation of the contents of the specified array.
+
+-----------------------------
+package cn.itcast_01;
+
+import java.util.Arrays;
+
+public class ArraysTest1 {
+	public static void main(String[] args) {
+		int[] arr = {10, 23, 100, 230, 890};
+		System.out.println("Before BinarySearch:  "+Arrays.toString(arr));
+		int index = Arrays.binarySearch(arr, 23);
+		System.out.println("After BinarySearch, the index of " + 23 + " is " + index);
+		int[] arr2 = {100, 23, 200, 5, 90};
+		System.out.println("Before sort:  "+Arrays.toString(arr2));
+        Arrays.sort(arr2);
+        System.out.println("After sort:  "+Arrays.toString(arr2));
+		
+	}
+
+}
+-----------------------------
+Note:
+If it is a reference object, before using it, we need judge whether it is null or not
+
+Source code study:
+    public static String toString(int[] a) {
+        if (a == null)
+            return "null";
+        int iMax = a.length - 1;
+        if (iMax == -1)
+            return "[]";
+
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(a[i]);
+            if (i == iMax)
+                return b.append(']').toString();
+            b.append(", ");
+        }
+    }
+    public static int binarySearch(int[] a, int key) {
+        return binarySearch0(a, 0, a.length, key);
+    }
+	private static int binarySearch0(int[] a, int fromIndex, int toIndex,
+                                     int key) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            int midVal = a[mid];
+
+            if (midVal < key)
+                low = mid + 1;
+            else if (midVal > key)
+                high = mid - 1;
+            else
+                return mid; // key found
+        }
+        return -(low + 1);  // key not found.
+    }
+	
+	>>> k: unsigned right move k, it equals to dividing 2^k
+
+5. Integer
+Requirement 1: Compute bin, oct, hex of one dec data
+Requirement 2: Judge whether a data is in the range of int
+	-2^31 to 2^31 - 1(-2147483648 to 2147483647)
+
+Class Integer
+
+    java.lang.Object
+        java.lang.Number
+            java.lang.Integer 
+
+    All Implemented Interfaces:
+        Serializable, Comparable<Integer>
+
+    public final class Integer
+    extends Number
+    implements Comparable<Integer>
+
+    The Integer class wraps a value of the primitive type int in an object. 
+	An object of type Integer contains a single field whose type is int.
+
+    In addition, this class provides several methods for converting an int 
+	to a String and a String to an int, as well as other constants and methods 
+	useful when dealing with an int. 
+	
+static String 	toBinaryString​(int i) 	
+Returns a string representation of the integer argument as an unsigned integer 
+in base 2.
+static String 	toHexString​(int i) 	
+Returns a string representation of the integer argument as an unsigned integer 
+in base 16.
+static String 	toOctalString​(int i) 	
+Returns a string representation of the integer argument as an unsigned integer 
+in base 8.
+String 	toString()
+
+static int 	BYTES 	
+The number of bytes used to represent an int value in two's complement binary form.
+static int 	MAX_VALUE 	
+A constant holding the maximum value an int can have, 231-1.
+static int 	MIN_VALUE 	
+A constant holding the minimum value an int can have, -231.
+static int 	SIZE 	
+The number of bits used to represent an int value in two's complement binary form.
+static Class<Integer> 	TYPE 	
+The Class instance representing the primitive type int.
+ 	
+
+eclipse auto completion function:
+1.Java->Editor->Content Assit（Auto Activation:Enable auto activation,Auto activation
+trigger for Java(.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ)）
+2.Java->Editor->Content Assit-Advanced->Java Non-type Proposals
+
+
+----------------------------
+***************************
+source code
+***************************
+package cn.itcast_01;
+
+import java.util.Arrays;
+
+public class ArraysTest1 {
+	public static void main(String[] args) {
+		int[] arr = {10, 23, 100, 230, 890};
+		System.out.println("Before BinarySearch:  "+Arrays.toString(arr));
+		int index = Arrays.binarySearch(arr, 23);
+		System.out.println("After BinarySearch, the index of " + 23 + " is " + index);
+		int[] arr2 = {100, 23, 200, 5, 90};
+		System.out.println("Before sort:  "+Arrays.toString(arr2));
+        Arrays.sort(arr2);
+        System.out.println("After sort:  "+Arrays.toString(arr2));
+		
+	}
+
+}
+
+***********************
+result:
+***********************
+1100100
+144
+64
+100
+-2147483648
+2147483647
+int
+4
+32
+-----------------------------
+In order to operate basic data types, introduce class types and Wrapper Class types
+basic    Reference
+bytes    Byte
+short    Short
+int      Integer
+long     Long
+float    Float
+double   Double
+char     Character
+boolean  Boolean
+
+They can be used to convert between basic types and String types
+
+----------------------------
+Constructors Constructor 	Description
+Integer​(int value) 	
+Deprecated.
+It is rarely appropriate to use this constructor.
+Integer​(String s) 	
+Deprecated.
+It is rarely appropriate to use this constructor.
+
+--------------------------------
+**********
+source code
+**********************
+package cn.itcast_01;
+
+public class IntegerTest2 {
+
+	public static void main(String[] args) {
+//		method 1
+		int i = 100;
+		Integer ii = new Integer(i);
+		System.out.println(ii); // 100, rewrite toString()
+		
+//      method 2
+		String str = "100";
+		Integer iii = new Integer(str);
+		System.out.println(iii);// 100
+		
+//		exception
+//		String str2 = "abc";
+//		Integer ii2 = new Integer(str2);// java.lang.NumberFormatException
+//		System.out.println(ii2);
+
+		
+	}
+
+}
+
+************
+result:
+100
+100
+*************
+Note: String must be consisted of integers instead of chars
+-------------------------------
+String<->int
+int 	intValue() 	
+Returns the value of this Integer as an int.
+
+static int 	parseInt​(String s) 	
+Parses the string argument as a signed decimal integer.
+
+static int 	parseInt​(String s, int radix) 	
+Parses the string argument as a signed integer in the radix 
+specified by the second argument.
+
+String 	toString() 	
+Returns a String object representing this Integer's value.
+static String 	toString​(int i) 	
+Returns a String object representing the specified integer.
+
+static String 	toString​(int i, int radix) 	
+Returns a string representation of the first argument in the 
+radix specified by the second argument.
+
+static Integer 	valueOf​(int i) 	
+Returns an Integer instance representing the specified int value.
+static Integer 	valueOf​(String s) 	
+Returns an Integer object holding the value of the specified String.
+static Integer 	valueOf​(String s, int radix) 	
+Returns an Integer object holding the value extracted from the specified
+ String when parsed with the radix given by the second argument.
+ 
+---------------------------
+****************************
+package cn.itcast_01;
+
+public class IntStringConversionTest {
+
+	public static void main(String[] args) {
+//		int to String
+//		String.valueOf(int)
+		
+//		method 1: String joint
+		int num = 100;
+		String str = "" + num;
+		System.out.println(str);
+
+//		method 2: Integer.toString
+		String str2 = Integer.toString(num);
+		System.out.println(str2);
+		
+//		method 3: String.valueOf, recommended
+		String str3 = String.valueOf(num);
+		System.out.println(str3);
+		
+//		method 4: Integer.toString()
+		Integer integer = new Integer(num);
+		String str4 = integer.toString();
+		System.out.println(str4);
+		
+		
+		
+//		String to int
+//		integer.parseInt(s);
+		
+//		method 1:
+		String str5 = "100";
+	    Integer i5 = new Integer(str5);
+	    int x5 = i5.intValue();
+	    System.out.println(x5);
+
+//	    method 2:
+//	    String str6 = "200";
+//	    Integer i6 = Integer.getInteger(str6);
+//	    int x6 = i6.intValue();//NullPointerException
+//	    System.out.println(x6);
+	    
+//	    method 2:
+	    String str6 = "200";
+	    int x6 = Integer.parseInt(str6);
+	    System.out.println(x6);
+	    
+	}
+
+}
+
+**************
+result:
+100
+100
+100
+100
+100
+200
+****************
+---------------------------------------
+
+SysConvert:
+Dec->Bin, Oct, Hex
+static String 	toBinaryString​(int i) 	
+Returns a string representation of the integer argument 
+as an unsigned integer in base 2.
+static String 	toHexString​(int i) 	
+Returns a string representation of the integer argument 
+as an unsigned integer in base 16.
+static String 	toOctalString​(int i) 	
+Returns a string representation of the integer argument 
+as an unsigned integer in base 8.
+
+Dec->Other sys (2 to 36)(0-9,a-z: 36 in total)
+static String 	toString​(int i, int radix) 	
+Returns a string representation of the first argument in the radix
+ specified by the second argument.
+
+Other sys->Dec:
+static int 	parseInt​(String s, int radix) 	
+Parses the string argument as a signed integer 
+in the radix specified by the second argument.
+
+*************************
+package cn.itcast_01;
+
+public class DecToOtherSysTest {
+
+	public static void main(String[] args) {
+//		Dec->Bin, Oct, Hex
+		int num = 100;
+		System.out.println(Integer.toBinaryString(num));
+		System.out.println(Integer.toOctalString(num));
+		System.out.println(Integer.toHexString(num));
+		System.out.println("----------------");
+		
+//		Dec->other sys(2 to 36)
+		System.out.println(Integer.toString(num, 10));
+		System.out.println(Integer.toString(num, 2));
+		System.out.println(Integer.toString(num, 8));
+		System.out.println(Integer.toString(num, 16));
+		System.out.println(Integer.toString(num, 17));
+		System.out.println(Integer.toString(num, 32));
+		System.out.println(Integer.toString(num, 36));
+		System.out.println(Integer.toString(num, 37));
+		System.out.println(Integer.toString(num, 5));
+		System.out.println(Integer.toString(num, 7));
+		System.out.println(Integer.toString(num, 20));
+	
+		System.out.println(Integer.toString(num, 100));
+		System.out.println(Integer.toString(num, -5));
+		System.out.println(Integer.toString(num, -7));
+		System.out.println("-----------------");
+		
+//		Other sys->Dec
+		System.out.println(Integer.parseInt("100", 10));
+		System.out.println(Integer.parseInt("100", 2));
+		System.out.println(Integer.parseInt("100", 8));
+		System.out.println(Integer.parseInt("100", 16));
+		System.out.println(Integer.parseInt("100", 5));
+//		System.out.println(Integer.parseInt("123", 2));//java.lang.NumberFormatException
+	}
+}
+
+
+**************************
+result:
+1100100
+144
+64
+----------------
+100
+1100100
+144
+64
+5f
+34
+2s
+100
+400
+202
+50
+100
+100
+100
+-----------------
+100
+4
+64
+256
+25
+***********************
+----------------------------
+
+
+
+JDK5 new feature:
+Auto wrapper: basic type into wrapper type
+Auto unwrapper: wrapper type into basic type
+
+Note: NullPointerException, before using Integer method, we need judge if Integer
+is null, if it is not null, we can call Integer methods
+if (i != null) {
+	int x = i.intValue();
+}
+
+***********************
+Integer ii = 100;
+ii += 200;
+System.out.println("ii:"+ii);
+
+After decompiling:
+Integer ii = Integer.valueOf(100);
+ii = Integer.valueOf(ii.intValue() + 200);
+System.out.println(new StringBuilder("ii:").append(ii).toString());
+***********************
+package cn.itcast_01;
+
+public class AutoWrapperTest {
+
+	public static void main(String[] args) {
+		Integer i1 = new Integer(100);
+//		Integer i2 = 200;// JDK5 is OK
+//		i2 += 100;
+		System.out.println(i1.intValue());
+
+
+	}
+
+}
+Note: It will report compilation error in JDK12
+---------------------------------
+
+Q1: Integer i1 = 127;  
+// -128 to 127(Byte type of data)
+// if the data is in the range of it, we don't need create new memory
+    public static Integer valueOf(int i) {
+        if (i >= IntegerCache.low && i <= IntegerCache.high)
+            return IntegerCache.cache[i + (-IntegerCache.low)];
+        return new Integer(i);
+    }
+
+
+    valueOf
+
+    public static Integer valueOf​(int i)
+
+    Returns an Integer instance representing the specified int value. If a new Integer instance is not required, this method should generally be used in preference to the constructor Integer(int), as this method is likely to yield significantly better space and time performance by caching frequently requested values. This method will always cache values in the range -128 to 127, inclusive, and may cache other values outside of this range.
+
+    Parameters:
+        i - an int value.
+    Returns:
+        an Integer instance representing i.
+    Since:
+        1.5
+
+**********************
+package cn.itcast_01;
+
+public class IntegerTest3 {
+
+	public static void main(String[] args) {
+		Integer i1 = new Integer(127);
+		Integer i2 = new Integer(127);
+		System.out.println(i1 == i2);       // false
+		System.out.println(i1.equals(i2));  // true
+		System.out.println("-----------------");
+		
+		Integer i3 = new Integer(128);
+		Integer i4 = new Integer(128);
+		System.out.println(i3 == i4);      // false
+		System.out.println(i3.equals(i4)); // true
+		System.out.println("-----------------");
+		
+		Integer i5 = Integer.valueOf(127); // Integer i5 = 127;
+		Integer i6 = Integer.valueOf(127); // Integer i6 = 127;
+		System.out.println(i5 == i6);      // true
+		System.out.println(i5.equals(i6)); // true
+		System.out.println("-----------------");
+		
+		Integer i7 = Integer.valueOf(128); // Integer i7 = 128;
+		Integer i8 = Integer.valueOf(128); // Integer i8 = 128;
+		System.out.println(i7 == i8);      // false, new memory out the range of -128 to 127
+		System.out.println(i7.equals(i8)); // true
+		System.out.println("-----------------");
+	}
+
+}
+*************************
+
+Character:
+Class Character
+
+    java.lang.Object
+        java.lang.Character 
+
+    All Implemented Interfaces:
+        Serializable, Comparable<Character>
+
+    public final class Character
+    extends Object
+    implements Serializable, Comparable<Character>
+
+    The Character class wraps a value of the primitive type char in an object. 
+	An object of type Character contains a single field whose type is char.
+
+    In addition, this class provides several methods for determining a character's
+	category (lowercase letter, digit, etc.) and for converting characters from 
+	uppercase to lowercase and vice versa.
+
+    Character information is based on the Unicode Standard, version 8.0.0.
+
+    The methods and data of class Character are defined by the information in 
+	the UnicodeData file that is part of the Unicode Character Database 
+	maintained by the Unicode Consortium. This file specifies various properties 
+	including name and general category for every defined Unicode code point or 
+	character range. 
+	
+----------------------
+Constructors Constructor 	Description
+Character​(char value) 	
+Deprecated.
+It is rarely appropriate to use this constructor.
+
+common methods:
+static boolean 	isDigit​(char ch) 	
+Determines if the specified character is a digit.
+
+static boolean 	isLowerCase​(char ch) 	
+Determines if the specified character is a lowercase character.
+
+static boolean 	isUpperCase​(char ch) 	
+Determines if the specified character is an uppercase character.
+
+static char 	toLowerCase​(char ch) 	
+Converts the character argument to lowercase 
+using case mapping information from the UnicodeData file.
+
+static char 	toUpperCase​(char ch) 	
+Converts the character argument to uppercase using case 
+mapping information from the UnicodeData file.
+
+******************
+package day13_Character;
+
+public class CharacterTest1 {
+
+	public static void main(String[] args) {
+//		Character character = new Character(97); // compile error
+//		Character ch = new Character((char) 97);
+		Character ch = new Character('a');
+		System.out.println("ch:"+ch);// Character rewrite toString()
+		System.out.println("----------");
+		
+		System.out.println(Character.isDigit('a'));
+		System.out.println(Character.isLowerCase('a'));
+		System.out.println(Character.isUpperCase('a'));
+		System.out.println(Character.toLowerCase('a'));
+		System.out.println(Character.toUpperCase('a'));
+		System.out.println("---------");
+		
+		System.out.println(Character.isDigit('1'));
+		System.out.println(Character.isLowerCase('A'));
+		System.out.println(Character.isUpperCase('A'));
+		System.out.println(Character.toLowerCase('A'));
+		System.out.println(Character.toUpperCase('A'));
+		
+
+	}
+
+}
+
+result:
+ch:a
+----------
+false
+true
+false
+a
+A
+---------
+true
+false
+true
+a
+A
+***************
+Compute the number of digits, lowerCases and upperCases
+****************
+package day13_Character;
+
+import java.util.Scanner;
+
+public class ComputeCountTest {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter a String:");
+		String str = sc.nextLine();
+		compute(str);
+
+	}
+	
+	public static void compute(String str) {
+		int digitsCount       = 0;
+		int lowerCasesCount   = 0;
+		int upperCasesCount   = 0;
+		
+		char[] chs = str.toCharArray();
+		for (int i = 0; i < chs.length; ++i) {
+			if (Character.isDigit(chs[i])) {
+				digitsCount++;
+			}
+			else if (Character.isLowerCase(chs[i])) {
+				lowerCasesCount++;
+			}
+			else if (Character.isUpperCase(chs[i])) {
+				upperCasesCount++;
+			}
+		}
+		
+		System.out.println("The number of digits is " + digitsCount);
+		System.out.println("The number of lowerCases is " + lowerCasesCount);
+		System.out.println("The number of upperCases is " + upperCasesCount);
+	}
+
+}
+
+result:
+Please enter a String:
+abcABC123455aaaabbbGSG,.
+The number of digits is 6
+The number of lowerCases is 10
+The number of upperCases is 6
+*********************************************
+
+	
