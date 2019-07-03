@@ -1,0 +1,109 @@
+1. Why does Regular expression generate?
+Check QQ number
+req:
+A: 5 to 15 digits
+B: don't begin with 0
+*******************
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class RegexTest1 {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Please enter your QQ number(5 to 15 digits):");
+		String str = scanner.nextLine();
+		boolean bl = isQQNumber(str);
+		boolean bl1 = checkQQ(str);
+		System.out.println("isQQNumber:"+bl);
+		System.out.println("checkQQ:"+bl1);
+		
+
+	}
+	
+	// My implementation:
+	public static boolean isQQNumber(String str) {
+		char[] chs = str.toCharArray();
+		int count = 0;
+		boolean flag = true;
+		
+		for (int i = 0; i < chs.length; ++i) {
+			if (!Character.isDigit(chs[i])) {
+				flag = false;
+				break;
+			}
+			else {
+				count++;
+			}
+			
+			if (chs[0] == '0') {
+				flag = false;
+				
+			}
+		}
+		
+		if (count < 5 || count > 15) {
+			return false;
+		}
+		
+		return flag;
+	}
+	
+	// Teacher method, recommended
+	public static boolean checkQQ(String qq) {
+		boolean flag = true;
+		
+		if (qq.length() >= 5 && qq.length() <= 15) {
+			if (!qq.startsWith("0")) {
+				char[] chs = qq.toCharArray();
+				for (int i = 0; i < chs.length; ++i) {
+					char ch = chs[i];
+					if (!Character.isDigit(ch)) {
+						flag = false;
+						break;
+					}
+				}
+			}
+			else {
+				flag = false;
+			}
+		}
+		else {
+			flag = false;
+		}
+		
+		return flag;
+	}
+
+}
+***********************************
+It is very completed for the simple requirement, so we need to use another method.
+
+Regex: String with a rule
+********************
+Use Regex:
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class RegexTest2 {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Please enter your QQ number(5 to 15 digits):");
+		String str = scanner.nextLine();
+		boolean isQQ = checkQQ(str);
+		System.out.println("checkQQ:"+isQQ);
+	}
+	
+	public static boolean checkQQ(String qq) {
+		return qq.matches("[1-9][0-9]{4,14}");
+	}
+
+}
+***************************
+
+2. Pattern
+java.util.regex
+class Pattern
