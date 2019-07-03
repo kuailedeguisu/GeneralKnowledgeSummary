@@ -241,3 +241,70 @@ Special constructs (named-capturing and non-capturing)
 (?<!X)	X, via zero-width negative lookbehind
 (?>X)	X, as an independent, non-capturing group
 \cx	The control character corresponding to x
+
+3. Pattern judge function
+String matches
+public boolean matches(String regex);
+***************************************
+matches
+public boolean matches​(String regex)
+Tells whether or not this string matches the given regular expression.
+An invocation of this method of the form str.matches(regex) yields exactly the same result as the expression
+
+Pattern.matches(regex, str)
+Parameters:
+regex - the regular expression to which this string is to be matched
+Returns:
+true if, and only if, this string matches the given regular expression
+Throws:
+PatternSyntaxException - if the regular expression's syntax is invalid
+*********************************
+package cn.itcast_01;
+
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+public class PhoneNumberTest {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Please enter the mobile phone number:");
+		String string = scanner.nextLine();
+		boolean flag1 = string.matches("1[378]\\d{9}");
+		boolean flag2 = Pattern.matches("1[378]\\d{9}", string);
+		System.out.println("String matches:"+flag1);
+		System.out.println("Pattern matches:"+flag2);
+	}
+}
+
+result:
+Please enter the mobile phone number:
+18912345678
+String matches:true
+Pattern matches:true
+**********************************
+check email
+**************
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class EmailTest {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Please enter an email:");
+		String emailString = scanner.nextLine();
+		String regexString = "\\w+@\\w+{2,6}(\\.\\w{2,3})+";
+		boolean flag1 = emailString.matches(regexString);
+		System.out.println(flag1);
+
+	}
+
+}
+
+result:
+123@itcast.com.cn
+true
+*****************************
+**************************
