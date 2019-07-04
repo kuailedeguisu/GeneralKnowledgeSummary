@@ -308,3 +308,224 @@ result:
 true
 *****************************
 **************************
+
+
+4. Regex split function
+String
+split
+public String[] split​(String regex)
+Splits this string around matches of the given regular expression.
+This method works as if by invoking the two-argument split method with the given expression and a limit argument of zero. Trailing empty strings are therefore not included in the resulting array.
+
+The string "boo:and:foo", for example, yields the following results with these expressions:
+
+Regex	Result
+:	{ "boo", "and", "foo" }
+o	{ "b", "", ":and:f" }
+Parameters:
+regex - the delimiting regular expression
+Returns:
+the array of strings computed by splitting this string around matches of the given regular expression
+Throws:
+PatternSyntaxException - if the regular expression's syntax is invalid
+***************************
+Check if your age meets the requirements:
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class RegexTest3 {
+
+	public static void main(String[] args) {
+		String ageString = "18-24";
+		String[] strings = ageString.split("-");
+		int begin = Integer.parseInt(strings[0]);
+		int end = Integer.parseInt(strings[1]);
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Please enter your age[18-24]:");
+		int age = scanner.nextInt();
+		
+		if (age >= begin && age <= end) {
+			System.out.println("In the range");
+		}
+		else {
+			System.out.println("Out of the range");
+		}
+
+	}
+
+}
+**************************
+
+package cn.itcast_01;
+
+public class RegexSplit2 {
+
+	public static void main(String[] args) {
+		String str1 = "aa,bb,cc";
+		String[] strings1 = str1.split(",");
+		for (int i = 0; i < strings1.length; ++i) {
+			System.out.println(strings1[i]);
+		}
+		System.out.println("---------------");
+		
+		String str2 = "aa.bb.cc";
+		String[] strings2 = str2.split("\\.");
+		for (int i = 0; i < strings2.length; ++i) {
+			System.out.println(strings2[i]);
+		}
+		System.out.println("---------------");
+		
+		String str3 = "aa   bb                  cc";
+		String[] strings3 = str3.split(" +");
+		for (int i = 0; i < strings3.length; ++i) {
+			System.out.println(strings3[i]);
+		}
+		System.out.println("---------------");
+		
+		String str4 = "E:\\develop\\java\\src";
+		String[] strings4 = str4.split("\\\\");
+		for (int i = 0; i < strings4.length; ++i) {
+			System.out.println(strings4[i]);
+		}
+		System.out.println("---------------");
+
+	}
+
+}
+
+result:
+aa
+bb
+cc
+---------------
+aa
+bb
+cc
+---------------
+aa
+bb
+cc
+---------------
+E:
+develop
+java
+src
+---------------
+
+***************************************
+Sort one String:
+package cn.itcast_01;
+
+import java.util.Arrays;
+
+public class RegexSort {
+
+	public static void main(String[] args) {
+		String string = "12 34 78 1 2 89";
+		String regexString = " +";
+		String[] splitStrings = string.split(regexString);
+		
+		int[] intArray = new int[splitStrings.length];
+		for (int i=0; i < splitStrings.length; ++i) {
+			intArray[i] = Integer.parseInt(splitStrings[i]);
+		}
+		
+		Arrays.sort(intArray);
+		
+		StringBuilder sBuffer = new StringBuilder();
+		for (int i=0; i < intArray.length; ++i) {
+			sBuffer.append(intArray[i]).append(" ");
+		}
+		
+		String newString = sBuffer.toString().trim();
+		System.out.println("result: "+newString);
+	}
+}
+
+result:
+result:1 2 12 34 78 89
+***********************
+***********************************
+
+5. Regex replace
+String
+replaceAll
+public String replaceAll​(String regex, String replacement)
+Replaces each substring of this string that matches the given regular expression with the given replacement.
+An invocation of this method of the form str.replaceAll(regex, repl) yields exactly the same result as the expression
+
+Pattern.compile(regex).matcher(str).replaceAll(repl)
+Note that backslashes (\) and dollar signs ($) in the replacement string may cause the results to be different than if it were being treated as a literal replacement string; see Matcher.replaceAll. Use Matcher.quoteReplacement(java.lang.String) to suppress the special meaning of these characters, if desired.
+
+Parameters:
+regex - the regular expression to which this string is to be matched
+replacement - the string to be substituted for each match
+Returns:
+The resulting String
+Throws:
+PatternSyntaxException - if the regular expression's syntax is invalid
+***********************
+package cn.itcast_01;
+
+public class RegexReplace {
+
+	public static void main(String[] args) {
+		String string = "qwerqq1234567kh622112345678xxxx";
+		String regexString = "\\d";
+//		String regexString = "\\d+"// * to replace all numbers
+		String replaceString = "*";
+		String replaceString2 = "";
+		String resultString = string.replaceAll(regexString, replaceString);
+		String resultString2 = string.replaceAll(regexString, replaceString2);
+		System.out.println(resultString);
+		System.out.println(resultString2);
+	}
+
+}
+
+result:
+qwerqq*******kh************xxxx
+qwerqqkhxxxx
+*******************************************
+
+6. Regex get function
+Pattern and Matcher
+
+ Pattern p = Pattern.compile("a*b");
+ Matcher m = p.matcher("aaaaab");
+ boolean b = m.matches();
+ 
+ ****************************
+ \b: A word boundary
+ 
+ Please get word with three letters
+ 
+ package cn.itcast_01;
+
+import java.util.regex.Pattern;
+
+import java.util.regex.Matcher;
+
+public class RegexGet {
+
+	public static void main(String[] args) {
+		String ss = "wo ai guo jia, wo zhen de ai guo jia";
+		Pattern pattern = Pattern.compile("\\b\\w{3}\\b");
+		Matcher m = pattern.matcher(ss);
+		
+//		Before using Matcher.group(), we must call Matcher.find()
+		while(m.find()) {
+			System.out.println(m.group());
+		}
+	}
+}
+result:
+guo
+jia
+guo
+jia
+*********************
+
+*******************
