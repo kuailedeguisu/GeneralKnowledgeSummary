@@ -1202,4 +1202,93 @@ public class ListModifyconcurrentTest {
 result:
 [hello, how, big, world, javaee]
 *******************************************
+Q: Common data structure advantanges and disadvantages?
+*****************************************
+stack: first in last out
+the entry of stack is at the top, and push every element into the top then put the previous element down
+the exit of stack is at the top
+in order(store): A(top->middle->bottom)->B(top->middle)->C(top)
+out order(get): C(top)->B(middle->top)->A(bottom->middle->top)
+store order:
+A
+B
+C
+
+get order:
+C
+B
+A
+例子：子弹夹
+********************************************
+queue：first in first out
+the entry is in the left and the exit is in the right
+in order(store): A(left->middle->right)->B(left->middle)->C(left)
+out order(get):A(right)->B(middel->right)->C(left->middle->right)
+store order:
+C B A
+get order:
+A B C
+example: queue at the station
+*********************************************
+array: the container to store elements with the same type, has index
+find is very fast but add and remove is slow
+int[] arr = {11, 22, 33, 44};
+store order(left->right): 11 22 33 44
+
+R1: get element by index: arr[2]
+
+R2: add element 88 after 33
+	create a new array with the length of original length plus 1
+	traverse old array and find 33
+	for the elements before 33, store the elements on the same positions as old array
+	33: 33
+	for the elements after 33, put 88, then put the elements after 33 with original index plus 1
+	
+R3: remove element 33
+	create a new array with the length of original length minus 1
+	traverse old array and find 33
+	for the elements before 33, store the elements on the same positions as old array
+	33: not store
+	for the elements after 33, then put the elements after 33 with original index minus 1
+***********************************************
+链表：由一个链子把多个节点连接起来
+节点：有数据域和指针域组成
+链表特点：查询慢，增删慢
+0x001(11, 0x002)->0x002(22, 0x003)->0x003(33, 0x004)->0x004(44, 0x005)->0x005(55, null)
+11->22->33->44->55
+R1: get 33
+start in the beginning
+
+R2: add 88 after 33
+把33的地址域保存到变量tmp中
+把88的元素地址赋值为33的地址域
+把tmp的值赋值给88的地址域
+0x008(88,null)
+tmp = 0x004
+0x003(33, 0x008)->0x008(88, 0x004)->0x004(44, 0x005)
+
+R3: remove 33
+把33的地址域保存到变量tmp中
+把tmp赋值给33前一个元素的地址域
+tmp = 0x004
+0x002（22， 0x004）->0x004(44, 0x005)
+
+上面讲的是单向链表
+循环链表：头元素的地址域赋值给尾元素的元素地址
+双向链表的节点：前一个节点的地址域，节点值，后一个节点的地址域
+如果把双向链表的头节点和尾节点连接起来，就是双向循环链表
+
+List的子类特点：
+ArrayList：底层结构是数组，查询快，增删慢，不同步，线程不安全，效率高
+Vector：底层结构是线程安全的，效率低，查询和增删都慢，不怎么用
+LinkedList：底层是双向链表，线程不安全，效率高，线程不安全，查询慢，增删快
+
+使用哪个子类，看需求，安全的只有Vector，即使要安全，也不用Vector，后面的有替代的
+不安全的，ArrayList（查询多），LinkedList（查询少，增删多）
+
+如果都不会，用ArrayList
+
+
+
+
 
