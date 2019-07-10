@@ -1,0 +1,394 @@
+Day16.txt
+List subclasses features
+	ArrayList: based on Array, thread unsafe, high efficiency, find fast, add and remove slow
+	Vector: based on Array, thread safe, low efficiency, find slow, and and remove slow
+	LinkedList: based on link list, thread unsafe, high efficiency, find slow, add and remove fast
+
+Examples:
+Use List subclasses to implement String and self-defined Object stored and traverse
+
+*****************************
+ArrayList
+*****************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ArrayListStringTest {
+
+	public static void main(String[] args) {
+		ArrayList list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			String string = (String)listIterator.next();
+			System.out.println(string);
+		}
+
+	}
+
+}
+
+Result:
+hello
+world
+*****************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ArrayListStudentTest {
+
+	public static void main(String[] args) {
+		ArrayList list = new ArrayList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("John", 60);
+		
+		list.add(s1);
+		list.add(s2);
+		list.add(s3);
+		list.add(s4);
+		list.add(s5);
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			Student stu = (Student)listIterator.next();
+			System.out.println(stu.getNameString()+"---"+stu.getAge());
+		}
+
+	}
+
+}
+
+Result:
+Emma---20
+Peter---30
+Bob---40
+Andy---50
+John---60
+***************************
+Vector
+************************************
+package cn.itcast_01;
+
+import java.util.ListIterator;
+import java.util.Vector;
+
+public class VectorStringTest {
+
+	public static void main(String[] args) {
+		Vector list = new Vector();
+		list.add("hello");
+		list.add("world");
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			String string = (String)listIterator.next();
+			System.out.println(string);
+		}
+
+	}
+
+}
+
+
+Result:
+hello
+world
+***********************************
+package cn.itcast_01;
+
+import java.util.ListIterator;
+import java.util.Vector;
+
+public class VectorStudentTest {
+
+	public static void main(String[] args) {
+		Vector list = new Vector();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("John", 60);
+		
+		list.add(s1);
+		list.add(s2);
+		list.add(s3);
+		list.add(s4);
+		list.add(s5);
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			Student stu = (Student)listIterator.next();
+			System.out.println(stu.getNameString()+"---"+stu.getAge());
+		}
+
+	}
+
+}
+
+
+Result:
+Emma---20
+Peter---30
+Bob---40
+Andy---50
+John---60
+*************************************
+LinkedList
+*************************************
+package cn.itcast_01;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class LinkedListStringTest {
+
+	public static void main(String[] args) {
+		LinkedList list = new LinkedList();
+		list.add("hello");
+		list.add("world");
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			String string = (String)listIterator.next();
+			System.out.println(string);
+		}
+
+	}
+
+}
+
+Result:
+hello
+world
+***********************************
+package cn.itcast_01;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class LinkedListStudentTest {
+
+	public static void main(String[] args) {
+		LinkedList list = new LinkedList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("John", 60);
+		
+		list.add(s1);
+		list.add(s2);
+		list.add(s3);
+		list.add(s4);
+		list.add(s5);
+		
+		ListIterator listIterator = list.listIterator();
+		
+		while (listIterator.hasNext()) {
+			Student stu = (Student)listIterator.next();
+			System.out.println(stu.getNameString()+"---"+stu.getAge());
+		}
+
+	}
+
+}
+
+Result:
+Emma---20
+Peter---30
+Bob---40
+Andy---50
+John---60
+*******************************
+Vector special function:
+public void addElement (E obj)
+public E elementAt (int index)
+public Enumeration<E> elements()
+
+Enumeration
+boolean hasMoreElements()
+E nextElement()
+*********************************
+package vector;
+
+import java.util.Vector;
+import java.util.Enumeration;
+
+public class VectorTest {
+
+	public static void main(String[] args) {
+		Vector vec = new Vector();
+		vec.addElement("hello");
+		vec.addElement("world");
+		
+		for (int i=0; i<vec.size(); ++i) {
+			String string = (String)vec.elementAt(i);
+			System.out.println(string);
+		}
+		System.out.println("-------");
+		Enumeration en = vec.elements();
+		
+		while (en.hasMoreElements()) {
+			String string = (String)en.nextElement();
+			System.out.println(string);
+		}
+	}
+
+}
+
+Result:
+hello
+world
+-------
+hello
+world
+************************************************
+package vector;
+
+import java.util.Enumeration;
+import java.util.Vector;
+
+import cn.itcast_01.Student;
+
+public class VectorStudentTest {
+
+	public static void main(String[] args) {
+		Vector list = new Vector();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("John", 60);
+		
+		list.addElement(s1);
+		list.addElement(s2);
+		list.addElement(s3);
+		list.addElement(s4);
+		list.addElement(s5);
+		
+		for (int i=0; i<list.size(); ++i) {
+			Student stu = (Student)list.elementAt(i);
+			System.out.println(stu.getNameString()+"----"+stu.getAge());
+		}
+		System.out.println("-------");
+
+		Enumeration en = list.elements();
+		while (en.hasMoreElements()) {
+			Student stu = (Student)en.nextElement();
+			System.out.println(stu.getNameString()+"----"+stu.getAge());
+		}
+	}
+
+}
+
+Result:
+Emma----20
+Peter----30
+Bob----40
+Andy----50
+John----60
+-------
+Emma----20
+Peter----30
+Bob----40
+Andy----50
+John----60
+************************************
+
+////////////////////////////////////////////
+LinkedList special functions
+public void addFirst (E e)
+public void addLast (E e)
+public E removeFirst() // return the removed element
+public E removeLast() 
+public E getFirst()
+public E getLast()
+///////////////////////////////////////////
+package linked.list;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class LinkedListStringTest {
+
+	public static void main(String[] args) {
+		LinkedList ll = new LinkedList();
+		ll.add("hello");
+		ll.add("world");
+		
+		System.out.println("getFirst:"+ll.getFirst());
+		System.out.println("getLast:"+ll.getLast());
+		Iterator iterator = ll.iterator();
+		while (iterator.hasNext()) {
+			String string = (String)iterator.next();
+			System.out.println(string);
+		}
+		
+		System.out.println("-------");
+		ll.addFirst("how");
+		ll.addLast("old");
+		System.out.println("getFirst:"+ll.getFirst());
+		System.out.println("getLast:"+ll.getLast());
+		Iterator iterator1 = ll.iterator();
+		while (iterator1.hasNext()) {
+			String string = (String)iterator1.next();
+			System.out.println(string);
+		}
+		System.out.println("--------");
+		
+		ll.removeFirst();
+		ll.removeLast();
+		System.out.println("getFirst:"+ll.getFirst());
+		System.out.println("getLast:"+ll.getLast());
+		Iterator iterator2 = ll.iterator();
+		while (iterator2.hasNext()) {
+			String string = (String)iterator2.next();
+			System.out.println(string);
+		}
+		System.out.println("--------");
+
+	}
+
+}
+
+Result:
+getFirst:hello
+getLast:world
+hello
+world
+-------
+getFirst:how
+getLast:old
+how
+hello
+world
+old
+--------
+getFirst:hello
+getLast:world
+hello
+world
+--------
+*********************************
