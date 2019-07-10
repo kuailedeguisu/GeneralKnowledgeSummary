@@ -222,13 +222,13 @@ Andy---50
 John---60
 *******************************
 Vector special function:
-public void addElement (E obj)
-public E elementAt (int index)
-public Enumeration<E> elements()
+public void addElement (E obj)      ---add
+public E elementAt (int index)      ----get
+public Enumeration<E> elements()    -----Iterator
 
 Enumeration
-boolean hasMoreElements()
-E nextElement()
+boolean hasMoreElements()         -----hasNext()
+E nextElement()                   -----next()
 *********************************
 package vector;
 
