@@ -528,19 +528,872 @@ guo
 jia
 *********************
 
+Math
+Class Math
+
+    java.lang.Object
+        java.lang.Math 
+
+    public final class Math
+    extends Object
+
+    The class Math contains methods for performing basic numeric 
+	operations such as the elementary exponential, 
+	logarithm, square root, and trigonometric functions. 
+	
+
+Data Members:
+    public static final double E
+
+    public static final double PI
+
+Member methods:
+
+public static int abs​(int a)           // get absolute value
+
+public static double ceil​(double a)    // get integer upward
+
+public static double floor​(double a)   // get integer downward
+
+public static double pow​(double a,
+                         double b)     // Exponential
+
+public static int max​(int a,
+                      int b)          // get maximum
+					  
+public static long round​(double a)    // to the nearest
+
+public static double random()         // return random value [0-1]
+
+public static double sqrt​(double a)	   // 	Return positive square root	
+
+
+***************************************************
+package cn.itcast_01;
+
+public class MathTest01 {
+
+	public static void main(String[] args) {
+		System.out.println(Math.E);
+		System.out.println(Math.PI);
+		
+		int a = 100;
+		int b = -100;
+		double c = -120.87;
+		System.out.println("abs of a:"+Math.abs(a));
+		System.out.println("abs of b:"+Math.abs(b));
+		System.out.println("abs of c:"+Math.abs(c));
+		
+		double d = 120.87;
+		System.out.println("ceil of c:"+Math.ceil(c));
+		System.out.println("ceil of d:"+Math.ceil(d));
+		
+		System.out.println("floor of c:"+Math.floor(c));
+		System.out.println("floor of d:"+Math.floor(d));
+		
+		System.out.println("max of a and b:"+Math.max(a, b));
+		
+		System.out.println("pow of 2 and 10:"+ Math.pow(2,  10));
+		
+		System.out.println("round of c:"+Math.round(c));
+		System.out.println("round of d:"+Math.round(d));
+		System.out.println("random:"+Math.random());
+		System.out.println("sqrt of 2:"+Math.sqrt(2));
+	}
+
+}
+result:
+2.718281828459045
+3.141592653589793
+abs of a:  100
+abs of b:  100
+abs of c:  120.87
+ceil of c:  -120.0
+ceil of d:  121.0
+floor of c:  -121.0
+floor of d:  120.0
+max of a and b:  100
+pow of 2 and 10:  1024.0
+round of c:  -121
+round of d:  121
+random:  0.4492767293199389
+sqrt of 2:  1.4142135623730951
+*****************************************************
+Math.random(): [0,1)
+Get random integer in any range [start, end):
+	public static int getRandom(int start, int end) {
+		return (int)(Math.random() * (end-start + 1)) + start;
+	}
+///////////////////////////////
+Random
+Class Random
+
+    java.lang.Object
+        java.util.Random 
+
+    All Implemented Interfaces:
+        Serializable
+
+    Direct Known Subclasses:
+        SecureRandom, ThreadLocalRandom
+
+    public class Random
+    extends Object
+    implements Serializable
+
+    An instance of this class is used to generate a stream of pseudorandom numbers.
+	The class uses a 48-bit seed, 
+	which is modified using a linear congruential formula.
 
 
 
+Constructor Detail:
+    public Random() // default seed( the Milliseconds of the current time ), seed is not fixed
+
+    public Random​(long seed) // specified seed, get the same random integer each time
 
 
 
+Member methods:
+public int nextInt() // any int
+
+public int nextInt​(int bound) // [0, bound)
+
+*************************************
+Random r = new Random();
+r.nextInt(100) + 1; // [1, 100)
+r.nextInt(100);     // [0, 100)
+**************************************
+/////////////////////////////////
 
 
+System
+class System
+The System class contains several useful class fields and methods(static).
+It cannot be instantiated. 
+
+public static void gc()               // garbage collection, call Object.finalize()
+                                      // automatically after you set object null and before System.gc()
+									  // only use it for many objects
+
+public static void exit​(int status)  //  Terminates the currently running Java Virtual Machine. 
+                                     // The argument serves as a status code; by convention,
+									 // a nonzero status code indicates abnormal termination. 
+
+public static void arraycopy​(Object src,
+                             int srcPos,
+                             Object dest,
+                             int destPos,
+                             int length) // Copies an array from the specified source array, 
+							             // beginning at the specified position,
+										 // to the specified position of the destination array.
+										 // A subsequence of array components are copied 
+										 // from the source array referenced by src to the destination
+										 // array referenced by dest. The number of components copied 
+										 // is equal to the length argument. The components at positions
+										 // srcPos through srcPos+length-1 in the source array are copied into 
+										 // positions destPos through destPos+length-1, respectively, 
+										 // of the destination array.
+
+public static long currentTimeMillis() // Return the difference, measured in milliseconds,
+                                       // between the current time and midnight, January 1, 1970 UTC.
+									   // It is used for computing the running time some programs
+***************************************************
+Person.java
+package day14_System;
+
+public class Person {
+	private String nameString;
+	private int age;
+	public Person() {
+		super();
+	}
+	public Person(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+	public String getNameString() {
+		return nameString;
+	}
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		return result;
+	}
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (age != other.age)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+	public String toString() {
+		return "Person [nameString=" + nameString + ", age=" + age + "]";
+	}
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	protected void finalize() throws Throwable {
+		System.out.println("The current object is recycled"+this);
+		super.finalize();
+	}
+
+}
 
 
+Test class:
+
+package day14_System;
+
+public class SystemTest01 {
+
+	public static void main(String[] args) throws Throwable {
+		Person person = new Person();
+		person.setNameString("Emma");
+		person.setAge(20);
+		System.out.println(person.toString());
+		person = null;
+		System.gc();
+
+	}
+
+}
+
+result:
+Person [nameString=Emma, age=20]
+The current object is recycledPerson [nameString=Emma, age=20]
+***************************************************
+Compute the running time:
+package day14_System;
+
+public class SystemTest03 {
+
+	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
+		for (int x=0; x<100000; x++) {
+			System.out.println("hello"+x);
+		}
+		long end = System.currentTimeMillis();
+		
+		System.out.println("The runtime is "+ (end-start)+" milliseconds");
+
+	}
+}
+************************************************
+package day14_System;
+
+import java.util.Arrays;
+
+public class SystemTest04 {
+
+	public static void main(String[] args) {
+		int[] srcArr = {1, 2, 3, 4, 5, 6, 7};
+		int[] destArr = {11, 22, 33, 44, 55, 66, 77};
+		System.arraycopy(srcArr, 2, destArr, 3, 3);
+		System.out.println(Arrays.toString(srcArr));
+		System.out.println(Arrays.toString(destArr));
+
+	}
+
+}
+
+result:
+[1, 2, 3, 4, 5, 6, 7]
+[11, 22, 33, 3, 4, 5, 77]
+*********************************
+BigInteger:
+Compute data out of range of Integer
+*****************************************
+package cn.itcast_01;
+
+public class BigIntegerTest01 {
+
+	public static void main(String[] args) {
+		Integer integer = new Integer(100);
+		System.out.println(integer.MAX_VALUE);
+		System.out.println(integer.toString());
+		Integer iMax = new Integer("2147483647");
+		System.out.println(iMax.toString());
+		System.out.println(iMax);
+		Integer iMax1 = new Integer("2147483648"); // NumberFormatException
+		System.out.println(iMax1.toString());
+		System.out.println(iMax1);
+	}
+}
+
+result:
+2147483647
+100
+2147483647
+2147483647
+Exception in thread "main" java.lang.NumberFormatException: For input string: "2147483648"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:68)
+	at java.base/java.lang.Integer.parseInt(Integer.java:662)
+	at java.base/java.lang.Integer.<init>(Integer.java:1117)
+	at cn.itcast_01.BigIntegerTest01.main(BigIntegerTest01.java:12)
+****************************************************
+		BigInteger bi1 = new BigInteger("2147483648");
+		System.out.println(bi1);
+result:
+2147483648
+********************************************************
+public static final BigInteger ZERO
+public static final BigInteger ONE
+public static final BigInteger TWO
+public static final BigInteger TEN
+
+public BigInteger​(byte[] val,
+                  int off,
+                  int len)
+public BigInteger​(byte[] val)
+public BigInteger​(int signum,
+                  byte[] magnitude,
+                  int off,
+                  int len)
+public BigInteger​(int signum,
+                  byte[] magnitude)
+public BigInteger​(String val,
+                  int radix)
+public BigInteger​(String val)  ************
+public BigInteger​(int numBits,
+                  Random rnd)
+public BigInteger​(int bitLength,
+                  int certainty,
+                  Random rnd)
 
 
+public BigInteger add​(BigInteger val)
+public BigInteger subtract​(BigInteger val)
+public BigInteger multiply​(BigInteger val)
+public BigInteger divide​(BigInteger val)
+// Returns an array of two BigIntegers 
+// containing (this / val) followed by (this % val).
+public BigInteger[] divideAndRemainder​(BigInteger val) 
+///////////////////////////
+Class BigDecimal
+*******************
+package cn.itcast_01;
 
+public class BigDecimalTest01 {
+
+	public static void main(String[] args) {
+		System.out.println(0.09 + 0.01);
+		System.out.println(1.0 - 0.32);
+		System.out.println(1.015 * 100);
+		System.out.println(1.301 / 100);
+
+	}
+
+}
+
+result:
+0.09999999999999999
+0.6799999999999999
+101.49999999999999
+0.013009999999999999
+0.78
+*****************************
+conclusion:
+When float and double data join to compute, they will lose accuracy
+=>BigDecimal: fixed and any accuracy signed decimal, can resolve data accuracy lost
+
+public static final BigDecimal TEN
+public static final BigDecimal ZERO
+
+public BigDecimal​(String val)
+
+public BigDecimal add​(BigDecimal augend)
+public BigDecimal subtract​(BigDecimal subtrahend)
+public BigDecimal multiply​(BigDecimal multiplicand)
+public BigDecimal divide​(BigDecimal divisor)
+public BigDecimal divide​(BigDecimal divisor,
+                         int scale, // leave scale digits after .
+                         RoundingMode roundingMode) // the rounding mode
+public BigDecimal remainder​(BigDecimal divisor)
+public BigDecimal[] divideAndRemainder​(BigDecimal divisor)
+
+*********************************************
+package cn.itcast_01;
+
+import java.math.BigDecimal;
+
+public class BigDecimalTest02 {
+
+	public static void main(String[] args) {
+		BigDecimal bd1 = new BigDecimal("0.09");
+		BigDecimal bd2 = new BigDecimal("0.01");
+		System.out.println(bd1.add(bd2));
+		
+		BigDecimal bd3 = new BigDecimal("1.0");
+		BigDecimal bd4 = new BigDecimal("0.32");
+		System.out.println(bd3.subtract(bd4));
+		
+		BigDecimal bd5 = new BigDecimal("1.015");
+		BigDecimal bd6 = new BigDecimal("100");
+		System.out.println(bd5.multiply(bd6));
+		
+		BigDecimal bd7 = new BigDecimal("1.301");
+		BigDecimal bd8 = new BigDecimal("100");
+		System.out.println(bd7.divide(bd8));
+	}
+}
+
+result:
+0.10
+0.68
+101.500
+0.01301
+*************************************************
+////////////////////////////////////////////////////
+class Date
+The class Date represents a specific instant in time, with millisecond precision. 
+public Date() // get current time
+public Date​(long date)  // get current time with milliseconds since Jan 1 1970
+CST = UTC+8
+***************************
+package cn.itcast_01;
+
+import java.util.Date;
+
+public class DateTest01 {
+	public static void main(String[] args) {
+		Date d = new Date();
+		System.out.println(d);
+		
+		long time = System.currentTimeMillis();
+		Date d2 = new Date(time);
+		System.out.println(d2);
+		
+		long time3 = 1000 * 60 * 60;
+		Date d3 = new Date(time3);
+		System.out.println(d3);
+	}
+
+}
+
+result:
+Tue Jul 09 10:52:21 CST 2019
+Tue Jul 09 10:52:21 CST 2019
+Thu Jan 01 09:00:00 CST 1970 // because we are UTC+8, 1 hour + 8 = 9 hours
+****************************
+// Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT 
+// represented by this Date object.
+public long getTime()
+// Sets this Date object to represent a point in time that is time milliseconds 
+// after January 1, 1970 00:00:00 GMT.
+public void setTime​(long time)
+
+If you only want to print the exact time with month, day, year, week, time, timezone,
+you need print Date object
+
+Date -> millisecond
+getTime()
+
+millisecond -> Date
+Date(ms)
+setTime(ms)
+
+**********************************
+package cn.itcast_01;
+
+import java.util.Date;
+
+public class DateTest02 {
+
+	public static void main(String[] args) {
+		long time = 9000 * 60 * 60;
+		Date d = new Date();
+		long startTime = d.getTime();
+		System.out.println("hello");
+		long endTime = d.getTime();
+		System.out.println(startTime);
+		System.out.println(endTime);
+		
+		Date d2 = new Date();
+		System.out.println(d2);
+		d2.setTime(1000);
+		System.out.println(d2);
+
+	}
+}
+
+result:
+hello
+1562651617685
+1562651617685
+Tue Jul 09 13:53:37 CST 2019
+Thu Jan 01 08:00:01 CST 1970
+****************************************
+DateFormat
+public class SimpleDateFormat
+extends DateFormat
+
+Date   ----  String (format)
+public final String format​(Date date)
+String ---   Date (parse)
+public Date parse​(String source)
+           throws ParseException
+		   
+Date and String format convert, DateFormat is abstract class
+both are from class DateFormat
+
+
+public SimpleDateFormat()
+public SimpleDateFormat​(String pattern)
+
+If subclass has no specified method, we can find whether its father class has the method
+DateFormat---format(Date)
+SimpleDateFormat---- no format(Date)
+
+Letter 	Date or Time Component 	Presentation 	Examples
+G 	Era designator 	Text 	AD
+y 	Year 	Year 	1996; 96
+Y 	Week year 	Year 	2009; 09
+M 	Month in year (context sensitive) 	Month 	July; Jul; 07
+L 	Month in year (standalone form) 	Month 	July; Jul; 07
+w 	Week in year 	Number 	27
+W 	Week in month 	Number 	2
+D 	Day in year 	Number 	189
+d 	Day in month 	Number 	10
+F 	Day of week in month 	Number 	2
+E 	Day name in week 	Text 	Tuesday; Tue
+u 	Day number of week (1 = Monday, ..., 7 = Sunday) 	Number 	1
+a 	Am/pm marker 	Text 	PM
+H 	Hour in day (0-23) 	Number 	0
+k 	Hour in day (1-24) 	Number 	24
+K 	Hour in am/pm (0-11) 	Number 	0
+h 	Hour in am/pm (1-12) 	Number 	12
+m 	Minute in hour 	Number 	30
+s 	Second in minute 	Number 	55
+S 	Millisecond 	Number 	978
+z 	Time zone 	General time zone 	Pacific Standard Time; PST; GMT-08:00
+Z 	Time zone 	RFC 822 time zone 	-0800
+X 	Time zone 	ISO 8601 time zone 	-08; -0800; -08:00
+
+
+year y month M day d hour H minute m second s
+2019    7       9     15     40       00
+
+**********************************
+package cn.itcast_01;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class SimpleDateFormatTest01 {
+
+	public static void main(String[] args) throws ParseException {
+		// Date --- String
+		Date d = new Date();
+		System.out.println(d);
+		System.out.println("--------------------");
+		// default format
+		DateFormat sdf = new SimpleDateFormat();
+		System.out.println(sdf.format(d));
+		System.out.println("---------------------");
+		// dedicated format
+		DateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(sdf1.format(d));
+		System.out.println("--------------------");
+		
+		// String --- Date
+		// String->Date, String format and pattern format are consistent
+		String string = "2008-08-08 12:12:12";
+		DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = sdf2.parse(string);
+		System.out.println(date);
+		System.out.println("---------------------");		
+	}
+}
+
+
+result:
+Tue Jul 09 15:50:58 CST 2019
+--------------------
+7/9/19, 3:50 PM
+---------------------
+2019-07-09 15:50:58
+--------------------
+Fri Aug 08 12:12:12 CST 2008
+---------------------
+**********************************************
+Web GUI:enter String(birthday)----> String-> Date -----> Store it into database
+-------------> Date->String -------------->
+Date tool class DateUtil
+*********************
+DateUtil.java
+package cn.itcast_01;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateUtil {
+	private DateUtil() {}
+	
+	public static String dateToString(Date d) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return df.format(d);
+	}
+	
+	public static Date stringToDate(String str) throws ParseException {
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dFormat.parse(str);
+	}
+
+}
+**********************
+Test.java
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.util.Date;
+
+public class SimpleDateFormatTest02 {
+
+	public static void main(String[] args) throws ParseException {
+		Date d = new Date();
+		System.out.println(DateUtil.dateToString(d));
+		
+		String string = "2019-07-09 16:18:20";
+		System.out.println(DateUtil.stringToDate(string));
+
+	}
+
+}
+
+result:
+2019-07-09 16:19:24
+Tue Jul 09 16:18:20 CST 2019
+***************************
+Another method: we can define format in test class
+****************************
+DateUtil.java
+package cn.itcast_01;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateUtil {
+	private DateUtil() {}
+	
+	public static String dateToString(Date d, String format) {
+		DateFormat df = new SimpleDateFormat(format);
+		return df.format(d);
+	}
+	
+	public static Date stringToDate(String str, String format) throws ParseException {
+		DateFormat dFormat = new SimpleDateFormat(format);
+		return dFormat.parse(str);
+	}
+
+}
+
+test class
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.util.Date;
+
+public class SimpleDateFormatTest02 {
+
+	public static void main(String[] args) throws ParseException {
+		Date d = new Date();
+		System.out.println(DateUtil.dateToString(d, "yyyy-MM-dd HH:mm:ss"));
+		
+		String string = "2019-07-09 16:18:20";
+		System.out.println(DateUtil.stringToDate(string, "yyyy-MM-dd HH:mm:ss"));
+
+	}
+
+}
+
+
+result:
+2019-07-09 16:22:03
+Tue Jul 09 16:18:20 CST 2019
+*******************************************************
+Compute the days you are coming to the world
+****************************
+DateUtil.java
+package cn.itcast_01;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateUtil {
+	private DateUtil() {}
+	
+	public static String dateToString(Date d, String format) {
+		DateFormat df = new SimpleDateFormat(format);
+		return df.format(d);
+	}
+	
+	public static Date stringToDate(String str, String format) throws ParseException {
+		DateFormat dFormat = new SimpleDateFormat(format);
+		return dFormat.parse(str);
+	}
+
+}
+
+testClass:
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Scanner;
+
+public class MyDays {
+
+	public static void main(String[] args) throws ParseException {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("please enter your birthday[yyyy-MM-dd]");
+		String string = sc.nextLine();
+		
+		long now = System.currentTimeMillis();
+		Date d = new Date();
+		d = DateUtil.stringToDate(string, "yyyy-MM-dd");
+		long birth = d.getTime();
+		
+		long daysDiff = (now - birth) / 1000 / 60 / 60 / 24 ;
+		System.out.println("You've been born for "+ daysDiff + " days ");
+	}
+}
+
+
+result:
+please enter your birthday[yyyy-MM-dd]
+1982-01-09
+You've been born for 13695 days
+******************************************
+///////////////////////////
+Class Calendar
+
+    java.lang.Object
+        java.util.Calendar 
+
+Direct Known Subclasses:
+    GregorianCalendar 
+he Calendar class is an abstract class that provides methods 
+for converting between a specific instant in time and a set of 
+calendar fields such as YEAR, MONTH, DAY_OF_MONTH, HOUR, and so on, 
+and for manipulating the calendar fields, such as getting the date of 
+the next week. An instant in time can be represented by a millisecond 
+value that is an offset from the Epoch, January 1, 1970 00:00:00.000 GMT 
+(Gregorian). 
+	
+Year
+Month
+Day
+Hour
+Minute
+Second
+Week
+The day of the year
+the day of the month
+
+class Calendar 
+public int get​(int field)
+Returns the value of the given calendar field. 
+
+public static Calendar getInstance() // return subclass object
+Gets a calendar using the default time zone and locale. 
+The Calendar returned is based on the current time in the default time zone with the default FORMAT locale. 
+**********************
+package cn.itcast_01;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class CalendarTest01 {
+
+	public static void main(String[] args) {
+		Calendar c = new GregorianCalendar();
+		System.out.println(c.get(Calendar.YEAR));
+		System.out.println(c.get(Calendar.MONTH) + 1); // month starts with 0
+		System.out.println(c.get(Calendar.DATE));
+		System.out.println("-------------------");
+		
+		Calendar c2 = Calendar.getInstance();
+		System.out.println(c.get(Calendar.YEAR));
+		System.out.println(c.get(Calendar.MONTH) + 1);
+		System.out.println(c.get(Calendar.DATE));
+		
+
+	}
+
+}
+
+result:
+2019
+7
+9
+-------------------
+2019
+7
+9
+***************************************
+public abstract void add​(int field,
+                         int amount)
+public void set​(int field,
+                int value)
+
+***************************************
+package cn.itcast_01;
+
+import java.util.Calendar;
+
+public class CalendarTest02 {
+
+	public static void main(String[] args) {
+		Calendar c1 = Calendar.getInstance();
+		System.out.println("The original year is "+c1.get(Calendar.YEAR));
+		c1.add(Calendar.YEAR, 2);
+		System.out.println("The changed year is "+c1.get(Calendar.YEAR));
+		
+		System.out.println("The original month is "+c1.get(Calendar.MONTH));
+		c1.set(Calendar.MONTH, 10);
+		System.out.println("The changed month is "+c1.get(Calendar.MONTH));
+	}
+}
+
+
+result:
+The original year is 2019
+The changed year is 2021
+The original month is 6
+The changed month is 10
+***************************************
+Get the days of Feburary in one year							 
 ***************************
 计算任意一年的2月有多少天
 package cn.itcast_01;
