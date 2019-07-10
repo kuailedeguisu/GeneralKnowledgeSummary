@@ -1,0 +1,1205 @@
+Object Array
+Put five students data into one Object array, then print each student information
+***********************************
+package cn.itcast_01;
+
+public class FiveStudentsInfoTest {
+
+	public static void main(String[] args) {
+		Student[] students = new Student[5];
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("John", 60);
+		
+		students[0] = s1;
+		students[1] = s2;
+		students[2] = s3;
+		students[3] = s4;
+		students[4] = s5;
+		
+		for (int i=0; i<students.length; ++i) {
+			System.out.println(students[i].toString());
+		}
+	}
+}
+
+
+result:
+Student [nameString=Emma, age=20]
+Student [nameString=Peter, age=30]
+Student [nameString=Bob, age=40]
+Student [nameString=Andy, age=50]
+Student [nameString=John, age=60]
+******************************************
+Collection
+Object array length can't be changed, but sometimes we need changing situation
+Collection to solve this issue
+StringBuffer can only contain String
+
+The differences between array and Collection:
+	A: the length
+		array: fixed
+		Collection: changed
+	B: the content
+		array: the same type for all elements
+		Collection: the different types for all elements
+	C: the data type of elements
+		array: basic type, reference type
+		Collection: only reference type
+
+Collection class has many classes for specified requirements
+Collection is interface, Cannot be initialized 
+
+data structure: the stored method of data
+the stored method of data is not important, we need care about the data can be stored,
+but we need use it after storing it
+
+The common features for Collection will generate an Inheritance system diagram based
+on Collection
+Collection
+	List
+		ArrayList
+		Vector
+		LinkedList
+	Set
+		HashSet
+		TreeSet
+
+
+ Analysis: From concrete to abstract 
+ Realize: From abstract to concrete 
+ Use: Use specific 
+ 
+
+We need start to learn Collection
+Because all subclasses have the common features of Collection
+Subclass: Collection, special features for the subclass
+
+The root interface in the collection hierarchy.
+A collection represents a group of objects, known as its elements. 
+Some collections allow duplicate elements and others do not. 
+Some are ordered and others unordered.
+
+Collection functions:
+	Add function:
+		boolean add​(E e)                          // add one Object
+		boolean addAll​(Collection<? extends E> c) // add one Collection
+	
+	Delete function:
+		void clear()                             // remove all elements of Collection
+		boolean remove​(Object o)                 // remove one Object
+		boolean removeAll​(Collection<?> c)       // remove all Objects of Collection
+	
+	Judge function:
+		boolean contains​(Object o)           // contain one Object
+		boolean containsAll​(Collection<?> c) // contain all Objects in one Collection
+		boolean isEmpty()                    // no elements for Collection
+	
+	Modify function:
+	
+	Get function:
+		Iterator<E> iterator()  ** // Returns an iterator over the elements in this collection.
+	
+	length function:
+		int size()
+	Intersection function:
+		boolean retainAll​(Collection<?> c) // the elements two Collection owns
+		
+	Convert into Array:
+		Object[] toArray()
+		<T> T[] toArray​(T[] a)
+
+Q: length() method?
+array: no, length
+String: yes
+Collection: no, size()
+
+
+*******************************
+basic function:
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionTest01 {
+
+	public static void main(String[] args) {
+		Collection cal = new ArrayList();
+
+		// 1. add function
+//		System.out.println("add:"+cal.add("Hello")); // ArrayList add always return true
+		cal.add("hello");
+		cal.add("world");
+		cal.add("Emma");
+		
+//		System.out.println("add: "+cal); // rewrite toString()
+		
+		// 2. clear function
+//		cal.clear();
+//		
+//		System.out.println("clear: "+cal);
+		
+		// 3. remove function
+//		System.out.println(cal.remove("Emma")); // ArrayList remove always return true
+//		System.out.println(cal.remove("hi")); // return false for fake element
+//		System.out.println("remove:"+cal);
+		
+		// ArrayList add and remove will impact ArrayList itself
+		
+		// 4. contains
+//		System.out.println("contains:"+cal.contains("hello"));
+//		System.out.println("contains:"+cal.contains("hi"));
+//		System.out.println("cal:"+cal);
+		
+		// judge function will not change Collection itself
+		
+		
+		// 5. isEmpty
+//		System.out.println("empty:"+cal.isEmpty());
+//		System.out.println("cal:"+cal);
+//		cal.clear();
+//		System.out.println("empty:"+cal.isEmpty());
+//		System.out.println("cal:"+cal);
+		
+		
+		// 6. size
+		System.out.println("size: "+cal.size());	
+	}
+}
+
+
+result:
+******************************************************
+all function
+	boolean addAll​(Collection<? extends E> c)
+	boolean removeAll​(Collection<?> c)
+	boolean containsAll​(Collection<?> c)
+	boolean retainAll​(Collection<?> c)
+
+
+**********************
+addAll​
+we can put duplicated elements into another Collection
+************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionAllTest01 {
+
+	public static void main(String[] args) {
+		Collection cal1 = new ArrayList();
+		cal1.add("Hello");
+		cal1.add("World!");
+		cal1.add("How");
+		cal1.add("are");
+		cal1.add("you?");
+		
+		Collection cal2 = new ArrayList();
+		cal2.add("I");// Note: you must add some elements to make cal2 defined
+		cal2.add("am");
+		cal2.add("fine");
+		cal2.add("Hello");
+		
+		// allAll
+		System.out.println(cal1.addAll(cal2));
+		
+		System.out.println("cal1:"+cal1);
+		System.out.println("cal2:"+cal2);
+	}
+
+}
+
+result:
+true
+cal1:[Hello, World!, How, are, you?, I, am, fine, Hello]
+cal2:[I, am, fine, Hello]
+*********************************
+
+
+************************************
+removeAll​
+only one element is removed, return true
+**********************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionRemoveAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				cal1.add("How");
+				cal1.add("are");
+				cal1.add("you");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("I");// Note: you must add some elements to make cal2 defined
+				cal2.add("am");
+				cal2.add("fine");
+				cal2.add("Hello");
+				cal2.add("World");
+				
+				
+				// removeAll
+				System.out.println(cal1.removeAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+
+}
+
+result:
+true
+cal1:[How, are, you]
+cal2:[I, am, fine, Hello, World]
+************************************
+
+
+
+********************************
+containsAll​
+If only contains all elements, it return true
+*****************************
+example 1: 
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionContainsAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				cal1.add("How");
+				cal1.add("are");
+				cal1.add("you");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("I");// Note: you must add some elements to make cal2 defined
+				cal2.add("am");
+				cal2.add("fine");
+				cal2.add("Hello");
+				cal2.add("World");
+				
+				
+				// removeAll
+				System.out.println(cal1.containsAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+
+}
+
+result:
+false
+cal1:[Hello, World, How, are, you]
+cal2:[I, am, fine, Hello, World]
+********************************************
+example2:
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionContainsAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				cal1.add("How");
+				cal1.add("are");
+				cal1.add("you");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("Hello");
+				cal2.add("World");
+				
+				
+				// removeAll
+				System.out.println(cal1.containsAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+
+}
+
+result:
+true
+cal1:[Hello, World, How, are, you]
+cal2:[Hello, World]
+************************************
+
+
+***************************
+retainAll​
+A.retainAll(B)
+A store the intersection of A and B
+return whether A has been changed
+
+***************************
+example1:
+
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionRetainAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				cal1.add("How");
+				cal1.add("are");
+				cal1.add("you");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("Hello");
+				cal2.add("World");
+				cal2.add("Hi");
+
+				System.out.println(cal1.retainAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+}
+
+
+result:
+true
+cal1:[Hello, World]
+cal2:[Hello, World, Hi]
+*********************************
+example2
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionRetainAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				cal1.add("How");
+				cal1.add("are");
+				cal1.add("you");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("Hi");
+				cal2.add("I");
+				cal2.add("am");
+
+				System.out.println(cal1.retainAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+}
+
+result:
+true
+cal1:[]
+cal2:[Hi, I, am]
+**************************************
+exmple3:
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionRetainAllTest {
+
+	public static void main(String[] args) {
+				Collection cal1 = new ArrayList();
+				cal1.add("Hello");
+				cal1.add("World");
+				
+				Collection cal2 = new ArrayList();
+				cal2.add("Hello");
+				cal2.add("World");
+				cal2.add("Hi");
+				cal2.add("I");
+				cal2.add("am");
+
+
+				System.out.println(cal1.retainAll(cal2));
+				
+				System.out.println("cal1:"+cal1);
+				System.out.println("cal2:"+cal2);
+			}
+}
+
+
+result:
+false
+cal1:[Hello, World]
+cal2:[Hello, World, Hi, I, am]
+**********************************************
+
+////////////////////////////////////
+Collection traverse
+get each element of Collection
+/////////////////////////////////
+
+Iterator<E> iterator()
+Object[] toArray() // convert Collection into Array
+<T> T[] toArray​(T[] a)
+
+
+****************************
+toArray
+****************************
+String example:
+**************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionTraverseTest {
+
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		c.add("hello"); // Object obj = "hello"
+		c.add("world");
+		c.add("java");
+		
+		Object[]  objects = c.toArray();
+		for (int i=0; i<objects.length; ++i) {
+//			System.out.println(objects[i]);
+//			System.out.println(objects[i]+"-----"+objects[i].length());
+			String string = (String)objects[i];
+			System.out.println(string+"--------"+string.length());
+		}
+
+	}
+
+}
+
+result:
+
+*************************************
+self-defined Object:
+**********************************
+Student.java
+package cn.itcast_02;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+}
+
+
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CollectionTraverseDefinedObjectTest {
+
+	public static void main(String[] args) {
+		Object s1 = new Student("Emma", 20);
+		Object s2 = new Student("Peter", 30);
+		Object s3 = new Student("Andy", 40);
+		Object s4 = new Student("Bob", 50);
+		Object s5 = new Student("John", 60);
+		
+		Collection c = new ArrayList();
+		c.add(s1);
+		c.add(s2);
+		c.add(s3);
+		c.add(s4);
+		c.add(s5);
+		
+		Object[] objs = c.toArray();
+		
+		for (int i=0; i<objs.length; ++i) {
+			System.out.println(objs[i].toString());
+		}
+	}
+}
+
+
+result:
+Student [nameString=Emma, age=20]
+Student [nameString=Peter, age=30]
+Student [nameString=Andy, age=40]
+Student [nameString=Bob, age=50]
+Student [nameString=John, age=60]
+*****************************************************
+
+
+
+*************************
+iterator
+*************************
+Iterator
+E next()          // get current element and Returns the next element in the iteration.
+boolean hasNext() // Returns true if the iteration has more elements.
+
+throw NoSuchElementException
+
+********************************
+String traverse:
+*********************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class CollectionTraverseIteratorTest {
+
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		c.add("hello");
+		c.add("world");
+		
+		Iterator i = c.iterator();
+
+		while(i.hasNext()) {
+			String string = (String)(i.next());
+			System.out.println(string);
+//			System.out.println(i.next());
+		}
+
+	}
+}
+
+
+result:
+hello
+world
+*******************************
+self-defined Object traverse
+******************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class CollectionTraverseDefinedObjectIteratorTest {
+
+	public static void main(String[] args) {
+		Object s1 = new Student("Emma", 20);
+		Object s2 = new Student("Peter", 30);
+		Object s3 = new Student("Andy", 40);
+		Object s4 = new Student("Bob", 50);
+		Object s5 = new Student("John", 60);
+		
+		Collection c = new ArrayList();
+		c.add(s1);
+		c.add(s2);
+		c.add(s3);
+		c.add(s4);
+		c.add(s5);
+		
+		Iterator iter = c.iterator();
+		
+//		while (iter.hasNext()) {
+//			System.out.println(iter.next());
+//		}
+		
+		while (iter.hasNext()) {
+			Student student = (Student)(iter.next());
+			System.out.println(student.getNameString()+"-------"+student.getAge());
+		}
+	}
+}
+
+
+result:
+Emma-------20
+Peter-------30
+Andy-------40
+Bob-------50
+John-------60
+**********************************************
+for loop: ok
+*****************************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class CollectionTraverseDefinedObjectIteratorTest {
+
+	public static void main(String[] args) {
+		Object s1 = new Student("Emma", 20);
+		Object s2 = new Student("Peter", 30);
+		Object s3 = new Student("Andy", 40);
+		Object s4 = new Student("Bob", 50);
+		Object s5 = new Student("John", 60);
+		
+		Collection c = new ArrayList();
+		c.add(s1);
+		c.add(s2);
+		c.add(s3);
+		c.add(s4);
+		c.add(s5);
+		
+//		Iterator iter = c.iterator();
+//		
+////		while (iter.hasNext()) {
+////			System.out.println(iter.next());
+////		}
+//		
+//		while (iter.hasNext()) {
+//			Student student = (Student)(iter.next());
+//			System.out.println(student.getNameString()+"-------"+student.getAge());
+//		}
+		
+		for (Iterator iter = c.iterator(); iter.hasNext();) {
+			Student student = (Student)(iter.next());
+			System.out.println(student.getNameString()+"-------"+student.getAge());
+		}
+	}
+}
+
+********************************
+Note for iterator:
+1. for loop is ok, but while loop is better
+2. we shouldn't use more than one next() method at the same time, 
+and we can get it by one local variant
+************************************
+
+Iterator: the method of Collection traverse
+Iterator is base on Collection
+The first location of iterator is before the first element
+
+A: create Collection
+B: create Collection elements
+C: add elements into Collenction
+D: traverse Collection
+	a: get iterator by Collection
+	b: hasNext() to judge whether it has element or not
+	c: next() to get element and move to the next element
+
+Iterator is one interface? Why?
+Because Collection classes are different, and their data structures are different,
+so storage method and traverse method are differt for different Collection classes
+At last, we won't have Iterator class. But whatever Collection classes you are ,
+you need have getting element function.
+What is the implement class of Iterator? in the concrete subclass,in inner class
+
+
+************************************
+iterator() relationship:
+Iterable<-Collection<-List<-ArrayList(SubList)
+************************************
+public interface Iterator<E> {
+    boolean hasNext();
+    E next();
+}
+
+public interface Iterable<T> {
+    Iterator<T> iterator();
+}
+
+public interface Collection<E> extends Iterable<E> {
+   Iterator<E> iterator();
+}
+
+public interface List<E> extends Collection<E> {
+    Iterator<E> iterator();
+}
+
+public class ArrayList<E> extends AbstractList<E>
+        implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+{
+    public Iterator<E> iterator() {
+        return new Itr();
+    }
+	
+	private class Itr implements Iterator<E> {
+		Itr() {}
+		hasNext() {}
+		next(){}
+	}
+	private static class SubList<E> extends AbstractList<E> implements RandomAccess {
+			private final ArrayList<E> root;
+			private final SubList<E> parent;
+			private final int offset;
+			private int size;
+			
+			public Iterator<E> iterator() {
+				return listIterator();
+			}
+	}
+}
+
+Collection c = new ArrayList();
+c.add("hello");
+Iterator iter = c.iterator(); // ArrayList.iterator()
+while (iter.hasNext()) {// Itr.hasNext() and Itr.next()
+}
+
+***************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class StringIteratorTest {
+
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		c.add("hello");
+		c.add("world");
+		c.add("you");
+		
+		Iterator iter = c.iterator();
+		
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			System.out.println(string);
+		}
+	}
+}
+
+result:
+hello
+world
+you
+***********************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class StudentIteratorTest {
+
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		
+		c.add(s1);
+		c.add(s2);
+		
+		Iterator iter = c.iterator();
+		
+		while (iter.hasNext()) {
+			Student stu = (Student)iter.next();
+			System.out.println(stu.getNameString()+"----"+stu.getAge());
+		}
+	}
+}
+
+
+result:
+Emma----20
+Peter----30
+************************************
+///////////////////////////////////////////
+List
+An ordered collection (also known as a sequence)
+The user of this interface has precise control over 
+where in the list each element is inserted. 
+The user can access elements by their integer index (position in the list), 
+and search for elements in the list.
+
+List features:
+A: ordered (The elements stored and removed are consistent). 
+B: repeatable
+*****************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import java.util.ArrayList;
+
+public class ArrayListTest01 {
+
+	public static void main(String[] args) {
+		List l1 = new ArrayList();
+		l1.add("hello");
+		l1.add("world");
+		l1.add("hello");
+		l1.add("world");
+		
+		Iterator iter = l1.iterator();
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			System.out.println(string);
+		}
+	}
+}
+
+result:
+hello
+world
+hello
+world
+**********************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+
+public class ArrayListStudentTest {
+
+	public static void main(String[] args) {
+		List l1 = new ArrayList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Emma", 20);
+
+		l1.add(s1);
+		l1.add(s2);
+		l1.add(s3);
+		
+		Iterator iter = l1.iterator();
+		while (iter.hasNext()) {
+			Student stu = (Student)iter.next();
+			System.out.println(stu.getNameString()+"----"+stu.getAge());
+		}
+	}
+}
+
+result:
+Emma----20
+Peter----30
+Emma----20
+********************************
+
+
+***********************
+List special functions
+A: Add function:
+void add​(int index,
+         E element) // add element on special position
+		            // IndexOutOfBoundsException if index is out of range
+					// but we can add element at the end of List
+
+B: get function:
+E get​(int index)    // get element on special position
+					// IndexOutOfBoundsException if index is out of range
+					// traverse List by size() and get() for List special
+
+C: Iterator function:
+ListIterator<E> listIterator() // List special ListIterator
+ListIterator<E> listIterator​(int index) // start with the special position
+ 
+D: remove function:
+E remove​(int index)   // remove element by index, return the removed element
+
+E: Modify function:
+E set​(int index,
+      E element) // modify element by index, return modified element
+*************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListSpecialTest02 {
+
+	public static void main(String[] args) {
+		List list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		list.add(1, "how");
+		list.add(2, "big");
+		
+		for (int i=0; i<list.size(); ++i) {
+			System.out.println(list.get(i));
+		}
+
+		System.out.println("------------");
+		ListIterator iter = list.listIterator();
+
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			System.out.println(string);
+		}
+		System.out.println("------------");
+		
+		
+		list.set(2, "small");
+		for (int i=0; i<list.size(); ++i) {
+			System.out.println(list.get(i));
+		}
+		
+		System.out.println("---------------");
+		list.remove(0);
+		for (int i=0; i<list.size(); ++i) {
+			System.out.println(list.get(i));
+		}
+	}
+}
+
+result:
+hello
+how
+big
+world
+------------
+hello
+how
+big
+world
+------------
+hello
+how
+small
+world
+---------------
+how
+small
+world
+************************************
+package cn.itcast_02;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.itcast_01.Student;
+
+
+public class ArrayListStudentTest {
+
+	public static void main(String[] args) {
+		List l1 = new ArrayList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Emma", 20);
+
+		l1.add(s1);
+		l1.add(s2);
+		l1.add(s3);
+		
+		for (int i=0; i<l1.size(); ++i) {
+			Student student = (Student)l1.get(i);
+			System.out.println(student.getNameString()+"----"+student.getAge());
+		}
+	}
+}
+
+
+result:
+Emma----20
+Peter----30
+Emma----20
+********************************
+List Iterator
+ListIterator listIterator(); // List special Iterator
+ListIterator extends Iterator, so it has hasNext() and next()
+
+boolean hasPrevious()  // judge if it has element
+E previous()  // get the previous element
+
+ListIterator can implement traverse reversely, but we must traverse normally
+at first, it is not meaningful, so we don't use it
+***********************
+package cn.itcast_03;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListIteratorTest {
+
+	public static void main(String[] args) {
+		List list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		list.add(1, "how");
+		list.add(2, "big");
+		
+		ListIterator iter = list.listIterator();
+
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			System.out.println(string);
+		}
+		System.out.println("------------");
+		
+
+		while(iter.hasPrevious()) {
+			String string = (String)iter.previous();
+			System.out.println(string);
+		}
+
+	}
+}
+
+result:
+hello
+how
+big
+world
+------------
+world
+big
+how
+hello
+*********************************************************************
+ConcurrentModificationException
+This exception may be thrown by methods that have detected 
+concurrent modification of an object when such modification is not permissible.
+root cause: Iterator is based on Collection, after judgement succeeds,
+			Collection has been added some element, but Iterator don't know it,
+			so report error information, this is concurrent modification exception
+			When using Iterator, we should not modify Collection element
+how to solve it:
+	A: Iterator to iter element, use iter to modify element
+		element is put after the itered element
+	B: Collectio to traverse elements, Collection modify elements, we need use for loop
+		element is put at the end of list
+*********************************************************************
+package cn.itcast_04;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListModifyconcurrentTest {
+
+	public static void main(String[] args) {
+		List list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		list.add(1, "how");
+		list.add(2, "big");
+
+		ListIterator iter = list.listIterator();
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			if ("world".equals(string)) {
+				list.add("javaee");
+			}
+		}
+		System.out.println(list);
+
+	}
+}
+
+result:
+compilation error to throw ConcurrentModificationException
+***************************************************************
+package cn.itcast_04;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListModifyconcurrentTest {
+
+	public static void main(String[] args) {
+		List list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		list.add(1, "how");
+		list.add(2, "big");
+
+		ListIterator iter = list.listIterator();
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			if ("world".equals(string)) {
+				iter.add("javaee");
+			}
+		}
+		System.out.println(list);
+
+	}
+}
+
+result:
+[hello, how, big, world, javaee]
+**************************************
+package cn.itcast_04;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+
+public class ListModifyconcurrentTest {
+
+	public static void main(String[] args) {
+		List list = new ArrayList();
+		list.add("hello");
+		list.add("world");
+		list.add(1, "how");
+		list.add(2, "big");
+	
+		for (int i=0; i<list.size(); ++i) {
+			String string = (String)list.get(i);
+			if ("world".equals(string)) {
+				list.add("javaee");
+			}
+		}
+		
+		System.out.println(list);
+
+	}
+}
+
+result:
+[hello, how, big, world, javaee]
+*******************************************
+
