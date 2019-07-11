@@ -1,7 +1,7 @@
 Day16.txt
 List subclasses features
 	ArrayList: based on Array, thread unsafe, high efficiency, find fast, add and remove slow
-	Vector: based on Array, thread safe, low efficiency, find slow, and and remove slow
+	Vector: based on Array, thread safe, low efficiency, find fast, and and remove slow
 	LinkedList: based on link list, thread unsafe, high efficiency, find slow, add and remove fast
 
 Examples:
