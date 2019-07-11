@@ -1,0 +1,48 @@
+Day17.txt
+***********************************
+Collection toString() source code
+
+	Collection c = new ArrayList();
+	c.add(“hello”);
+	c.add(“world”);
+	System.out.println(c);
+**************************
+AbstractCollection
+    public String toString() {
+        Iterator<E> it = iterator();
+        if (! it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            E e = it.next();
+            sb.append(e == this ? "(this Collection)" : e);
+            if (! it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
+************************
+用户注册登陆案例：
+
+客户端：
+
+注册页面
+用户名
+密码
+注册
+取消
+
+登陆页面
+用户名
+密码
+登陆
+重置
+
+服务端：
+功能代码
+数据库：表，对应一个实体类
+
+注册路程：客户端用户填写用户名和密码后，提交给服务器，然后由服务器端实现数据库的存储，如果数据信息无误，就返回true，否则返回false
+登陆流程：客户端用户输入用户名和密码后，提交给服务器，然后由服务端实现在数据库的查找，如果数据匹配成功，就返回true，否则返回false
