@@ -1510,6 +1510,8 @@ Arrays asList()
 public static <T> List<T> asList​(T... a)
 
 Returns a fixed-size list backed by the specified array.
+convert array into one Collection
+the length of Collection is fixed
 
 ****************************************************
 package aslist_01;
