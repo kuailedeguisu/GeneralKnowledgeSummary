@@ -1587,8 +1587,127 @@ Sha Wujing----400
 Bai Niangzi----10
 Zhao Yazhi----20
 ***********************************************
-Generate random in the range of [1-20] and don't be duplicated
+Generate 10 random integer in the range of [1-20] and don't be duplicated
+Day16_2
+Generate  10 random integer for [1-20] and not duplicated
+*******************************
+package cn.itcast_01;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+public class CreateRandom1To20 {
+
+	public static void main(String[] args) {
+		Random random = new Random();
+		
+		ArrayList<Integer> arrIntegers = new ArrayList<Integer>();
+		
+		int count = 0;
+		while (count < 10) {
+			int num = random.nextInt(20) + 1;
+			if (!arrIntegers.contains(num)) {
+				arrIntegers.add(num);
+				count++;
+			}
+		}
+		
+		for (Integer integer : arrIntegers) {
+			System.out.println(integer);
+		}
+
+	}
+
+}
+
+Result:
+6
+2
+10
+11
+8
+19
+20
+15
+4
+3
+**********************************
+Enter many data beginning with 0, and compute the max value of all datas
+***********************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class ComputeMax {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		ArrayList<Integer> arrIntegers = new ArrayList<Integer>();
+		
+		Integer maxInteger = 0;
+		
+
+		
+		while (true) {
+			System.out.println("Please enter an integer:");
+			int num = scanner.nextInt();
+			
+			if (num != 0) {
+				arrIntegers.add(num);
+			}
+			else {
+				break;
+			}
+		}
+		
+//		for (Integer integer : arrIntegers) {
+//			if (integer > maxInteger) {
+//				maxInteger = integer;
+//			}
+//		}
+//		System.out.println("max:"+maxInteger);
+		
+		Integer[] interIntegers = new Integer[arrIntegers.size()];
+		arrIntegers.toArray(interIntegers);
+		Arrays.sort(interIntegers);
+		System.out.println("The sorted array is:"+arrayToString(interIntegers));
+		System.out.println("max:"+interIntegers[interIntegers.length - 1]);
+
+	}
+	
+	public static String arrayToString(Integer[] i) {
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("[");
+		for (int x=0; x<i.length; ++x) {
+			if (x == i.length -1) {
+				sBuilder.append(i[i.length - 1]);
+			}
+			else {
+				sBuilder.append(i[x]).append(",");
+			}
+		}
+		sBuilder.append("]");
+		return sBuilder.toString();
+	}
+
+}
+
+Result
+Please enter an integer:
+100
+Please enter an integer:
+20
+Please enter an integer:
+90
+Please enter an integer:
+60
+Please enter an integer:
+0
+The sorted array is:[20,60,90,100]
+max:100
+*****************************
 
 
 
