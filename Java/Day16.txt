@@ -392,3 +392,1204 @@ hello
 world
 --------
 *********************************
+/////////////////////////
+ArrayList
+
+**************************************************
+Remove duplicated String elements in ArrayList
+***************************************************
+
+**********************************
+method 1: create new ArrayList
+put not duplicated element into new ArrayList
+***************************************
+
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ArrayListRemoveDuplicateTest {
+
+	public static void main(String[] args) {
+		ArrayList al = new ArrayList();
+		al.add("hello");
+		al.add("world");
+		al.add("hello");
+		al.add("people");
+		al.add("good");
+		al.add("people");
+		al.add("good");
+		al.add("world");
+		
+		Iterator iter = al.iterator();
+		ArrayList newAl = new ArrayList();
+		
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			if (!newAl.contains(string)) {
+				newAl.add(string);
+			}
+		}
+		
+		Iterator iterNew = newAl.iterator();
+		while (iterNew.hasNext()) {
+			String string = (String)iterNew.next();
+			System.out.println(string);
+		}
+		
+	}
+}
+
+
+result:
+hello
+world
+people
+good
+**************************************************
+method 2: don't create new ArrayList
+from selection sort idea
+**************************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ArrayListRemoveDuplicateTest {
+
+	public static void main(String[] args) {
+		ArrayList al = new ArrayList();
+		al.add("hello");
+		al.add("world");
+		al.add("hello");
+		al.add("people");
+		al.add("good");
+		al.add("people");
+		al.add("good");
+		al.add("world");
+		
+		// selection sort idea
+		for (int i=0; i<al.size()-1; ++i) {
+			for (int j=i+1; j<al.size(); ++j) {
+				if (al.get(i) == al.get(j)) {
+					al.remove(j);
+					j--;
+				}
+			}
+		}
+		
+		Iterator iterator = al.iterator();
+		while (iterator.hasNext()) {
+			String string = (String)iterator.next();
+			System.out.println(string);
+		}
+		
+	}
+}
+
+result:
+hello
+world
+people
+good
+************************************************************
+
+
+********************************************************
+Remove duplicated String elements in ArrayList
+***********************************************************
+Student.java
+package cn.itcast_01;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	
+	public Student() {
+		super();
+	}
+
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+
+	public String getNameString() {
+		return nameString;
+	}
+
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+
+
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		return result;
+	}
+
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (age != other.age)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}	
+}
+
+
+***********************************
+method 1: create new ArrayList
+*******************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ArrayListRemoveDuplicateStudentTest3 {
+
+	public static void main(String[] args) {
+		ArrayList al = new ArrayList();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Emma", 20);
+		Student s4 = new Student("Peter", 30);
+		
+		al.add(s1);
+		al.add(s2);
+		al.add(s3);
+		al.add(s4);
+		
+		Iterator iter = al.iterator();
+		ArrayList newAl = new ArrayList();
+		
+		while (iter.hasNext()) {
+			Student stu = (Student)iter.next();
+			if (!newAl.contains(stu)) {
+				newAl.add(stu);
+			}
+		}
+		
+		Iterator iterNew = newAl.iterator();
+		while (iterNew.hasNext()) {
+			Student stu = (Student)iterNew.next();
+			System.out.println(stu);
+		}
+		
+	}
+}
+
+result:
+Student [nameString=Emma, age=20]
+Student [nameString=Peter, age=30]
+***************************************
+method2 : selection sort idea
+**************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class ArrayListRemoveDuplicateStudentTest2 {
+
+	public static void main(String[] args) {
+		ArrayList al = new ArrayList();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Emma", 20);
+		Student s4 = new Student("Peter", 30);
+		
+		al.add(s1);
+		al.add(s2);
+		al.add(s3);
+		al.add(s4);
+		
+
+		// selection sort idea
+		for (int i=0; i<al.size()-1; ++i) {
+			for (int j=i+1; j<al.size(); ++j) {
+				if (al.get(i).equals(al.get(j))) {
+					al.remove(j);
+					j--;
+				}
+			}
+		}
+		
+		Iterator iterator = al.iterator();
+		while (iterator.hasNext()) {
+			Student stu = (Student)iterator.next();
+			System.out.println(stu.getNameString()+"----"+stu.getAge());
+		}
+		
+	}
+}
+
+
+result:
+Emma----20
+Peter----30
+********************************
+Note: contains() is based on equals(), for self-defined Object, if you don't rewrite 
+equals(), it will call Object equals() to compare pointer value, so we need 
+rewrite equals for self-defined Object
+*****************************************
+Use LinkedList to simulate Stack
+*********************
+Wrong implement:
+
+package cn.itcast_02;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class LinkedLinkToStackTest {
+
+	public static void main(String[] args) {
+		LinkedList ll = new LinkedList();
+		ll.addFirst("people");
+		ll.addFirst("big");
+		ll.addFirst("world");
+		ll.addFirst("small");
+		
+		Iterator iter = ll.iterator();
+		
+		while (iter.hasNext()) {
+			String string = (String)iter.next();
+			System.out.println(string);
+		}
+
+	}
+
+}
+
+
+result:
+small
+world
+big
+people
+***************************
+original for this problem:
+self-define one Collection class then you can use LinkedList 
+to simulate stack in the class
+
+*********************************
+MyStack.java
+***********************************
+package cn.itcast_02;
+
+import java.util.LinkedList;
+
+public class MyStack {
+	private LinkedList llLinkedList;
+	
+	
+	public MyStack() {
+		super();
+		llLinkedList = new LinkedList();
+	}
+
+	
+
+	public MyStack(LinkedList llLinkedList) {
+		super();
+		this.llLinkedList = llLinkedList;
+	}
+
+
+
+	public  void add(Object obj) {
+		llLinkedList.addFirst(obj);
+	}
+	
+	
+	public  Object get() {
+//		return llLinkedList.pop();
+		return llLinkedList.removeFirst();
+		
+	}
+	
+	public boolean isEmpty() {
+		return llLinkedList.isEmpty();
+	}
+
+}
+
+
+*********************
+Test class:
+*********************
+package cn.itcast_02;
+
+public class MyStackTest {
+
+	public static void main(String[] args) {
+		MyStack mStack = new MyStack();
+		mStack.add("hello");
+		mStack.add("world");
+		mStack.add("java");
+		
+		while (!mStack.isEmpty()) {
+			System.out.println(mStack.get());
+		}
+	}
+
+}
+
+result:
+java
+world
+hello
+***************************************
+//////////////////////////////////////
+
+
+
+/////////////////////////////////////
+ Generic programming 
+******************************************
+It is better to report compilation error than report run error
+String[] only contains String elements, 
+if you put non String element, it will report compile error
+
+Generic programming : Collection will have the same mechanism to specify
+reference Object
+
+format:
+	<reference type>
+advantages:
+	A: run issues are reported during compilation
+	B: avoid  Cast type conversion 
+	C: Optimized program design to address yellow warning lines 
+
+
+************************************
+String：
+
+package generic.programming;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class GenericProgrammingTest {
+
+	public static void main(String[] args) {
+		ArrayList<String> strArr = new ArrayList<String>();
+		strArr.add("English");
+		strArr.add("Japanese");
+		strArr.add("French");
+		
+		Iterator<String> iter = strArr.iterator();
+		while (iter.hasNext()) {
+			System.out.println(iter.next());
+		}
+
+	}
+
+}
+
+result:
+English
+Japanese
+French
+********************************************
+Self-defined reference type
+package generic.programming;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class GenericProgrammingStudentTest {
+
+	public static void main(String[] args) {
+		ArrayList<Student> strArr = new ArrayList<Student>();
+		
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Bob", 40);
+		strArr.add(s1);
+		strArr.add(s2);
+		strArr.add(s3);
+		
+		Iterator<Student> iter = strArr.iterator();
+		while (iter.hasNext()) {
+			Student student = iter.next();
+			System.out.println(student.getNameString()+"---------"+student.getAge());
+		}
+
+	}
+
+}
+
+result:
+Emma---------20
+Peter---------30
+Bob---------40
+**************************************************
+Object:
+    A: Transform upward (subclass->Object)
+	B: Transform downward (Object->subclass)
+
+*************************************
+package generic.programming;
+
+public class ObjectTest {
+
+	public static void main(String[] args) {
+		ObjectTool oTool = new ObjectTool();
+		oTool.setObject(new Integer(100));
+		System.out.println((Integer)oTool.getObject());
+//		String string = (String)oTool.getObject();
+//		System.out.println(string);
+		
+		oTool.setObject("hello");
+		System.out.println((String)oTool.getObject());
+		
+		oTool.setObject(new Student("Emma", 30));
+		Student student = (Student)oTool.getObject();
+		System.out.println(student.getNameString()+"---"+student.getAge());
+	}
+}
+
+
+result:
+100
+hello
+Emma---30
+*******************************************************
+Object: safe issue(generic programming can resolve it)
+*******************************************************
+Generic Programming Class:
+When we specify the type, if we set the wrong type, it will report compile error
+and the type should be reference type instead of basic types
+
+Generic Class： Defining generics on Classes 
+*****************
+ObjectTool.java
+package generic.programming.type;
+
+public class ObjectTool<T> {
+	private T object;
+
+	public ObjectTool() {
+		super();
+	}
+
+	public ObjectTool(T object) {
+		super();
+		this.object = object;
+	}
+
+	public T getObject() {
+		return object;
+	}
+
+	public void setObject(T object) {
+		this.object = object;
+	}
+}
+
+***************************
+Test class:
+package generic.programming.type;
+
+import generic.programming.Student;
+
+public class ObjectTest {
+
+	public static void main(String[] args) {
+		ObjectTool<String> oTool = new ObjectTool<String>();
+		oTool.setObject("hello");
+		System.out.println(oTool.getObject());
+		
+		ObjectTool<Integer> oTool2 = new ObjectTool<Integer>();
+		Integer integer = new Integer(100);
+		oTool2.setObject(integer);
+		System.out.println(oTool2.getObject());
+		
+		ObjectTool<Student> oTool3 = new ObjectTool<Student>();
+		oTool3.setObject(new Student("Emma", 20));
+		Student student = oTool3.getObject();
+		System.out.println(student.getNameString()+"---"+student.getAge());
+
+	}
+
+}
+
+
+result:
+hello
+100
+Emma---20
+**********************************************
+Method overload
+add(E e)=>E can be any reference type
+We can add generic on Class or method
+**************************************************
+Generic methods: Defining generics on methods 
+***************************************************
+ObjectTool.java
+package generic.programming.method;
+
+public class ObjectTool<T> {
+	private T object;
+
+	public ObjectTool() {
+		super();
+	}
+
+	public ObjectTool(T object) {
+		super();
+		this.object = object;
+	}
+
+	public T getObject() {
+		return object;
+	}
+
+	public void setObject(T object) {
+		this.object = object;
+	}
+	
+	public <E> void show(E object) {
+		System.out.println(object);
+	}
+}
+
+package generic.programming.method;
+
+import generic.programming.Student;
+
+public class ObjectTest {
+
+	public static void main(String[] args) {
+		ObjectTool<String> oTool = new ObjectTool<String>();
+		oTool.setObject("hello");
+		System.out.println(oTool.getObject());
+		oTool.show("world");
+		oTool.show(100);
+		System.out.println("---------------");
+		
+		ObjectTool<Integer> oTool2 = new ObjectTool<Integer>();
+		Integer integer = new Integer(100);
+		oTool2.setObject(integer);
+		System.out.println(oTool2.getObject());
+		oTool2.show("world");
+		oTool2.show(100);
+		System.out.println("---------------");
+		
+		ObjectTool<Student> oTool3 = new ObjectTool<Student>();
+		oTool3.setObject(new Student("Emma", 20));
+		Student student = oTool3.getObject();
+		System.out.println(student.getNameString()+"---"+student.getAge());
+		oTool3.show("world");
+		oTool3.show(100);
+		System.out.println("---------------");
+	}
+}
+
+
+result:
+hello
+world
+100
+---------------
+100
+world
+100
+---------------
+Emma---20
+world
+100
+---------------
+**********************************************************
+Generic interfaces: Defining generics on interfaces
+
+When an implementation class implementing an interface：
+1. Know the specific type 
+2. Do not know the specific type 
+ 
+*******************************************
+1. Know the specific type - Implementation Class specifies the type
+java.lang.ClassCastException
+*******************************************
+Inter.java
+package generic.programming.interfaces_02;
+
+public interface Inter<T> {
+	public abstract void show(T t);
+
+}
+
+InterImpl.java
+package generic.programming.interfaces_02;
+
+public class InterImpl implements Inter<String> {
+	public void show(String t) {
+		System.out.println(t);
+	}
+
+}
+
+IterTest.java
+package generic.programming.interfaces_02;
+
+import generic.programming.Student;
+
+public class InterTest {
+
+	public static void main(String[] args) {
+		Inter iter = new InterImpl();
+		iter.show("hello");
+		
+//		Inter iter2 = new InterImpl();  // java.lang.ClassCastException
+//		iter2.show(100);
+//		
+//		Inter iter3 = new InterImpl();  // java.lang.ClassCastException
+//		iter3.show(new Student("Emma", 20));
+	}
+
+}
+
+
+
+******************************************
+2. Do not know the specific type-Test class will specify it
+
+Inter.java
+package generic.programming.interfaces;
+
+public interface Inter<T> {
+	public abstract void show(T t);
+
+}
+
+InterImpl.java
+package generic.programming.interfaces;
+
+public class InterImpl<T> implements Inter<T> {
+	public void show(T t) {
+		System.out.println(t);
+	}
+
+}
+
+IterTest.java
+package generic.programming.interfaces;
+
+import generic.programming.Student;
+
+public class InterTest {
+
+	public static void main(String[] args) {
+		Inter<String> iter = new InterImpl<String>();
+		iter.show("hello");
+		
+		Inter<Integer> iter2 = new InterImpl<Integer>();
+		iter2.show(100);
+		
+		Inter<Student> iter3 = new InterImpl<Student>();
+		iter3.show(new Student("Emma", 20));
+
+	}
+
+}
+
+result:
+hello
+100
+Student [nameString=Emma, age=20]
+***************************************************************
+advanced generic programming with Pattern
+?:             Any type, if not explicit, it's Object or any type
+	A: Generics must be consistent when explicitly written
+	B: ? presents any type
+? extends E:   Limit downward, E and its subclasses 
+? super E:     limit upward, E and its superclasses
+
+**********************************
+package generic.programming.pattern;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class GenericDemo {
+
+	public static void main(String[] args) {
+		// ?
+		Collection<Object> c1 = new ArrayList<Object>();
+		
+//		Collection<Object> c2 = new ArrayList<Animal>(); // compile error
+		Collection<Animal> c3 = new ArrayList<Animal>();
+		Collection<?> c4 = new ArrayList<Animal>();
+		
+//		Collection<Object> c5 = new ArrayList<Dog>(); // compile error
+//		Collection<Animal> c6 = new ArrayList<Dog>(); // compile error
+		Collection<Dog> c7 = new ArrayList<Dog>();
+		Collection<?> c8 = new ArrayList<Dog>();
+		
+		Collection<?> c9 = new ArrayList<Object>();
+		
+		// ? extends E
+//		Collection<? extends Animal> c10 = new ArrayList<Object>();
+		Collection<? extends Object> c11 = new ArrayList<Object>();
+		Collection<? extends Animal> c12 = new ArrayList<Animal>();
+		
+		Collection<? extends Animal> c13 = new ArrayList<Dog>();
+		Collection<? extends Dog> c14 = new ArrayList<Dog>();
+
+		// ? super E
+		Collection<? super Animal> c15 = new ArrayList<Object>();
+		Collection<? super Object> c16 = new ArrayList<Object>();
+		Collection<? super Animal> c17 = new ArrayList<Animal>();
+		
+//		Collection<? super Animal> c18 = new ArrayList<Dog>();
+		Collection<? super Dog> c19 = new ArrayList<Animal>();
+		Collection<? super Dog> c20 = new ArrayList<Dog>();
+	}
+
+}
+************************************************
+
+JDK5 new features:
+	boxing and unboxing automatically
+	generic
+	enhanced for
+	static import
+	variable parameters
+	enumeration 
+
+*******************************************************
+enhanced for: one type of for
+for (element date type variableName : Array or Collection) {
+	use variableName
+}
+advantages:
+	A: simplify the traverse of Array and Collection
+
+Note:
+		A: Array and Collection should not be null
+			java.lang.NullPointerException(null), 
+			so you need judge null before using it,
+			so it is one iterator indeed
+		B: enhanced for is to replace Iterator
+********************************************************
+package enhanced.for_01;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class ArrayListTest {
+
+	public static void main(String[] args) {
+		int[] arrInt = {11, 22, 33, 44, 55};
+		for (int arr : arrInt) {
+			System.out.println(arr);
+		}
+		System.out.println("-----------------");
+		
+		String[] arrStrings = {"Jan", "Feb", "Mar"};
+		
+		for (String str : arrStrings) {
+			System.out.println(str);
+		}
+		System.out.println("----------");
+		
+		Collection<String> cStr = new ArrayList<String>();
+		cStr.add("Mon");
+		cStr.add("Tue");
+		cStr.add("Wed");
+		cStr.add("Thu");
+		cStr.add("Fri");
+		cStr.add("Sat");
+		cStr.add("Sun");
+		
+		for (String string : cStr) {
+			System.out.println(string);
+		}
+		
+		System.out.println("-------------");
+		
+		List<String> lStr = null;
+		if (lStr != null) {
+			for (String str : lStr) {
+				System.out.println(str);
+			}
+		} else {
+			System.out.println("lStr is empty");
+		}
+
+	}
+}
+
+result:
+11
+22
+33
+44
+55
+-----------------
+Jan
+Feb
+Mar
+----------
+Mon
+Tue
+Wed
+Thu
+Fri
+Sat
+Sun
+-------------
+lStr is empty
+**********************************************
+package enhanced.for_01;
+
+import java.util.ArrayList;
+
+public class ArrayListStudentTest {
+
+	public static void main(String[] args) {
+		ArrayList<Student> arrStu = new ArrayList<Student>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		
+		arrStu.add(s1);
+		arrStu.add(s2);
+		for (Student student : arrStu) {
+			System.out.println(student.getNameString()+"----"+student.getAge());
+		}
+
+	}
+
+}
+
+result:
+Emma----20
+Peter----30
+*************************************************************
+
+
+
+/////////////////////////////////////
+static import
+	A: format: import static packageName.className.methodName
+	B: import until methodName
+Note:
+	A: methods are static
+	B: for many methods with the same name, add prefix
+********************************************
+package staticimport_01;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.max;
+
+//import static java.util.ArrayList.add;
+
+public class StaticImportTest01 {
+
+	public static void main(String[] args) {
+		// use className and methodName
+		System.out.println(Math.abs(-100));
+		System.out.println(Math.pow(2, 5));
+		System.out.println(Math.max(20, 30));
+		System.out.println("-------------");
+		
+		// use packageName, className and methodName
+		System.out.println(java.lang.Math.abs(-100));
+		System.out.println(java.lang.Math.pow(2, 5));
+		System.out.println(java.lang.Math.max(20, 30));
+		System.out.println("-------------");
+		
+		// use methodName
+		System.out.println(abs(-100));
+		System.out.println(pow(2, 5));
+		System.out.println(max(20, 30));
+		System.out.println("---------------");
+		
+		// the same name
+		System.out.println(java.lang.Math.abs(-100));
+		System.out.println(abs(-100));
+	}
+	
+	public static int abs(int num) {
+		return num;
+	}
+}
+
+
+result:
+100
+32.0
+30
+-------------
+100
+32.0
+30
+-------------
+-100
+32.0
+30
+---------------
+100
+-100
+*******************************************
+
+////////////////////////////////////////////////////
+variable parameters
+	situation: don't know how many variables are existing
+	format: Modifier ReturnsValueType MethodName (dataType... VariableName)
+	Note: 
+		A: VariableName is one Array
+		B: if one method has many parameters, variable parameters should be the last
+		
+
+ 
+*************************
+choose (a + b)-> right click on "Refactor"->"Extract Method"->enter "sum"->
+sum implementation and sum calling generated automatically
+****************************
+package variableparam01;
+
+public class VariableParameterTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int result = sum(a, b);
+		System.out.println(result);
+		System.out.println("--------------");
+		
+		int c = 30;
+		result = sum(a, b, c);
+		System.out.println(result);
+		System.out.println("--------------");
+		
+		int d = 40;
+		result = sum(a, b, c, d);
+		System.out.println(result);
+		System.out.println("--------------");
+	}
+
+	private static int sum(int a, int b, int c, int d) {
+		return a + b + c + d;
+	}
+
+	private static int sum(int a, int b, int c) {
+		return a + b + c;
+	}
+
+	private static int sum(int a, int b) {
+		return a + b;
+	}
+}
+
+result:
+30
+--------------
+60
+--------------
+100
+-------------
+******************************************************
+multiple parameters:
+
+package variableparam01;
+
+public class VariableParameterTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int result = sum(a, b);
+		System.out.println(result);
+		System.out.println("--------------");
+		
+		int c = 30;
+		result = sum(a, b, c);
+		System.out.println(result);
+		System.out.println("--------------");
+		
+		int d = 40;
+		result = sum(a, b, c, d);
+		System.out.println(result);
+		System.out.println("--------------");
+	}
+
+//	private static int sum(int...a) {
+////		System.out.println(a);
+//		int result = 0;
+//		for (int i : a) {
+//			result += i;
+//		}
+//		return result;
+//	}
+	
+//	private static int sum(int...a, int b) { // report compile error
+////		System.out.println(a);
+//		int result = 0;
+//		for (int i : a) {
+//			result += i;
+//		}
+//		return result;
+//	}
+	
+	private static int sum(int b, int...a) {
+//		System.out.println(a);
+		int result = b;
+		for (int i : a) {
+			result += i;
+		}
+		return result;
+	}
+	
+//	private static int sum(int a, int b, int c, int d) {
+//		return a + b + c + d;
+//	}
+//
+//	private static int sum(int a, int b, int c) {
+//		return a + b + c;
+//	}
+//
+//	private static int sum(int a, int b) {
+//		return a + b;
+//	}
+}
+
+
+result:
+30
+--------------
+60
+--------------
+100
+--------------
+************************************************
+
+//////////////////////////////////////////
+Arrays asList()
+public static <T> List<T> asList​(T... a)
+
+Returns a fixed-size list backed by the specified array.
+
+****************************************************
+package aslist_01;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class ArrayListAsListTest {
+
+	public static void main(String[] args) {
+		List<String> alStr = Arrays.asList("Mon", "Tue", "Wed");
+		
+		for (String string : alStr) {
+			System.out.println(string);
+		}
+
+	}
+}
+
+result:
+Mon
+Tue
+Wed
+**************************************************
+
+
+///////////////////////////////////////////////////
+Collection Nesting traverse
+
+*****************************************
+package collection.nesting_01;
+
+import java.util.ArrayList;
+
+import cn.itcast_01.Student;
+
+public class ArrayListNestingTest01 {
+
+	public static void main(String[] args) {
+		ArrayList<ArrayList<Student>> nestStu = new ArrayList<ArrayList<Student>>();
+		
+		ArrayList<Student> firstArrstr = new ArrayList<Student>();
+		Student s1 = new Student("Tang Seng", 100);
+		Student s2 = new Student("Sun Fukong", 200);
+		Student s3 = new Student("Zhu Bajie", 300);
+		Student s4 = new Student("Sha Wujing", 400);
+		firstArrstr.add(s1);
+		firstArrstr.add(s2);
+		firstArrstr.add(s3);
+		firstArrstr.add(s4);
+		
+		ArrayList<Student> secondArrstr = new ArrayList<Student>();
+		Student s5 = new Student("Bai Niangzi", 10);
+		Student s6 = new Student("Zhao Yazhi", 20);
+		secondArrstr.add(s5);
+		secondArrstr.add(s6);
+
+		nestStu.add(firstArrstr);
+		nestStu.add(secondArrstr);
+		
+		for (ArrayList<Student> arrStr : nestStu) {
+			for (Student student : arrStr) {
+				System.out.println(student.getNameString()+"----"+student.getAge());
+			}
+		}
+	}
+}
+
+
+result:
+Tang Seng----100
+Sun Fukong----200
+Zhu Bajie----300
+Sha Wujing----400
+Bai Niangzi----10
+Zhao Yazhi----20
+***********************************************
+Generate random in the range of [1-20] and don't be duplicated
+
+
+
+
+ 
