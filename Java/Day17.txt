@@ -1586,3 +1586,80 @@ Student [nameString=Bob, chineseScore=90, mathScore=80, EnglishScore=97] The sum
 Student [nameString=Sophia, chineseScore=70, mathScore=87, EnglishScore=95] The sum score is 252
 
 **********************************************************************
+Day17_3.txt
+总结：
+登陆注册案例（理解）
+Set集合（理解）
+	Set集合的特点：无序，唯一
+
+HashSet（掌握）（元素是链表的数组）
+	底层数据是哈希表
+	哈希表底层依赖两个方法，hashCode（）和equals（）
+		首先比较hash值
+			相同：返回true，元素重复，不添加；返回false，添加元素
+			不相同：添加元素到集合
+
+	如何保证元素唯一性？ hashCode（）和equals（）
+	开发的时候，代码自动生成
+	HashSet存储字符串并遍历
+	HashSet存储自定义对象并遍历（对象的成员变量值相同是同一个对象）
+
+TreeSet（理解）
+	底层数据结构是红黑树，是一个自平衡的二叉树
+	如何保证元素排序？
+		自然排序：让元素所属的类实现comparable接口，元素具备比较性
+		比较器排序：让集合构造接受comparator的实现类对象，集合具备比较性
+
+
+案例：
+	获取无重复的随机数
+	键盘录入学生成绩，按总分从高到低排序
+
+Collection总结：
+|-List 有序 可重复
+	|-ArrayList
+		底层数据是数组，查询快，增删慢，线程不安全，效率高
+	|-Vector
+		底层数据是数组，查询快，增删慢，线程安全，效率低
+	|-LinkedList
+		底层数据是链表，查询慢，增删快，线程不安全，效率高
+|-Set 无序 唯一
+	|-HashSet
+		保证元素唯一？HashCode（）和equals
+		|-LinkedHashSet
+			底层是哈希表（唯一）和链表（有序）
+	|-TreeSet
+		底层数据是红黑树
+		如何保证排序？
+			自然排序
+			比较器排序
+		唯一性？
+			根据比较的返回值是否是0来保证
+
+我们使用谁？
+唯一？
+	是？ Set
+		排序？
+			是？
+				TreeSet
+			否？ 
+				HashSet
+			HashSet优先
+	否？List
+		安全？
+			是？
+				Vector
+			否？
+				ArrayList or LinkedList
+				查询多：ArrayList
+				增删多：LinkedList
+			ArrayList优先
+
+如果你知道是Collection，但是不知道用什么就用ArrayList
+
+
+常见的数据结构：
+ArrayXxx：底层数据是数组，查询快，增删慢
+LinkedXxx：底层数据是链表
+HashXxx：底层数据是哈希表，hashCode（），equals（）
+TreeXxx：底层数据是二叉树，自然排序或者比较器排序
