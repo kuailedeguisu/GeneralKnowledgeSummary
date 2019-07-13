@@ -347,3 +347,1242 @@ PS：更改之后的eclipse中原来的工程中的中文会出现乱码 ，按�
 
 ////////////////////////////////////////////////////
 Console Shopping Management System 
+day17_2.txt
+Set: no duplicated elements
+Collection
+	List-in order(stored and got order are consistent), duplicated
+	Set-no order(stored and got order are not consistent), unique
+HashSet: can’t guarantee Set iterator order and it can’t keep Set Iterator order unchanged
+
+Although Set is not in order, but it has its stored order; 
+if your order is consistent with its stored order, 
+ But it can’t prove it is in order, we you add more elements, you can see it. 
+
+*************************************
+package cn.itcast.set_01;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class SetDemo {
+
+	public static void main(String[] args) {
+		Set<String> strSet = new HashSet<String>();
+		
+		strSet.add("hello");
+		strSet.add("world");
+		strSet.add("java");
+		strSet.add("good");
+		strSet.add("hello");
+		strSet.add("world");
+		strSet.add("java");
+		
+		for (String string : strSet) {
+			System.out.println(string);
+		}
+	}
+}
+
+Result:
+world
+java
+hello
+good
+***********************************************************
+package cn.itcast.set_01;
+
+import java.util.HashSet;
+
+public class HashSetStringTest {
+
+	public static void main(String[] args) {
+		HashSet<String> strHashSet = new HashSet<String>();
+		strHashSet.add("hello");
+		strHashSet.add("java");
+		strHashSet.add("world");
+		strHashSet.add("good");
+		strHashSet.add("java");
+		strHashSet.add("abc");
+		
+		for (String string : strHashSet) {
+			System.out.println(string);
+		}
+
+	}
+
+}
+
+Result:
+java
+world
+abc
+hello
+good
+********************************
+HashSet : add source code analysis
+Interface Collection {}
+
+Interface Set extends Collection {}
+
+Class HashSet implements Set {
+    private transient HashMap<E,Object> map;
+
+    // Dummy value to associate with an Object in the backing Map
+    private static final Object PRESENT = new Object();
+
+    public HashSet() {
+        map = new HashMap<>();
+    }
+
+    public boolean add(E e) {
+        return map.put(e, PRESENT)==null;
+    }
+}
+
+class HashMap<K,V> implements Map<K,V> {
+
+     static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+    }
+
+    public V put(K key, V value) {
+        return putVal(hash(key), key, value, false, true);
+    }
+
+    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node<K,V>[] tab; Node<K,V> p; int n, i;
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        if ((p = tab[i = (n - 1) & hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            Node<K,V> e; K k;
+            if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode)
+                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &&
+                        ((k = e.key) == key || (key != null && key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                return oldValue;
+            }
+        }
+        ++modCount;
+        if (++size > threshold)
+            resize();
+        afterNodeInsertion(evict);
+        return null;
+    }
+ }
+*************************************************
+hashSet的底层实现
+为什么重复的元素只添加一次到集合中呢？
+通过查看底层add源码，我们知道底层依赖hashCode（）和equals（）
+步骤：
+	首先比较哈希值
+	如果相同，继续走，比较地址值或者equals（）
+	如果不同，就直接添加到集合中
+按照方法的步骤来说：
+	先看hashCode（）的值是否相同
+		相同，继续走equals（）
+			返回true，不添加元素到集合中
+			返回false，元素添加到集合中
+		不同，就直接把元素添加到集合中
+
+String重写了hashCode（）和equals（）方法，如果不重写，就调用Object的，只有重写了这两个方法的类才可以保证元素的唯一性
+**************************************************
+哈希表：是一个元素是链表的数组，综合了数组和链表的好处。（新华字典）
+
+如果对象的哈希值相同，就会调用equals方法，比较对象的成员变量是否相同，如果不相同，就添加到集合，如果相同就不添加到集合
+我们虽然解决了重复的问题，但是效率不高，解决办法是让每个对象的哈希值尽量不同
+
+哈希值应该与对象的成员变量值有关， 
+所以我们的解决方案是将对象的成员变量值相加
+	如果是基本类型，就直接相加
+	如果是引用类型，就加哈希值
+但是会存在每个成员变量值都不相同但其和相同，所以会将一个成员变量的值乘以一个固定的整数后，再和其他成员变量值求和
+
+
+
+
+哈希是桶结构
+0
+|
+0x001
+|
+0x002
+|
+0x003
+
+**************************************************************
+Student.java
+
+package cn.itcast.student;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (age != other.age)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+
+}
+
+**********************************
+HashSetStudentTest.java
+
+package cn.itcast.student;
+
+import java.util.HashSet;
+
+public class HashSetStudentTest {
+
+	public static void main(String[] args) {
+		HashSet<Student> stuHashSet = new HashSet<Student>();
+		
+		Student s1 = new Student("Peter", 18);
+		Student s2 = new Student("Bob", 20);
+		Student s3 = new Student("Peter", 28);
+		Student s4 = new Student("Peter", 18);
+		
+		stuHashSet.add(s1);
+		stuHashSet.add(s2);
+		stuHashSet.add(s3);
+		stuHashSet.add(s4);
+		
+		for (Student student : stuHashSet) {
+			System.out.println(student.getNameString()+"---"+student.getAge());
+		}
+
+	}
+
+}
+
+**********************************
+Result:
+
+Bob---20
+Peter---28
+Peter---18
+
+
+****************************************************************************************
+Dog.java
+
+package cn.itcast.student;
+
+public class Dog {
+	private String nameString;
+	private int age;
+	private String colorString;
+	private char sex;
+	
+	public Dog() {
+		super();
+	}
+	
+	public Dog(String nameString, int age, String colorString, char sex) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+		this.colorString = colorString;
+		this.sex = sex;
+	}
+	
+	@Override
+	public String toString() {
+		return "Dog [nameString=" + nameString + ", age=" + age + ", colorString=" + colorString + ", sex=" + sex + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((colorString == null) ? 0 : colorString.hashCode());
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		result = prime * result + sex;
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dog other = (Dog) obj;
+		if (age != other.age)
+			return false;
+		if (colorString == null) {
+			if (other.colorString != null)
+				return false;
+		} else if (!colorString.equals(other.colorString))
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		if (sex != other.sex)
+			return false;
+		return true;
+	}
+	
+	
+
+}
+
+**********************************
+DogHashSetTest.java
+
+package cn.itcast.student;
+
+import java.util.HashSet;
+
+public class DogHashSetTest {
+
+	public static void main(String[] args) {
+		HashSet<Dog> dogHashSet = new HashSet<Dog>();
+		
+		Dog d1 = new Dog("Lucky", 2, "yellow", 'f');
+		Dog d2 = new Dog("Polly", 3, "black", 'm');
+		Dog d3 = new Dog("Lucky", 3, "white", 'f');
+		Dog d4 = new Dog("Lucky", 4, "yellow", 'f');
+		Dog d5 = new Dog("Lucky", 2, "yellow", 'f');
+		
+		dogHashSet.add(d1);
+		dogHashSet.add(d2);
+		dogHashSet.add(d3);
+		dogHashSet.add(d4);
+		dogHashSet.add(d5);
+		
+		for (Dog dog : dogHashSet) {
+			System.out.println(dog);
+		}
+	}
+
+}
+
+**********************************
+Result:
+Dog [nameString=Lucky, age=2, colorString=yellow, sex=f]
+Dog [nameString=Polly, age=3, colorString=black, sex=m]
+Dog [nameString=Lucky, age=4, colorString=yellow, sex=f]
+Dog [nameString=Lucky, age=3, colorString=white, sex=f]
+********************************************************
+LinkedHashSet
+* java.lang.Object
+    * java.util.AbstractCollection<E>
+        * java.util.AbstractSet<E>
+            * java.util.HashSet<E>
+                * java.util.LinkedHashSet<E>
+                * 
+Hash table and linked list implementation of the Set interface, with predictable iteration order. 
+
+底层数据由哈希表和链表组成
+哈希表保证数据的唯一性，链表保证数据的有序（存储和取出一致）
+
+************************************
+Student.java
+
+package cn.itcast_01;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (age != other.age)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+
+}
+
+**************************
+LinkedHashSetTest.java
+
+package cn.itcast_01;
+
+import java.util.LinkedHashSet;
+
+public class LinkedHashSetTest {
+
+	public static void main(String[] args) {
+		LinkedHashSet<Student> slhSet = new LinkedHashSet<Student>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Sophia", 30);
+		Student s3 = new Student("Emma", 20);
+		Student s4 = new Student("Emma", 40);
+		Student s5 = new Student("Sophia", 40);
+		
+		slhSet.add(s1);
+		slhSet.add(s2);
+		slhSet.add(s3);
+		slhSet.add(s4);
+		slhSet.add(s5);
+		
+		for (Student student : slhSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+****************************************************
+Result:
+
+Student [nameString=Emma, age=20]
+Student [nameString=Sophia, age=30]
+Student [nameString=Emma, age=40]
+Student [nameString=Sophia, age=40]
+*******************************************
+
+Module java.base
+Package java.util
+Class TreeSet<E>
+* java.lang.Object
+    * java.util.AbstractCollection<E>
+        * java.util.AbstractSet<E>
+            * java.util.TreeSet<E>
+* Type Parameters: E - the type of elements maintained by this set  All Implemented Interfaces: Serializable, Cloneable, Iterable<E>, Collection<E>, NavigableSet<E>, Set<E>, SortedSet<E>
+
+
+
+Module java.base
+Package java.util
+Class TreeMap<K, V>
+* java.lang.Object
+    * java.util.AbstractMap<K, V>
+        * java.util.TreeMap<K, V>
+* Type Parameters: K - the type of keys maintained by this map V - the type of mapped values  All Implemented Interfaces: Serializable, Cloneable, Map<K, V>, NavigableMap<K, V>, SortedMap<K, V>
+
+TreeSet:能够对元素按照某种规则排序
+
+排序方式：
+	自然排序：
+	比较器排序
+
+TreeSet特点：
+	唯一
+	按照自然顺序排序（无参构造）
+
+通过观察TreeSet的add方法最终看TreeMap的put方法
+public class TreeSet<E> extends AbstractSet<E>
+    implements NavigableSet<E>, Cloneable, java.io.Serializable
+{
+    /**
+     * The backing map.
+     */
+    private transient NavigableMap<E,Object> m;
+
+    // Dummy value to associate with an Object in the backing Map
+    private static final Object PRESENT = new Object();
+
+    /**
+     * Constructs a set backed by the specified navigable map.
+     */
+    TreeSet(NavigableMap<E,Object> m) {
+        this.m = m;
+    }
+    public boolean add(E e) {
+        return m.put(e, PRESENT)==null;
+    }
+}
+
+
+public class TreeMap<K,V>
+    extends AbstractMap<K,V>
+    implements NavigableMap<K,V>, Cloneable, java.io.Serializable
+{
+    public V put(K key, V value) {
+        Entry<K,V> t = root;
+        if (t == null) {
+            compare(key, key); // type (and possibly null) check
+
+            root = new Entry<>(key, value, null);
+            size = 1;
+            modCount++;
+            return null;
+        }
+        int cmp;
+        Entry<K,V> parent;
+        // split comparator and comparable paths
+        Comparator<? super K> cpr = comparator;
+        if (cpr != null) {
+            do {
+                parent = t;
+                cmp = cpr.compare(key, t.key);
+                if (cmp < 0)
+                    t = t.left;
+                else if (cmp > 0)
+                    t = t.right;
+                else
+                    return t.setValue(value);
+            } while (t != null);
+        }
+        else {
+            if (key == null)
+                throw new NullPointerException();
+            @SuppressWarnings("unchecked")
+                Comparable<? super K> k = (Comparable<? super K>) key;
+            do {
+                parent = t;
+                cmp = k.compareTo(t.key);
+                if (cmp < 0)
+                    t = t.left;
+                else if (cmp > 0)
+                    t = t.right;
+                else
+                    return t.setValue(value);
+            } while (t != null);
+        }
+        Entry<K,V> e = new Entry<>(key, value, parent);
+        if (cmp < 0)
+            parent.left = e;
+        else
+            parent.right = e;
+        fixAfterInsertion(e);
+        size++;
+        modCount++;
+        return null;
+    }
+}
+
+TreeSet: 底层是二叉树（红黑树是一种自平衡的二叉树）
+存储元素：
+第一个元素存储的时候，直接作为跟节点存储；
+从第二个元素开始，每个元素从跟节点开始比较，
+	大了做为右孩子，
+	小了做为左孩子，
+	相等了就不添加
+
+取出元素：（先序遍历，中序遍历，后序遍历）
+从跟节点开始按照左中右的顺序来取，最终按照从小到大排了序
+
+TreeSet中自定义对象不用定义hashCode和equals方法，因为没有关系
+TreeSet中存储自定义对象并保证排序和唯一。
+如果一个类的元素自然排序，必须实现自然排序的方法
+***************************************
+Sort it by age
+
+Student.java
+package cn.itcast.tree.set;
+
+public class Student implements Comparable<Student> {
+	private String nameString;
+	private int age;
+	
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public Student() {
+		super();
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+
+	@Override
+	public int compareTo(Student o) {
+//		return 0; // only the first element
+//		return 1; // all elements with the same order added
+//		return -1; // all elements with the reverse order added
+		int num = this.age - o.age;
+		int num2 = (num == 0)?(this.nameString.compareTo(o.nameString)) : num;
+		
+		return num2;
+	}
+}
+
+
+TreeSetStudentTest.java
+
+package cn.itcast.tree.set;
+
+import java.util.TreeSet;
+
+public class TreeSetStudentTest {
+
+	public static void main(String[] args) {
+		TreeSet<Student> stuTreeSet = new TreeSet<Student>();
+		Student s1 = new Student("linqingxia", 28);
+		Student s2 = new Student("wangzuxian", 20);
+		Student s3 = new Student("linqingxia", 29);
+		Student s4 = new Student("linqingxia", 28);
+		Student s5 = new Student("wangzuxian", 29);
+		
+		stuTreeSet.add(s1);
+		stuTreeSet.add(s2);
+		stuTreeSet.add(s3);
+		stuTreeSet.add(s4);
+		stuTreeSet.add(s5);
+		
+		for (Student student : stuTreeSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+result：
+Student [nameString=wangzuxian, age=20]
+Student [nameString=linqingxia, age=28]
+Student [nameString=linqingxia, age=29]
+Student [nameString=wangzuxian, age=29]
+
+****************************************************
+Sort it by name.length
+
+Student.java
+package cn.itcast.tree.set.student.name.length;
+
+public class Student implements Comparable<Student> {
+	private String nameString;
+	private int age;
+	
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public Student() {
+		super();
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public int compareTo(Student o) {
+		// compare them by name.length
+		int num = this.nameString.length() - o.nameString.length();
+		// compare them by name content
+		int num2 = num == 0 ? (this.nameString.compareTo(o.nameString)) : num;
+		// compare them by age
+		int num3 = num2 == 0 ? (this.age - o.age) : num2;
+		
+		return num3;
+		
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+}
+
+
+StudentNameLengthTreeSetTest.java
+package cn.itcast.tree.set.student.name.length;
+
+import java.util.TreeSet;
+
+
+public class StudentNameLengthTreeSetTest {
+
+	public static void main(String[] args) {
+		TreeSet<Student> stuTreeSet = new TreeSet<Student>();
+		Student s1 = new Student("linqingxia", 28);
+		Student s2 = new Student("wangzuxianxx", 20);
+		Student s3 = new Student("linqingxiaxx", 29);
+		Student s4 = new Student("linqingxia", 28);
+		Student s5 = new Student("linqingxia", 29);
+		Student s6 = new Student("wangzuxian", 29);
+		
+		stuTreeSet.add(s1);
+		stuTreeSet.add(s2);
+		stuTreeSet.add(s3);
+		stuTreeSet.add(s4);
+		stuTreeSet.add(s5);
+		
+		for (Student student : stuTreeSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+
+Result:
+Student [nameString=linqingxia, age=28]
+Student [nameString=linqingxia, age=29]
+Student [nameString=linqingxiaxx, age=29]
+Student [nameString=wangzuxianxx, age=20]
+******************************************************
+自然排序：TreeSet无参构造
+比较器排序：TreeSet有参构造
+
+public TreeSet()
+Constructs a new, empty tree set, sorted according to the natural ordering of its elements.
+
+public TreeSet​(Comparator<? super E> comparator)
+Constructs a new, empty tree set, sorted according to the specified comparator.
+
+*********************
+比较器排序
+
+Student.java
+package cn.itcast.compare.order;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public Student() {
+		super();
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+}
+
+
+MyComparator.java
+
+package cn.itcast.compare.order;
+
+import java.util.Comparator;
+
+public class MyComparator implements Comparator<Student> {
+	
+
+	public MyComparator() {
+		super();
+	}
+	
+	
+
+	@Override
+	public int compare(Student o1, Student o2) {
+//		return 0;
+		int num = o1.getNameString().length() - o1.getNameString().length();
+		int num2 = num == 0 ? (o1.getNameString().compareTo(o2.getNameString())) : num;
+		int num3 =num2 == 0 ? (o1.getAge() - o2.getAge()) : num2;
+		return num3;
+	}
+
+
+
+}
+
+
+CompareOderTest.java
+
+package cn.itcast.compare.order;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+
+public class CompareOderTest {
+
+	public static void main(String[] args) {
+		Comparator mComparator = new MyComparator();
+		TreeSet<Student> stuTreeSet = new TreeSet<Student>(mComparator);
+		Student s1 = new Student("linqingxia", 28);
+		Student s2 = new Student("wangzuxianxx", 20);
+		Student s3 = new Student("linqingxiaxx", 29);
+		Student s4 = new Student("linqingxia", 28);
+		Student s5 = new Student("linqingxia", 29);
+		Student s6 = new Student("wangzuxian", 29);
+		
+		stuTreeSet.add(s1);
+		stuTreeSet.add(s2);
+		stuTreeSet.add(s3);
+		stuTreeSet.add(s4);
+		stuTreeSet.add(s5);
+		
+		for (Student student : stuTreeSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+Result:
+Student [nameString=linqingxia, age=28]
+Student [nameString=linqingxia, age=29]
+Student [nameString=linqingxiaxx, age=29]
+Student [nameString=wangzuxianxx, age=20]
+*************************************************************
+
+Use Anonymous Object for only used once
+Keep Student.java unchanged, remove MyComparator.java
+
+CompareOderTest.java
+
+package cn.itcast.compare.order.anonymous;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class CompareOderTest {
+
+	public static void main(String[] args) {
+		TreeSet<Student> stuTreeSet = new TreeSet<Student>(new Comparator<Student>() {
+			public int compare(Student o1, Student o2) {
+				int num = o1.getNameString().length() - o1.getNameString().length();
+				int num2 = num == 0 ? (o1.getNameString().compareTo(o2.getNameString())) : num;
+				int num3 =num2 == 0 ? (o1.getAge() - o2.getAge()) : num2;
+				return num3;
+			}
+		});
+		Student s1 = new Student("linqingxia", 28);
+		Student s2 = new Student("wangzuxianxx", 20);
+		Student s3 = new Student("linqingxiaxx", 29);
+		Student s4 = new Student("linqingxia", 28);
+		Student s5 = new Student("linqingxia", 29);
+		Student s6 = new Student("wangzuxian", 29);
+		
+		stuTreeSet.add(s1);
+		stuTreeSet.add(s2);
+		stuTreeSet.add(s3);
+		stuTreeSet.add(s4);
+		stuTreeSet.add(s5);
+		
+		for (Student student : stuTreeSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+
+****************************************
+The last method is flexible because if we use the first method defined in Student class, if any compare conditions are changed, we need modify compare method and don’t adopt other conditions
+
+
+TreeSet 集合保证元素排序和唯一性管理
+唯一性：是根据比较返回是否是0来决定
+排序：
+	A：自然排序（元素具备比较性）
+		让元素所属的类实现自然排序接口Comparable
+	B：比较排序（集合具备比较性）
+		让集合的构造方法接收一个比较器接口的子类对象Comparator
+******************************************************************
+产生10个1到20的随机数，要求不能重复
+
+package cn.itcast.random;
+
+import java.util.HashSet;
+import java.util.Random;
+
+public class RandomTest {
+
+	public static void main(String[] args) {
+		Random random = new Random();
+		
+		HashSet<Integer> integers = new HashSet<Integer>();
+		
+		while (integers.size() < 10) {
+			int num = random.nextInt(20) + 1;
+			integers.add(num);
+			
+		}
+		
+		for (Integer integer : integers) {
+			System.out.println(integer);
+		}
+
+	}
+
+}
+
+result：
+16
+17
+18
+2
+19
+4
+8
+11
+14
+15
+***********************************************************
+键盘录入5个学生的姓名，语文成绩，数学成绩和英语成绩，并且按照总分从高到低排序
+
+Student.java
+
+package cn.itcast.score;
+
+public class Student {
+	private String nameString;
+	private int chineseScore;
+	private int mathScore;
+	private int EnglishScore;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int chineseScore, int mathScore, int englishScore) {
+		super();
+		this.nameString = nameString;
+		this.chineseScore = chineseScore;
+		this.mathScore = mathScore;
+		EnglishScore = englishScore;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getChineseScore() {
+		return chineseScore;
+	}
+
+	public void setChineseScore(int chineseScore) {
+		this.chineseScore = chineseScore;
+	}
+
+	public int getMathScore() {
+		return mathScore;
+	}
+
+	public void setMathScore(int mathScore) {
+		this.mathScore = mathScore;
+	}
+
+	public int getEnglishScore() {
+		return EnglishScore;
+	}
+
+	public void setEnglishScore(int englishScore) {
+		EnglishScore = englishScore;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", chineseScore=" + chineseScore + ", mathScore=" + mathScore
+				+ ", EnglishScore=" + EnglishScore + "]"+" The sum score is " + getSumScore();
+	}
+	
+	public int getSumScore()  {
+		return chineseScore + mathScore + EnglishScore;
+	}
+
+}
+
+
+ScoreOrderTest.java
+
+package cn.itcast.score;
+
+import java.util.Comparator;
+import java.util.Scanner;
+import java.util.TreeSet;
+
+public class ScoreOrderTest {
+
+	public static void main(String[] args) {
+		TreeSet<Student> stuTreeSet = new TreeSet<Student>(new Comparator<Student>() {
+			public int compare(Student o1, Student o2) {
+				int num = o2.getSumScore() - o1.getSumScore();
+				int num2 = num == 0 ? (o2.getChineseScore() - o1.getChineseScore()) : num;
+				int num3 = num2 == 0 ? (o2.getMathScore() - o1.getMathScore()) : num2;
+				int num4 = num3 == 0 ? (o2.getEnglishScore() - o1.getEnglishScore()) : num3;
+				int num5 = num4 == 0 ? (o1.getNameString().compareTo(o2.getNameString())) :  num4;
+				return num5;
+			}
+		});
+//		Student s1 = new Student("Emma", 90, 98, 97);
+//		Student s2 = new Student("Peter", 85, 98, 97);
+//		Student s3 = new Student("Bob", 90, 80, 97);
+//		Student s4 = new Student("Sophia", 70, 87, 95);
+//		Student s5 = new Student("Susan", 90, 99, 100);
+//		Student s6 = new Student("John", 90, 98, 97);
+		
+//		stuTreeSet.add(s1);
+//		stuTreeSet.add(s2);
+//		stuTreeSet.add(s3);
+//		stuTreeSet.add(s4);
+//		stuTreeSet.add(s5);
+//		stuTreeSet.add(s6);
+		
+		for (int x = 1; x <= 5; ++x ) {
+			System.out.println("Please enter " + x + " student name:");
+			Scanner scanner = new Scanner(System.in);
+			String nameString = scanner.nextLine();
+			System.out.println("Please enter chinese score:");
+			String chineseString = scanner.nextLine();
+			System.out.println("Please enter math score:");
+			String mathString = scanner.nextLine();
+			System.out.println("Please enter english score:");
+			String englishString = scanner.nextLine();
+			
+			Student student = new Student();
+			student.setNameString(nameString);
+			student.setChineseScore(Integer.parseInt(chineseString));
+			student.setMathScore(Integer.parseInt(mathString));
+			student.setEnglishScore(Integer.parseInt(englishString));
+			
+			stuTreeSet.add(student);
+		}
+		
+
+		
+		for (Student student : stuTreeSet) {
+			System.out.println(student);
+		}
+
+	}
+
+}
+
+Result:
+Please enter 1 student name:
+Emma
+Please enter chinese score:
+90
+Please enter math score:
+98
+Please enter english score:
+97
+Please enter 2 student name:
+Peter
+Please enter chinese score:
+85
+Please enter math score:
+98
+Please enter english score:
+97
+Please enter 3 student name:
+Bob
+Please enter chinese score:
+90
+Please enter math score:
+80
+Please enter english score:
+97
+Please enter 4 student name:
+Sophia
+Please enter chinese score:
+70
+Please enter math score:
+87
+Please enter english score:
+95
+Please enter 5 student name:
+Susan
+Please enter chinese score:
+90
+Please enter math score:
+99
+Please enter english score:
+100
+Student [nameString=Susan, chineseScore=90, mathScore=99, EnglishScore=100] The sum score is 289
+Student [nameString=Emma, chineseScore=90, mathScore=98, EnglishScore=97] The sum score is 285
+Student [nameString=Peter, chineseScore=85, mathScore=98, EnglishScore=97] The sum score is 280
+Student [nameString=Bob, chineseScore=90, mathScore=80, EnglishScore=97] The sum score is 267
+Student [nameString=Sophia, chineseScore=70, mathScore=87, EnglishScore=95] The sum score is 252
+
+**********************************************************************
