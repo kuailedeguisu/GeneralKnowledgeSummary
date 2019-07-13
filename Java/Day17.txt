@@ -46,3 +46,304 @@ AbstractCollection
 
 注册路程：客户端用户填写用户名和密码后，提交给服务器，然后由服务器端实现数据库的存储，如果数据信息无误，就返回true，否则返回false
 登陆流程：客户端用户输入用户名和密码后，提交给服务器，然后由服务端实现在数据库的查找，如果数据匹配成功，就返回true，否则返回false
+
+///////////////////////////
+Eclipse user guide:
+http://help.eclipse.org/oxygen/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2Freference%2Fref-properties-build-path.htm
+
+/////////////////////////////////
+Login system and guess game
+
+***************************************
+Requirement: 
+	A:Register and Login System
+	B: do guess game after login
+**********************************
+
+*********************************************
+Issues:
+	A: use static for multiple Objects share the same data member 
+	B: break in switch only is over for switch, so if loop is out of switch, 
+	   never exit loop
+**********************************************
+
+User.java
+
+package cn.itcast_01;
+
+public class User {
+	private String userNameString;
+	private String passwordString;
+	
+	public User() {
+		super();
+	}
+
+	public User(String userNameString, String passwordString) {
+		super();
+		this.userNameString = userNameString;
+		this.passwordString = passwordString;
+	}
+
+	public String getUserNameString() {
+		return userNameString;
+	}
+
+	public void setUserNameString(String userNameString) {
+		this.userNameString = userNameString;
+	}
+
+	public String getPasswordString() {
+		return passwordString;
+	}
+
+	public void setPasswordString(String passwordString) {
+		this.passwordString = passwordString;
+	}
+}
+
+****************************************************
+UserOperation.java
+
+package cn.itcast_01;
+
+public interface UserOperation {
+	public abstract boolean isLogin(String userName, String password);
+	public abstract void register(User user);
+}
+
+*******************************************************
+UserOperationImpl.java
+
+package cn.itcast_01;
+
+import java.util.ArrayList;
+
+public class UserOperationImpl implements UserOperation {
+	private static ArrayList<User> array = new ArrayList<User>();
+
+	public boolean isLogin(String userName, String password) {
+		boolean flag = false;
+		for (User user : array) {
+			if (user.getUserNameString().equals(userName) &&
+				user.getPasswordString().equals(password)) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
+	}
+
+	public void register(User user) {
+		array.add(user);	
+	}
+
+}
+
+*********************************************
+GuessNumber.java
+
+package cn.itcast.game;
+
+import java.util.Scanner;
+
+public class GuessNumber {
+	private GuessNumber() {}
+	
+	public static void start() {
+		int num = (int)(Math.random() * 100) + 1;
+		int count = 0;
+		
+		while (true) {
+			System.out.println("Please enter an integer[1-100]:");
+			Scanner sc = new Scanner(System.in);
+			int guessNumber = sc.nextInt();
+			count++;
+			
+			if (guessNumber == num) {
+				System.out.println("You are right after "+count+" times");
+				break;
+			}
+			else if (guessNumber > num) {
+				System.out.println(guessNumber+" is bigger");
+			}
+			else {
+				System.out.println(guessNumber+" is smaller");
+			}
+		}
+	}
+
+}
+
+
+****************************************************
+UserTest.java
+
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+import cn.itcast.game.GuessNumber;
+
+public class UserTest {
+
+	public static void main(String[] args) {
+		while (true) {
+			System.out.println("--------------Welcome---------------------");
+			System.out.println("1 Login");
+			System.out.println("2 Register");
+			System.out.println("3 Exit");
+			System.out.println("Please enter your choice:");
+			Scanner sc = new Scanner(System.in);
+			String choice = sc.nextLine();
+			UserOperation uoi = new UserOperationImpl();
+
+			switch (choice) {
+				case "1":
+					System.out.println("Login GUI");
+					System.out.println("Please enter username:");
+					String newUserNameString = sc.nextLine();
+					System.out.println("Please enter password:");
+					String newPassword = sc.nextLine();
+	//				UserOperation uoi = new UserOperationImpl();
+					boolean flag = uoi.isLogin(newUserNameString, newPassword);
+					if (flag) {
+						System.out.println("You login and can start guess game");
+						System.out.println("Are you playing?[Y/N]");
+						while (true) {
+							String play = sc.nextLine();
+							if (play.equalsIgnoreCase("Y")) {
+								GuessNumber.start();
+								System.out.println("Do you still play?[Y/N]");
+							} else {
+								break;
+							}
+						}
+						System.out.println("Welcome back next time");
+						System.exit(0);
+	//					break; // over for switch not while
+					}
+					else {
+						System.out.println("Your username or password is not right");
+					}
+					break;
+				case "2":
+					System.out.println("Register GUI");
+					System.out.println("Please enter username:");
+					String newUserNameString2 = sc.nextLine();
+					System.out.println("Please enter password:");
+					String newPassword2 = sc.nextLine();
+	//				UserOperation uoi2 = new UserOperationImpl();
+					User user2 = new User(newUserNameString2, newPassword2);
+					uoi.register(user2);
+					System.out.println("You register!");
+					break;
+				case "3":
+					break;
+				default:
+					System.out.println("Welcome back next time");
+					System.exit(0);
+					break;
+			}
+		}
+
+	}
+
+}
+********************************************
+result:
+
+--------------Welcome---------------------
+1 Login
+2 Register
+3 Exit
+Please enter your choice:
+2
+Register GUI
+Please enter username:
+admin
+Please enter password:
+admin
+You register!
+--------------Welcome---------------------
+1 Login
+2 Register
+3 Exit
+Please enter your choice:
+1
+Login GUI
+Please enter username:
+admin
+Please enter password:
+admin
+You login and can start guess game
+Are you playing?[Y/N]
+Y
+Please enter an integer[1-100]:
+2
+2 is smaller
+Please enter an integer[1-100]:
+70
+70 is bigger
+Please enter an integer[1-100]:
+50
+50 is bigger
+Please enter an integer[1-100]:
+40
+40 is smaller
+Please enter an integer[1-100]:
+45
+45 is smaller
+Please enter an integer[1-100]:
+47
+You are right after 6 times
+Do you still play?[Y/N]
+Y
+Please enter an integer[1-100]:
+40
+40 is smaller
+Please enter an integer[1-100]:
+30
+30 is smaller
+Please enter an integer[1-100]:
+60
+60 is smaller
+Please enter an integer[1-100]:
+70
+70 is smaller
+Please enter an integer[1-100]:
+90
+90 is smaller
+Please enter an integer[1-100]:
+98
+98 is smaller
+Please enter an integer[1-100]:
+99
+You are right after 7 times
+Do you still play?[Y/N]
+N
+Welcome back next time
+*************************************************
+
+/////////////////////////////////////
+Eclipse中文乱码
+1.原因
+
+所有的中文乱码 问题是编码不同所导致的
+
+2.解决
+
+要想让eclipse能正常显示出汉字，就要修改它的字符编码
+
+步骤如下：
+1 ，点击菜单栏中的Window（窗口），选择Preferences（首选项）
+2，在出来的窗口中选择左边的General（常规）下拉出它的菜单
+3，在选择Content Types选项，这是会在右边看到Text，点击拉下菜单
+4，选择其中的Java Source File，然后把最下边下面的Default encoding设置成GBK，点击右边的update，然后点击确认。
+5，重启eclipse，不重启的话就不能保存。
+
+PS：更改之后的eclipse中原来的工程中的中文会出现乱码 ，按以上步骤重新修改为UTF-8 或者 把GBK删除 再update就可以恢复，同样添加的windows 上的工程就会乱码
+
+
+////////////////////////////////////////////////////
+Console Shopping Management System 
