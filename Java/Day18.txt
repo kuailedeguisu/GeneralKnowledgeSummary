@@ -1,0 +1,777 @@
+Map
+As a student, you can distinguish student by student number
+If we know student number, I would like to get Student Object by student number
+If we use Collection to do it, we only can store student number and student name in Student Obeject
+
+Map: can store element with (key, value) pair
+An object that maps keys to values. A map cannot contain duplicate keys; 
+each key can map to at most one value. 
+
+Collection:
+	Collection elements are existing An object that maps keys to values.
+	Collection subclass Set elements are unique, List elements can be duplicated
+	Collection data structure is valid only for element	
+Map:
+	A map cannot contain duplicate keys; each key can map to at most one value.
+	Map elements are paired in key and value, and key is unique, value can be duplicated
+	Map data structure is valid only for key, not related to value
+
+HashMap
+TreeMap
+
+Map functions:
+add function:
+	V put?(K key,
+		V value) //Associates the specified value with the specified key in this map
+				 // If key is stored at first time, return null
+				 // If key is not stored at first time, replace original value as new value, and return original value
+	void putAll?(Map<? extends K,? extends V> m)// Copies all of the mappings from the specified map to this map 
+delete function:
+	void clear() // Removes all of the mappings from this map
+	V remove?(Object key)// Removes the mapping for a key from this map if it is present
+	default boolean remove?(Object key,
+                       Object value) // Removes the entry for the specified key only if it is currently mapped to the specified value.
+	
+judge function
+	boolean containsKey?(Object key)     // Returns true if this map contains a mapping for the specified key
+	boolean containsValue?(Object value) // Returns true if this map maps one or more keys to the specified value.
+	boolean isEmpty()                    // Returns true if this map contains no key-value mappings.
+lengh function:
+	int size()             // Returns the number of key-value mappings in this map. 
+get function:
+	Set<Map.Entry<K,V>> entrySet()// Returns a Set view of the mappings contained in this map.
+	V get?(Object key)     // Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key. 
+	Set<K> keySet()        // Returns a Set view of the keys contained in this map.
+	Collection<V> values() // Returns a Collection view of the values contained in this map. 
+traverse function:
+
+************************************************
+HashMap basic functions:
+*************************************************
+package cn.itcast_01;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapBasicFunTest {
+
+	public static void main(String[] args) {
+		Map<String, String> strHashMap = new HashMap<String, String>();
+		// check put returns
+//		System.out.println("put:"+strHashMap.put("wenzhang", "mayili"));
+//		System.out.println("put:"+strHashMap.put("wenzhang", "yaodi"));
+//		System.out.println("-------");
+		
+		// add elements
+		strHashMap.put("dengchao", "sunli");
+		strHashMap.put("huangxiaoming", "yangying");
+		strHashMap.put("zhoujielun", "kunling");
+		strHashMap.put("liukaiwei", "yangmi");
+		System.out.println("map:"+strHashMap);// rewrite toString()
+		System.out.println("-------------");
+		
+		// clear all elements
+//		strHashMap.clear();
+//		System.out.println("map:"+strHashMap);
+		
+		// remove element by key
+		// return null if not existing element in Map
+		strHashMap.remove("huangxiaoming");
+		System.out.println("map:"+strHashMap);
+		System.out.println("--------------");
+		
+		// remove element by (key, value)
+		// if (key, value) doesn't exist in the Map
+		// don't remove the element
+		strHashMap.remove("zhoujielun", "sunli");
+		System.out.println("map:"+strHashMap);
+		strHashMap.remove("zhoujielun", "kunling");
+		System.out.println("map:"+strHashMap);
+		
+		// containsKey and containsValue
+		System.out.println("containsKey:"+strHashMap.containsKey("dengchao"));
+		System.out.println("containsKey:"+strHashMap.containsKey("zhoujielun"));
+		System.out.println("containsValue:"+strHashMap.containsValue("sunli"));
+		System.out.println("containsValue:"+strHashMap.containsValue("jiangwenli"));
+		
+		// isEmpty and size
+		System.out.println("isEmpty:"+strHashMap.isEmpty());
+		System.out.println("size:"+strHashMap.size());
+		
+		
+	}
+}
+
+
+result:
+map:{zhoujielun=kunling, liukaiwei=yangmi, dengchao=sunli, huangxiaoming=yangying}
+-------------
+map:{zhoujielun=kunling, liukaiwei=yangmi, dengchao=sunli}
+--------------
+map:{zhoujielun=kunling, liukaiwei=yangmi, dengchao=sunli}
+map:{liukaiwei=yangmi, dengchao=sunli}
+containsKey:true
+containsKey:false
+containsValue:true
+containsValue:false
+isEmpty:false
+size:2
+*************************************************************
+Get value by key, get all keys, get all values
+********************************************************
+package cn.itcast.get;
+
+import java.sql.Connection;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class HashMapGetTest {
+
+	public static void main(String[] args) {
+		Map<String, String> strHashMap = new HashMap<String, String>();
+		strHashMap.put("Zhou Jielun", "Kun Ling");
+		strHashMap.put("Deng Chao", "Sun Li");
+		strHashMap.put("Huang Xiaoming", "Yang Ying");
+		strHashMap.put("Chen Xiaochun", "Ying Caier");
+		strHashMap.put("Liang Chaowei", "Liu Jialing");
+		
+		// get
+		System.out.println("get:"+strHashMap.get("Zhou Jielun"));
+		System.out.println("get:"+strHashMap.get("Liu Dehua")); // return null
+		System.out.println("-------------");
+		
+		// keySet and values
+		Set<String> keySet = strHashMap.keySet();
+		for (String str : keySet) {
+			System.out.println(str);
+		}
+//		System.out.println("KeySet:"+strHashMap.keySet());		
+		System.out.println("--------------------");
+		
+
+		Collection<String> strCol = strHashMap.values();
+		for (String valueString : strCol) {
+			System.out.println(valueString);
+		}
+//		System.out.println("values:"+strHashMap.values());
+		System.out.println("--------------------------");
+	}
+
+}
+
+
+result:
+get:Kun Ling
+get:null
+-------------
+Liang Chaowei
+Huang Xiaoming
+Zhou Jielun
+Chen Xiaochun
+Deng Chao
+--------------------
+Liu Jialing
+Yang Ying
+Kun Ling
+Ying Caier
+Sun Li
+--------------------------
+***************************************************
+Map traverse:
+method 01:
+package cn.itcast_03;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class MapTraverseTest {
+
+	public static void main(String[] args) {
+		Map<String, String> strHashMap = new HashMap<String, String>();
+		strHashMap.put("Zhou Jielun", "Kun Ling");
+		strHashMap.put("Deng Chao", "Sun Li");
+		strHashMap.put("Huang Xiaoming", "Yang Ying");
+		strHashMap.put("Chen Xiaochun", "Ying Caier");
+		strHashMap.put("Liang Chaowei", "Liu Jialing");
+		
+		Set<String> keySet = strHashMap.keySet();
+		for (String keyString : keySet) {
+			String value = strHashMap.get(keyString);
+			System.out.println(keyString+"-"+value);
+		}
+	}
+
+}
+
+
+result:
+Liang Chaowei-Liu Jialing
+Huang Xiaoming-Yang Ying
+Zhou Jielun-Kun Ling
+Chen Xiaochun-Ying Caier
+Deng Chao-Sun Li
+
+*************************************
+Map traverse
+
+method 02:
+Set<Map.Entry<K,V>> entrySet()
+Entry<K,V> is an key value pair Object
+Interface Map.Entry<K,V>
+K getKey()   // Returns the key corresponding to this entry.
+V getValue() // Returns the value corresponding to this entry.
+
+package cn.itcast_03;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class MapTraversetTest02 {
+
+	public static void main(String[] args) {
+		Map<String, String> strHashMap = new HashMap<String, String>();
+		strHashMap.put("Zhou Jielun", "Kun Ling");
+		strHashMap.put("Deng Chao", "Sun Li");
+		strHashMap.put("Huang Xiaoming", "Yang Ying");
+		strHashMap.put("Chen Xiaochun", "Ying Caier");
+		strHashMap.put("Liang Chaowei", "Liu Jialing");
+		
+		Set<Entry<String, String>> keyValueSet = strHashMap.entrySet();
+		for (Entry<String, String> entry : keyValueSet) {
+			String keyString = entry.getKey();
+			String valueString = entry.getValue();
+			System.out.println(keyString + "--------"+ valueString);
+		}
+
+	}
+
+}
+
+result:
+Liang Chaowei--------Liu Jialing
+Huang Xiaoming--------Yang Ying
+Zhou Jielun--------Kun Ling
+Chen Xiaochun--------Ying Caier
+Deng Chao--------Sun Li
+****************************************************************
+Map: two columns
+		traverse: 
+			method 1: keySet() to get key Set, get() to get value by key
+			method 2: entrySet(), getKey() to get key, getValue() to get value
+Collection: one column
+
+HashMap: Implement Class of Interface Map based on Hash table
+		Hash Table to guarantee key unique
+
+************************************************
+HashMap to keep key unique
+package cn.itcast_02;
+
+import java.util.HashMap;
+import java.util.Set;
+
+public class HashMapTest01 {
+
+	public static void main(String[] args) {
+		HashMap<String, String> strHashMap = new HashMap<String, String>();
+		
+		strHashMap.put("it001", "mayun");
+		strHashMap.put("it002", "mahuateng");
+		strHashMap.put("it003", "zhangchaoyang");
+		strHashMap.put("it004", "qiubojun");//wps, jinshan
+		strHashMap.put("it001", "biergaici");
+		
+		Set<String> set = strHashMap.keySet();
+		
+		for (String keyString : set) {
+			String value = strHashMap.get(keyString);
+			System.out.println(keyString + "------------"+value);
+		}
+	
+	}
+}
+
+
+result:
+it004------------qiubojun
+it003------------zhangchaoyang
+it002------------mahuateng
+it001------------biergaici
+
+analysis:
+HashMap<String, String>
+hash table: based on String hashCode() and equals(), and String has rewritten them
+*******************************
+HashMap<String, String>
+
+package cn.itcast_02;
+
+import java.util.HashMap;
+import java.util.Set;
+
+public class HashMapTest01 {
+
+	public static void main(String[] args) {
+		HashMap<String, String> strHashMap = new HashMap<String, String>();
+		
+		strHashMap.put("it001", "mayun");
+		strHashMap.put("it002", "mahuateng");
+		strHashMap.put("it003", "zhangchaoyang");
+		strHashMap.put("it004", "qiubojun");//wps, jinshan
+		strHashMap.put("it001", "biergaici");
+		
+		Set<String> set = strHashMap.keySet();
+		
+		for (String keyString : set) {
+			String value = strHashMap.get(keyString);
+			System.out.println(keyString + "------------"+value);
+		}
+	
+	}
+}
+
+result:
+it004------------qiubojun
+it003------------zhangchaoyang
+it002------------mahuateng
+it001------------biergaici
+*********************************************
+
+HashMap<Integer, String>
+package cn.itcast_02;
+
+import java.util.HashMap;
+import java.util.Set;
+
+public class HashMapIntegerStringTest {
+
+	public static void main(String[] args) {
+		HashMap<Integer, String> intStr = new HashMap<Integer, String>();
+		intStr.put(27, "Lin Qingxia");
+		intStr.put(29, "Emma");
+		intStr.put(30, "Bob");
+		intStr.put(35, "Peter");
+		
+		Set<Integer> set = intStr.keySet();
+		
+		for (Integer keyString : set) {
+			String value = intStr.get(keyString);
+			System.out.println(keyString + "------------"+value);
+		}
+
+	}
+
+}
+
+
+result:
+35------------Peter
+27------------Lin Qingxia
+29------------Emma
+30------------Bob
+****************************************
+HashMap<String, Student>
+
+package cn.itcast_02;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class HashMapStringStudentTest {
+
+	public static void main(String[] args) {
+		HashMap<String, Student> strStuHashMap = new HashMap<String, Student>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Susan", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("Sophie", 60);
+		
+		strStuHashMap.put("s001", s1);
+		strStuHashMap.put("s002", s2);
+		strStuHashMap.put("s003", s3);
+		strStuHashMap.put("s004", s4);
+		strStuHashMap.put("s005", s5);
+		
+		Set<Entry<String, Student>> entrySet = strStuHashMap.entrySet();
+		
+		for (Entry<String, Student> entry : entrySet) {
+			String keyString = entry.getKey();
+			Student student = entry.getValue();
+			System.out.println(keyString+"----"+student);
+		}
+	}
+}
+
+result:
+s004----Student [nameString=Andy, age=50]
+s003----Student [nameString=Susan, age=40]
+s005----Student [nameString=Sophie, age=60]
+s002----Student [nameString=Peter, age=30]
+s001----Student [nameString=Emma, age=20]
+*********************************************
+HashMap<Student, String>
+
+package cn.itcast_02;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class HashMapStringStudentTest3 {
+
+	public static void main(String[] args) {
+		HashMap<Student, String> strStuHashMap = new HashMap<Student, String>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Susan", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("Sophie", 60);
+		
+		strStuHashMap.put(s1, "s001");
+		strStuHashMap.put(s2, "s002");
+		strStuHashMap.put(s3, "s003");
+		strStuHashMap.put(s4, "s004");
+		strStuHashMap.put(s5, "s005");
+		
+		Set<Entry<Student, String>> entrySet = strStuHashMap.entrySet();
+		
+		for (Entry<Student, String> entry : entrySet) {
+			Student student = entry.getKey();
+			String string = entry.getValue();
+			System.out.println(student+"----"+string);
+		}
+	}
+}
+
+result:
+Student [nameString=Sophie, age=60]----s005
+Student [nameString=Emma, age=20]----s001
+Student [nameString=Peter, age=30]----s002
+Student [nameString=Andy, age=50]----s004
+Student [nameString=Susan, age=40]----s003
+******************************************************
+
+
+LinkedHashMap
+public class LinkedHashMap<K,V>
+extends HashMap<K,V>
+implements Map<K,V>
+
+Hash table and linked list implementation of the Map interface,
+with predictable iteration order.
+
+hash table to keep key unique
+linked list to keep keyboard order(stored order and got order are consistent)
+***************************************************
+package cn.itcast_01;
+
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class LinkedHashMapTest {
+
+	public static void main(String[] args) {
+		LinkedHashMap<String, String> strStr = new LinkedHashMap<String, String>();
+		strStr.put("Deng Chao", "Sun Li");
+		strStr.put("Liang Chaowei", "Liu Jialing");
+		strStr.put("Zhou Jielun", "Kun Ling");
+		strStr.put("Chen Xiaochun", "Ying caier");
+		strStr.put("Zhou Jielun", "Cai Yilin");
+		
+		Set<Entry<String, String>> entrys = strStr.entrySet();
+		for (Entry<String, String> entry : entrys) {
+			String keyString = entry.getKey();
+			String valueString = entry.getValue();
+			System.out.println(keyString+"----"+valueString);
+		}
+	}
+}
+
+result:
+Deng Chao----Sun Li
+Liang Chaowei----Liu Jialing
+Zhou Jielun----Cai Yilin
+Chen Xiaochun----Ying caier
+***************************************************************
+
+
+TreeMap
+public class TreeMap<K,V>
+extends AbstractMap<K,V>
+implements NavigableMap<K,V>, Cloneable, Serializable
+
+A Red-Black tree based NavigableMap implementation.
+The map is sorted according to the natural ordering of its keys,
+or by a Comparator provided at map creation time, depending on which constructor is used.
+
+
+TreeMap
+key is Red-Black tree, which can make key unique and ordered
+TreeMap<String, String>
+TreeMap<Student, String>
+
+********************************
+TreeMap<String, String>
+package day18_TreeMapTest;
+
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+public class TreeMapStringStringTest {
+
+	public static void main(String[] args) {
+		TreeMap<String, String> strStrTreeMap = new TreeMap<String, String>();
+		strStrTreeMap.put("Deng Chao", "Sun Li");
+		strStrTreeMap.put("Liang Chaowei", "Liu Jialing");
+		strStrTreeMap.put("Zhou Jielun", "Kun Ling");
+		strStrTreeMap.put("Chen Xiaochun", "Ying caier");
+		strStrTreeMap.put("Zhou Jielun", "Cai Yilin");
+		
+		Set<String> keys = strStrTreeMap.keySet();
+		for (String key : keys) {
+			String valueString = strStrTreeMap.get(key);
+			System.out.println(key+"----"+valueString);
+		}
+	}
+}
+
+result:
+Chen Xiaochun----Ying caier
+Deng Chao----Sun Li
+Liang Chaowei----Liu Jialing
+Zhou Jielun----Cai Yilin
+
+*************************************
+TreeMap<Student, String>
+
+Student.java
+
+package day18_TreeMapTest;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Student other = (Student) obj;
+		if (age != other.age)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+	
+
+}
+
+package day18_TreeMapTest;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+public class TreeSetStudentStringTest {
+
+	public static void main(String[] args) {
+		TreeMap<Student, String> strStuTreeMap = new TreeMap<Student, String>(new Comparator<Student>() {
+
+			public int compare(Student s1, Student s2) {
+				int num = s1.getAge() - s2.getAge();
+				int num2 = num == 0 ? s1.getNameString().compareTo(s2.getNameString()) : num;
+				return num2;
+			}
+			
+		});
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 30);
+		Student s3 = new Student("Susan", 40);
+		Student s4 = new Student("Andy", 50);
+		Student s5 = new Student("Sophie", 60);
+		Student s6 = new Student("Anele", 60);
+		
+		strStuTreeMap.put(s1, "s001");
+		strStuTreeMap.put(s2, "s002");
+		strStuTreeMap.put(s3, "s003");
+		strStuTreeMap.put(s4, "s004");
+		strStuTreeMap.put(s5, "s005");
+		strStuTreeMap.put(s6, "s006");
+		
+		Set<Entry<Student, String>> entrySet = strStuTreeMap.entrySet();
+		
+		for (Entry<Student, String> entry : entrySet) {
+			Student student = entry.getKey();
+			String string = entry.getValue();
+			System.out.println(student+"----"+string);
+		}
+	}
+}
+
+
+
+result:
+Student [nameString=Emma, age=20]----s001
+Student [nameString=Peter, age=30]----s002
+Student [nameString=Susan, age=40]----s003
+Student [nameString=Andy, age=50]----s004
+Student [nameString=Anele, age=60]----s006
+Student [nameString=Sophie, age=60]----s005
+***********************************************
+Compute char count in one String
+********************************
+package day18_countChar;
+
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeMap;
+
+public class StringCharCountTest02 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter a String:");
+		String string = sc.nextLine();
+		char[] charArray = string.toCharArray();
+		TreeMap<Character, Integer> tm = new TreeMap<Character, Integer>();
+
+		for (Character character : charArray) {
+			Integer i = tm.get(character);// get last time count
+			if (i == null) {
+				tm.put(character, 1);
+			}
+			else {
+				i++;
+				tm.put(character, i);
+			}
+		}
+		
+		Set<Character> chSet = tm.keySet();
+		StringBuffer sBuffer = new StringBuffer();
+		for (Character character : chSet) {
+			Integer valueInteger = tm.get(character);
+			sBuffer.append(character).append("(").append(valueInteger).append(")").append(" ");
+//			System.out.println(character+"("+valueInteger+")");
+		}
+		
+		System.out.println(sBuffer.toString());
+	}
+}
+
+result:
+Please enter a String:
+aabbb1111444444444
+a(2) 1(4) b(3) 4(9) 
+*********************************************
+
+Collection nesting
+HashMap nesting
+TreeMap
+
+*****************************************
+package cn.itcast_01;
+
+import java.util.HashMap;
+import java.util.Set;
+
+public class HashMapNestingTest02 {
+
+	public static void main(String[] args) {
+
+		HashMap<String, HashMap<String, Integer>> hm = new HashMap<String, HashMap<String, Integer>>();
+		HashMap<String, Integer> jcMap = new HashMap<String, Integer>();
+		jcMap.put("Emma", 20);
+		jcMap.put("Peter", 23);
+		hm.put("jc", jcMap);
+		
+		HashMap<String, Integer> jyMap = new HashMap<String, Integer>();
+		jyMap.put("Bob", 19);
+		jyMap.put("John", 18);
+		hm.put("jy", jyMap);
+		
+		Set<String> set = hm.keySet();
+		for (String string : set) {
+			System.out.println(string);
+			HashMap<String, Integer> valueHashMap = hm.get(string);
+			Set<String> inKeys = valueHashMap.keySet();
+			for (String inKey : inKeys) {
+				Integer i = valueHashMap.get(inKey);
+				System.out.println("\t"+inKey+"---"+i);
+			}
+			
+		}
+		
+	}
+
+}
+
+result:
+jc
+	Peter---23
+	Emma---20
+jy
+	Bob---19
+	John---18
+**********************************************
