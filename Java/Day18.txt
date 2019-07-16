@@ -775,3 +775,907 @@ jy
 	Bob---19
 	John---18
 **********************************************
+day18_2
+HashMap nesting
+************************************
+HashMap<String, ArrayList<String>> 
+*********************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+public class HashMapArrayListTest {
+
+	public static void main(String[] args) {
+		HashMap<String, ArrayList<String>> hm = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> strArrayList1 = new ArrayList<String>();
+		strArrayList1.add("Lu Bu");
+		strArrayList1.add("Cao Cao");
+		strArrayList1.add("Zhu Geliang");
+		hm.put("SanGuoYanyi", strArrayList1);
+		
+		ArrayList<String> strArrayList2 = new ArrayList<String>();
+		strArrayList2.add("Jia Baoyu");
+		strArrayList2.add("Lin Daiyu");
+		hm.put("HongLouMeng", strArrayList2);
+		
+		ArrayList<String> strArrayList3 = new ArrayList<String>();
+		strArrayList3.add("Tang Seng");
+		strArrayList3.add("Sun Wukong");
+		strArrayList3.add("Zhu Bajie");
+		strArrayList3.add("Sha Wujing");
+		hm.put("XiYouJi", strArrayList3);
+		
+		Set<String> set = hm.keySet();
+		for (String string : set) {
+			System.out.println(string);
+			ArrayList<String> valueArrayList = hm.get(string);
+			
+			for (String elem : valueArrayList) {
+				System.out.println("\t"+elem);
+			}
+		}
+		
+
+	}
+
+}
+
+Result:
+HongLouMeng
+	Jia Baoyu
+	Lin Daiyu
+XiYouJi
+	Tang Seng
+	Sun Wukong
+	Zhu Bajie
+	Sha Wujing
+SanGuoYanyi
+	Lu Bu
+	Cao Cao
+	Zhu Geliang
+***************************************
+HashMap<String, ArrayList<HashMap<String, String>>>
+*****************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+public class ArrayListHashMapTest {
+
+	public static void main(String[] args) {
+		HashMap<String, ArrayList<HashMap<String, String>>> bigHm = new HashMap<String, ArrayList<HashMap<String, String>>>();
+		
+		ArrayList<HashMap<String, String>> arrayList1 = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> hm11 =  new HashMap<String, String>();
+		hm11.put("Deng Chao", "Sun Li");
+		hm11.put("Chen Xiaochun", "Ying Caier");
+		arrayList1.add(hm11);
+		HashMap<String, String> hm12 =  new HashMap<String, String>();
+		hm12.put("Liang Chaowei", "Liu Jialing");
+		hm12.put("Wen Zhang", "Ma Yili");
+		arrayList1.add(hm12);
+		bigHm.put("Celebrity", arrayList1);
+		
+		ArrayList<HashMap<String, String>> arrayList2 = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> hm21 =  new HashMap<String, String>();
+		hm21.put("Xi Jinping", "Peng Liyuan");
+		hm21.put("Henry Charles", "Diana Spencer");
+		arrayList2.add(hm21);
+		HashMap<String, String> hm22 =  new HashMap<String, String>();
+		hm22.put("Hu Jintao", "Liu Yongqing");
+		hm22.put("Jiang Zemin", "Wang Yeping");
+		arrayList2.add(hm22);
+		bigHm.put("Political", arrayList2);
+		
+		ArrayList<HashMap<String, String>> arrayList3 = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> hm31 =  new HashMap<String, String>();
+		hm31.put("Yang Zhenning", "Weng Fan");
+		hm31.put("Qian Xuesen", "Jiang Ying");
+		arrayList3.add(hm31);
+		HashMap<String, String> hm32 =  new HashMap<String, String>();
+		hm32.put("Ai DiSheng", "A");
+		hm32.put("Ai MoSheng", "B");
+		arrayList3.add(hm32);
+		bigHm.put("Scientist", arrayList3);
+		
+		Set<String> setCat = bigHm.keySet();
+		for (String str : setCat) {
+			System.out.println(str);
+			ArrayList<HashMap<String, String>> valueArrayList = bigHm.get(str);
+			for (HashMap<String, String> hm : valueArrayList) {
+				Set<String> set = hm.keySet();
+				for (String key : set) {
+					String valueString = hm.get(key);
+					System.out.println("\t"+key+"--"+valueString);
+				}
+			}
+		}
+
+
+
+	}
+
+}
+
+Result:
+Celebrity
+	Chen Xiaochun--Ying Caier
+	Deng Chao--Sun Li
+	Liang Chaowei--Liu Jialing
+	Wen Zhang--Ma Yili
+Scientist
+	Qian Xuesen--Jiang Ying
+	Yang Zhenning--Weng Fan
+	Ai MoSheng--B
+	Ai DiSheng--A
+Political
+	Xi Jinping--Peng Liyuan
+	Henry Charles--Diana Spencer
+	Hu Jintao--Liu Yongqing
+	Jiang Zemin--Wang Yeping
+**********************************
+ArrayList<HashMap<String, String>>
+**************************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+public class ArrayListHashMapTest02 {
+
+	public static void main(String[] args) {
+		ArrayList<HashMap<String, String>> arrayList = new ArrayList<HashMap<String, String>>();
+		
+		HashMap<String, String> hm1 = new HashMap<String, String>();
+		hm1.put("Zhou Yu", "Xiao Qiao");
+		hm1.put("Lv Bu", "Diao Chan");
+		arrayList.add(hm1);
+		
+		HashMap<String, String> hm2 = new HashMap<String, String>();
+		hm2.put("Guo Jing", "Huang Rong");
+		hm2.put("Yang Guo", "Xiao Longnv");
+		arrayList.add(hm2);
+		
+		HashMap<String, String> hm3 = new HashMap<String, String>();
+		hm3.put("Ling Huchong", "Ren Yingying");
+		hm3.put("Ling Pingzhi", "Yue Lingshan");
+		arrayList.add(hm3);
+		
+		for (HashMap<String, String> hm: arrayList) {
+			System.out.println("---------------------");
+			Set<String> set = hm.keySet();
+			for (String key : set) {
+				String valueString = hm.get(key);
+				System.out.println(key+"--"+valueString);
+			}
+		}
+
+	}
+
+}
+
+
+Result:
+---------------------
+Zhou Yu--Xiao Qiao
+Lv Bu--Diao Chan
+---------------------
+Yang Guo--Xiao Longnv
+Guo Jing--Huang Rong
+---------------------
+Ling Pingzhi--Yue Lingshan
+Ling Huchong--Ren Yingying
+************************************************
+1. The difference between HashMap and Hashtable
+Hashtable: thread-safe, low efficiency, null key and null value are not permitted
+HashMap: thread-unsafe, high efficiency, null key and null value are permitted
+
+public class Hashtable<K,V>
+extends Dictionary<K,V>
+implements Map<K,V>, Cloneable, Serializable
+This class implements a hash table, which maps keys to values.
+Any non-null object can be used as a key or as a value.
+To successfully store and retrieve objects from a hashtable, 
+the objects used as keys must implement the hashCode method and the equals method.
+
+HashMap
+public class HashMap<K,V>
+extends AbstractMap<K,V>
+implements Map<K,V>, Cloneable, Serializable
+Hash table based implementation of the Map interface. 
+This implementation provides all of the optional map operations,
+and permits null values and the null key. 
+(The HashMap class is roughly equivalent to Hashtable, 
+except that it is unsynchronized and permits nulls.) 
+This class makes no guarantees as to the order of the map; 
+in particular, it does not guarantee that the order will remain constant over time. 
+
+************************************************
+package cn.itcast_01;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Set;
+
+public class HashtableTest01 {
+
+	public static void main(String[] args) {
+		// Hashtable
+		Hashtable<String, String> strHashtable = new Hashtable<String, String>();
+		strHashtable.put("it001", "Steven Jobs"); // Apple
+		strHashtable.put("it002", "Mark Elliot Zuckerberg"); // Facebook
+		strHashtable.put("it003", "Bill Gates"); // Microsoft
+		strHashtable.put("it004", "Jeff Bezos"); // Amazon
+		strHashtable.put("it005", "Warren E. Buffet"); 
+		strHashtable.put("it006", "Larry Ellison"); // Oracle
+//		strHashtable.put(null, "Larry Ellison"); // java.lang.NullPointerException
+//		strHashtable.put("it007", null); // java.lang.NullPointerException
+//		strHashtable.put(null, null); // java.lang.NullPointerException
+		
+		
+		Set<String> keySet = strHashtable.keySet();
+		
+		for (String key : keySet) {
+			String value = strHashtable.get(key);
+			System.out.println(key+"---"+value);
+		}
+		
+		System.out.println("------------------------");
+		// HashMap
+		HashMap<String, String> hm = new HashMap<String, String>();
+		hm.put("md001", "Taylor Swift");
+		hm.put("md002", "BeyoncÈ Giselle Knowles");
+		hm.put("md003", "Celine Dion");
+		hm.put(null, "A");
+		hm.put("B", null);
+		hm.put(null, null);
+		
+		Set<String> keySetHm = hm.keySet();
+		
+		for (String key : keySetHm) {
+			String value = hm.get(key);
+			System.out.println(key+"---"+value);
+		}
+	}
+}
+
+
+result:
+it005---Warren E. Buffet
+it004---Jeff Bezos
+it003---Bill Gates
+it002---Mark Elliot Zuckerberg
+it001---Steven Jobs
+it006---Larry Ellison
+------------------------
+null---null
+md003---Celine Dion
+B---null
+md001---Taylor Swift
+md002---BeyoncÈ Giselle Knowles
+************************************************
+
+2. List, Set, Map interfaces are all inheritting subMap interface?
+List, Set are not inheritting Map interface, they are inheritting Collection interface
+Map interface is the top interface of Map
+
+3. Collections
+public class Collections
+extends Object
+
+This class consists exclusively of static methods that operate on or return collections. 
+It contains polymorphic algorithms that operate on collections, "wrappers", 
+which return a new collection backed by a specified collection, 
+and a few other odds and ends.
+The methods of this class all throw a NullPointerException if the collections 
+or class objects provided to them are null. 
+
+Collections: operate Collection, static methods
+
+public static <T> int binarySearch?(List<? extends T> list,
+                                   T key,
+                                   Comparator<? super T> c) // binary search, return -(maxIndex + 1) if not found
+public static <T> int binarySearch?(List<? extends Comparable<? super T>> list,
+                                   T key) // return -(maxIndex + 1) if not found
+public static <T extends Comparable<? super T>> void sort?(List<T> list) // sort, natural sort by default
+public static <T> void sort?(List<T> list,
+                            Comparator<? super T> c)
+public static <T extends Object & Comparable<? super T>> T max?(Collection<? extends T> coll) // max value
+public static <T> T max?(Collection<? extends T> coll,
+                        Comparator<? super T> comp)
+public static void reverse?(List<?> list) // reverse
+public static void shuffle?(List<?> list) // random swap
+
+						
+The difference between Collection and Collections
+Collection: single column Collection top interface, has sub interface List and Set
+Collections: tool Class to operate Collection, has the methods to sort and find Collection
+
+*********************************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CollectionsTest01 {
+
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<Integer>();
+		list.add(30);
+		list.add(50);
+		list.add(40);
+		list.add(10);
+		list.add(20);
+		
+		System.out.println("Original list:"+list);
+//		Collections.sort(list); // change original list
+//		System.out.println("Sorted list:"+list);
+//		
+//		int index = Collections.binarySearch(list, 20); // not change original list
+//		System.out.println("binarySearch index:"+index);
+//		
+//		int index2 = Collections.binarySearch(list, 100);
+//		System.out.println("binarySearch index:"+index2);
+//		
+//		System.out.println("max:"+Collections.max(list)); // not change original list
+		
+//		Collections.reverse(list);
+//		System.out.println("Reversed list:"+list); // change original list
+		
+		Collections.shuffle(list);
+		System.out.println("Shuffled list:"+list); // change original list
+
+	}
+
+}
+******************************************************
+
+Collections
+Collections can sort elements of the ArrayList storing base wrapper class,
+and can it store custom objects? 
+
+*****************************************
+Method 1: 
+Student implements Comparable,
+then define compareTo method in Student
+******************************************
+Student.java
+package cn.itcast_01;
+
+public class Student implements Comparable<Student> {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+//
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + age;
+//		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Student other = (Student) obj;
+//		if (age != other.age)
+//			return false;
+//		if (nameString == null) {
+//			if (other.nameString != null)
+//				return false;
+//		} else if (!nameString.equals(other.nameString))
+//			return false;
+//		return true;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Student [nameString=" + nameString + ", age=" + age + "]";
+//	}
+
+	public int compareTo(Student s) {
+		int num = this.getAge() - s.getAge();
+		int num2 = num == 0 ? this.getNameString().compareTo(s.getNameString()) : num;
+		return num2;
+		
+	}
+	
+	
+	
+
+}
+
+
+***************************************
+CollectionsStudentTest01.java
+
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CollectionsStudentTest01 {
+	public static void main(String[] args) {
+		List<Student> list = new ArrayList<Student>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 19);
+		Student s3 = new Student("Bob", 21);
+		Student s4 = new Student("Susan", 22);
+		Student s5 = new Student("John", 18);
+		Student s6 = new Student("Andy", 18);
+		list.add(s1);
+		list.add(s2);
+		list.add(s3);
+		list.add(s4);
+		list.add(s5);
+		list.add(s6);
+		
+		for (Student student : list) {
+			System.out.println(student.getNameString()+"-----"+student.getAge());
+		}
+		System.out.println("-------------------");
+		
+		Collections.sort(list);
+
+		for (Student student : list) {
+			System.out.println(student.getNameString()+"-----"+student.getAge());
+		}
+	}
+
+}
+
+result:
+Emma-----20
+Peter-----19
+Bob-----21
+Susan-----22
+John-----18
+Andy-----18
+-------------------
+Andy-----18
+John-----18
+Peter-----19
+Emma-----20
+Bob-----21
+Susan-----22
+*********************************************
+
+*****************************************
+Method 2: 
+Student doesn't implements Comparable
+add Comparator Object in Collections.sort method
+******************************************
+Student.java
+
+package cn.itcast_01;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+//
+//	@Override
+//	public int hashCode() {
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + age;
+//		result = prime * result + ((nameString == null) ? 0 : nameString.hashCode());
+//		return result;
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null)
+//			return false;
+//		if (getClass() != obj.getClass())
+//			return false;
+//		Student other = (Student) obj;
+//		if (age != other.age)
+//			return false;
+//		if (nameString == null) {
+//			if (other.nameString != null)
+//				return false;
+//		} else if (!nameString.equals(other.nameString))
+//			return false;
+//		return true;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "Student [nameString=" + nameString + ", age=" + age + "]";
+//	}
+
+
+	
+	
+	
+
+}
+
+******************************************************
+CollectionsStudentTest01.java
+
+
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class CollectionsStudentTest01 {
+	public static void main(String[] args) {
+		List<Student> list = new ArrayList<Student>();
+		Student s1 = new Student("Emma", 20);
+		Student s2 = new Student("Peter", 19);
+		Student s3 = new Student("Bob", 21);
+		Student s4 = new Student("Susan", 22);
+		Student s5 = new Student("John", 18);
+		Student s6 = new Student("Andy", 18);
+		list.add(s1);
+		list.add(s2);
+		list.add(s3);
+		list.add(s4);
+		list.add(s5);
+		list.add(s6);
+		
+		for (Student student : list) {
+			System.out.println(student.getNameString()+"-----"+student.getAge());
+		}
+		System.out.println("-------------------");
+		
+//		Collections.sort(list);
+		Collections.sort(list, new Comparator<Student>() {
+			public int compare(Student s1, Student s2) {
+				int num = s1.getAge() - s2.getAge();
+				int num2 = num == 0 ? s1.getNameString().compareTo(s2.getNameString()) : num;
+				return num2;
+			}
+		});
+
+		for (Student student : list) {
+			System.out.println(student.getNameString()+"-----"+student.getAge());
+		}
+	}
+
+}
+
+
+result:
+Emma-----20
+Peter-----19
+Bob-----21
+Susan-----22
+John-----18
+Andy-----18
+-------------------
+Andy-----18
+John-----18
+Peter-----19
+Emma-----20
+Bob-----21
+Susan-----22
+**************************************************
+Fight the Landlord:
+
+********************************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class PokerDemo {
+
+	public static void main(String[] args) {
+		ArrayList<String> strArrayList = new ArrayList<String>();
+//		String[] colorsStrings = {"Hearts", "Spades", "Diamonds", "Clubs"};
+		String[] colorsStrings = {"?", "?", "?", "?"};
+		String[] numbersStrings = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J","Q", "K"};
+		
+		// Put all pokers into ArrayList
+		for (String color : colorsStrings) {
+			for (String number : numbersStrings) {
+				strArrayList.add(color.concat(number));
+			}
+		}
+		
+		strArrayList.add("BK");
+		strArrayList.add("SK");
+		
+		// Shuffle the pokers
+		Collections.shuffle(strArrayList);
+		
+		// Send the pokers
+		ArrayList<String> lingQingXiaArrayList = new ArrayList<String>();
+		ArrayList<String> caoCaoArrayList = new ArrayList<String>();
+		ArrayList<String> zhuGeLiangArrayList = new ArrayList<String>();
+		ArrayList<String> diPaiArrayList = new ArrayList<String>();
+		
+		for (int i=0; i< strArrayList.size(); ++i) {
+			// Leave two hole cards
+			if (i >= strArrayList.size() - 3) {
+				diPaiArrayList.add(strArrayList.get(i));
+			}
+			if (i%3 == 0) {
+				lingQingXiaArrayList.add(strArrayList.get(i));
+			} else if (i%3 == 1) {
+				caoCaoArrayList.add(strArrayList.get(i));
+			} else if (i%3 == 2) {
+				zhuGeLiangArrayList.add(strArrayList.get(i));
+			}
+		}
+		
+		
+		// See poker
+		lookPoker("Lin Qingxia", lingQingXiaArrayList);
+		lookPoker("Cao Cao", caoCaoArrayList);
+		lookPoker("Zhu Geliang", zhuGeLiangArrayList);
+		lookPoker("DiPai", diPaiArrayList);
+	}
+	
+	public static void lookPoker(String name, ArrayList<String> array) {
+		System.out.println(name+"'s poker is:");
+		for (String s : array) {
+			System.out.print(s+" ");
+		}
+		System.out.println();
+	}
+
+}
+
+
+result:
+Lin Qingxia's poker is:
+?6 ?7 ?3 ?J ?2 ?7 ?8 ?8 ?9 ?4 ?7 ?10 ?J ?5 ?3 ?J ?9 ?10 
+Cao Cao's poker is:
+?7 ?A ?5 ?4 ?J ?A BK ?5 ?5 ?8 ?2 ?6 ?3 ?Q ?A ?8 ?6 ?6 
+Zhu Geliang's poker is:
+?4 ?K ?Q ?9 ?K ?3 ?10 ?A ?Q ?Q ?2 ?10 ?K SK ?4 ?2 ?9 ?K 
+DiPai's poker is:
+?10 ?6 ?K
+*********************************************************
+Sort pokers:
+
+HashMap
+key                  value
+0                     ?3
+1					  ?3
+2                     ?3
+3                     ?3
+4                     ?4
+5					  ?4
+6                     ?4
+7                     ?4
+8
+...                  ...
+52                    SK
+53                    BK
+
+ArrayList to be used in Shuffling cards
+0
+1
+2
+3
+...
+52
+53
+
+Send cards:
+TreeSet(key ordered automatically)
+0,1,...,53
+
+See cards
+get value by key
+
+
+********************************
+package cn.itcast_01;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.TreeSet;
+
+public class PokerDemo2 {
+
+	public static void main(String[] args) {
+		HashMap<Integer, String> hm = new HashMap<Integer, String>();
+		ArrayList<Integer> intArr = new ArrayList<Integer>();
+		
+		String[] colorsStrings = {"?", "?", "?", "?"};
+		String[] numbersStrings = {"3", "4", "5", "6", "7", "8", "9", "10", "J","Q", "K", "A", "2"};
+		
+		int index = 0;
+		
+		// Put pokers
+		for (String numberString : numbersStrings) {
+			for (String colorString : colorsStrings) {
+				hm.put(index, colorString.concat(numberString));
+				intArr.add(index);
+				index++;
+			}
+ 		}
+		
+		hm.put(index, "SK");
+		intArr.add(index);
+		index++;
+		hm.put(index, "BK");
+		intArr.add(index);
+		
+		// Shuffle pokers
+		Collections.shuffle(intArr);
+		
+		TreeSet<Integer> linQingXiaIntTreeSet = new TreeSet<Integer>();
+		TreeSet<Integer> fengQingYangIntTreeSet = new TreeSet<Integer>();
+		TreeSet<Integer> caoCaoIntTreeSet = new TreeSet<Integer>();
+		TreeSet<Integer> diPaiTreeSet = new TreeSet<Integer>();
+		
+		// Send pokers
+		for (int i=0; i<intArr.size(); ++i) {
+			if (i >= intArr.size() - 3) {
+				diPaiTreeSet.add(intArr.get(i));
+			} else if (i%3 == 0) {
+				linQingXiaIntTreeSet.add(intArr.get(i));
+			} else if (i%3 == 1) {
+				fengQingYangIntTreeSet.add(intArr.get(i));
+				
+			} else if (i%3 == 2) {
+				caoCaoIntTreeSet.add(intArr.get(i));
+			}
+		}
+		
+		// See pokers
+		lookPoker("Lin Qingxia", linQingXiaIntTreeSet, hm);
+		lookPoker("Feng Qingyang", fengQingYangIntTreeSet, hm);
+		lookPoker("Cao cao", caoCaoIntTreeSet, hm);
+		lookPoker("Di Pai", diPaiTreeSet, hm);
+		
+		
+	}
+	
+	public static void lookPoker(String name, TreeSet<Integer> intTreeSet, HashMap<Integer, String> hm) {
+		System.out.println(name+"'s pokers are:");
+		for (Integer keyInteger : intTreeSet) {
+			String valueString = hm.get(keyInteger);
+			System.out.print(valueString+" ");
+		}
+		System.out.println();
+	}
+}
+
+result:
+Lin Qingxia's pokers are:
+?3 ?4 ?4 ?5 ?5 ?5 ?9 ?10 ?10 ?J ?Q ?Q ?K ?K ?A ?A ?2 
+Feng Qingyang's pokers are:
+?3 ?6 ?6 ?7 ?7 ?8 ?9 ?10 ?Q ?Q ?K ?A ?A ?2 ?2 ?2 BK 
+Cao cao's pokers are:
+?3 ?4 ?4 ?5 ?6 ?6 ?7 ?8 ?8 ?9 ?9 ?10 ?J ?J ?J ?K SK 
+Di Pai's pokers are:
+?3 ?7 ?8 
+********************************************
+Summary:
+Map
+	Map definition: (key, value), key is unique
+	Map: (key, value)
+	Collection: single column
+		List: duplicated
+		Set: unique
+	Map functions:
+		add
+		delete
+		judge
+		get
+		length
+	Map traverse
+		key to find value: Map.keySet()+Map.get()
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("it001", "A");
+			hm.put("it002", "B");
+			hm.put("it003", "C");
+			Set<String> set = hm.keySet();
+			for (String key : set) {
+				String value = hm.get(key);
+				System.out.println(key+"---"+value);
+			}
+		(key,value) to find key and value: Map.entrySet(), Entry.getKey(), Entry.getValue()
+			HashMap<String, String> hm = new HashMap<String, String>();
+			hm.put("it001", "A");
+			hm.put("it002", "B");
+			hm.put("it003", "C");
+			HashMap<Entry<String, String>> entrys = hm.entrySet();
+			for (Entry<String, String> entry : entrys) {
+				String key = entry.getKey();
+				String value = entry.getValue();
+				System.out.println(key+"-------"+value);
+			}
+	HashMap:
+		HashMap<String, String>
+		HashMap<Integer, String>
+		HashMap<String, Student>
+		HashMap<Student, String>
+	Map:
+	TreeMap:
+		TreeMap<String, String>
+		TreeMap<String, Student>
+	compute each char count in one String
+	HashMap<HashMap>
+	HashMap<ArrayList>
+	ArrayList<HashMap>
+	multiple levels nesting
+Collections
+	Differences:
+		Collection: interface, List and Set
+		Collections: tool Class to operate Collection, static methods
+	sort
+	binarySearch
+	reverse
+	shuffle
+	ArrayList to store custom Classes
+	fight landLord
