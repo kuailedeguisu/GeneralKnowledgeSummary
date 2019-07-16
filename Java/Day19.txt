@@ -1,0 +1,507 @@
+
+
+
+Day19_2.txt
+Two methods to handle exception
+1-try…catch…finally
+2-throws
+
+try {
+	code with potential exception 
+} catch(ExceptionName variableName) {
+	handle exception
+} finally {
+	release resource
+}
+
+try {
+	code with potential exception 
+} catch(ExceptionName variableName) {
+	handle exception
+} 
+
+Note: as less as possible for code in try
+**********************************
+package cn.itcast_01;
+
+
+public class ExceptionTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 0;
+		
+		try {
+			System.out.println(a/b);
+		} catch(ArithmeticException e) {
+			System.out.println("One integer is not divided by zero");
+			
+		}
+		System.out.println("Over!");
+	}
+}
+
+Result:
+One integer is not divided by zero
+Over!
+******************************
+Try..multiple catch…Issue:
+If one Exception encounters, other code after the code who throws the Exception are not run, it will go into the related catch, 
+other catch can’t be run
+Once try has one issue, it will throw one Exception, then match the Exception with catch, once one catch matched, execute the statements in
+The matched catch, then end try, then run the coming statements after try
+If you know the specified Exception, you need write the specified ones and put it as front as possible; if you don’t know which Exception it is,
+We should add Exception catch statement, which can catch any sub Exception; if you put Exception in the first place, any other sub Exception can’t be added, if you do so, compilation error will generate
+The same level Exception has no order, but father Exception should be after sub Exception
+***************************
+One try
+More catch
+
+package cn.itcast_01;
+
+
+public class ExceptionTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 0;
+		int[] arr = { 1, 2, 3 };
+
+		try {
+			System.out.println(a / b);
+			System.out.println(arr[3]);
+		} catch (ArithmeticException e) {
+			System.out.println("One integer is not divided by zero");
+		} catch (ArrayIndexOutOfBoundsException ee) {
+			System.out.println("Array index is out of bounds");
+		}
+
+//
+//		try {
+//			System.out.println(arr[3]);
+//			
+//		} catch (ArrayIndexOutOfBoundsException ee) {
+//			System.out.println("Array index is out of bounds");
+//		}
+
+		System.out.println("Over!");
+	}
+}
+
+Result:
+One integer is not divided by zero
+Over!
+***************************************************
+More than one try…catch…, too repeated
+
+package cn.itcast_01;
+
+
+public class ExceptionTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 0;
+		int[] arr = { 1, 2, 3 };
+
+		try {
+			System.out.println(a / b);
+		} catch (ArithmeticException e) {
+			System.out.println("One integer is not divided by zero");
+		}
+
+
+		try {
+			System.out.println(arr[3]);
+			
+		} catch (ArrayIndexOutOfBoundsException ee) {
+			System.out.println("Array index is out of bounds");
+		}
+
+		System.out.println("Over!");
+	}
+}
+
+
+Result:
+One integer is not divided by zero
+Array index is out of bounds
+Over!
+*****************************
+Unknown Exception will exist
+Exception can match any sub Exception
+package cn.itcast_01;
+
+import java.util.Hashtable;
+
+public class ExceptionTest01 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int[] arr = {1, 2, 3};
+
+		try {
+			System.out.println(a / b);
+			System.out.println(arr[2]);
+			Hashtable<String, String> hashtable = new Hashtable<String, String>();
+			hashtable.put(null, null);
+		} catch (ArithmeticException e) {
+			System.out.println("One integer is not divided by zero");
+		} catch (ArrayIndexOutOfBoundsException ee) {
+			System.out.println("Array index is out of bounds");
+		} catch (Exception e) {
+			System.out.println("Here an Exception");
+		}
+
+		System.out.println("Over!");
+	}
+}
+
+Result:
+0
+3
+Here an Exception
+Over!
+*******************
+JDK 7 new feature:
+Try {
+} catch(Exception1 | Exception2 | … ee) {
+}
+
+But 
+Try {
+} catch(Exception1 | Exception2 | …|Exception ee) {
+}
+Not permitted
+
+All Exception should be the same level
+******************************************
+package cn.itcast_01;
+
+import java.util.Hashtable;
+
+public class ExceptionTest3 {
+
+	public static void main(String[] args) {
+		int a = 10;
+		int b = 20;
+		int[] arr = {1, 2, 3};
+
+		try {
+			System.out.println(a / b);
+			System.out.println(arr[3]);
+			Hashtable<String, String> hashtable = new Hashtable<String, String>();
+			hashtable.put(null, null);
+		} catch (ArithmeticException | ArrayIndexOutOfBoundsException e) {
+			System.out.println("sub Exception");
+		} catch (Exception e) {
+			System.out.println("Here an Exception");
+		}
+
+		System.out.println("Over!");
+	}
+}
+********************************************
+The difference between compilation Exception and runtimeException
+**************
+Match, don’t throw ParseException
+
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+Result:
+Tue Jul 16 00:00:00 CST 2019
+****************************************************
+String has no HH:mm:ss
+
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+Result:
+java.text.ParseException
+*************************************
+Only match yyyy-MM-dd, don’t care about extra String
+
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16--";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+Result:
+Tue Jul 16 00:00:00 CST 2019
+******************************************
+java.lang.Object
+java.lang.Throwable
+java.lang.Exception
+java.text.ParseException
+*******************************
+Throws Exception
+It should be after method()
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) throws ParseException {
+		String string = "2019-07-16--";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = dFormat.parse(string);
+		System.out.println(date);
+//		try {
+//			Date date = dFormat.parse(string);
+//			System.out.println(date);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+	}
+}
+
+Result:
+Exception in thread "main" java.text.ParseException: Unparseable date: "2019-07-16--"
+	at java.base/java.text.DateFormat.parse(DateFormat.java:395)
+	at cn.itcast_01.CompilationExceptionTest01.main(CompilationExceptionTest01.java:13)
+***************************************************************************************************************
+Throwable methods:
+public String getMessage()
+public void printStackTrace()
+public void printStackTrace (PrintStream s) // Write it into one file
+public String toString()
+	Returns a short description of this throwable. The result is the concatenation of:
+        * the name of the class of this object
+        * ": " (a colon and a space)
+        * the result of invoking this object's getLocalizedMessage() method
+
+*****************************
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+//			e.printStackTrace();
+		}
+	}
+}
+
+Result:
+Unparseable date: "2019-07-16"
+*********************************************************
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+			System.out.println(e.toString());
+		}
+	}
+}
+
+Result:
+java.text.ParseException: Unparseable date: "2019-07-16"
+***************************************
+package cn.itcast_01;
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+//			System.out.println(e.getMessage());
+			e.printStackTrace();
+//			System.out.println(e.toString());
+		}
+	}
+}
+
+Result in red:
+java.text.ParseException: Unparseable date: "2019-07-16"
+	at java.base/java.text.DateFormat.parse(DateFormat.java:395)
+	at cn.itcast_01.CompilationExceptionTest01.main(CompilationExceptionTest01.java:15)
+**********************************************************************
+package cn.itcast_01;
+
+,m
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CompilationExceptionTest01 {
+
+	public static void main(String[] args) {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			Date date = dFormat.parse(string);
+			System.out.println(date);
+		} catch (ParseException e) {
+//			System.out.println(e.getMessage());
+//			e.printStackTrace();
+//			System.out.println(e.toString());
+			e.printStackTrace(System.out); // write it into console
+		}
+	}
+}
+
+Result not in red:
+java.text.ParseException: Unparseable date: "2019-07-16"
+	at java.base/java.text.DateFormat.parse(DateFormat.java:395)
+	at cn.itcast_01.CompilationExceptionTest01.main(CompilationExceptionTest01.java:15)
+*****************************************************************
+Throws ExceptionClassName
+
+Put after method()
+
+When we have no ability to handle Exception, we only need throw it and handle it in caller method
+
+Note: 
+	1-Try not to throw Exception on main method, we can throw Exception on called method, then handle it on main method
+	2-But it is only for compilation exception, if it is runtime exception, we don’t need throw on called method and handle it on main method
+***************************************************************
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+
+public class CompilationExceptionThrowsTest {
+
+	public static void main(String[] args) {
+		System.out.println("Begin method");
+		try {
+			method(); // we need handle compilation exception, otherwise, compilation failed
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		System.out.println("End method");
+		
+		// we don't need handle runtime Exception if we want to make compilation pass
+		System.out.println("Begin method2");
+		method2();
+		System.out.println("End method2");
+	}
+
+	// Runtime Exception
+	public static void method2() throws ArithmeticException {
+		int a = 10;
+		int b = 0;
+		System.out.println(a/b);
+	}
+
+	// Compilation Exception
+	public static void method() throws ParseException {
+		String string = "2019-07-16";
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dFormat.parse(string);
+	}
+}
+
+
+Result:
+Begin method
+java.text.ParseException: Unparseable date: "2019-07-16"
+	at java.base/java.text.DateFormat.parse(DateFormat.java:395)
+	at cn.itcast_01.CompilationExceptionThrowsTest.method(CompilationExceptionThrowsTest.java:35)
+	at cn.itcast_01.CompilationExceptionThrowsTest.main(CompilationExceptionThrowsTest.java:12)
+End method
+Begin method2
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at cn.itcast_01.CompilationExceptionThrowsTest.method2(CompilationExceptionThrowsTest.java:28)
+	at cn.itcast_01.CompilationExceptionThrowsTest.main(CompilationExceptionThrowsTest.java:20)
+******************************************
+Note:
+	Compilation Exception: caller must handle it
+	Runtime Exception: caller can not handle it
