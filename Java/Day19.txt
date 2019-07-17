@@ -809,3 +809,771 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 Note:
 	Compilation Exception: caller must handle it
 	Runtime Exception: caller can not handle it
+We can throw multiple Exception by the following method
+... method(...) throws Exception1, Exception2,...
+
+**************************************************************
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class ExceptionDemo02 {
+
+	public static void main(String[] args) {
+		try {
+			method();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			method2();
+		} catch (ArithmeticException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void method2() throws ArithmeticException, Exception {
+		int a = 10;
+		int b = 0;
+		
+		System.out.println(a / b);
+	}
+
+	public static void method() throws ParseException {
+		String string = "2019-07-17";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = sdf.parse(string);
+	}
+}
+
+
+result:
+java.lang.ArithmeticException: / by zero
+	at cn.itcast_01.ExceptionDemo02.method2(ExceptionDemo02.java:30)
+	at cn.itcast_01.ExceptionDemo02.main(ExceptionDemo02.java:17)
+***********************************************************************
+The differences between throw and throws
+	throw: if exception exists, we can throw Exception Object inside method
+		A: Used inside the method body, after it, Exception Object
+		B: Only throw one Exception Object
+		C:throw Exception, then handle it by statements inside the method
+		D: throw show throw Exception, execute throw, it must throw one Exception
+	throws: if exception exists, we can throw Exception after method()
+		A: used after method definition, after it, Exception Class name
+		B: multiple Exception Class names can be used, and use "," to seperate them
+		C: throws only show the possibility to generate Exception, not sure if it will happen
+	
+	
+************************************************************
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class ExceptionThrowTest01 {
+
+	public static void main(String[] args) {
+//		method();
+		try {
+			method2();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+//	public static void method() {
+//		int a = 10;
+//		int b = 0;
+//		
+//		if (b == 0) {
+//			throw new ArithmeticException();
+//		} else {
+//			System.out.println(a / b);
+//		}
+//	}
+	
+	public static void method2() throws Exception {
+		int a = 10;
+		int b = 0;
+		
+		if (b == 0) {
+			throw new Exception();
+		} else {
+			System.out.println(a / b);
+		}
+	}
+
+}
+
+result:
+java.lang.Exception
+	at cn.itcast_01.ExceptionThrowTest01.method2(ExceptionThrowTest01.java:35)
+	at cn.itcast_01.ExceptionThrowTest01.main(ExceptionThrowTest01.java:12)
+**************************************************************
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class ExceptionThrowTest01 {
+
+	public static void main(String[] args) {
+		method();
+//		try {
+//			method2();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+	}
+
+	public static void method() {
+		int a = 10;
+		int b = 0;
+		
+		if (b == 0) {
+			throw new ArithmeticException();
+		} else {
+			System.out.println(a / b);
+		}
+	}
+	
+//	public static void method2() throws Exception {
+//		int a = 10;
+//		int b = 0;
+//		
+//		if (b == 0) {
+//			throw new Exception();
+//		} else {
+//			System.out.println(a / b);
+//		}
+//	}
+
+}
+
+result:
+Exception in thread "main" java.lang.ArithmeticException
+	at cn.itcast_01.ExceptionThrowTest01.method(ExceptionThrowTest01.java:24)
+	at cn.itcast_01.ExceptionThrowTest01.main(ExceptionThrowTest01.java:10)
+*********************************************************************************
+
+How to handle Exception:
+principle: 
+	A: If we can handle it inside method, use try; 
+	B: If not, handle it by caller, use throws
+Differences:
+	A: The coming programs need run, use try
+	B: The coming programs don't need run, use throws
+*******************************************************************
+
+finally
+	A: try...catch...finally...
+	B: All programs controlled by finally must be executed
+	C: Note: 
+		if before finally, jvm exit, finally won't be executed
+		System.exit(0);
+	D: purpose: release resources
+*****************************************************
+package cn.itcast_01;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class ExceptionFinallyTest {
+
+	public static void main(String[] args) {
+		String string = "2019-07-17";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date d = null;
+		try {
+			d = sdf.parse(string);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println(d);
+		}
+
+	}
+
+}
+
+result:
+java.text.ParseException: Unparseable date: "2019-07-17"
+	at java.base/java.text.DateFormat.parse(DateFormat.java:395)
+	at cn.itcast_01.ExceptionFinallyTest.main(ExceptionFinallyTest.java:14)
+null
+*********************************************************
+final, finally, finalize
+	final: last, Class, member variable, member method
+		Class: Class can't be inheritted
+		member variable: variable is const
+		member method:   method can't be overrided
+	finally:
+		Exception handling part, used in releasing resources,
+		generally, it will be executed, but before it, program exit, is one exception
+	finalize: Object method, used to garbage collecting
+		Called by the garbage collector on an object when garbage collection determines 
+		that there are no more references to the object.
+		A subclass overrides the finalize method to dispose of system resources 
+		or to perform other cleanup. 
+********************************
+before finally, return in catch
+finally will be executed between the code before return in catch and return in catch
+**********************************************
+package cn.itcast_01;
+
+public class FinallyTest01 {
+
+	public static void main(String[] args) {
+
+		System.out.println(method());
+	}
+	
+	public static int method() {
+		int a = 10;
+		
+		try {
+			System.out.println(a / 0);
+			a = 20;
+		} catch (ArithmeticException e) {
+			a = 30; // step 1 : a = 30
+			return a; // step 3: return a=>return 30;
+		} finally {
+			a = 40; // step 2: a = 40
+		}
+		
+		return a; // not executed
+	}
+
+}
+
+result:
+30
+********************************
+package cn.itcast_01;
+
+public class FinallyTest01 {
+
+	public static void main(String[] args) {
+
+		System.out.println(method());
+	}
+	
+	public static int method() {
+		int a = 10;
+		
+		try {
+			System.out.println(a / 0);
+			a = 20;
+		} catch (ArithmeticException e) {
+			a = 30; // step 1 : a = 30
+			return a; // don't be run
+		} finally {
+			a = 40; // step 2: a = 40
+			return a; // step 3: return 40
+		}
+	}
+
+}
+
+result:
+40
+************************************************************
+
+try...catch...finally format
+	A: try...catch...finally
+	B: try...catch
+	C: try...catch...catch......
+	D: try...catch...catch......finally
+	E: try...finally
+		used to release resources
+	
+custom Exception
+Inheritted from 
+	Exception
+	RuntimeException
+
+******************************************
+MyException.java
+
+package cn.itcast_01;
+
+public class MyException extends Exception {
+
+	public MyException() {
+		super();
+	}
+
+	public MyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public MyException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public MyException(String message) {
+		super(message);
+	}
+
+	public MyException(Throwable cause) {
+		super(cause);
+	}
+
+}
+
+
+Teacher.java
+
+package cn.itcast_01;
+
+public class Teacher {
+	public void check(int score) throws MyException {
+		if (score >100 | score < 0) {
+			throw new MyException("ScoreOutOfRange");
+		} else {
+			System.out.println("Your score is in the range");
+		}
+	}
+
+}
+
+
+TeacherTest.java
+
+package cn.itcast_01;
+
+import java.util.Scanner;
+
+public class TeacherTest {
+
+	public static void main(String[] args) {
+		Teacher teacher = new Teacher();
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter your score[0-100]:");
+		int score = sc.nextInt();
+		try {
+			teacher.check(score);
+		} catch (MyException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+**************************
+Exception Notes:
+	A: When a child class overrides a parent class's method, 
+	   the child class's method must throw an exception like 
+	   the parent class or a child class of a parent class exception. 
+	   (Father is bad, subclass can't be worse) 
+	B:  If a parent class throws more than one exception, 
+		a child class can only throw the same exception or his child class 
+		when it overrides a parent class method, and the child class cannot 
+		throw an exception that the parent class does not have
+	C:  If the overridden method is not thrown by an exception, then the subclass 
+	    can never throw an exception, and if an exception occurs within the subclass method,
+		then the subclass can only try, not throws 
+	
+	
+********************************
+Fu.java
+
+package cn.itcast_02;
+
+public abstract class Fu {
+	public abstract void show() throws Exception;
+
+}
+
+Zi.java
+package cn.itcast_02;
+
+public class Zi extends Fu {
+	public void show() throws ArithmeticException {
+		
+	}
+
+}
+
+**********************************************************
+Fu.java
+
+package cn.itcast_02;
+
+public abstract class Fu {
+	public abstract void show() throws Exception;
+	public abstract void method();
+}
+
+Zi.java
+package cn.itcast_02;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Zi extends Fu {
+	public void show() throws ArithmeticException {
+		
+	}
+	
+	public void method() {
+		String string = "2019-07-17";
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		Date d = null;
+		try {
+			d = sdf.parse(string);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
+***********************************************
+
+
+File
+public class File
+extends Object
+implements Serializable, Comparable<File>
+
+An abstract representation of file and directory pathnames. 
+
+
+public File?(String pathname) // package one pathname into one File Object 
+public File?(String parent,
+            String child)
+public File?(File parent,
+            String child)
+
+******************************************************
+package cn.itcast_01;
+
+import java.io.File;
+
+public class FileTest01 {
+
+	public static void main(String[] args) {
+		File f1 = new File("c:\\develop\\a.txt");
+		System.out.println("f: "+f1);
+		
+		File f2 = new File("c:\\develop", "a.txt");
+		System.out.println("f2: "+f2);
+		
+		File f3 = new File(new File("c:\\develop"), "a.txt");
+		System.out.println("f3: "+f3);
+
+	}
+
+}
+
+result:
+f: c:\develop\a.txt
+f2: c:\develop\a.txt
+f3: c:\develop\a.txt
+********************************************
+
+File Create File functions:
+public boolean createNewFile()      // Create File based on existing directory
+                      throws IOException // dir not existing, throws IOException
+					        // if file exists, don't create it
+public boolean mkdir()      // Create single layer directory
+                            // if directory exists, don't create it
+public boolean mkdirs()     // Create multiple layers directory
+                            // If father directory doesn't exist, create it automatically
+							// mkdirs to create file only create dir named fileName(don't use it to create file)
+
+
+********************************************
+
+package cn.itcast_02;
+
+import java.io.File;
+import java.io.IOException;
+
+public class CreateFileTest {
+
+	public static void main(String[] args) {
+		File f1 = new File("c:\\demo");
+		System.out.println(f1.mkdir()); // mkdir to create single layer dir
+			
+		File f2 = new File("c:\\demo\\test\\a.txt");
+		try {
+			System.out.println(f2.createNewFile());// create file based on dir existing
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File f3 = new File("c:\\demo\\test");
+		System.out.println("mkdir:"+f3.mkdir()); // mkdir to create single layer dir
+		
+		File f4 = new File("c:\\demo\\test\test1\test2");
+		System.out.println("mkdir:"+f4.mkdir()); // mkdir to create single layer dir
+		
+		File f5 = new File("c:\\demo\\test\\test2\\test3\\test4");
+		System.out.println("mkdirs:"+f5.mkdirs());// mkdirs to create multiple layers dir
+
+	}
+}
+
+result:
+true
+java.io.IOException: The system cannot find the path specified
+	at java.base/java.io.WinNTFileSystem.createFileExclusively(Native Method)
+	at java.base/java.io.File.createNewFile(File.java:1024)
+	at cn.itcast_02.CreateFileTest.main(CreateFileTest.java:14)
+mkdir:true
+mkdir:false
+mkdirs:true
+
+
+**************************************
+File Delete functions
+public boolean delete()
+
+Note: 
+	A: If you create file or file directory, forget to write directory, 
+		the directory will be in java project
+	B: Java delete don't run into recycling bin
+	C: delete can delete one file or one directory
+******************************
+package cn.itcast_03;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileTest {
+
+	public static void main(String[] args) {
+		File f1 = new File("a.txt");
+		try {
+			System.out.println(f1.createNewFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File f2 = new File("aaa\\bbb");
+		System.out.println(f2.mkdirs());
+		
+		File f3 = new File("a.txt");
+		System.out.println("delete:"+f3.delete());
+		
+		File f4 = new File("aaa\\bbb");
+		System.out.println("delete directory:"+f4.delete());
+		File f5 = new File("aaa");
+		System.out.println("delete directory:"+f5.delete());
+	}
+}
+
+result:
+true
+true
+delete:true
+delete directory:true
+delete directory:true
+***************************************
+ Path starts with a disk character:           absolute path 
+ Path does not start with a disk character:   relative path 
+ 
+File rename functions:
+public boolean renameTo?(File dest) // Renames the file denoted by this abstract pathname. 
+									// dir is the same, rename the file
+									// dir is not the same, cut the file
+
+**********************************************
+package cn.itcast_04;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileRenameTest {
+
+	public static void main(String[] args) {
+		File f1 = new File("lingqingxia.jpg");
+		File newFile1 = new File("dongfangbubai.jpg");
+		try {
+			System.out.println(f1.createNewFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("rename f1:"+f1.renameTo(newFile1));
+		
+		
+		File f2 = new File("lingqingxia.jpg");
+		File f3 = new File("c:\\demo");
+		System.out.println("mkdir f3:"+f3.mkdir());
+		File newFile2 = new File("c:\\\\demo\\dongfangbubai.jpg");
+		try {
+			System.out.println(f2.createNewFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(f2.renameTo(newFile2));
+
+	}
+
+}
+
+result:
+true
+rename f1:true
+mkdir f3:true
+true
+true
+
+project dir: dongfangbubai.jpg
+c:\\demo: dongfangbubai.jpg
+****************************************************************
+
+File judge functions:
+public boolean isDirectory()
+public boolean isFile()
+public boolean isHidden()
+public boolean canRead()
+public boolean canWrite()
+public boolean exists()
+
+**************************************
+package cn.itcast_05;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileJudgeTest {
+
+	public static void main(String[] args) throws IOException {
+		File f1 = new File("a.txt");
+		System.out.println(f1.createNewFile());
+		System.out.println("isDirectory:"+f1.isDirectory());
+		System.out.println("isFile:"+f1.isFile());
+		System.out.println("exists:"+f1.exists());
+		System.out.println("canRead:"+f1.canRead());
+		System.out.println("canWrite:"+f1.canWrite());
+		System.out.println("isHidden:"+f1.isHidden());
+
+	}
+}
+
+result:
+true
+isDirectory:false
+isFile:true
+exists:true
+canRead:true
+canWrite:true
+isHidden:false
+*****************************
+Note: 
+	We can click read-only or hide to change canWrite or isHidden return value
+
+***********************************************************
+File Get functions:
+public String getAbsolutePath() // get absolute path
+public String getPath()         // get relative path
+public long length()            // get length, bytes
+public long lastModified()      // get last modified time, Milliseconds 
+public String getName()
+
+*********************************************************
+package cn.itcast_06;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class FileGetTest {
+
+	public static void main(String[] args) {
+		File f1 = new File("a.txt");
+		System.out.println("getAbsolutePath: "+f1.getAbsolutePath());
+		System.out.println("getPath: "+f1.getPath());
+		System.out.println("length: "+f1.length());
+		
+		System.out.println("lastModified: "+f1.lastModified());
+		long ms = f1.lastModified();
+		Date d = new Date(ms);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println("lastModified time:"+sdf.format(d));
+
+		System.out.println("getName: "+f1.getName());
+
+	}
+
+}
+
+result:
+getAbsolutePath: C:\Users\ehlucui\eclipse_new_workspace\day19_File\a.txt
+getPath: a.txt
+length: 47
+lastModified: 1563353142809
+lastModified time:2019-07-17 16:45:42
+Wed Jul 17 16:45:42 CST 2019
+getName: a.txt
+***************************************************
+File advanced get functions:
+public String[] list()    //  Get an array of names for all files or folders in the specified directory 
+public File[] listFiles() //  Get an array of Files for all files or folders in the specified directory 
+
+********************************************
+package cn.itcast_06;
+
+import java.io.File;
+
+public class FileAdvancedGetTest {
+
+	public static void main(String[] args) {
+		File f1 = new File("c:\\develop");
+		String[] strArr = f1.list();
+		System.out.println("Names array:");
+		for (String string : strArr) {
+			System.out.println(string);
+		}
+		System.out.println("-------------------");
+		System.out.println("Files array:");
+		File[] fileArr = f1.listFiles();
+		for (File f : fileArr) {
+			System.out.println(f);
+		}
+	}
+}
+
+result:
+Names array:
+code
+eclipse
+FromTeacher
+Java
+java_??
+java_??.zip
+JDK_API_1_6_zh_CN.CHM
+preferences.epf
+resource.zip
+software
+-------------------
+Files array:
+c:\develop\code
+c:\develop\eclipse
+c:\develop\FromTeacher
+c:\develop\Java
+c:\develop\java_??
+c:\develop\java_??.zip
+c:\develop\JDK_API_1_6_zh_CN.CHM
+c:\develop\preferences.epf
+c:\develop\resource.zip
+c:\develop\software
+*********************************************
+
