@@ -1,7 +1,311 @@
+1. Collection
+Collection(single column)
+	List(ordered and duplicated)
+		ArrayList:based on Array, fast to find, slow to add and remove, thread-unsafe, high efficiency
+		Vector:based on Array, fast to find, slow to add and remove, thread-safe, low efficiency
+		LinkedList: based on linked table, slow to find, fast to add and remove, thread-unsafe, high efficiency
+	Set(unique and unordered)
+		HashSet
+			based on hash table
+			hash table is based on hashCode() and equals()
+			steps:
+				A: Whether hashCode() are the same
+					A1: yes
+						A11: run equals(),return
+							A111: true? not add the element
+							A112: false? add the element
+					A2: no
+						A21: add the element
+			At last: use hashCode() and equals() generated automatically
+			LinkedHashSet
+				based on hash table and linked table
+				hash table to keep element unique
+				linked table to keep element ordered
+		TreeSet
+			based on red-black tree, which is a auto-balanced binary tree
+			how to keep element unique?
+				whether comparator returns 0 or not
+			how to keep element ordered?
+				two methods:
+					natural sort(element)
+						let the Class owning element implement Comparable interface
+					comparator sort(Collection)
+						let Collection receive a Comparator implementation Class Object
+			
+			
+Map(two columns, key and value)
+	Map is only valid for key, not related to value
+	store pairs of key and value, key is unique, value is duplicated
+	HashMap
+			based on hash table, thread-unsafe, high efficiency
+			hash table is based on hashCode() and equals()
+			steps:
+				A: Whether hashCode() are the same
+					A1: yes
+						A11: run equals(),return
+							A111: true? not add the element
+							A112: false? add the element
+					A2: no
+						A21: add the element
+			At last: use hashCode() and equals() generated automatically
+			LinkedHashSet
+				based on hash table and linked table
+				hash table to keep element unique
+				linked table to keep element ordered
+		LinkedHashMap
+	Hashtable
+			based on hash table, thread-safe, low efficiency
+			hash table is based on hashCode() and equals()
+			steps:
+				A: Whether hashCode() are the same
+					A1: yes
+						A11: run equals(),return
+							A111: true? not add the element
+							A112: false? add the element
+					A2: no
+						A21: add the element
+			At last: use hashCode() and equals() generated automatically
+		
+	TreeMap
+			based on red-black tree, which is a auto-balanced binary tree
+			how to keep element unique?
+				whether comparator returns 0 or not
+			how to keep element ordered?
+				two methods:
+					natural sort(element)
+						let the Class owning element implement Comparable interface
+					comparator sort(Collection)
+						let Collection receive a Comparator implementation Class Object
+
+2. Which Collection should we use?
+	Requirements
+	Whether it is pair Object of key and value?
+		Yes?
+			Map
+				Key need by ordered?
+					Yes? TreeMap
+					No? HashMap(*)
+			    Don't know about it, use HashMap
+		No?
+			Collection
+				element is unique?
+					yes?
+						Set
+							element need be ordered?
+								yes? TreeSet
+								no?  HashSet(*)
+					no?
+						List
+							safe?
+								yes?
+									Vector(we don't use it)
+								no?
+									ArrayList or LinkedList?
+										more find? ArrayList(*)
+										more add or delete? LinkedList
+				Don't know about it, use ArrayList	
+				
+3. common traverse methods for Collection and Map
+Collection:
+	add()
+	remove()
+	contains()
+	iterator()
+	size()
+	traverse:
+		enhance for
+		iterator
+	|-List
+		get()
+		traverse:
+			common for
+			enhance for
+			iterator
+	|-Set
+		
+Map:
+	put()
+	remove()
+	containsKey()
+	keySet()
+	get()
+	value()
+	entrySet()
+	size()
+	
+	traverse:
+		key to find value: keySet()+get()
+		pair of key and value to get key and value: entrySet()+Entry.getKey()+Entry.getValue()
+
+4. ArrayList, LinkedList. HashSet, HashMap(master)
+	store String and custom Object and traverse
+
+5. Collection nesting traverse
+
+///////////////////////////////////////////////
+IO stream
+*******************************************
+register and login system
+*******************************************
+client:
+	login system
+		username
+		password
+		login
+		reset
+	register system
+		username
+		password
+		register
+		cancel
+		
+server:
+	data storage:
+		table
+		Class
+	function implementation
+
+Steps:
+	register:
+		enter username and pasword, submit it to server, server store the data
+		if data is right, return true, else, return false
+	login:
+		enter username and password, submit it to server, server find it in data storage,
+		if matched, return true, else, return false
+
+***********************************
+Matchmaking website
+**********************************
+client:
+	register
+		name
+		age
+		sex 
+			male
+			female
+		picture
+		browser(d:\\love\mn.jpg)
+		register
+		cancel
+	find
+		find all users pictures
+		user1
+		user2
+		user3 picture has something wrong
+		......
+		
+
+Server:
+	register: upload operation
+		IO read client data and write it into server
+		picture has something wrong
+	find: download operation(choose download tool)
+		IO read server data and show them on client
+
+************************************************
+Abnormal
+file
+Recursive 
+Byte Stream 
+Conversion flow 
+Character Stream 
+Other streams 
 
 
+Exception
+Exception: program has some abnormal situations
+Program Exception: Throwable
+	serious issues: Error(we don't handle, such as memory overflow)
+	issues: Exception
+		compilation period Exception: all Exception not RuntimeException(we must handle, not go through compilation)
+		runtime period Exception:     RuntimeException(We don't handle, caused by code,  The code is not rigorous)
 
-Day19_2.txt
+Exception
+public class Exception
+extends Throwable
+The class Exception and its subclasses are a form of Throwable 
+that indicates conditions that a reasonable application might want to catch.
+The class Exception and any subclasses that are not also subclasses 
+of RuntimeException are checked exceptions. 
+Checked exceptions need to be declared in a method or constructor's throws clause 
+if they can be thrown by the execution of the method or constructor 
+and propagate outside the method or constructor boundary.
+
+Throwable
+public class Throwable
+extends Object
+implements Serializable
+The Throwable class is the superclass of all errors and exceptions in the Java language.
+Instances of two subclasses, Error and Exception, 
+are conventionally used to indicate that exceptional situations have occurred.
+Typically, these instances are freshly created 
+in the context of the exceptional situation so as to include relevant information 
+(such as stack trace data). 
+
+
+Error
+public class Error
+extends Throwable
+An Error is a subclass of Throwable that indicates serious problems 
+that a reasonable application should not try to catch. 
+Most such errors are abnormal conditions. The ThreadDeath error, 
+though a "normal" condition, is also a subclass of Error because 
+most applications should not try to catch it. 
+
+
+JVM how to handle Exception?
+If we don't handle Exception, JVM will start default Exception handling:
+output Exception name, cause and issue information on console, 
+and end the program and not go on the following code lines
+
+handle Exception:
+	A: try...catch...finally
+	B: throws
+	
+	method 1:
+	try {
+		the codes which have potential Exception
+	} catch(ExceptionName variable) {
+		handle the Exception
+	} finally {
+		release resources
+	}
+
+	method 2:
+		try {
+		the codes which have potential Exception
+	} catch(ExceptionName variable) {
+		handle the Exception
+	}
+
+
+Note: as less as possible for codes in try {}
+
+*****************************************************
+package cn.itcast_01;
+
+public class ExceptionDemo {
+
+	public static void main(String[] args) {
+		int a = 10;
+//		int b = 2;
+		int b = 0; // java.lang.ArithmeticException
+		try {
+			System.out.println(a / b); 
+		} catch (ArithmeticException e) {
+			System.out.println("One integer can't be divided by zero");
+		}
+		
+		System.out.println("Over!");
+	}
+}
+
+result:
+One integer can't be divided by zero
+Over!
+**********************************************
+
+
 Two methods to handle exception
 1-try…catch…finally
 2-throws
