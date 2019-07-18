@@ -1,0 +1,225 @@
+Recursion: method definition calls method itself
+public void show(int n) {
+	if (n == 0) {
+		System.exit(0);
+	}
+	System.out.println(n);
+	show(--n);
+}
+method calls method itself: method nesting instead of recursion
+
+
+Notice:
+	A: Recursion should have exit otherwise, it is dead loop
+	B: Recursion times shouldn't be too much, otherwise memory overflow
+	C: Constructor method shouldn't be recursion
+	
+Recursion thought:
+	Decomposition method: 
+	Combination method: 
+
+*************************************
+Requirement: compute factorial for one integer n-1
+method:
+	A: loop
+	B: Recursion
+
+package day20_Recursion;
+
+import java.util.Scanner;
+
+public class FactorialTest {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		long result = -1;
+		System.out.println("Please enter an integer[more than 2]:");
+		int n = sc.nextInt();
+		if (n <=0) {
+			System.out.println("You entered wrong integer");
+		} else {
+//			result = factorial(n);
+			result = factorial2(n);
+		}
+
+		System.out.println(result);
+
+	}
+	
+	public static long factorial(int n) {
+		long jc = 1;
+		for (int i = 2; i <= n; ++i) {
+			jc *= i;
+		}
+		
+		return jc;
+	}
+	
+	public static long factorial2(int n) {
+		if (n == 1) {
+			return 1;
+		}
+		
+		return factorial2(n-1) * n;
+	}
+
+}
+
+
+
+result:
+Please enter an integer[more than 2]:
+5
+120
+**********************************************
+Problems:
+1-Fibonacci Numbers
+2-The name of the file that specifies the end of the suffix name 
+  in the recursive traversal directory 
+3-Recursive deletion of directories with content 
+
+****************************************
+1-Fibonacci Numbers
+
+package cn.itcast_02;
+
+import java.util.Scanner;
+
+public class FibonacciTest {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter an integer(more than 2):");
+		int n = sc.nextInt();
+		if (n < 1) {
+			System.out.println("You entered wrong integer!");
+		} else {
+
+//			System.out.println(fibonacci(n));
+//			System.out.println(fibonacci2(n));
+			System.out.println(fibonacci3(n));
+		}
+	}
+	
+	// method 1: variable change
+	public static int fibonacci(int n) {
+		int a = 1;
+		int b = 1;
+		
+		for (int x = 0; x < n - 1; ++x) {
+			int tmp = a;
+			a = b;
+			b = tmp + b;
+		}
+		
+		return b;
+	}
+	
+
+	// method 2 : array
+	public static int fibonacci2(int n) {
+		if (n == 1 || n == 2) {
+			return 1;
+		}
+		
+		int[] arr = new int[n];
+		arr[0] = 1;
+		arr[1] = 1;
+		for (int i=2; i<arr.length; ++i) {
+			arr[i] = arr[i-1] + arr[i-2];
+		}
+		
+		return arr[n-1];
+	}
+	
+	// method 3 : recursion 
+	public static long fibonacci3(int n) {
+		if (n == 1 || n == 2) {
+			return 1;
+		} else {
+			return fibonacci2(n - 2) + fibonacci2(n - 1);
+		}
+	}
+}
+
+
+result:
+Please enter an integer(more than 2):
+10
+55
+************************************************************
+2-The name of the file that specifies the end of the suffix name 
+  in the recursive traversal directory (absolute directory)
+
+import java.io.File;
+
+public class TraverseFilesEndsWithTest {
+
+	public static void main(String[] args) {
+		File sourceFolder = new File("c:\\develop");
+		getAllFilePaths(sourceFolder);
+		
+
+	}
+	
+	public static void getAllFilePaths(File dir) {
+		File[] files = dir.listFiles();
+		
+		for (File file : files) {
+			if (file.isDirectory()) {
+				getAllFilePaths(file);
+			} else {
+				if (file.getName().endsWith(".java")) {
+					System.out.println(file.getAbsolutePath());
+				}
+			}
+		}
+		
+	}
+}
+
+result:
+c:\develop\code\Outer.java
+...............
+*********************************************************
+3-Recursive deletion of directories with content 
+
+package cn.itcast_03;
+
+import java.io.File;
+
+public class RecursionDeleteDirWithContentTest {
+
+	public static void main(String[] args) {
+		File sourceFolder = new File("c:\\demo");
+		deleteDirWithContent(sourceFolder);
+
+
+	}
+	
+	public static void deleteDirWithContent(File sourceFolder) {
+		File[] files = sourceFolder.listFiles();
+		
+		for (File file : files) {
+			if (file.isDirectory()) {
+				deleteDirWithContent(file);
+			} else {
+				System.out.println(file.getName()+"----"+file.delete());
+			}
+		}
+		
+		System.out.println(sourceFolder.getName() + "---------"+sourceFolder.delete());
+	}
+
+}
+
+
+result:
+a.txt----true
+test2---------true
+test1---------true
+test---------true
+demo---------true
+***********************************************
+
+
