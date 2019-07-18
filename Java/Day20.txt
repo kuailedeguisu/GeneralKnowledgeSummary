@@ -221,5 +221,146 @@ test1---------true
 test---------true
 demo---------true
 ***********************************************
+Day20_1.txt
+JAVA IO Stream kinds：
+Stream direction：
+	Input stream：  Read data
+	Output stream：Write data
+Data type：
+	byte stream：powerful
+		Byte input stream :    InputStream
+		Byte output stream:   OutputStream
+	char stream：convenient to operate text data(easy to read)
+		char input stream:       Reader
+		char output stream:  Writer
 
+InputStream:      abstract base Class of input stream
+OutputStream：abstract base Class of output stream
+
+FileOutputStream
+FileInputStream
+
+Byte stream comes before char stream
+Each subclass is sufixed with base class
+XxxOutputStream
+XxxInputStream
+XxxReader
+XxxWriter
+
+FileOutputStream
+public class FileOutputStream
+extends OutputStream
+A file output stream is an output stream for writing data to a File or to a FileDescriptor. 
+
+
+public FileOutputStream​(String name)
+                 throws FileNotFoundException
+public FileOutputStream​(File file,
+                        boolean append)
+                 throws FileNotFoundException
+
+FileOutputStream: 
+	create file by calling system method
+      create File Object
+	File points to the file
+
+Byte output Stream steps:
+	A: create Byte output Stream Object
+	B: write data
+	C: close Byte output Stream to release resource
+
+FileOutputStream
+public void write (byte[] b) throws IOException.                             // write a byte array
+public void write (byte[] b, int off, int len) throws IOException.    // write a part of a byte array
+public void write (int b) throws IOException                                   // write a byte
+
+***********************************************
+package cn.itcast_01;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class FileOutputStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		// method 1 
+		File file = new File("fos.txt");
+		FileOutputStream fos = new FileOutputStream(file);
+		
+		// Write data into file
+		fos.write("Hello World!".getBytes());
+		fos.write("How old are you?".getBytes());
+		fos.write("Beautiful girl".getBytes(), 0, 10);
+		
+		// release resource, close Stream Object, make it rubbish so that it can be collected
+		fos.close();
+		
+		// method 2
+		FileOutputStream fos2 = new FileOutputStream("fos2.txt");
+		
+		// Write data into file
+		fos2.write(97); // 'a'
+		fos2.write(57); // '9'
+		fos2.write(55); // '7'
+		fos2.write("Big World".getBytes(), 4, 5);
+		byte[] bysBytes = {97, 98, 99, 100};
+		fos2.write(bysBytes);
+		fos2.write(bysBytes, 1, 3);
+		
+		// release resource, close Stream Object
+		fos2.close();
+	}
+}
+
+Fox.txt
+Hello World!How old are you?Beautiful 
+
+Fox2.txt
+a97Worldabcdbcd
+
+*****************************************************************
+FileOutputStream wrap and append:
+Wrap
+	Windows: \r\n
+	Linux: \n
+	Mac: \r
+Some advanced text editor will be compatible for “\r” or “\n”
+
+
+Append: depend on FileOutputStream Constructor method
+public FileOutputStream​(File file,
+                        boolean append)
+                 throws FileNotFoundException
+public FileOutputStream​(String name,
+                        boolean append)
+                 throws FileNotFoundException
+
+*******************************************************************
+package cn.itcast_02;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class FileOutputStreamWrapTest {
+
+	public static void main(String[] args) throws IOException {
+		FileOutputStream fos = new FileOutputStream("fos3.txt", true);
+		for (int i=0; i<10; ++i) {
+			fos.write(("Hello"+i).getBytes());
+			fos.write("\r".getBytes());		
+		}
+	}
+}
+
+Fos.txt
+When you run the program once, the content will be appended
+**************************************************************************
+
+
+
+
+
+
+  
 
