@@ -1112,7 +1112,81 @@ x5.txt/x6.txt: efgh
 x7.txt/x8.txt: ijkl
 ************************************************************
 
+Day20_4.txt
+Recursion:
+	method definition call method itself
+	notice:
+		A: exit, otherwise, dead recursion
+		B: times shouldn’t be many, otherwise, memory overflow
+		
+IO Stream:
+	device to device data transfer
+	Stream direction:
+		input stream: read data
+		out stream: write data
+	data type:(default)
+		byte stream
+		char stream
+	FileOutStream:
+		A: create FileOutStream object
+		B: call write()
+		C: release resource
+		D: code
+			FileOutStream fos = new FileOutStream(“a.txt”);
+			fos.write(“HelloWorld!”.getBytes());
+			fos.close();
+	FileInputStream:
+		A: create FileInputStream object
+		B: call read()
+		C: release resource
+		D: code
+			method 1:
+				FileInputStream fis = new FileInputStream(“a.txt”);
+				int by = 0;
+				while ((by = fis.read()) != -1) {
+					System.out.println((char)by);
+				}
+				fis.close();
+			method 2:
+				FileInputStream fis = new FileInputStream(“a.txt”);
+				int len = 0;
+				byte[] bys = new byte[1024];
+				while ((len = fis.read(byes)) != -1) {
+					System.out.println(new String(bye, 0, Len));
+				}
+				fis.close();
+	BufferedOutputStream:
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(“a.txt”));
+			bos.write(100);
+			bos.close();
+	BufferedInputStream:
+			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(“a.txt”));
+			int len = 0;
+			byte[] bys = new byte[1024];
+			while ((len = bis.read(bys)) != -1) {
+				System.out.println(new String(bys, 0, len));
+			}
+			fis.close();
+	Problems:(each has four methods)
+		A: copy text file
+		B: copy image file
+		C: copy video file
 
+	IO Stream types:
+		Byte Stream:
+			InputStream:
+				FileInputStream
+				BufferedInputStream
+			OutputStream
+				FileOutputStream
+				BufferedOutputStream
+		Char Stream:
+			Reader
+				FileReader
+				BufferedReader
+			Writer
+				FileWriter
+				BufferedWriter
 
 
 
