@@ -1,0 +1,149 @@
+Day21_1.txt
+byte stream 
+Char stream
+Convert stream: byte stream-> char stream
+char stream = byte stream + encode table
+
+Encode table:
+	made of real world char and related digit
+	types:
+		ASCII code table: 8 digits,the top digit is sign digit
+			‘a’-97
+			‘A’-65
+			‘0’-48
+		ISO-8859-1: 8 digits, the top digit is digit
+		gb2312: simplified Chinese
+		GBK:
+		GB18030
+		BIG-5
+		Unicode: use 2 bytes to present a char, java uses it
+		UTF-8: at most use 3 bytes to present a char(ASCII compatible)(international)
+			a byte:            00000000-0000007F
+			two bytes:      00000080-000007FF
+			three bytes:   00000800-00007FFF
+
+String encode:
+public String​(byte[] bytes,
+              String charsetName).  // by specific char set to decode byte array
+       throws UnsupportedEncodingException
+public byte[] getBytes (String charsetName)  // by specify char set to encode String to byte array
+	throws UnsupportedEncodingException. 
+		
+Encode: convert known into unknown
+	String—byte[]
+Decode: convert unknown into known
+	byte[]—String
+Encode and decode should be the same
+**************************************************************
+package day21_CharStream;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+public class EncodeDecodeString {
+
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		// String---byte[]
+		String string = "Hello";
+		byte[] bys = string.getBytes();
+		System.out.println("default encode:    "+Arrays.toString(bys));
+		
+		
+		byte[] bys2 = string.getBytes("UTF-8");
+		System.out.println("UTF-8 encode:      "+Arrays.toString(bys2));
+		
+		byte[] bys3 = string.getBytes("GBK");
+		System.out.println("GBK encode:        "+Arrays.toString(bys3));
+		
+		byte[] bys4 = string.getBytes("Unicode");
+		System.out.println("Unicode encode:    "+Arrays.toString(bys4));
+		
+		//byte[] --String
+		String ss1 = new String(bys);
+		System.out.println("default decode:     "+ss1);
+		
+		String ss2 = new String(bys2, "UTF-8");
+		System.out.println("UTF-8 decode:       "+ss2);
+		
+		String ss3 = new String(bys3, "GBK");
+		System.out.println("GBK decode:         "+ss3);
+		
+		String ss4 = new String(bys4, "Unicode");
+		System.out.println("Unicode decode:     "+ss4);
+	}
+}
+
+Result:
+default encode:    [72, 101, 108, 108, 111]
+UTF-8 encode:      [72, 101, 108, 108, 111]
+GBK encode:        [72, 101, 108, 108, 111]
+Unicode encode:    [-2, -1, 0, 72, 0, 101, 0, 108, 0, 108, 0, 111]
+default decode:     Hello
+UTF-8 decode:       Hello
+GBK decode:         Hello
+Unicode decode:     Hello
+***************************************
+
+Byte stream is converted into char stream(OutputStreamWriter)
+
+Class OutputStreamWriter
+* java.lang.Object
+    * java.io.Writer
+        * java.io.OutputStreamWriter
+        * 
+public OutputStreamWriter​(OutputStream out,
+                          String charsetName)
+                   throws UnsupportedEncodingException
+
+public OutputStreamWriter​(OutputStream out)
+public OutputStreamWriter​(OutputStream out,
+                          String charsetName)
+                   throws UnsupportedEncodingException
+public void write (String str) throws IOException // in Writer
+
+
+********************************************
+package cn.itcast_01;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+public class OutStreamWriterTest {
+
+	public static void main(String[] args) throws IOException {
+		OutputStreamWriter oswWriter1 = new OutputStreamWriter(new FileOutputStream("a1.txt"));
+		oswWriter1.write("你好");
+		oswWriter1.close();
+		
+		OutputStreamWriter oswWriter2 = new OutputStreamWriter(new FileOutputStream("a2.txt"), "GBK");
+		oswWriter2.write("你好");
+		oswWriter2.close();
+		
+		OutputStreamWriter oswWriter3 = new OutputStreamWriter(new FileOutputStream("a3.txt"), "Unicode");
+		oswWriter3.write("你好");
+		oswWriter3.close();
+		
+		OutputStreamWriter oswWriter4 = new OutputStreamWriter(new FileOutputStream("a4.txt"), "UTF-8");
+		oswWriter4.write("你好");
+		oswWriter4.close();
+	}
+}
+
+Result:
+a1.txt:    你好
+a2.txt： 看不懂 （UFT-8 ）
+a3.txt:    你好
+a4.txt:    你好
+******************************************
+InputStreamReader
+Class InputStreamReader
+* java.lang.Object
+    * java.io.Reader
+        * java.io.InputStreamReader
+public InputStreamReader​(InputStream in)
+public InputStreamReader​(InputStream in,
+                         String charsetName)
+                  throws UnsupportedEncodingException
+public int read() throws IOException
+
