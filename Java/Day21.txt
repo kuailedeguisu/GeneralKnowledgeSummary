@@ -1816,3 +1816,69 @@ result:
 12:world
 13:java
 *************************************************************************************
+Day21_4.txt
+Summary
+
+Convert Stream
+	Byte Stream->Char Stream
+	Char Stream = Byte Stream + encodeTable
+	encodeTable: char and value
+		GBK
+		Unicode
+		UTF-8
+		encode should be consistent
+	String->Byte[]: encode
+	Byte[]->String: decode
+
+Char Stream
+	Reader
+		InputStreamReader(new FileInputStream(File));
+			FileReader
+		BufferedReader
+	Writer
+		OutputStreamWrite(new FileOutputStream(File));
+			FileWriter
+		BufferedWriter
+	copy text file using char stream: 5 types
+	
+
+IO stream
+	Byte Stream
+		InputStream 
+			int read() 		: read a byte once
+			int read(byte[] bys)	: read a byte array once
+			|—FileInputStream
+			|—BufferedInputStream
+		OutputStream
+			void write(int by) 							: write a byte once
+			void write(byte[] bys, int offset, int len) 	: write a byte array once
+			|—FileOutputStream
+			|—BufferedOutputStream
+		copy test file using byte stream: 4 types
+	Char Stream
+		Reader
+			int read() 	: read a char once
+			int read(char[] chs)	: read a char array once
+			|—InputStreamReader
+				|—FileReader
+			|—BufferedReader
+				String readLine():   read a String once
+		Writer
+			void write(char ch)
+			void write(char[], int, int)
+			|—OutputStreamWriter
+				|-FileWriter
+			|—BufferedWriter
+				newLine() : write a  \n line once
+
+Examples
+	copy text file
+	copy image(Byte data-Byte Stream)
+	save Collection data into a text file
+	Read a text file and save the content into Collection
+	Copy folder with single layer
+	Copy folder with single layer and rename for the specified suffix files
+	Copy folder with multiple layers
+	Enter student info and sort them by general score from top to bottom and save the result into a file
+	Reader to simulate BufferedReader
+	Reader to simulate LineNumberReader
