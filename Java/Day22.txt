@@ -1,0 +1,72 @@
+Day22_1.txt
+**********************************************
+Login and register IO version
+**********************************************
+package cn.itcast_01;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import cn.itcast.user.User;
+
+public class UserDaoImpl implements UserDao {
+
+	@Override
+	public boolean isLogin(String name, String password) {
+		BufferedReader bReader = null;
+		boolean flag = false;
+		try {
+			bReader = new BufferedReader(new FileReader("user.txt"));
+			String lineString = null;
+			while ( (lineString = bReader.readLine()) != null) {
+				String[] strsStrings = lineString.split("=");
+				if (strsStrings[0].equals(name) && strsStrings[1].equals(password)) {
+					flag = true;
+					break;
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("User Register fails");
+			e.printStackTrace();
+		} finally {
+			if (bReader != null) {
+				try {
+					bReader.close();
+				} catch (IOException e) {
+					System.out.println("User register close fails");
+					e.printStackTrace();
+				}
+			}
+
+		}
+		return flag;
+	}
+
+	@Override
+	public void register(User user) {
+		BufferedWriter bWriter = null;
+		try {
+			bWriter = new BufferedWriter(new FileWriter("user.txt"));
+			bWriter.write(user.getNameString()+"="+user.getPasswordString());
+			bWriter.newLine();
+			bWriter.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			if (bWriter != null) {
+				try {
+					bWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}	
+	}
+
+}
+**********************************
