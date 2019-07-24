@@ -908,3 +908,286 @@ public class ObjectStreamTest {
 result:
 Person [nameString=Emma, age=20]
 ***********************************************
+Day22_3.txt
+
+Handle Object Class yellow warning line
+Add serialNumberUID definition
+
+After that, if you modify Object definition, read the written data has no problems
+
+transient to define some data members not serializable
+
+Properties:
+	Class Properties
+* java.lang.Object
+    * java.util.Dictionary<K, V>
+        * java.util.Hashtable<Object, Object>
+            * java.util.Properties
+	The Properties class represents a persistent set of properties. 
+	The Properties can be saved to a stream or loaded from a stream. 
+	Each key and its corresponding value in the property list is a string.
+
+Because it is subclass of Hashtable, so Properties is a Map.
+
+public Properties()
+public V put (K key, V value) // Hashtable
+
+***************************************
+package cn.itcast_01;
+
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+
+
+public class PropertiesTest02 {
+
+	public static void main(String[] args) {
+		Properties properties = new Properties();
+		properties.put("tc001", "hello");
+		properties.put("tc002", "world");
+		properties.put("tc003", "java");
+		
+//		System.out.println("properties:"+properties);
+		
+//		method 1: get all keys, then get value for each key
+//		Set<Object> keySet = properties.keySet();
+//		for (Object key : keySet) {
+//			Object valueString = properties.get(key);
+//			System.out.println(key+"="+valueString);
+//		}
+		
+//		method 2: get all pair of (key, value), get key and value for each pair
+		Set<Entry<Object, Object>> entrySet = properties.entrySet();
+		for (Entry<Object, Object> entry : entrySet) {
+			Object keyObject = entry.getKey();
+			Object valueObject = entry.getValue();
+			System.out.println(keyObject+"="+valueObject);
+		}
+
+	}
+
+}
+
+Result:
+tc001=hello
+tc002=world
+tc003=java
+********************************************************
+public Object setProperty (String key, String value) // add key and value
+public String getProperty (String key). // get value by key
+public Set<String> stringPropertyNames() // get key set
+**************************************************************
+package cn.itcast_01;
+
+import java.util.Properties;
+import java.util.Set;
+
+public class PropertiesSpecialTest {
+
+	public static void main(String[] args) {
+		Properties properties = new Properties();
+		properties.setProperty("tc001", "hello");
+		properties.setProperty("tc002", "world");
+		properties.setProperty("tc003", "java");
+		
+		Set<String> keySet = properties.stringPropertyNames();
+		for (String key : keySet) {
+			String value = properties.getProperty(key);
+			System.out.println(key+"="+value);
+		}
+
+	}
+}
+***********************************
+public void load (Reader reader) throws IOException
+public void store (Writer writer, String comments) throws IOException
+***********************************************************************
+package cn.itcast_01;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Properties;
+
+public class PropertiesTest2 {
+
+	public static void main(String[] args) throws IOException {
+		load();
+		store();
+	}
+
+	private static void store() throws IOException {
+		Properties ssProperties = new Properties();
+		Writer writer = new FileWriter("b.txt");
+		
+		ssProperties.setProperty("tc001", "hello");
+		ssProperties.setProperty("tc002", "world");
+		ssProperties.setProperty("tc003", "java");
+		
+		ssProperties.store(writer, "Copy a.txt to b.txt");
+		writer.close();
+	}
+
+	private static void load() throws IOException {
+		Properties ssProperties = new Properties();
+		Reader reader = new FileReader("a.txt");
+		
+		ssProperties.load(reader);
+		reader.close();
+
+	}
+
+}
+Result:
+
+a.txt(I added)
+tc001=hello
+tc002=world
+tc003=java
+
+b.txt
+#Copy a.txt to b.txt
+#Wed Jul 24 20:56:28 CST 2019
+tc001=hello
+tc002=world
+tc003=java
+****************************************************
+Req: 
+user.txt has some key and value pair
+Check if key has “lisi”, if yes, change value to “100”
+***********************************************************************
+package cn.itcast_01;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Properties;
+import java.util.Set;
+
+public class PropertiesTest03 {
+
+	public static void main(String[] args) throws IOException {
+		Properties prop = new Properties();
+		Reader reader = new FileReader("user.txt");
+		prop.load(reader);
+		reader.close();
+		
+		Set<String> keySet = prop.stringPropertyNames();
+		for (String key : keySet) {
+			if ("lisi".equals(key)) {
+				prop.setProperty(key, "100");
+				break;
+			}
+		}
+		Writer writer = new FileWriter("user.txt");
+		prop.store(writer, null);
+		writer.close();
+
+	}
+
+}
+
+Result:
+user.txt before:
+**************************************
+lisi=20
+emma=30
+peter=40
+andy=30
+********************************************
+
+user.txt after:
+**************************************
+#Wed Jul 24 21:25:04 CST 2019
+lisi=100
+emma=30
+peter=40
+andy=30
+********************************************
+Req:
+You have one game to guess number, you need implement to play at most 5 times in test class
+*******************************************
+Game.java
+********************************************
+package cn.itcast_02;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Game {
+	public static void start() {
+		Random random = new Random();
+		int guess = random.nextInt(100) + 1;
+		int count = 0;
+		while (true) {
+			count++;
+			System.out.println("Please enter an integer[1-100]:");
+			Scanner scanner = new Scanner(System.in);
+			int num = scanner.nextInt();
+			if (num > guess) {
+				System.out.println("Your guessed "+ num + " is greater");
+			} else if (num < guess) {
+				System.out.println("Your guessed "+num+" is smaller");
+			} else {
+				System.out.println("You have guessed "+count+" times and you are right");
+				System.exit(0);
+			}
+		}
+	}
+
+}
+
+
+************************************************************
+GuessNumberGameTest.java
+***********************************************************
+package cn.itcast_02;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Properties;
+
+public class GuessNumberGameTest {
+
+	public static void main(String[] args) throws IOException {
+		Properties properties = new Properties();
+		Reader reader = new FileReader("count.txt");
+		properties.load(reader);
+		reader.close();
+		
+		String valueString = properties.getProperty("count");
+		int number = Integer.parseInt(valueString);
+		
+		if (number > 5) {
+			System.out.println("You can play at most 5 times, please pay");
+			System.exit(0);;
+		} else {
+			number++;
+			properties.setProperty("count", String.valueOf(number));
+			Writer writer = new FileWriter("count.txt");
+			properties.store(writer, null);
+			Game.start(); 
+		}
+	}
+
+}
+
+
+Result:
+count.txt
+count=0
+
+count.txt
+count=6
+
+Console:
+You can play at most 5 times, please pay
+***************************************************************************************
