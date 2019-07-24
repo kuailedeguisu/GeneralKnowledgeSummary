@@ -70,3 +70,841 @@ public class UserDaoImpl implements UserDao {
 
 }
 **********************************
+Stream operating basic data type:
+	DataInputStream
+	DataOutputStream
+
+DataInputStream:
+	definition:
+		Class DataInputStream
+
+		java.lang.Object
+			java.io.InputStream
+				java.io.FilterInputStream
+					java.io.DataInputStream 
+	
+	constructor method:
+		public DataInputStream​(InputStream in)
+		
+	methods:
+		
+
+DataOutputStream:
+	Class DataOutputStream
+
+    java.lang.Object
+        java.io.OutputStream
+            java.io.FilterOutputStream
+                java.io.DataOutputStream 
+
+*****************************************************************
+package cn.itcast_01;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class DataInputStreamDataOutputStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		write();
+		read();
+	}
+
+	private static void read() throws IOException {
+		DataInputStream dis = new DataInputStream(new FileInputStream("a.txt"));
+		boolean bl = dis.readBoolean(); 
+		byte b = dis.readByte();
+		short s = dis.readShort();
+		int i = dis.readInt();
+		long l = dis.readLong();
+		float f = dis.readFloat();
+		double d = dis.readDouble();
+		char c = dis.readChar();
+
+		
+		dis.close();
+		
+		System.out.println(bl);
+		System.out.println(b);
+		System.out.println(s);
+		System.out.println(i);
+		System.out.println(l);
+		System.out.println(f);
+		System.out.println(d);
+		System.out.println(c);
+
+	}
+
+	private static void write() throws IOException {
+		DataOutputStream dos = new DataOutputStream(new FileOutputStream("a.txt"));
+		dos.writeBoolean(true);
+		dos.writeByte(10);
+		dos.writeShort(1888);
+		dos.writeInt(100);
+		dos.writeLong(1999999L);
+		dos.writeFloat(188.76F);
+		dos.writeDouble(199.88);
+		dos.writeChar('a');
+		
+		dos.close();
+	}
+}
+
+
+result:
+true
+10
+1888
+100
+1999999
+188.76
+199.88
+a
+***************************************************************
+Memory operation Stream: used in handling temporarily stored data 
+	Operate byte array:
+		ByteArrayInputStream
+		ByteArrayOutputStream
+	Operate char array:
+		CharArrayReader
+		CharArrayWriter
+	Operate String:
+		StringReader
+		StringWriter
+********************************************************************
+ByteArrayInputStream:
+	Class ByteArrayInputStream
+
+		java.lang.Object
+			java.io.InputStream
+				java.io.ByteArrayInputStream
+	
+	constructor methods:
+		public ByteArrayInputStream​(byte[] buf)	
+		public ByteArrayInputStream​(byte[] buf,
+                            int offset,
+                            int length)
+	
+	member methods:
+		public int read()
+		public int read​(byte[] b,
+                int off,
+                int len)
+
+*******************************************************************
+ByteArrayOutputStream
+	Class ByteArrayOutputStream
+
+		java.lang.Object
+			java.io.OutputStream
+				java.io.ByteArrayOutputStream 
+	
+	public ByteArrayOutputStream()
+	public ByteArrayOutputStream​(int size)
+	
+	public void write​(int b)
+	public void write​(byte[] b,
+                  int off,
+                  int len)
+	public void writeTo​(OutputStream out)
+             throws IOException
+	
+	close stream: invalid
+***************************************************************************
+package cn.itcast_02;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+public class ByteArrayStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		for (int i=0; i<10;++i) {
+			baos.write(("hello"+i).getBytes());
+		}
+		
+		
+		byte[] bys = baos.toByteArray();
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(bys);
+		int by = 0;
+		while ((by = bais.read()) != -1) {
+			System.out.print((char)by);
+		}
+	}
+}
+
+result:
+hello0hello1hello2hello3hello4hello5hello6hello7hello8hello9
+*************************************************************************
+For Chinese, we need use Char Array Stream
+*******************************************************************
+package cn.itcast_03;
+
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+
+public class CharArrayStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		CharArrayWriter caw = new CharArrayWriter();
+		caw.write("我爱你中国");
+		
+		char[] memory = caw.toCharArray();
+		
+		CharArrayReader car = new CharArrayReader(memory);
+		int ch = 0;
+		while ((ch = car.read()) != -1) {
+			System.out.print((char)ch);
+		}
+
+	}
+
+}
+
+result:
+我爱你中国
+****************************************************
+package cn.itcast_04;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+public class StringStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		StringWriter sw = new StringWriter();
+		sw.write("hello");
+		sw.write("world");
+		
+		String memory = sw.toString();
+
+		StringReader sr = new StringReader(memory);
+		int len = 0;
+		char[] cbuf = new char[1024];
+		while ((len = sr.read(cbuf)) != -1) {
+			System.out.print(new String(cbuf, 0, len));
+		}
+	}
+}
+
+
+result:
+helloworld
+**********************************************************************
+Print Stream
+	Byte Print Stream: PrintStream
+	Char Print Stream: PrintWriter
+	
+	features:
+		A: only write, not read, only operate destination, not data source
+		B: print any basic data type
+		C: if we start flush automatically, it can flush automatically
+		D: it can operate text file directly
+			Which stream can operate text file directly?
+				FileInputStream
+				FileOutputStream
+				FileReader
+				FileWriter
+				PrintStream
+				PrintWriter
+				
+			How to check which stream is basic stream：
+				check API, find Object constructor methods, 
+				if its parameter can be String or File type, it can operate text file directly
+			
+			Note:
+				basic stream: operate text file directly
+				advanced stream: provide some other functions based on basic stream
+************************************************************************
+PrintStream
+	Class PrintStream
+    java.lang.Object
+        java.io.OutputStream
+            java.io.FilterOutputStream
+                java.io.PrintStream 
+***************************************************************************
+PrintWriter	
+	Class PrintWriter
+    java.lang.Object
+        java.io.Writer
+            java.io.PrintWriter 
+*****************************************************************************
+package cn.itcast_05;
+
+import java.io.IOException;
+import java.io.PrintStream;
+
+public class PrintStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		PrintStream ps = new PrintStream("ps.txt");
+		byte[] bys = {97, 98, 99, 100};
+		ps.write(bys);
+		ps.close();
+	}
+}
+
+result:
+ps.txt
+abcd
+*************************************************************************
+package cn.itcast_05;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+public class PrintWriterTest {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter("pw.txt");
+		pw.write("hello");
+		pw.write("world");
+		pw.close();
+	}
+
+}
+
+result:
+pw.txt
+helloworld
+*************************************************************
+PrintWriter auto flush function:
+public PrintWriter​(OutputStream out,
+                   boolean autoFlush)
+				   autoFlush - A boolean; if true, the println, printf, 
+							   or format methods will flush the output buffer
+*************************************************************
+package cn.itcast_05;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+public class PrintWriteAutoFlushTest {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter("pw_flush.txt");
+		pw.print(true);
+		pw.print(100);
+		pw.print("hello");
+		pw.close();
+	}
+}
+
+result:
+it can't be flushed automatically, so we only can use close to flush
+pw_flush.txt
+true100hello
+**********************************************************************
+package cn.itcast_05;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+
+public class PrintWriteAutoFlushTest2 {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(new FileOutputStream("pw_flush_2.txt"), true);
+		pw.println("hello");
+//		pw.close();
+	}
+}
+
+result:
+hello
+**************************************************************	
+PrintWriter:
+		1-operate any type of data
+			print()
+			println()
+		2-start auto flush
+			println() to trigger auto flush
+			
+			println() == write()+newLine()+flush()
+****************************************************************
+Copy File
+*************************************************************
+method 1: BufferedReader and BufferedWriter
+****************************************************************
+package cn.itcast_05;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class CopyFileBufferedWriterTest {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("ps.txt"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter("ps_dest.txt"));
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			bw.write(line);
+			bw.newLine();
+			bw.flush();
+		}
+		
+		br.close();
+		bw.close();
+	}
+}
+
+*************************************************************************
+method 2 : PrintWriter
+**********************************************************************
+package cn.itcast_05;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class CopyFilePrintWriter {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("ps.txt"));
+		PrintWriter pw = new PrintWriter("b.txt");
+		
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			pw.println(line);
+		}
+		
+		br.close();
+		pw.close();
+	}
+}
+******************************************************************************
+System.in : standard input stream, InputStream
+System.out : standard output stream, PrintStream
+	public static final InputStream in
+	public static final PrintStream out
+	
+	InputStream is = System.in;
+	PrintStream ps = System.out;
+	
+	// method 1
+	System.out.println("hello");
+	// method 2
+	PrintStream ps = System.out;
+	ps.println("hello");
+	
+	// method 1
+	Scanner sc = new Scanner(System.in);
+	// method 2
+	InputStream is = System.in;
+	Scanner sc = new Scanner(is);
+***********************************************************
+System.in standard input stream, get data from keyboard
+Enter data by keyboard:
+	A: main method args parameter
+		java Hello hello world java
+	B: Scannner(JDK5 later)
+		Scanner sc = new Scanner(System.in);
+		String string = sc.nextLine();
+	C:  Char Buffered Stream wraps standard input stream
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Please enter a string");
+		String line = br.readLine();
+		System.out.println(line);
+*************************************************************
+Req: Enter data by Char Buffered Stream wrapping standard input stream
+******************************************************************
+package cn.itcast_05;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class StandardInputTest {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Please enter a String:");
+		String line = br.readLine();
+		System.out.println("Your entered String is "+line);
+		
+		System.out.println("Please enter an integer:");
+		line = br.readLine();
+		int i = Integer.parseInt(line);
+		System.out.println("Your entered integer is "+i);
+		br.close();
+	}
+
+}
+
+result:
+Please enter a String:
+hello
+Your entered String is hello
+Please enter an integer:
+19999
+Your entered integer is 19999
+*************************************************************************
+Output data on console by using Char Buffered Stream
+*********************************************************************
+package cn.itcast_05;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
+public class SystemOutTest {
+
+	public static void main(String[] args) throws IOException {
+//		PrintStream ps = System.out;
+//		OutputStream os = ps;
+		OutputStream os = System.out;
+		OutputStreamWriter osw = new OutputStreamWriter(os);
+		osw.write("hello");
+		osw.close();
+	}
+
+}
+
+result:
+hello
+******************************************************************
+package cn.itcast_05;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
+public class SystemOutTest {
+
+	public static void main(String[] args) throws IOException {
+//		PrintStream ps = System.out;
+//		OutputStream os = ps;
+//		OutputStream os = System.out;
+//		OutputStreamWriter osw = new OutputStreamWriter(os);
+//		BufferedWriter bw = new BufferedWriter(osw);
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		bw.write("hello");
+		bw.newLine();
+		bw.write("world");
+		bw.newLine();
+		bw.write("java");
+		bw.newLine();
+		bw.flush();
+		bw.close();
+	}
+
+}
+
+result:
+hello
+world
+java
+*********************************************************
+RandomAccessFile
+	It is not a stream, but subclass of Object
+	Mix the functions of InputStream and OutputStream
+	Instances of this class support both reading and writing to a random access file.
+	
+	Class RandomAccessFile
+
+		java.lang.Object
+			java.io.RandomAccessFile 
+	
+	constructor methods:
+		public RandomAccessFile​(String name,
+							String mode)
+					 throws FileNotFoundException
+		public RandomAccessFile​(File file,
+							String mode)
+					 throws FileNotFoundException
+		mode:
+			"r" 	Open for reading only. Invoking any of the write methods of the resulting object 
+					will cause an IOException to be thrown.
+			"rw" 	Open for reading and writing. If the file does not already exist 
+					then an attempt will be made to create it. (commonly used) (*)
+			"rws" 	Open for reading and writing, as with "rw", and also require that every update 
+					to the file's content or metadata be written synchronously to the underlying storage device.
+			"rwd" 	Open for reading and writing, as with "rw", and also require that every update 
+					to the file's content be written synchronously to the underlying storage device.
+***********************************************************************
+package cn.itcast_01;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+public class RandomAccessFileTest {
+
+	public static void main(String[] args) throws IOException {
+		write();
+		read();
+
+	}
+
+	private static void read() throws IOException {
+		RandomAccessFile raf = new RandomAccessFile("raf.txt", "rw");
+		int i = raf.readInt();
+		System.out.println(i);
+		System.out.println("The current pointer location is "+ raf.getFilePointer());
+		
+		char ch = raf.readChar();
+		System.out.println(ch);
+		System.out.println("The current pointer location is "+ raf.getFilePointer());
+		
+		String string = raf.readUTF();
+		System.out.println(string);
+		System.out.println("The current pointer location is "+ raf.getFilePointer());
+		
+		// Start with the specified location to read data
+		raf.seek(4);
+		ch = raf.readChar();
+		System.out.println(ch);
+		System.out.println("The current pointer location is "+raf.getFilePointer());
+	}
+
+	private static void write() throws IOException {
+		RandomAccessFile raf = new RandomAccessFile("raf.txt", "rw");
+		raf.writeInt(100);
+		raf.writeChar('a');
+		raf.writeUTF("hello");
+		raf.close();
+	}
+}
+
+
+result:
+100
+The current pointer location is 4
+a
+The current pointer location is 6
+hello
+The current pointer location is 13
+a
+The current pointer location is 6
+******************************************************************************
+SequenceInputStream
+	A SequenceInputStream represents the logical concatenation of other input streams. 
+	It starts out with an ordered collection of input streams and reads from the first 
+	one until end of file is reached, whereupon it reads from the second one, and so on, 
+	until end of file is reached on the last of the contained input streams.
+	
+	Class SequenceInputStream
+
+    java.lang.Object
+        java.io.InputStream
+            java.io.SequenceInputStream 
+	
+	constructor method:
+		public SequenceInputStream​(InputStream s1,
+                           InputStream s2)
+		public SequenceInputStream​(Enumeration<? extends InputStream> e)
+	
+	member methods:
+		public int read()
+			 throws IOException
+		public int read​(byte[] b,
+					int off,
+					int len)
+			 throws IOException
+		public void close()
+			   throws IOException
+*****************************************************************************
+package cn.itcast_01;
+
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
+
+public class SequenceInputStreamTest {
+
+	public static void main(String[] args) throws IOException {
+		InputStream is1 = new FileInputStream("CollectionsTest01.java");
+		InputStream is2 = new FileInputStream("CollectionsStudentTest01.java");
+		SequenceInputStream sis = new SequenceInputStream(is1, is2);
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("Copy.txt"));
+		int len = 0;
+		byte[] bys = new byte[1024];
+		
+		while ( (len = sis.read(bys)) != -1) {
+			bos.write(bys, 0, len);
+		}
+		is1.close();
+		is2.close();
+		sis.close();
+		bos.close();
+	}
+}
+
+
+result:
+Copy.txt has the contents of two files
+*********************************************************************************
+Combine multiple files into one file
+************************************************************************************
+package cn.itcast_01;
+
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+
+public class SequenceInputStreamTest02 {
+
+	public static void main(String[] args) throws IOException {
+		InputStream is1 = new FileInputStream("CollectionsTest01.java");
+		InputStream is2 = new FileInputStream("CollectionsStudentTest01.java");
+		InputStream is3 = new FileInputStream("Student.java");
+		Vector<InputStream> isVec = new Vector<InputStream>();
+		isVec.add(is1);
+		isVec.add(is2);
+		isVec.add(is3);
+		
+		Enumeration<InputStream> en = isVec.elements();
+		SequenceInputStream sis = new SequenceInputStream(en);
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("Copy.txt"));
+		int len = 0;
+		byte[] bys = new byte[1024];
+		
+		while ( (len = sis.read(bys)) != -1) {
+			bos.write(bys, 0, len);
+		}
+		
+		is1.close();
+		is2.close();
+		is3.close();
+		sis.close();
+		bos.close();
+
+	}
+}
+
+result:
+three files contents are combined into one file
+************************************************************************************
+Serializable Stream    : Object->Stream
+	ObjectOutputStream
+De-Serializable Stream : Stream->Object
+	ObjectInputStream
+*******************************************************************************************
+ObjectOutputStream: 
+	An ObjectOutputStream writes primitive data types and graphs of Java objects to an OutputStream.
+	Class ObjectOutputStream
+		java.lang.Object
+			java.io.OutputStream
+				java.io.ObjectOutputStream 
+
+	constructor:
+		public ObjectOutputStream​(OutputStream out)
+					   throws IOException
+		protected ObjectOutputStream()
+						  throws IOException,
+								 SecurityException
+
+ObjectInputStream
+	An ObjectInputStream deserializes primitive data and objects previously written using an ObjectOutputStream. 
+	Class ObjectInputStream
+		java.lang.Object
+			java.io.InputStream
+				java.io.ObjectInputStream
+	
+	Serializable: no any method interface, sign interface
+	
+*********************************************************************************************
+Person.java
+*********************************************************************************************
+package cn.itcast_01;
+
+import java.io.Serializable;
+
+public class Person implements Serializable {
+	private String nameString;
+	private int age;
+	
+	public Person() {
+		super();
+	}
+	
+	public Person(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String toString() {
+		return "Person [nameString=" + nameString + ", age=" + age + "]";
+	}
+	
+	
+}
+
+***************************************************************************
+Test class
+****************************************************************************
+package cn.itcast_01;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+public class ObjectStreamTest {
+
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+		write();
+		read();
+		
+
+	}
+
+	private static void read() throws ClassNotFoundException, IOException {
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("oos.txt"));
+		Object object = ois.readObject();
+		System.out.println(object);
+		ois.close();
+		
+	}
+
+	private static void write() throws FileNotFoundException, IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("oos.txt"));	
+		Person person = new Person();
+		person.setNameString("Emma");
+		person.setAge(20);
+		oos.writeObject(person);
+		oos.close();
+	}
+}
+
+result:
+Person [nameString=Emma, age=20]
+***********************************************
