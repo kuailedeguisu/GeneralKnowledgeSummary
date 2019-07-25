@@ -963,3 +963,785 @@ Peter:2,Thu Jul 25 17:08:47 CST 2019
 *****************************************************************************
 
 thread control:
+Day23_2.txt
+**************************************************************************
+Thread join: Waits for this thread to die.
+public final void join() throws InterruptedException
+**************************************************************************
+package cn.itcast.thread.join;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(getName()+":"+i);
+		}
+	}
+}
+
+package cn.itcast.thread.join;
+
+public class MyThreadJoinTest {
+
+	public static void main(String[] args) {
+		MyThread mt1 = new MyThread();
+		MyThread mt2 = new MyThread();
+		MyThread mt3 = new MyThread();
+		
+		mt1.setName("Liyuan");
+		mt2.setName("Lishimin");
+		mt3.setName("Liyuanba");
+		
+		mt1.start();
+		try {
+			mt1.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		
+		mt2.start();
+		mt3.start();
+	}
+}
+
+
+Result: // mt1 run at first, after that, mt2 and mt3 grab CPU execution
+Liyuan:0
+Liyuan:1
+Liyuan:2
+Liyuan:3
+Liyuan:4
+Liyuan:5
+Liyuan:6
+Liyuan:7
+Liyuan:8
+Liyuan:9
+Liyuan:10
+Liyuan:11
+Liyuan:12
+Liyuan:13
+Liyuan:14
+Liyuan:15
+Liyuan:16
+Liyuan:17
+Liyuan:18
+Liyuan:19
+Liyuan:20
+Liyuan:21
+Liyuan:22
+Liyuan:23
+Liyuan:24
+Liyuan:25
+Liyuan:26
+Liyuan:27
+Liyuan:28
+Liyuan:29
+Liyuan:30
+Liyuan:31
+Liyuan:32
+Liyuan:33
+Liyuan:34
+Liyuan:35
+Liyuan:36
+Liyuan:37
+Liyuan:38
+Liyuan:39
+Liyuan:40
+Liyuan:41
+Liyuan:42
+Liyuan:43
+Liyuan:44
+Liyuan:45
+Liyuan:46
+Liyuan:47
+Liyuan:48
+Liyuan:49
+Liyuan:50
+Liyuan:51
+Liyuan:52
+Liyuan:53
+Liyuan:54
+Liyuan:55
+Liyuan:56
+Liyuan:57
+Liyuan:58
+Liyuan:59
+Liyuan:60
+Liyuan:61
+Liyuan:62
+Liyuan:63
+Liyuan:64
+Liyuan:65
+Liyuan:66
+Liyuan:67
+Liyuan:68
+Liyuan:69
+Liyuan:70
+Liyuan:71
+Liyuan:72
+Liyuan:73
+Liyuan:74
+Liyuan:75
+Liyuan:76
+Liyuan:77
+Liyuan:78
+Liyuan:79
+Liyuan:80
+Liyuan:81
+Liyuan:82
+Liyuan:83
+Liyuan:84
+Liyuan:85
+Liyuan:86
+Liyuan:87
+Liyuan:88
+Liyuan:89
+Liyuan:90
+Liyuan:91
+Liyuan:92
+Liyuan:93
+Liyuan:94
+Liyuan:95
+Liyuan:96
+Liyuan:97
+Liyuan:98
+Liyuan:99
+Lishimin:0
+Liyuanba:0
+Lishimin:1
+Liyuanba:1
+Lishimin:2
+Liyuanba:2
+Lishimin:3
+Liyuanba:3
+Lishimin:4
+Liyuanba:4
+Lishimin:5
+Liyuanba:5
+Lishimin:6
+Liyuanba:6
+Lishimin:7
+Liyuanba:7
+Lishimin:8
+Liyuanba:8
+Lishimin:9
+Liyuanba:9
+Lishimin:10
+Liyuanba:10
+Lishimin:11
+Liyuanba:11
+Lishimin:12
+Lishimin:13
+Liyuanba:12
+Lishimin:14
+Liyuanba:13
+Lishimin:15
+Liyuanba:14
+Lishimin:16
+Liyuanba:15
+Lishimin:17
+Liyuanba:16
+Lishimin:18
+Liyuanba:17
+Lishimin:19
+Liyuanba:18
+Lishimin:20
+Liyuanba:19
+Lishimin:21
+Liyuanba:20
+Lishimin:22
+Liyuanba:21
+Liyuanba:22
+Lishimin:23
+Liyuanba:23
+Liyuanba:24
+Liyuanba:25
+Liyuanba:26
+Liyuanba:27
+Lishimin:24
+Liyuanba:28
+Liyuanba:29
+Lishimin:25
+Lishimin:26
+Lishimin:27
+Lishimin:28
+Lishimin:29
+Lishimin:30
+Liyuanba:30
+Liyuanba:31
+Liyuanba:32
+Liyuanba:33
+Liyuanba:34
+Liyuanba:35
+Liyuanba:36
+Liyuanba:37
+Lishimin:31
+Liyuanba:38
+Lishimin:32
+Liyuanba:39
+Lishimin:33
+Liyuanba:40
+Lishimin:34
+Liyuanba:41
+Lishimin:35
+Liyuanba:42
+Lishimin:36
+Liyuanba:43
+Lishimin:37
+Liyuanba:44
+Lishimin:38
+Liyuanba:45
+Lishimin:39
+Liyuanba:46
+Lishimin:40
+Liyuanba:47
+Lishimin:41
+Liyuanba:48
+Lishimin:42
+Liyuanba:49
+Lishimin:43
+Liyuanba:50
+Lishimin:44
+Lishimin:45
+Liyuanba:51
+Lishimin:46
+Lishimin:47
+Liyuanba:52
+Lishimin:48
+Liyuanba:53
+Lishimin:49
+Liyuanba:54
+Lishimin:50
+Liyuanba:55
+Lishimin:51
+Liyuanba:56
+Lishimin:52
+Liyuanba:57
+Lishimin:53
+Liyuanba:58
+Lishimin:54
+Liyuanba:59
+Lishimin:55
+Liyuanba:60
+Lishimin:56
+Liyuanba:61
+Lishimin:57
+Liyuanba:62
+Lishimin:58
+Liyuanba:63
+Lishimin:59
+Lishimin:60
+Liyuanba:64
+Lishimin:61
+Liyuanba:65
+Lishimin:62
+Liyuanba:66
+Lishimin:63
+Liyuanba:67
+Lishimin:64
+Liyuanba:68
+Lishimin:65
+Lishimin:66
+Liyuanba:69
+Lishimin:67
+Lishimin:68
+Lishimin:69
+Liyuanba:70
+Lishimin:70
+Liyuanba:71
+Lishimin:71
+Liyuanba:72
+Lishimin:72
+Liyuanba:73
+Lishimin:73
+Lishimin:74
+Liyuanba:74
+Lishimin:75
+Lishimin:76
+Lishimin:77
+Lishimin:78
+Lishimin:79
+Lishimin:80
+Liyuanba:75
+Lishimin:81
+Liyuanba:76
+Lishimin:82
+Liyuanba:77
+Lishimin:83
+Liyuanba:78
+Lishimin:84
+Liyuanba:79
+Lishimin:85
+Liyuanba:80
+Lishimin:86
+Liyuanba:81
+Lishimin:87
+Liyuanba:82
+Lishimin:88
+Liyuanba:83
+Lishimin:89
+Liyuanba:84
+Lishimin:90
+Liyuanba:85
+Lishimin:91
+Liyuanba:86
+Liyuanba:87
+Liyuanba:88
+Lishimin:92
+Lishimin:93
+Lishimin:94
+Lishimin:95
+Liyuanba:89
+Lishimin:96
+Liyuanba:90
+Lishimin:97
+Liyuanba:91
+Lishimin:98
+Liyuanba:92
+Lishimin:99
+Liyuanba:93
+Liyuanba:94
+Liyuanba:95
+Liyuanba:96
+Liyuanba:97
+Liyuanba:98
+Liyuanba:99
+*****************************************************************
+Thread yield:
+public static void yield()
+A hint to the scheduler that the current thread is willing to yield its current use of a processor. The scheduler is free to ignore this hint.
+Make multiple threads more harmonious, but not guarantee each person once
+**********************************************************************************
+package cn.itcast.thread.yield;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(getName()+":"+i);
+			Thread.yield();
+		}
+	}
+}
+
+package cn.itcast.thread.yield;
+
+public class ThreadYieldTest {
+
+	public static void main(String[] args) {
+		MyThread mt1 = new MyThread();
+		MyThread mt2 = new MyThread();
+		
+		mt1.setName("Linqingxia");
+		mt2.setName("Zhangguorun");
+		
+		mt1.start();
+		mt2.start();
+	}
+}
+
+
+Result:
+Linqingxia:0
+Zhangguorun:0
+Linqingxia:1
+Zhangguorun:1
+Linqingxia:2
+Zhangguorun:2
+Linqingxia:3
+Zhangguorun:3
+Linqingxia:4
+Zhangguorun:4
+Linqingxia:5
+Zhangguorun:5
+Linqingxia:6
+Zhangguorun:6
+Linqingxia:7
+Zhangguorun:7
+Linqingxia:8
+Zhangguorun:8
+Linqingxia:9
+Zhangguorun:9
+Linqingxia:10
+Zhangguorun:10
+Linqingxia:11
+Linqingxia:12
+Zhangguorun:11
+Linqingxia:13
+Zhangguorun:12
+Linqingxia:14
+Zhangguorun:13
+Linqingxia:15
+Zhangguorun:14
+Linqingxia:16
+Zhangguorun:15
+Linqingxia:17
+Zhangguorun:16
+Linqingxia:18
+Zhangguorun:17
+Linqingxia:19
+Zhangguorun:18
+Linqingxia:20
+Zhangguorun:19
+Linqingxia:21
+Zhangguorun:20
+Linqingxia:22
+Zhangguorun:21
+Linqingxia:23
+Zhangguorun:22
+Linqingxia:24
+Zhangguorun:23
+Linqingxia:25
+Zhangguorun:24
+Linqingxia:26
+Zhangguorun:25
+Linqingxia:27
+Zhangguorun:26
+Linqingxia:28
+Zhangguorun:27
+Linqingxia:29
+Zhangguorun:28
+Zhangguorun:29
+Linqingxia:30
+Zhangguorun:30
+Linqingxia:31
+Zhangguorun:31
+Linqingxia:32
+Zhangguorun:32
+Linqingxia:33
+Zhangguorun:33
+Linqingxia:34
+Zhangguorun:34
+Linqingxia:35
+Zhangguorun:35
+Linqingxia:36
+Zhangguorun:36
+Linqingxia:37
+Zhangguorun:37
+Linqingxia:38
+Zhangguorun:38
+Linqingxia:39
+Zhangguorun:39
+Linqingxia:40
+Zhangguorun:40
+Linqingxia:41
+Zhangguorun:41
+Linqingxia:42
+Zhangguorun:42
+Linqingxia:43
+Zhangguorun:43
+Linqingxia:44
+Zhangguorun:44
+Linqingxia:45
+Zhangguorun:45
+Linqingxia:46
+Zhangguorun:46
+Linqingxia:47
+Zhangguorun:47
+Linqingxia:48
+Zhangguorun:48
+Linqingxia:49
+Zhangguorun:49
+Linqingxia:50
+Zhangguorun:50
+Linqingxia:51
+Zhangguorun:51
+Linqingxia:52
+Zhangguorun:52
+Linqingxia:53
+Zhangguorun:53
+Linqingxia:54
+Zhangguorun:54
+Linqingxia:55
+Zhangguorun:55
+Linqingxia:56
+Zhangguorun:56
+Linqingxia:57
+Zhangguorun:57
+Linqingxia:58
+Zhangguorun:58
+Linqingxia:59
+Zhangguorun:59
+Linqingxia:60
+Zhangguorun:60
+Linqingxia:61
+Zhangguorun:61
+Linqingxia:62
+Zhangguorun:62
+Linqingxia:63
+Zhangguorun:63
+Linqingxia:64
+Zhangguorun:64
+Linqingxia:65
+Zhangguorun:65
+Linqingxia:66
+Zhangguorun:66
+Linqingxia:67
+Zhangguorun:67
+Linqingxia:68
+Zhangguorun:68
+Linqingxia:69
+Zhangguorun:69
+Linqingxia:70
+Zhangguorun:70
+Linqingxia:71
+Zhangguorun:71
+Linqingxia:72
+Zhangguorun:72
+Linqingxia:73
+Zhangguorun:73
+Linqingxia:74
+Zhangguorun:74
+Linqingxia:75
+Zhangguorun:75
+Linqingxia:76
+Zhangguorun:76
+Zhangguorun:77
+Linqingxia:77
+Zhangguorun:78
+Linqingxia:78
+Zhangguorun:79
+Linqingxia:79
+Zhangguorun:80
+Linqingxia:80
+Zhangguorun:81
+Linqingxia:81
+Zhangguorun:82
+Linqingxia:82
+Zhangguorun:83
+Linqingxia:83
+Zhangguorun:84
+Linqingxia:84
+Zhangguorun:85
+Linqingxia:85
+Zhangguorun:86
+Linqingxia:86
+Zhangguorun:87
+Linqingxia:87
+Zhangguorun:88
+Linqingxia:88
+Zhangguorun:89
+Linqingxia:89
+Zhangguorun:90
+Linqingxia:90
+Zhangguorun:91
+Linqingxia:91
+Zhangguorun:92
+Linqingxia:92
+Zhangguorun:93
+Linqingxia:93
+Zhangguorun:94
+Linqingxia:94
+Zhangguorun:95
+Linqingxia:95
+Zhangguorun:96
+Linqingxia:96
+Zhangguorun:97
+Linqingxia:97
+Zhangguorun:98
+Linqingxia:98
+Zhangguorun:99
+Linqingxia:99
+*********************************************************************************
+Thread Daemon:
+public final void setDaemon (boolean on)
+Marks this thread as either a daemon thread or a user thread. The Java Virtual Machine exits when the only threads running are all daemon threads.
+This method must be invoked before the thread is started.
+*******************************************************************************
+package cn.itcast.thread.yield;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(getName()+":"+i);
+		}
+	}
+}
+
+
+package cn.itcast.thread.daemon;
+
+public class ThreadDaemonTest {
+
+	public static void main(String[] args) {
+		MyThread mt1 = new MyThread();
+		MyThread mt2 = new MyThread();
+		
+		mt1.setName("Guan Yu");
+		mt2.setName("Zhang Fei");
+		
+		mt1.setDaemon(true);
+		mt2.setDaemon(true);
+		
+		mt1.start();
+		mt2.start();
+		
+		Thread.currentThread().setName("Liu Bei");
+		for (int i = 0; i < 5; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+
+	}
+
+}
+
+Result:
+Guan Yu:0
+Liu Bei:0
+Zhang Fei:0
+Liu Bei:1
+Guan Yu:1
+Liu Bei:2
+Liu Bei:3
+Guan Yu:2
+Zhang Fei:1
+Guan Yu:3
+Liu Bei:4
+Guan Yu:4
+Zhang Fei:2
+Guan Yu:5
+
+***************************************************
+Thread stop
+@Deprecated(since="1.2") public final void stop()
+public void interrupt() // Interrupts this thread.
+*******************************************************
+package cn.itcast.thread.stop;
+
+import java.util.Date;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		System.out.println("start:"+new Date());
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+//			e.printStackTrace();
+			System.out.println("Thread is stopped");
+		}
+		
+		System.out.println("end:"+new Date());
+	}
+}
+
+package cn.itcast.thread.stop;
+
+public class ThreadStopTest {
+	public static void main(String[] args) {
+		MyThread mt = new MyThread();
+		
+		mt.setName("Zhou Jielun");
+		
+		mt.start();
+//		try {
+//			Thread.sleep(3000);
+//			mt.stop();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+	}
+
+}
+
+Result:
+start:Thu Jul 25 21:58:07 CST 2019
+end:Thu Jul 25 21:58:17 CST 2019
+*******************************************************************************
+package cn.itcast.thread.stop;
+
+import java.util.Date;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		System.out.println("start:"+new Date());
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+//			e.printStackTrace();
+			System.out.println("Thread is stopped");
+		}
+		
+		System.out.println("end:"+new Date());
+	}
+}
+
+package cn.itcast.thread.stop;
+
+public class ThreadStopTest {
+	public static void main(String[] args) {
+		MyThread mt = new MyThread();
+		
+		mt.setName("Zhou Jielun");
+		
+		mt.start();
+		try {
+			Thread.sleep(3000);
+			mt.stop();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+Result: // the coming code can’t be run, so it is not safe
+start:Thu Jul 25 21:55:49 CST 2019
+********************************************
+
+Interrupt:
+package cn.itcast.thread.stop;
+
+import java.util.Date;
+
+public class MyThread extends Thread {
+	@Override
+	public void run() {
+		System.out.println("start:"+new Date());
+		
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+//			e.printStackTrace();
+			System.out.println("Thread is stopped");
+		}
+		
+		System.out.println("end:"+new Date());
+	}
+}
+
+package cn.itcast.thread.stop;
+
+public class ThreadStopTest {
+	public static void main(String[] args) {
+		MyThread mt = new MyThread();
+		
+		mt.setName("Zhou Jielun");
+		
+		mt.start();
+		try {
+			Thread.sleep(3000);
+//			mt.stop();
+			mt.interrupt();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+Result:
+start:Thu Jul 25 22:00:24 CST 2019
+Thread is stopped
+end:Thu Jul 25 22:00:27 CST 2019
+
+************************************************************************
