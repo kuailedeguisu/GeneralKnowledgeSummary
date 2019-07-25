@@ -1191,3 +1191,80 @@ count=6
 Console:
 You can play at most 5 times, please pay
 ***************************************************************************************
+NIO: New IO
+JDK 4:
+	Buffer
+	Channel
+JDK 7:
+	Path:  path
+	Paths: static method to return a path
+	Files: provide static method
+***************************************
+Path
+	Module java.base
+	Package java.nio.file
+	Interface Path
+
+Paths
+	Module java.base
+	Package java.nio.file
+	Class Paths
+		java.lang.Object
+			java.nio.file.Paths
+	
+	public static Path get​(String first,
+                       String... more)
+	public static Path get​(URI uri)
+
+Files
+	Module java.base
+	Package java.nio.file
+	Class Files
+
+		java.lang.Object
+			java.nio.file.Files
+
+	methods:
+		public static long copy​(Path source,
+							OutputStream out)
+					 throws IOException
+		public static Path write​(Path path,
+							 Iterable<? extends CharSequence> lines,
+							 Charset cs,
+							 OpenOption... options)
+					  throws IOException
+**********************************************************************
+Summary
+1-Login regiser syster IO version
+2-Data operation stream
+	DataOutputStream
+	DataInputStream
+3-Memory operation stream
+	ByteArrayInputStream, ByteArrayOutputStream
+	CharArrayReader, CharArrayWriter
+	StringReader, StringWriter
+4-Print stream(***)
+	PrintStream
+	PrintWriter
+	println-auto flush
+5-standard input and output stream
+	System.in-InputStream
+	System.out-PrintStream
+6-random access stream
+	RandomAccessFile
+	read and write data by file pointer
+7-combined stream
+	SequenceInputStream
+8-seriable stream
+	ObjectOutputStream
+	ObjectInputStream
+9-Properties
+	getProperties
+	setProperties
+	stringPropertyNames
+	load
+	store
+10-NIO
+	Path
+	Paths
+	Files
