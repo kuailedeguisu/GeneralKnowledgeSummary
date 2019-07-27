@@ -1745,3 +1745,757 @@ Thread is stopped
 end:Thu Jul 25 22:00:27 CST 2019
 
 ************************************************************************
+Thread lifetime
+	new: create Thread Object
+	ready: Threasd has execution qualifications, but not execution rights
+	running: Thread has execution qualifications and execution rights
+		Thread blocking : due to some operation, Thread has changed into the status,
+						  has no execution qualifications and execution rights,
+						  however, some operation can make it changed into ready status
+	dead: Thread Object has changed into garage, wait for being collected
+
+1. new-----(start())---->ready---(grab CPU execution)----->running--------1.run() is over
+																	   2. stop() or interrupt()---------->dead
+2. running------(sleep() or wait())------------>blocking--------(sleep() time is done or notify())--------->ready
+
+3. running-----------(CPU execution is grab by other Threads)------------------>ready
+*******************************************************************************************
+ The other way to create a thread is to declare a class that implements the Runnable interface. That class then implements the run method. An instance of the class can then be allocated, passed as an argument when creating Thread, and started. The same example in this other style looks like the following:
+
+         class PrimeRun implements Runnable {
+             long minPrime;
+             PrimeRun(long minPrime) {
+                 this.minPrime = minPrime;
+             }
+
+             public void run() {
+                 // compute primes larger than minPrime
+                  . . .
+             }
+         }
+     
+
+The following code would then create a thread and start it running:
+
+         PrimeRun p = new PrimeRun(143);
+         new Thread(p).start();
+*******************************************************************************
+package cn.itcast.thread.create.runnable;
+
+public class MyRunnable implements Runnable {
+
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName() + ":"+i);
+		}
+	}
+
+}
+
+package cn.itcast.thread.create.runnable;
+
+public class MyThreadCreateSecondTest {
+
+	public static void main(String[] args) {
+		MyRunnable mr1 = new MyRunnable(); // only need create one MyRunnable instance
+		
+//		Thread t1 = new Thread(mr1);
+//		Thread t2 = new Thread(mr2);
+//		
+//		t1.setName("Liu Bei");
+//		t2.setName("Zhu Geliang");
+		
+		Thread t1 = new Thread(mr1, "Liu Bei");
+		Thread t2 = new Thread(mr1, "Zhu Geliang");
+		
+		t1.start();
+		t2.start();
+	}
+}
+
+
+result:
+Zhu Geliang:0
+Liu Bei:0
+Zhu Geliang:1
+Liu Bei:1
+Zhu Geliang:2
+Liu Bei:2
+Zhu Geliang:3
+。。。
+***************************************************************
+ The different between two methods to implement multi-thread
+	method 1: inherite Class Thread
+		A: self define Class MyThread, inheriting Class Thread
+		B: rewrite run() method
+		C: create MyThread instance
+		D: call start() method to start MyThread instance
+		
+		Issue:
+			a: rewrite run()?                    run() wraps the code executed by Thread
+			b: which method to start Thread?     start()
+			c: run() and start()
+				run(): call it directly, common method
+				start(): start process at first, then call run() method by JVM
+		
+	method 2: implement Runnable interface
+		A: self define Class MyRunnable, implementing interface Runnable
+		B: rewrite run() method
+		C: create MyRunnable instance
+		DL create Thread instance by passing MyRunnable instance,
+		   call start() method to start Thread instance
+**********************************************************
+method 2 advantanges: (we use method 2 mostly)
+	A: Addressing the limitations of single inheritance
+	B: Suitable for multiple identical program code to deal with the same resource situation, 
+	   the inter-thread program code, data effective separation, a better embodiment of object-oriented design ideas
+***********************************************************************************
+Req:A cinema, is showing a New Year's eve blockbuster, there are 100 tickets, 3 ticket windows, 
+    please design a program to simulate the cinema ticket sales 
+***********************************************************************************
+method 1: Thread
+************************************************************************************
+package cn.itcast.thread.ticket;
+
+public class SellTicketThread extends Thread {
+	private static int tickets = 100;
+	
+	public void run() {
+		while (true) {
+			if (tickets > 0) {
+				System.out.println(getName()+ " is selling the "+(tickets--)+" tickets");
+			}
+			
+		}
+	}
+}
+
+package cn.itcast.thread.ticket;
+
+public class SellTicketThreadTest {
+
+	public static void main(String[] args) {
+		SellTicketThread stt1 = new SellTicketThread();
+		SellTicketThread stt2 = new SellTicketThread();
+		SellTicketThread stt3 = new SellTicketThread();
+		
+		stt1.setName("No.1");
+		stt2.setName("No.2");
+		stt3.setName("No.3");
+		
+		stt1.start();
+		stt2.start();
+		stt3.start();
+
+	}
+
+}
+
+*************************************************************
+method 2: Runnable
+*************************************************************
+
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnable implements Runnable {
+	private int tickets = 100;// not need static because of only one instance
+
+	public void run() {	
+		while (true) { // because of more than one movie
+			if (tickets > 0) {
+				System.out.println(Thread.currentThread().getName()+" is selling the " +(tickets--)+" tickets");
+			}
+		}
+	}
+}
+
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnableTest {
+
+	public static void main(String[] args) {
+		SellTicketRunnable str = new SellTicketRunnable();
+		
+		Thread t1 = new Thread(str, "No.1");
+		Thread t2 = new Thread(str, "No.2");
+		Thread t3 = new Thread(str, "No.3");
+		
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+}
+
+*********************************************************
+result:
+*********************************************************
+No.1 is selling the 100 tickets
+No.2 is selling the 98 tickets
+No.3 is selling the 99 tickets
+No.2 is selling the 96 tickets
+No.1 is selling the 97 tickets
+No.2 is selling the 94 tickets
+No.3 is selling the 95 tickets
+No.2 is selling the 92 tickets
+No.1 is selling the 93 tickets
+No.2 is selling the 90 tickets
+No.3 is selling the 91 tickets
+No.2 is selling the 88 tickets
+No.1 is selling the 89 tickets
+No.2 is selling the 86 tickets
+No.3 is selling the 87 tickets
+No.2 is selling the 84 tickets
+No.1 is selling the 85 tickets
+No.2 is selling the 82 tickets
+No.3 is selling the 83 tickets
+No.2 is selling the 80 tickets
+No.2 is selling the 78 tickets
+No.1 is selling the 81 tickets
+No.2 is selling the 77 tickets
+No.3 is selling the 79 tickets
+No.2 is selling the 75 tickets
+No.1 is selling the 76 tickets
+No.2 is selling the 73 tickets
+No.3 is selling the 74 tickets
+No.2 is selling the 71 tickets
+No.1 is selling the 72 tickets
+No.1 is selling the 68 tickets
+No.2 is selling the 69 tickets
+No.3 is selling the 70 tickets
+No.2 is selling the 66 tickets
+No.2 is selling the 64 tickets
+No.2 is selling the 63 tickets
+No.1 is selling the 67 tickets
+No.2 is selling the 62 tickets
+No.3 is selling the 65 tickets
+No.2 is selling the 60 tickets
+No.1 is selling the 61 tickets
+No.1 is selling the 57 tickets
+No.1 is selling the 56 tickets
+No.1 is selling the 55 tickets
+No.1 is selling the 54 tickets
+No.1 is selling the 53 tickets
+No.2 is selling the 58 tickets
+No.2 is selling the 51 tickets
+No.2 is selling the 50 tickets
+No.2 is selling the 49 tickets
+No.2 is selling the 48 tickets
+No.2 is selling the 47 tickets
+No.2 is selling the 46 tickets
+No.2 is selling the 45 tickets
+No.3 is selling the 59 tickets
+No.2 is selling the 44 tickets
+No.1 is selling the 52 tickets
+No.1 is selling the 41 tickets
+No.2 is selling the 42 tickets
+No.3 is selling the 43 tickets
+No.2 is selling the 39 tickets
+No.1 is selling the 40 tickets
+No.2 is selling the 37 tickets
+No.2 is selling the 35 tickets
+No.3 is selling the 38 tickets
+No.2 is selling the 34 tickets
+No.2 is selling the 32 tickets
+No.2 is selling the 31 tickets
+No.1 is selling the 36 tickets
+No.2 is selling the 30 tickets
+No.1 is selling the 29 tickets
+No.3 is selling the 33 tickets
+No.3 is selling the 26 tickets
+No.3 is selling the 25 tickets
+No.3 is selling the 24 tickets
+No.1 is selling the 27 tickets
+No.2 is selling the 28 tickets
+No.1 is selling the 22 tickets
+No.3 is selling the 23 tickets
+No.1 is selling the 20 tickets
+No.2 is selling the 21 tickets
+No.1 is selling the 18 tickets
+No.3 is selling the 19 tickets
+No.1 is selling the 16 tickets
+No.2 is selling the 17 tickets
+No.1 is selling the 14 tickets
+No.3 is selling the 15 tickets
+No.1 is selling the 12 tickets
+No.2 is selling the 13 tickets
+No.1 is selling the 10 tickets
+No.3 is selling the 11 tickets
+No.1 is selling the 8 tickets
+No.2 is selling the 9 tickets
+No.1 is selling the 6 tickets
+No.3 is selling the 7 tickets
+No.1 is selling the 4 tickets
+No.2 is selling the 5 tickets
+No.1 is selling the 2 tickets
+No.3 is selling the 3 tickets
+No.2 is selling the 1 tickets
+********************************************************
+delay for selling tickets
+	Issue: repeated tickets sold
+				cause:  Each execution of the CPU must be an atomic operation 
+			minus ticket
+				cause: randomly, delay
+			
+***********************************************************
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnable implements Runnable {
+	private int tickets = 100;// shared by more instances
+
+	public void run() {	
+		while (true) { // because of more than one movie
+			if (tickets > 0) {
+				try {
+					Thread.sleep(100);// // delay 100  Milliseconds
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}  
+				System.out.println(Thread.currentThread().getName()+" is selling the " +(tickets--)+" tickets");
+			}
+		}
+	}
+}
+
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnableTest {
+
+	public static void main(String[] args) {
+		SellTicketRunnable str = new SellTicketRunnable();
+		
+		Thread t1 = new Thread(str, "No.1");
+		Thread t2 = new Thread(str, "No.2");
+		Thread t3 = new Thread(str, "No.3");
+		
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+}
+
+
+result:
+No.1 is selling the 100 tickets
+No.2 is selling the 99 tickets
+No.3 is selling the 98 tickets
+No.3 is selling the 97 tickets
+No.1 is selling the 96 tickets
+No.2 is selling the 95 tickets
+No.3 is selling the 94 tickets
+No.2 is selling the 93 tickets
+No.1 is selling the 92 tickets
+No.3 is selling the 91 tickets
+No.2 is selling the 90 tickets
+No.1 is selling the 89 tickets
+No.3 is selling the 88 tickets
+No.2 is selling the 87 tickets
+No.1 is selling the 86 tickets
+No.3 is selling the 85 tickets
+No.2 is selling the 84 tickets
+No.1 is selling the 83 tickets
+No.3 is selling the 82 tickets
+No.2 is selling the 81 tickets
+No.1 is selling the 80 tickets
+No.3 is selling the 79 tickets
+No.2 is selling the 78 tickets
+No.1 is selling the 77 tickets
+No.3 is selling the 76 tickets
+No.2 is selling the 75 tickets
+No.1 is selling the 74 tickets
+No.3 is selling the 73 tickets
+No.2 is selling the 72 tickets
+No.1 is selling the 71 tickets
+No.3 is selling the 70 tickets
+No.2 is selling the 69 tickets
+No.1 is selling the 68 tickets
+No.3 is selling the 67 tickets
+No.2 is selling the 66 tickets
+No.1 is selling the 65 tickets
+No.3 is selling the 64 tickets
+No.2 is selling the 63 tickets
+No.1 is selling the 62 tickets
+No.3 is selling the 61 tickets
+No.2 is selling the 60 tickets
+No.1 is selling the 59 tickets
+No.3 is selling the 58 tickets
+No.2 is selling the 57 tickets
+No.1 is selling the 56 tickets
+No.3 is selling the 55 tickets
+No.2 is selling the 54 tickets
+No.1 is selling the 53 tickets
+No.3 is selling the 52 tickets
+No.2 is selling the 51 tickets
+No.1 is selling the 50 tickets
+No.3 is selling the 49 tickets
+No.2 is selling the 48 tickets
+No.1 is selling the 47 tickets
+No.3 is selling the 46 tickets
+No.2 is selling the 45 tickets
+No.1 is selling the 45 tickets
+No.3 is selling the 44 tickets
+No.2 is selling the 42 tickets
+No.1 is selling the 43 tickets
+No.3 is selling the 41 tickets
+No.1 is selling the 40 tickets
+No.2 is selling the 39 tickets
+No.3 is selling the 38 tickets
+No.2 is selling the 37 tickets
+No.1 is selling the 36 tickets
+No.3 is selling the 35 tickets
+No.2 is selling the 34 tickets
+No.1 is selling the 34 tickets
+No.3 is selling the 33 tickets
+No.2 is selling the 32 tickets
+No.1 is selling the 32 tickets
+No.3 is selling the 31 tickets
+No.2 is selling the 30 tickets
+No.1 is selling the 30 tickets
+No.3 is selling the 29 tickets
+No.1 is selling the 27 tickets
+No.2 is selling the 28 tickets
+No.3 is selling the 26 tickets
+No.2 is selling the 25 tickets
+No.1 is selling the 24 tickets
+No.3 is selling the 23 tickets
+No.1 is selling the 22 tickets
+No.2 is selling the 21 tickets
+No.3 is selling the 20 tickets
+No.2 is selling the 19 tickets
+No.1 is selling the 18 tickets
+No.3 is selling the 17 tickets
+No.2 is selling the 16 tickets
+No.1 is selling the 15 tickets
+No.3 is selling the 14 tickets
+No.2 is selling the 13 tickets
+No.1 is selling the 12 tickets
+No.3 is selling the 11 tickets
+No.2 is selling the 10 tickets
+No.1 is selling the 9 tickets
+No.3 is selling the 8 tickets
+No.2 is selling the 7 tickets
+No.1 is selling the 6 tickets
+No.3 is selling the 5 tickets
+No.2 is selling the 4 tickets
+No.1 is selling the 3 tickets
+No.3 is selling the 2 tickets
+No.2 is selling the 1 tickets
+No.1 is selling the 0 tickets
+No.3 is selling the -1 tickets
+*********************************************************
+Ho shall we solve thread safety issue?
+	causes:
+		A: multi-thread environment?
+		B: shared data?
+		C: multiple sentences operated on shared data? 
+	solution:
+		C is the direction to change, wrap multiple sentences into a while entity 
+		and make other threads not run when one thread is operating shared data)
+		
+		thread synchronized: add lock for the running thread
+			synchronized(instance){the code synchronized;}
+				A: instance is any Object
+				B: instance is a lock, multiple threads use the same lock
+					when one thread grab CPU execution, the door is locked by the lock, other thread can't
+					execute the statement block in sychronized
+************************************************************************
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnable implements Runnable {
+	private int tickets = 100;// shared by more instances
+	private Object mutex = new Object();
+
+	public void run() {	
+		while (true) { // because of more than one movie
+			synchronized (mutex) {
+				if (tickets > 0) {
+					try {
+						Thread.sleep(100);// // delay 100  Milliseconds
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}  
+					System.out.println(Thread.currentThread().getName()+" is selling the " +(tickets--)+" tickets");
+				}
+			}
+
+		}
+	}
+}
+
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnableTest {
+
+	public static void main(String[] args) {
+		SellTicketRunnable str = new SellTicketRunnable();
+		
+		Thread t1 = new Thread(str, "No.1");
+		Thread t2 = new Thread(str, "No.2");
+		Thread t3 = new Thread(str, "No.3");
+		
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+}
+
+result:
+No.2 is selling the 100 tickets
+No.3 is selling the 99 tickets
+No.3 is selling the 98 tickets
+No.1 is selling the 97 tickets
+No.1 is selling the 96 tickets
+No.1 is selling the 95 tickets
+No.1 is selling the 94 tickets
+No.1 is selling the 93 tickets
+No.1 is selling the 92 tickets
+No.1 is selling the 91 tickets
+No.3 is selling the 90 tickets
+No.2 is selling the 89 tickets
+No.2 is selling the 88 tickets
+No.3 is selling the 87 tickets
+No.3 is selling the 86 tickets
+No.3 is selling the 85 tickets
+No.1 is selling the 84 tickets
+No.1 is selling the 83 tickets
+No.3 is selling the 82 tickets
+No.3 is selling the 81 tickets
+No.3 is selling the 80 tickets
+No.3 is selling the 79 tickets
+No.2 is selling the 78 tickets
+No.2 is selling the 77 tickets
+No.2 is selling the 76 tickets
+No.2 is selling the 75 tickets
+No.2 is selling the 74 tickets
+No.2 is selling the 73 tickets
+No.3 is selling the 72 tickets
+No.3 is selling the 71 tickets
+No.3 is selling the 70 tickets
+No.1 is selling the 69 tickets
+No.3 is selling the 68 tickets
+No.3 is selling the 67 tickets
+No.3 is selling the 66 tickets
+No.2 is selling the 65 tickets
+No.3 is selling the 64 tickets
+No.3 is selling the 63 tickets
+No.3 is selling the 62 tickets
+No.3 is selling the 61 tickets
+No.1 is selling the 60 tickets
+No.1 is selling the 59 tickets
+No.1 is selling the 58 tickets
+No.1 is selling the 57 tickets
+No.1 is selling the 56 tickets
+No.1 is selling the 55 tickets
+No.1 is selling the 54 tickets
+No.3 is selling the 53 tickets
+No.2 is selling the 52 tickets
+No.2 is selling the 51 tickets
+No.2 is selling the 50 tickets
+No.2 is selling the 49 tickets
+No.3 is selling the 48 tickets
+No.1 is selling the 47 tickets
+No.1 is selling the 46 tickets
+No.1 is selling the 45 tickets
+No.1 is selling the 44 tickets
+No.1 is selling the 43 tickets
+No.3 is selling the 42 tickets
+No.2 is selling the 41 tickets
+No.2 is selling the 40 tickets
+No.2 is selling the 39 tickets
+No.2 is selling the 38 tickets
+No.3 is selling the 37 tickets
+No.3 is selling the 36 tickets
+No.1 is selling the 35 tickets
+No.1 is selling the 34 tickets
+No.1 is selling the 33 tickets
+No.1 is selling the 32 tickets
+No.1 is selling the 31 tickets
+No.1 is selling the 30 tickets
+No.1 is selling the 29 tickets
+No.1 is selling the 28 tickets
+No.1 is selling the 27 tickets
+No.1 is selling the 26 tickets
+No.1 is selling the 25 tickets
+No.1 is selling the 24 tickets
+No.1 is selling the 23 tickets
+No.1 is selling the 22 tickets
+No.1 is selling the 21 tickets
+No.3 is selling the 20 tickets
+No.2 is selling the 19 tickets
+No.2 is selling the 18 tickets
+No.2 is selling the 17 tickets
+No.2 is selling the 16 tickets
+No.2 is selling the 15 tickets
+No.3 is selling the 14 tickets
+No.3 is selling the 13 tickets
+No.1 is selling the 12 tickets
+No.1 is selling the 11 tickets
+No.1 is selling the 10 tickets
+No.1 is selling the 9 tickets
+No.3 is selling the 8 tickets
+No.3 is selling the 7 tickets
+No.3 is selling the 6 tickets
+No.3 is selling the 5 tickets
+No.3 is selling the 4 tickets
+No.2 is selling the 3 tickets
+No.2 is selling the 2 tickets
+No.3 is selling the 1 tickets
+**********************************************************************
+example for synchronized: Go to toilet on the train
+*********************************************************************
+sychronized features:
+	A: multi-thread
+	B: multi-thread are using the same lock instance
+	C: sychronized statement block lock is any instance
+sychronized advantages:
+	A: solve the thread safety issue for multi-thread
+sychronized disadvantages:
+	A: for many threads, it is not efficient
+***********************************************************************
+synchronized method format: don't need Object instance but no lock, has multi-thread safety issues
+	private sychronized void sellTicket() {
+		if (tickets > 0) {
+		try {
+			Thread.sleep(100);// // delay 100  Milliseconds
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}  
+		System.out.println(Thread.currentThread().getName()+" is selling the " +(tickets--)+" tickets");
+	}
+
+**************************************************************************
+use this instance for lock
+****************************************************************************
+package cn.itcast.thread.ticket;
+
+public class SellTicketRunnable implements Runnable {
+	private int tickets = 100;// shared by more instances
+//	private Object mutex = new Object();
+
+	public void run() {	
+		while (true) { // because of more than one movie
+			synchronized (this) {
+				if (tickets > 0) {
+					try {
+						Thread.sleep(100);// // delay 100  Milliseconds
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}  
+					System.out.println(Thread.currentThread().getName()+" is selling the " +(tickets--)+" tickets");
+				}
+			}
+
+		}
+	}
+}
+
+*******************************************************************************************
+A: sychronized code block lock instance?
+	any instance
+B: sychronized method format and instance issue?
+	put sychronized on method
+	synchronized lock?
+		this
+		sychronized(this)
+C: static method and lock instance?
+	this is not existing for static member
+	lock instance: Class byte code instance, sychronized(SellTicketRunnable.class)
+************************************************************************************
+thread safe:
+	StringBuffer
+	Vector
+	HashTable
+	
+Collections:
+	public static <T> Collection<T> synchronizedCollection​(Collection<T> c)
+	public static <T> Set<T> synchronizedSet​(Set<T> s)
+	public static <T> SortedSet<T> synchronizedSortedSet​(SortedSet<T> s)
+	public static <T> NavigableSet<T> synchronizedNavigableSet​(NavigableSet<T> s)
+	public static <T> List<T> synchronizedList​(List<T> list)
+	public static <K,V> Map<K,V> synchronizedMap​(Map<K,V> m)
+	public static <K,V> SortedMap<K,V> synchronizedSortedMap​(SortedMap<K,V> m)
+	public static <K,V> NavigableMap<K,V> synchronizedNavigableMap​(NavigableMap<K,V> m)
+************************************************************************************************
+package cn.itcast.thread.safe;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+public class ThreadSafeTest {
+
+	public static void main(String[] args) {
+		StringBuffer sBuffer = new StringBuffer();
+		Vector<String> strVec = new Vector<String>();
+		Hashtable<String, String> h = new Hashtable<String, String>();
+		
+		List<String> strList = Collections.synchronizedList(new ArrayList<String>());
+		Set<String> strSet = Collections.synchronizedSet(new HashSet<String>());
+		Map<String, String> strMap = Collections.synchronizedMap(new HashMap<String, String>());
+		Collection<String> strColl = Collections.synchronizedCollection(new ArrayList<String>());
+	}
+}
+****************************************************************************************************
+summary:
+multi-thread:
+	process : running application program
+	thread: process execution unit, execution path
+		single thread: one application program has only one execution path
+		multi-thread: one application program has multiple execution path
+	
+	multi-process: improve CPU efficiency
+	multi-thread: improve program efficiency
+	
+	java commmand to start JVM, JVM start one process, the process start a main thread
+	JVM starting processes is multi-thread
+		main thread
+		garage collecting thread
+		other threads
+	
+	Two methods to implements multi-thread
+		A: inherit Thread
+		B: implement Runnable
+	
+	thread dispatch and priority
+	thread dispatch:
+		A: time
+		B: grab
+	priority:
+		SetPriority and getPriority
+		default: 5
+		range: 1-10
+	
+	thread control
+		join
+		sleep
+		yield
+		stop
+		interrupt
+		
+	thread lifetime:
+		A: new
+		B: ready
+		C: running
+		D: blocking
+		E: dead
+		
+	thread safety
+		A: sell cinema tickets 
+		B: sychronized
+			sychronized code block
+			sychronized method: 
+	
+	thread safe:
+		StringBuffer
+		Vector
+		Hashtable
+		
+		Collections static methods to convert common Collection into thread safe Collection
+	
+
