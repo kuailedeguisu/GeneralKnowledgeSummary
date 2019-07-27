@@ -1,0 +1,398 @@
+Lock
+	after JDK5
+	know where to add lock and where to release lock
+	public interface Lock
+
+	Lock implementations provide more extensive locking operations than can be obtained 
+	using synchronized methods and statements. They allow more flexible structuring, 
+	may have quite different properties, and may support multiple associated Condition objects. 
+	
+	void lock()   // Acquires the lock. 
+	void unlock() // Releases the lock. 
+	
+**********************************************************
+ReentrantLock
+	public class ReentrantLock
+	extends Object
+	implements Lock, Serializable
+
+	A reentrant mutual exclusion Lock with the same basic behavior and semantics 
+	as the implicit monitor lock accessed using synchronized methods and statements,
+	but with extended capabilities. 
+******************************************************************************
+package cn.itcast.sell.tickets;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class SellTickets implements Runnable {
+	private int tickets = 100;
+	private Lock lk = new ReentrantLock();
+
+	public void run() {
+		while (true) {
+			try {
+				lk.lock();
+				if (tickets > 0) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					System.out.println(Thread.currentThread().getName()
+							+" is selling the " + (tickets--) + " tickets");
+				}
+			} finally { // in case exception occurs, lock can't be released
+				lk.unlock();
+			}
+		}	
+	}
+}
+
+package cn.itcast.sell.tickets;
+
+public class SellTicketsTest {
+
+	public static void main(String[] args) {
+		SellTickets sTickets = new SellTickets();
+		
+		Thread t1 = new Thread(sTickets, "W1");
+		Thread t2 = new Thread(sTickets, "W2");
+		Thread t3 = new Thread(sTickets, "W3");
+		
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+}
+
+result:
+the same as above
+*******************************************
+Dead Lock issues
+sychronized disadvantages:
+	low efficiency
+	if sychronized nesting occurs, it is easily to generate dead lock issues
+Dead lock issue:
+	 Two or more threads are in the process of execution because of 
+	 a phenomenon of waiting for each other as a result of 
+	 competing for resources
+	 
+	 Synchronized code block nesting cases 
+*******************************************************************
+package cn.itcast.dead.lock;
+
+public class MyLock {
+	public static final Object objA = new Object();
+	public static final Object objB = new Object();
+}
+
+package cn.itcast.dead.lock;
+
+public class DeadLock extends Thread {
+	boolean flag = true;
+
+	public DeadLock(boolean flag) {
+		this.flag = flag;
+	}
+
+	public void run() {
+		if (flag) {
+			synchronized (MyLock.objA) {
+				System.out.println("if objA");
+				synchronized (MyLock.objB) {
+					System.out.println("if objB");
+				}
+			}
+
+		} else {
+			synchronized (MyLock.objB) {
+				System.out.println("else objB");
+				synchronized (MyLock.objA) {
+					System.out.println("else objA");
+				}
+			}
+
+		}
+	}
+
+}
+
+package cn.itcast.dead.lock;
+
+public class DeadLockTest {
+
+	public static void main(String[] args) {
+		DeadLock dLock1 = new DeadLock(true);
+		DeadLock dLock2 = new DeadLock(false);
+		
+		dLock1.start();
+		dLock2.start();
+
+	}
+
+}
+
+result 1:
+else objB
+if objA
+
+result 2:
+if objA
+else objB
+
+result 3:
+else objB
+else objA
+if objA
+if objB
+
+result 4:
+if objA
+if objB
+else objB
+else objA
+********************************************************************
+interthreaded communication
+	There are different kinds of threads for operations for the same resource
+	
+ 
+Producer ： set thread
+Consumer : get thread
+**********************************************************************
+package cn.itcast.thread.interthread.communication;
+
+public class Student {
+	private String nameString;
+	private int age;
+	
+	
+	public Student() {
+		super();
+	}
+
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+
+	public String getNameString() {
+		return nameString;
+	}
+
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public void setAge(int age) {
+		this.age = age;
+	};
+}
+
+
+package cn.itcast.thread.interthread.communication;
+
+public class SetThread implements Runnable {
+
+	public void run() {
+		Student student = new Student();
+		student.setNameString("Lin Qingxia");
+		student.setAge(20);
+	}
+}
+
+package cn.itcast.thread.interthread.communication;
+
+public class GetThread implements Runnable {
+
+	public void run() {
+		Student student = new Student();
+		System.out.println(student.getNameString()+"---"+student.getAge());
+	}
+
+}
+
+package cn.itcast.thread.interthread.communication;
+
+public class StudentDemo {
+	public static void main(String[] args) {
+		SetThread sThread = new SetThread();
+		GetThread gThread = new GetThread();
+
+		Thread s = new Thread(sThread);
+		Thread g = new Thread(gThread);
+		
+		s.start();
+		g.start();
+	}
+}
+
+result:
+null---0
+****************************************************
+Because SetThread and GetThread are using different resources
+Methods:
+	A: create data outside, then pass data to each constructor
+	B:
+	
+Problems:add loop and judgement, generate new issues
+	a: repeated data
+	b: name and age not matched
+Cause:
+	a: repeated data
+		CPU time slice execution can run many times loop
+	b: name and age not matched
+		thread run randomly
+
+thread safety issues
+	A:multi-thread
+	B:shared data
+	C: multiple sentences operating shared data
+
+solution:
+	add lock
+	note:
+		A: add lock for each thread
+		B: add the same lock for different thread
+*************************************************
+method A
+*****************************************************
+package cn.itcast.thread.interthread.communication;
+
+public class SetThread implements Runnable {
+	private Student student;
+	
+	
+	public SetThread() {
+		super();
+	}
+
+	public SetThread(Student student) {
+		super();
+		this.student = student;
+	}
+	
+	public void run() {
+		student.setNameString("Lin Qingxia");
+		student.setAge(20);
+	}
+}
+
+package cn.itcast.thread.interthread.communication;
+
+public class GetThread implements Runnable {
+	private Student student;
+	
+	public GetThread() {
+		super();
+	}
+
+	public GetThread(Student student) {
+		super();
+		this.student = student;
+	}
+
+	public void run() {
+		System.out.println(student.getNameString()+"---"+student.getAge());
+	}
+
+}
+
+package cn.itcast.thread.interthread.communication;
+
+public class StudentDemo {
+	public static void main(String[] args) {
+		Student student = new Student();
+		
+		SetThread sThread = new SetThread(student);
+		GetThread gThread = new GetThread(student);
+
+		Thread s = new Thread(sThread);
+		Thread g = new Thread(gThread);
+		
+		s.start();
+		g.start();
+	}
+}
+
+result: randomly because s and g will grab CPU execution
+Lin Qingxia---20
+***********************************************************************
+Good code
+package cn.itcast.thread.interthread.communication;
+
+public class SetThread implements Runnable {
+	private Student student;
+	private int x = 0;
+	
+	
+	public SetThread() {
+		super();
+	}
+
+	public SetThread(Student student) {
+		super();
+		this.student = student;
+	}
+	
+	public void run() {
+		while (true) {
+			synchronized (student) {
+				if (x%2 == 0) {
+					student.setNameString("Lin Qingxia");
+					student.setAge(20);
+				} else {
+					student.setNameString("Liu Yi");
+					student.setAge(30);
+				}
+				x++;
+			}
+
+		}
+
+	}
+}
+
+package cn.itcast.thread.interthread.communication;
+
+public class GetThread implements Runnable {
+	private Student student;
+	
+	public GetThread() {
+		super();
+	}
+
+	public GetThread(Student student) {
+		super();
+		this.student = student;
+	}
+
+	public void run() {
+		while (true) {
+			synchronized (student) {
+				System.out.println(student.getNameString()+"---"+student.getAge());
+			}
+			
+		}	
+	}
+}
+
+result:
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+......
+**************************************************************
+
