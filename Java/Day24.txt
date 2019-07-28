@@ -395,4 +395,314 @@ Lin Qingxia---20
 Lin Qingxia---20
 ......
 **************************************************************
+Day24_2.txt
+A: producer: 
+	check if data exists
+		if yes, wait;
+		else, product data, after that, inform consumer to consume
+B:consumer:
+	check if data exists
+		if yes, consume, after that, inform producer to produce
+		else, wait for data,
 
+
+Thread wakeup Mechanism:
+	Object method
+	public final void notify()
+	public final void notifyAll()
+	public final void wait() throws InterruptedException
+	public final void wait (long timeoutMillis) throws InterruptedException
+	public final void wait (long timeoutMillis, int nanos) throws InterruptedException
+	why in Object?
+		Because these methods are called by lock instance, while lock instance is any instance
+
+	wait: call wait, release lock immediately, call notify, begin with the point of calling wait
+*********************************************
+Student add flag, default value is false
+**********************************************
+package cn.itcast_03;
+
+public class Student {
+	private String nameString;
+	private int age;
+	boolean flag;
+
+	public Student() {
+		super();
+	}
+
+	public Student(String nameString, int age) {
+		super();
+		this.nameString = nameString;
+		this.age = age;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+}
+
+*********************************************
+SetThread: 
+	flag is true
+		wait
+	flag is false
+		produce
+		after produce
+			set flag as true
+			notify
+*********************************************
+package cn.itcast_03;
+
+
+public class SetThread implements Runnable {
+	private Student student;
+	private int x;
+	
+	
+	public SetThread(Student student) {
+		super();
+		this.student = student;
+	}
+
+
+	@Override
+	public void run() {
+		while (true) {
+			synchronized (student) {
+				if (student.flag) {
+					try {
+						student.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (x%2 == 0) {
+					student.setNameString("Lin Qingxia");
+					student.setAge(20);
+				} else {
+					student.setNameString("Liu Yi");
+					student.setAge(40);
+				}
+				x++;
+				
+				student.setFlag(true);
+				student.notify();
+
+			}
+		}
+	}
+}
+
+******************************************************
+GetThread:
+	flag is false
+		wait
+	flag is true
+		consume
+		after consume
+			set flag as false
+			notify
+*********************************************************
+package cn.itcast_03;
+
+public class GetThread implements Runnable {
+	private Student student;
+	
+	
+	public GetThread(Student student) {
+		super();
+		this.student = student;
+	}
+
+
+	@Override
+	public void run() {
+		while (true) {
+			synchronized (student) {
+				if (!student.flag) {
+					try {
+						student.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				System.out.println(student.getNameString()+"---"+student.getAge());
+				student.setFlag(false);
+				student.notify();
+			}
+		}
+
+	}
+}
+    
+*******************************************************************************************
+Test class not changed
+*******************************************************************************************
+package cn.itcast_03;
+
+public class StudentTest {
+
+	public static void main(String[] args) {
+		Student student = new Student();
+		SetThread setThread = new SetThread(student);
+		GetThread getThread = new GetThread(student);
+		
+		Thread tThread = new Thread(setThread);
+		Thread gThread = new Thread(getThread);
+		
+		tThread.start();
+		gThread.start();
+	}
+}
+
+********************************************************************************************
+Thread state conversion:
+A: new->ready->running->dead
+B:new->ready->running->ready->running->dead
+C: new->ready->running->other blocking->ready->running->dead
+D:new->ready->running->synchronized blocking->ready->running->dead
+E:new->ready->running->wait blocking->synchronized blocking->ready->running->dead
+
+new->ready: start()
+Ready->running: get CPU execution
+Running->ready: lose CPU execution
+Running->other blocking: sleep(), join(), IO
+Other blocking->ready: sleep() timeout, join() thread is done, IO is done
+Running->dead: run() is over
+Running->wait blocking: wait()
+Wait blocking-> synchronized blocking: notify()
+Running->synchronized blocking: synchronized() {}
+Synchronized blocking->ready: lock is available
+*****************************************************************************************
+
+Thread Group:
+	make multiple threads into a group
+	Classified management of a batch of threads, java allows control of thread groups
+
+	public final String getName()
+
+	default ThreadGroup is main
+	Thread created in main function: ThreadGroup is main
+	main thread: ThreadGroup is main
+
+	 public ThreadGroup​(String name)
+Thread:
+	public final ThreadGroup getThreadGroup()
+	public Thread​(ThreadGroup group,
+              Runnable target,
+              String name)
+***********************************************************************
+package cn.itcast_04;
+
+public class MyRunnable implements Runnable {
+
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+	}
+
+}
+
+package cn.itcast_04;
+
+public class ThreadGroupTest {
+
+	public static void main(String[] args) {
+		MyRunnable myRunnable = new MyRunnable();
+		
+		Thread t1 = new Thread(myRunnable, "Lin Qingxia");
+		Thread t2 = new Thread(myRunnable, "Liu Yi");
+		
+		System.out.println("t1 ThreadGroup: "+t1.getThreadGroup().getName());
+		System.out.println("t2 ThreadGroup: "+t2.getThreadGroup().getName());
+		System.out.println("main thread ThreadGroup:"+Thread.currentThread().getThreadGroup().getName());
+
+	}
+
+}
+
+Result:
+t1 ThreadGroup: main
+t2 ThreadGroup: main
+main thread ThreadGroup:main
+**********************************************************************
+package cn.itcast_05;
+
+public class MyRunnable implements Runnable {
+
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+	}
+
+}
+
+package cn.itcast_05;
+
+public class ThreadGroupTest {
+
+	public static void main(String[] args) {
+//		method1();
+		method2();
+
+	}
+
+	private static void method2() {
+		ThreadGroup tGroup = new ThreadGroup("ThreadGroup 1");
+		
+		MyRunnable myRunnable = new MyRunnable();
+		
+		Thread t1 = new Thread(tGroup, myRunnable, "Lin Qingxia");
+		Thread t2 = new Thread(tGroup, myRunnable, "Liu Yi");
+		
+		System.out.println("t1 ThreadGroup: "+t1.getThreadGroup().getName());
+		System.out.println("t2 ThreadGroup: "+t2.getThreadGroup().getName());
+		
+//		tGroup.setDaemon(true);// all threads in the same group are daemon thread
+
+	}
+
+	private static void method1() {
+		MyRunnable myRunnable = new MyRunnable();
+		
+		Thread t1 = new Thread(myRunnable, "Lin Qingxia");
+		Thread t2 = new Thread(myRunnable, "Liu Yi");
+		
+		System.out.println("t1 ThreadGroup: "+t1.getThreadGroup().getName());
+		System.out.println("t2 ThreadGroup: "+t2.getThreadGroup().getName());
+		System.out.println("main thread ThreadGroup:"+Thread.currentThread().getThreadGroup().getName());
+	}
+}
+
+Result:
+t1 ThreadGroup: ThreadGroup 1
+t2 ThreadGroup: ThreadGroup 1
+*****************************************************************
