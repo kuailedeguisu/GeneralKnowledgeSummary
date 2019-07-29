@@ -3287,3 +3287,374 @@ start()
 	new-ready-running-dead
 	new-ready-runnning-ready-dead
 	new-ready-running-blocking-ready-running-dead
+
+Day24_4.txt
+设计模式
+六大原则：
+	单一职责：高内聚，低耦合（自己能做的事情不麻烦别人，和别的类没有关联性）
+	开闭原则：对扩展开放，对修改关闭（别人的类不要改，只加自己的类；抽象类）
+	里氏替换原则：子类替换父类
+	依赖注入原则：要依赖于抽象类，不要依赖于具体实现（传参为父类）
+	接口分离原则：一个接口不应该提供很多功能，应该一个接口提供一个功能
+	迪米特法则：一个对象对其他对象了解少，低耦合，通过接口来编程
+
+提高可维护性和可扩展性
+
+设计模式：模型，经验的总结，思想
+Book：java与模式
+分类：
+	A：创建型 创建对象， 包含简单工厂模式，单例模式
+	B：结构型 对象的组成
+	C：行为型 对象的功能
+
+创建型模式：
+	简单工厂模式：
+	工厂方法模式：
+	单例模式：
+
+****************************************************************************************
+简单工厂模式：让工厂类去实现创建各个对象，让各个对象只负责自己的功能即可
+缺点是：当有新的种类出现，需要修改工厂类，可维护性差
+****************************************************************************************
+package cn.itcast_01;
+
+public abstract class Animal {
+	public abstract void eat();
+}
+package cn.itcast_01;
+
+public class Dog extends Animal {
+
+	@Override
+	public void eat() {
+		System.out.println("Dog eats meat");
+	}
+
+}
+package cn.itcast_01;
+
+public class Cat extends Animal {
+
+	@Override
+	public void eat() {
+		System.out.println("Cat eats fish");
+	}
+
+}
+package cn.itcast_01;
+
+public class AnimalFactory {
+	private AnimalFactory() {}
+	
+	public static Animal createAnimal(String type) {
+		if ("dog".equals(type)) {
+			return new Dog();
+		} else if ("cat".equals(type)) {
+			return new Cat();
+		} else {
+			return null;
+		}
+	}
+
+}
+package cn.itcast_01;
+
+public class AnimalTest {
+
+	public static void main(String[] args) {
+		Animal a = AnimalFactory.createAnimal("dog");
+		a.eat();
+		a = AnimalFactory.createAnimal("cat");
+		a.eat();
+		a = AnimalFactory.createAnimal("pig");
+		if (a != null) {
+			a.eat();// NullPointerException
+		} else {
+			System.out.println("AnimalFactory can't produce pig");
+		}
+	}
+}
+
+result：
+Dog eats meat
+Cat eats fish
+AnimalFactory can't produce pig
+***************************************************************************************************************
+工厂方法模式：
+优点：新增对象只需增加相应的工厂类和相应的定义类，不用改变现有的代码；可扩展性好
+缺点：每次新增对象需要增加很多工作量
+*********************************************************************************
+用不同的实现工厂实现各个对象的创建，而总厂默认什么对象都能创建
+
+package cn.itcast_02;
+
+public abstract class Animal {
+	public abstract void eat();
+}
+package cn.itcast_02;
+
+public class Dog extends Animal {
+
+	@Override
+	public void eat() {
+		System.out.println("Dog eats meat");
+	}
+}
+package cn.itcast_02;
+
+public interface Factory {
+	public abstract Animal createAnimal();
+
+}
+package cn.itcast_02;
+
+public class DogFactory implements Factory {
+	
+	@Override
+	public Animal createAnimal() {
+		return new Dog();
+	}
+
+}
+package cn.itcast_02;
+
+public class Cat extends Animal {
+
+	@Override
+	public void eat() {
+		System.out.println("Cat eats fish");
+	}
+
+}
+package cn.itcast_02;
+
+public class CatFactory implements Factory {
+
+	@Override
+	public Animal createAnimal() {
+		return new Cat();
+	}
+
+}
+
+package cn.itcast_02;
+
+public class AnimalTest {
+
+	public static void main(String[] args) {
+		Factory factory = new DogFactory();
+		Animal animal = factory.createAnimal();
+		animal.eat();
+		
+		factory = new CatFactory();
+		animal = factory.createAnimal();
+		animal.eat();
+	}
+}
+
+result：
+Dog eats meat
+Cat eats fish
+***********************************************************
+
+单例模式：
+单例模式就是确保类在内存中只有一个对象，该实例必须自动创建，并且对外提供
+优点：在系统内存中只有对象，因此可以节约系统资源，对于一些需要频繁创建和销毁的对象，单例模式可以提高系统性能
+缺点：没有抽象层，扩展很难
+		职责过重，违背了单一职责原则
+
+A-构造方法私有
+B-在成员位置创建对象
+C-提供公共的方法访问对象
+
+单例模式种类：
+	饿汉式：类一加载就创建对象
+	懒汉式：用的时候，才去创建对象
+
+面试题：
+	单例模式的思想是什么？请用代码体现
+	开发：饿汉式（是不会出问题的单例模式）
+	面试：懒汉式（可能会出问题的单例模式）
+		A：懒加载（延迟加载）（不会出问题）
+		B：线程安全问题
+			a：是否多线程
+			b：是否共享数据
+			c：是否有多条语句操作共享数据
+		
+**************************************************************
+饿汉式：
+package cn.itcast_03;
+
+public class Student {
+	private Student() {} // private constructor will not create instance
+	
+	private static Student student = new Student(); // static in order that getStudent can access it, private in order that outside never changes it
+	
+	public static Student getStudent() {// static in order to access getStudent by Student Class name
+		return student;
+	}
+}
+
+package cn.itcast_03;
+
+public class StudentTest {
+
+	public static void main(String[] args) {
+//		Student.student = null;// we should not modify student
+		Student student1 = Student.getStudent();
+		Student student2 = Student.getStudent();
+		
+		System.out.println(student1 == student2);
+		
+		System.out.println(student1);
+		System.out.println(student2);
+
+	}
+
+}
+
+
+result：
+true
+cn.itcast_03.Student@4b1210ee
+cn.itcast_03.Student@4b1210ee
+**********************************************************
+懒汉式
+package cn.itcast_03;
+
+public class Teacher {
+	private Teacher() {}
+	
+	private static Teacher teacher = null;
+	
+	public synchronized static Teacher geTeacher() {
+		if (teacher == null) {
+			// t1, t2, t3
+			// each thread creates one Teacher instance if not synchronized
+			teacher = new Teacher();
+		}
+		
+		return teacher;
+	}
+
+}
+
+package cn.itcast_03;
+
+public class TeacherTest {
+
+	public static void main(String[] args) {
+		Teacher t1 = Teacher.geTeacher();
+		Teacher t2 = Teacher.geTeacher();
+		
+		System.out.println(t1 == t2);
+		System.out.println(t1);
+		System.out.println(t2);
+
+	}
+
+}
+
+
+result：
+true
+cn.itcast_03.Teacher@4b1210ee
+cn.itcast_03.Teacher@4b1210ee
+
+*********************************************************8
+Runtime:单例模式的饿汉式实例
+public class Runtime {
+    private static final Runtime currentRuntime = new Runtime();
+
+    private static Version version;
+
+    public static Runtime getRuntime() {
+        return currentRuntime;
+    }
+
+    private Runtime() {}
+……
+}
+
+public Process exec (String command) throws IOException.    // exec dos command
+Dos command:
+	这些在macbook不好用
+	win mine: 扫雷游戏
+	calc：计算器
+	shutdown -s -t 10000 : 2小时46分钟后关机
+	shutdown -a: cancel shutdown
+*************************************8
+package cn.itcast_04;
+
+import java.io.IOException;
+
+public class RuntimeTest {
+
+	public static void main(String[] args) throws IOException {
+		Runtime runtime = Runtime.getRuntime();
+		runtime.exec("calc");
+	}
+}
+result on macbook：
+Exception in thread "main" java.io.IOException: Cannot run program "calc": error=2, No such file or directory
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1128)
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1071)
+	at java.base/java.lang.Runtime.exec(Runtime.java:589)
+	at java.base/java.lang.Runtime.exec(Runtime.java:413)
+	at java.base/java.lang.Runtime.exec(Runtime.java:310)
+	at cn.itcast_04.RuntimeTest.main(RuntimeTest.java:9)
+Caused by: java.io.IOException: error=2, No such file or directory
+	at java.base/java.lang.ProcessImpl.forkAndExec(Native Method)
+	at java.base/java.lang.ProcessImpl.<init>(ProcessImpl.java:340)
+	at java.base/java.lang.ProcessImpl.start(ProcessImpl.java:271)
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1107)
+	... 5 more
+*************************************************
+summary
+多线程
+	JDK5针对线程的锁定操作和释放操作
+		Lock
+	死锁问题的描述和代码体现
+	生产者和消费者的多线程体现
+		资源类Student
+		设置数据类SetThread  生产者
+		获取数据类GetThread 消费者
+		测试类：StudentDemo
+	代码：
+		A：最基本的版本，只给一个数据
+		B：改进版本，给出不同数据
+		C：等待唤醒机制改进该程序，让数据依次实现
+	线程组
+	线程池
+	多线程实现的第三种方案
+	多线程的面试题
+
+设计模式
+	面向对象的常见设计原则
+		单一
+		开闭
+		里氏替换
+		依赖注入
+		接口分离
+		迪米特法则
+	
+	高内聚，低耦合，可操作，可维护，可扩展
+
+	设计模式：经验总结
+	分类：
+		创建型
+		结构型
+		行为型
+	简单工厂模式
+	工厂方法模式
+	单例模式
+		饿汉式
+		懒汉式
+
+Runtime
+	单例模式
+	调用Dos命令
+
+
+	
+	
