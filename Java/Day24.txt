@@ -706,3 +706,2584 @@ Result:
 t1 ThreadGroup: ThreadGroup 1
 t2 ThreadGroup: ThreadGroup 1
 *****************************************************************
+Producer and Consumer System:
+Put synchronized in Student Class, 
+then we don't need more changes in other Classes
+***************************************************************
+package cn.itcast.thread.wait.notify;
+
+public class Student {
+	private String name;
+	private int age;
+	private boolean flag;
+	
+	public synchronized void set(String name, int age) {
+		if (this.flag) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		this.name = name;
+		this.age = age;
+		
+		this.flag = false;
+		this.notify();
+	}
+	
+	public synchronized void get() {
+		if (!this.flag) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println(this.name+"---"+this.age);
+		this.flag = true;
+		this.notify();
+	}
+
+}
+
+package cn.itcast.thread.wait.notify;
+
+public class SetThread implements Runnable {
+	private Student student;
+	private int x;
+	
+	public SetThread(Student s) {
+		this.student = s;
+	}
+	
+	public void run() {
+		while (true) {		
+			if (x%2 == 0) {
+				student.set("Lin Qingxia", 20);
+			} else {
+				student.set("Liu Yi", 30);
+			}
+			x++;
+			}
+	}
+}
+
+package cn.itcast.thread.wait.notify;
+
+public class GetThread implements Runnable {
+	Student student;
+	
+	public GetThread(Student s) {
+		this.student = s;
+	}
+	public void run() {
+		while (true) {
+			student.get();
+			
+		}
+	}
+
+}
+
+package cn.itcast.thread.wait.notify;
+
+public class StudentTest {
+
+	public static void main(String[] args) {
+		Student student = new Student();
+		SetThread sThread = new SetThread(student);
+		GetThread gThread = new GetThread(student);
+		
+		Thread t1 = new Thread(sThread, "A");
+		Thread t2 = new Thread(gThread, "B");
+		
+		t1.start();
+		t2.start();
+	}
+}
+
+result:
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+Lin Qingxia---20
+Liu Yi--30
+......
+****************************************************************
+Thread Pool
+A program that starts a thread is expensive because it involves interacting with the operating system, 
+and using a thread pool can improve performance well, especially when a program needs to 
+create a large number of short-lived threads. 
+Each thread in the thread pool does not die after the end of the code, 
+but returns to the thread pool to become idle again, waiting for the next object to be used, 
+JDK5 before manually implementing the thread pool, jdK5 after supporting the thread pool.
+
+
+We will create some threads at first, then after using them, we can collect them
+Generally, it is difficult to decide how many threads are created in the beginning,
+we need more Concurrent testing and pressure testing
+
+
+	Module java.base
+	Package java.util.concurrent
+	Class Executors
+
+		java.lang.Object
+			java.util.concurrent.Executors 
+	
+	public static ExecutorService newCachedThreadPool()
+	public static ExecutorService newCachedThreadPool​(ThreadFactory threadFactory)
+	public static ExecutorService newFixedThreadPool​(int nThreads)
+	public static ExecutorService newSingleThreadExecutor()
+		The methods return ExecutorService, and can operate Runnable and Callable instances
+			Future<?> submit​(Runnable task)
+			<T> Future<T> submit​(Callable<T> task)
+			
+			Future: A Future represents the result of an asynchronous computation.
+				V get()
+					throws InterruptedException,
+					ExecutionException
+	
+	steps to implement threads:
+		A: create a thread pool instance, control how many threads instance are created in the thread pool
+		B: create a Class to implement Runnable interface or Callable interface
+		C: call submit() method by passing Runnable or Callable instance
+		D: call shutdown() method
+*************************************************************************************
+Method 1 : using Runnable
+**************************************************************************************
+package cn.itcast.thread.pool;
+
+public class MyRunnable implements Runnable {
+
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+"---"+i);
+			
+		}
+
+	}
+
+}
+
+package cn.itcast.thread.pool;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorsTest {
+
+	public static void main(String[] args) {
+		ExecutorService  pool = Executors.newFixedThreadPool(16);
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.submit(new MyRunnable());
+		pool.shutdown();
+	}
+}
+
+result:
+pool-1-thread-1---0
+pool-1-thread-6---0
+pool-1-thread-2---0
+pool-1-thread-4---0
+pool-1-thread-5---0
+pool-1-thread-3---0
+pool-1-thread-5---1
+pool-1-thread-7---0
+pool-1-thread-4---1
+pool-1-thread-2---1
+pool-1-thread-6---1
+pool-1-thread-1---1
+pool-1-thread-10---0
+pool-1-thread-9---0
+pool-1-thread-6---2
+pool-1-thread-2---2
+pool-1-thread-8---0
+pool-1-thread-4---2
+pool-1-thread-7---1
+pool-1-thread-5---2
+pool-1-thread-3---1
+pool-1-thread-5---3
+pool-1-thread-13---0
+pool-1-thread-13---1
+pool-1-thread-7---2
+pool-1-thread-7---3
+pool-1-thread-12---0
+pool-1-thread-12---1
+pool-1-thread-12---2
+pool-1-thread-12---3
+pool-1-thread-12---4
+pool-1-thread-4---3
+pool-1-thread-8---1
+pool-1-thread-2---3
+pool-1-thread-16---0
+pool-1-thread-6---3
+pool-1-thread-11---0
+pool-1-thread-9---1
+pool-1-thread-10---1
+pool-1-thread-1---2
+pool-1-thread-10---2
+pool-1-thread-9---2
+pool-1-thread-11---1
+pool-1-thread-6---4
+pool-1-thread-16---1
+pool-1-thread-2---4
+pool-1-thread-8---2
+pool-1-thread-15---0
+pool-1-thread-4---4
+pool-1-thread-12---5
+pool-1-thread-7---4
+pool-1-thread-13---2
+pool-1-thread-14---0
+pool-1-thread-14---1
+pool-1-thread-5---4
+pool-1-thread-3---2
+pool-1-thread-5---5
+pool-1-thread-14---2
+pool-1-thread-13---3
+pool-1-thread-7---5
+pool-1-thread-12---6
+pool-1-thread-12---7
+pool-1-thread-4---5
+pool-1-thread-15---1
+pool-1-thread-8---3
+pool-1-thread-2---5
+pool-1-thread-16---2
+pool-1-thread-6---5
+pool-1-thread-11---2
+pool-1-thread-9---3
+pool-1-thread-10---3
+pool-1-thread-1---3
+pool-1-thread-10---4
+pool-1-thread-9---4
+pool-1-thread-11---3
+pool-1-thread-6---6
+pool-1-thread-6---7
+pool-1-thread-16---3
+pool-1-thread-2---6
+pool-1-thread-8---4
+pool-1-thread-15---2
+pool-1-thread-4---6
+pool-1-thread-4---7
+pool-1-thread-12---8
+pool-1-thread-7---6
+pool-1-thread-13---4
+pool-1-thread-14---3
+pool-1-thread-5---6
+pool-1-thread-3---3
+pool-1-thread-5---7
+pool-1-thread-14---4
+pool-1-thread-13---5
+pool-1-thread-7---7
+pool-1-thread-12---9
+pool-1-thread-4---8
+pool-1-thread-15---3
+pool-1-thread-8---5
+pool-1-thread-2---7
+pool-1-thread-16---4
+pool-1-thread-6---8
+pool-1-thread-11---4
+pool-1-thread-9---5
+pool-1-thread-9---6
+pool-1-thread-10---5
+pool-1-thread-10---6
+pool-1-thread-1---4
+pool-1-thread-10---7
+pool-1-thread-9---7
+pool-1-thread-11---5
+pool-1-thread-6---9
+pool-1-thread-16---5
+pool-1-thread-2---8
+pool-1-thread-8---6
+pool-1-thread-15---4
+pool-1-thread-4---9
+pool-1-thread-12---10
+pool-1-thread-7---8
+pool-1-thread-13---6
+pool-1-thread-14---5
+pool-1-thread-5---8
+pool-1-thread-3---4
+pool-1-thread-5---9
+pool-1-thread-14---6
+pool-1-thread-13---7
+pool-1-thread-7---9
+pool-1-thread-12---11
+pool-1-thread-4---10
+pool-1-thread-15---5
+pool-1-thread-8---7
+pool-1-thread-2---9
+pool-1-thread-16---6
+pool-1-thread-16---7
+pool-1-thread-16---8
+pool-1-thread-16---9
+pool-1-thread-6---10
+pool-1-thread-11---6
+pool-1-thread-9---8
+pool-1-thread-10---8
+pool-1-thread-1---5
+pool-1-thread-10---9
+pool-1-thread-9---9
+pool-1-thread-11---7
+pool-1-thread-6---11
+pool-1-thread-16---10
+pool-1-thread-2---10
+pool-1-thread-8---8
+pool-1-thread-15---6
+pool-1-thread-4---11
+pool-1-thread-12---12
+pool-1-thread-7---10
+pool-1-thread-13---8
+pool-1-thread-14---7
+pool-1-thread-5---10
+pool-1-thread-3---5
+pool-1-thread-5---11
+pool-1-thread-14---8
+pool-1-thread-13---9
+pool-1-thread-7---11
+pool-1-thread-7---12
+pool-1-thread-12---13
+pool-1-thread-4---12
+pool-1-thread-15---7
+pool-1-thread-8---9
+pool-1-thread-2---11
+pool-1-thread-16---11
+pool-1-thread-16---12
+pool-1-thread-16---13
+pool-1-thread-16---14
+pool-1-thread-6---12
+pool-1-thread-11---8
+pool-1-thread-9---10
+pool-1-thread-10---10
+pool-1-thread-1---6
+pool-1-thread-10---11
+pool-1-thread-9---11
+pool-1-thread-11---9
+pool-1-thread-6---13
+pool-1-thread-16---15
+pool-1-thread-2---12
+pool-1-thread-2---13
+pool-1-thread-8---10
+pool-1-thread-8---11
+pool-1-thread-15---8
+pool-1-thread-4---13
+pool-1-thread-12---14
+pool-1-thread-7---13
+pool-1-thread-13---10
+pool-1-thread-14---9
+pool-1-thread-5---12
+pool-1-thread-3---6
+pool-1-thread-3---7
+pool-1-thread-3---8
+pool-1-thread-3---9
+pool-1-thread-5---13
+pool-1-thread-14---10
+pool-1-thread-13---11
+pool-1-thread-7---14
+pool-1-thread-12---15
+pool-1-thread-4---14
+pool-1-thread-15---9
+pool-1-thread-8---12
+pool-1-thread-2---14
+pool-1-thread-16---16
+pool-1-thread-6---14
+pool-1-thread-11---10
+pool-1-thread-9---12
+pool-1-thread-10---12
+pool-1-thread-1---7
+pool-1-thread-10---13
+pool-1-thread-9---13
+pool-1-thread-11---11
+pool-1-thread-6---15
+pool-1-thread-16---17
+pool-1-thread-2---15
+pool-1-thread-8---13
+pool-1-thread-15---10
+pool-1-thread-4---15
+pool-1-thread-12---16
+pool-1-thread-7---15
+pool-1-thread-13---12
+pool-1-thread-14---11
+pool-1-thread-5---14
+pool-1-thread-3---10
+pool-1-thread-5---15
+pool-1-thread-14---12
+pool-1-thread-13---13
+pool-1-thread-7---16
+pool-1-thread-12---17
+pool-1-thread-4---16
+pool-1-thread-15---11
+pool-1-thread-8---14
+pool-1-thread-2---16
+pool-1-thread-16---18
+pool-1-thread-6---16
+pool-1-thread-11---12
+pool-1-thread-9---14
+pool-1-thread-10---14
+pool-1-thread-1---8
+pool-1-thread-10---15
+pool-1-thread-9---15
+pool-1-thread-11---13
+pool-1-thread-6---17
+pool-1-thread-16---19
+pool-1-thread-2---17
+pool-1-thread-8---15
+pool-1-thread-15---12
+pool-1-thread-4---17
+pool-1-thread-12---18
+pool-1-thread-7---17
+pool-1-thread-13---14
+pool-1-thread-14---13
+pool-1-thread-5---16
+pool-1-thread-3---11
+pool-1-thread-5---17
+pool-1-thread-14---14
+pool-1-thread-13---15
+pool-1-thread-7---18
+pool-1-thread-12---19
+pool-1-thread-4---18
+pool-1-thread-15---13
+pool-1-thread-15---14
+pool-1-thread-8---16
+pool-1-thread-2---18
+pool-1-thread-16---20
+pool-1-thread-6---18
+pool-1-thread-11---14
+pool-1-thread-9---16
+pool-1-thread-10---16
+pool-1-thread-10---17
+pool-1-thread-10---18
+pool-1-thread-10---19
+pool-1-thread-10---20
+pool-1-thread-10---21
+pool-1-thread-10---22
+pool-1-thread-10---23
+pool-1-thread-1---9
+pool-1-thread-10---24
+pool-1-thread-10---25
+pool-1-thread-10---26
+pool-1-thread-9---17
+pool-1-thread-9---18
+pool-1-thread-9---19
+pool-1-thread-9---20
+pool-1-thread-9---21
+pool-1-thread-9---22
+pool-1-thread-9---23
+pool-1-thread-9---24
+pool-1-thread-9---25
+pool-1-thread-9---26
+pool-1-thread-9---27
+pool-1-thread-9---28
+pool-1-thread-9---29
+pool-1-thread-11---15
+pool-1-thread-6---19
+pool-1-thread-16---21
+pool-1-thread-16---22
+pool-1-thread-16---23
+pool-1-thread-16---24
+pool-1-thread-16---25
+pool-1-thread-2---19
+pool-1-thread-2---20
+pool-1-thread-2---21
+pool-1-thread-8---17
+pool-1-thread-15---15
+pool-1-thread-4---19
+pool-1-thread-12---20
+pool-1-thread-7---19
+pool-1-thread-13---16
+pool-1-thread-13---17
+pool-1-thread-14---15
+pool-1-thread-5---18
+pool-1-thread-3---12
+pool-1-thread-3---13
+pool-1-thread-3---14
+pool-1-thread-5---19
+pool-1-thread-14---16
+pool-1-thread-13---18
+pool-1-thread-13---19
+pool-1-thread-13---20
+pool-1-thread-7---20
+pool-1-thread-12---21
+pool-1-thread-4---20
+pool-1-thread-15---16
+pool-1-thread-8---18
+pool-1-thread-2---22
+pool-1-thread-2---23
+pool-1-thread-2---24
+pool-1-thread-2---25
+pool-1-thread-2---26
+pool-1-thread-16---26
+pool-1-thread-16---27
+pool-1-thread-16---28
+pool-1-thread-16---29
+pool-1-thread-16---30
+pool-1-thread-16---31
+pool-1-thread-16---32
+pool-1-thread-16---33
+pool-1-thread-16---34
+pool-1-thread-16---35
+pool-1-thread-16---36
+pool-1-thread-16---37
+pool-1-thread-16---38
+pool-1-thread-16---39
+pool-1-thread-16---40
+pool-1-thread-16---41
+pool-1-thread-16---42
+pool-1-thread-16---43
+pool-1-thread-16---44
+pool-1-thread-16---45
+pool-1-thread-16---46
+pool-1-thread-16---47
+pool-1-thread-16---48
+pool-1-thread-16---49
+pool-1-thread-16---50
+pool-1-thread-16---51
+pool-1-thread-16---52
+pool-1-thread-16---53
+pool-1-thread-16---54
+pool-1-thread-16---55
+pool-1-thread-16---56
+pool-1-thread-16---57
+pool-1-thread-16---58
+pool-1-thread-16---59
+pool-1-thread-16---60
+pool-1-thread-16---61
+pool-1-thread-16---62
+pool-1-thread-16---63
+pool-1-thread-16---64
+pool-1-thread-16---65
+pool-1-thread-6---20
+pool-1-thread-6---21
+pool-1-thread-6---22
+pool-1-thread-6---23
+pool-1-thread-6---24
+pool-1-thread-6---25
+pool-1-thread-6---26
+pool-1-thread-11---16
+pool-1-thread-11---17
+pool-1-thread-11---18
+pool-1-thread-11---19
+pool-1-thread-11---20
+pool-1-thread-11---21
+pool-1-thread-11---22
+pool-1-thread-11---23
+pool-1-thread-11---24
+pool-1-thread-11---25
+pool-1-thread-11---26
+pool-1-thread-11---27
+pool-1-thread-11---28
+pool-1-thread-9---30
+pool-1-thread-9---31
+pool-1-thread-9---32
+pool-1-thread-9---33
+pool-1-thread-9---34
+pool-1-thread-9---35
+pool-1-thread-9---36
+pool-1-thread-9---37
+pool-1-thread-9---38
+pool-1-thread-9---39
+pool-1-thread-9---40
+pool-1-thread-9---41
+pool-1-thread-9---42
+pool-1-thread-9---43
+pool-1-thread-9---44
+pool-1-thread-9---45
+pool-1-thread-9---46
+pool-1-thread-9---47
+pool-1-thread-9---48
+pool-1-thread-9---49
+pool-1-thread-9---50
+pool-1-thread-9---51
+pool-1-thread-9---52
+pool-1-thread-9---53
+pool-1-thread-9---54
+pool-1-thread-9---55
+pool-1-thread-9---56
+pool-1-thread-9---57
+pool-1-thread-9---58
+pool-1-thread-9---59
+pool-1-thread-9---60
+pool-1-thread-9---61
+pool-1-thread-9---62
+pool-1-thread-9---63
+pool-1-thread-9---64
+pool-1-thread-9---65
+pool-1-thread-9---66
+pool-1-thread-9---67
+pool-1-thread-9---68
+pool-1-thread-9---69
+pool-1-thread-9---70
+pool-1-thread-9---71
+pool-1-thread-9---72
+pool-1-thread-9---73
+pool-1-thread-9---74
+pool-1-thread-9---75
+pool-1-thread-9---76
+pool-1-thread-9---77
+pool-1-thread-9---78
+pool-1-thread-9---79
+pool-1-thread-10---27
+pool-1-thread-10---28
+pool-1-thread-10---29
+pool-1-thread-10---30
+pool-1-thread-10---31
+pool-1-thread-10---32
+pool-1-thread-1---10
+pool-1-thread-1---11
+pool-1-thread-1---12
+pool-1-thread-1---13
+pool-1-thread-1---14
+pool-1-thread-1---15
+pool-1-thread-1---16
+pool-1-thread-10---33
+pool-1-thread-10---34
+pool-1-thread-10---35
+pool-1-thread-10---36
+pool-1-thread-10---37
+pool-1-thread-10---38
+pool-1-thread-10---39
+pool-1-thread-10---40
+pool-1-thread-10---41
+pool-1-thread-10---42
+pool-1-thread-10---43
+pool-1-thread-10---44
+pool-1-thread-10---45
+pool-1-thread-10---46
+pool-1-thread-10---47
+pool-1-thread-9---80
+pool-1-thread-9---81
+pool-1-thread-9---82
+pool-1-thread-9---83
+pool-1-thread-9---84
+pool-1-thread-9---85
+pool-1-thread-9---86
+pool-1-thread-9---87
+pool-1-thread-11---29
+pool-1-thread-11---30
+pool-1-thread-11---31
+pool-1-thread-11---32
+pool-1-thread-11---33
+pool-1-thread-11---34
+pool-1-thread-11---35
+pool-1-thread-11---36
+pool-1-thread-11---37
+pool-1-thread-11---38
+pool-1-thread-11---39
+pool-1-thread-11---40
+pool-1-thread-11---41
+pool-1-thread-11---42
+pool-1-thread-11---43
+pool-1-thread-11---44
+pool-1-thread-11---45
+pool-1-thread-6---27
+pool-1-thread-6---28
+pool-1-thread-6---29
+pool-1-thread-6---30
+pool-1-thread-6---31
+pool-1-thread-16---66
+pool-1-thread-16---67
+pool-1-thread-16---68
+pool-1-thread-16---69
+pool-1-thread-16---70
+pool-1-thread-16---71
+pool-1-thread-16---72
+pool-1-thread-16---73
+pool-1-thread-16---74
+pool-1-thread-16---75
+pool-1-thread-16---76
+pool-1-thread-16---77
+pool-1-thread-16---78
+pool-1-thread-16---79
+pool-1-thread-16---80
+pool-1-thread-16---81
+pool-1-thread-16---82
+pool-1-thread-16---83
+pool-1-thread-16---84
+pool-1-thread-16---85
+pool-1-thread-16---86
+pool-1-thread-16---87
+pool-1-thread-16---88
+pool-1-thread-16---89
+pool-1-thread-16---90
+pool-1-thread-16---91
+pool-1-thread-16---92
+pool-1-thread-16---93
+pool-1-thread-16---94
+pool-1-thread-16---95
+pool-1-thread-16---96
+pool-1-thread-16---97
+pool-1-thread-16---98
+pool-1-thread-16---99
+pool-1-thread-2---27
+pool-1-thread-2---28
+pool-1-thread-2---29
+pool-1-thread-2---30
+pool-1-thread-2---31
+pool-1-thread-2---32
+pool-1-thread-2---33
+pool-1-thread-2---34
+pool-1-thread-2---35
+pool-1-thread-2---36
+pool-1-thread-2---37
+pool-1-thread-2---38
+pool-1-thread-2---39
+pool-1-thread-2---40
+pool-1-thread-2---41
+pool-1-thread-2---42
+pool-1-thread-8---19
+pool-1-thread-8---20
+pool-1-thread-8---21
+pool-1-thread-15---17
+pool-1-thread-15---18
+pool-1-thread-15---19
+pool-1-thread-15---20
+pool-1-thread-15---21
+pool-1-thread-15---22
+pool-1-thread-15---23
+pool-1-thread-15---24
+pool-1-thread-15---25
+pool-1-thread-15---26
+pool-1-thread-4---21
+pool-1-thread-4---22
+pool-1-thread-4---23
+pool-1-thread-4---24
+pool-1-thread-4---25
+pool-1-thread-4---26
+pool-1-thread-4---27
+pool-1-thread-4---28
+pool-1-thread-4---29
+pool-1-thread-4---30
+pool-1-thread-4---31
+pool-1-thread-4---32
+pool-1-thread-4---33
+pool-1-thread-4---34
+pool-1-thread-4---35
+pool-1-thread-4---36
+pool-1-thread-4---37
+pool-1-thread-4---38
+pool-1-thread-4---39
+pool-1-thread-4---40
+pool-1-thread-4---41
+pool-1-thread-4---42
+pool-1-thread-4---43
+pool-1-thread-4---44
+pool-1-thread-4---45
+pool-1-thread-4---46
+pool-1-thread-4---47
+pool-1-thread-4---48
+pool-1-thread-4---49
+pool-1-thread-4---50
+pool-1-thread-4---51
+pool-1-thread-4---52
+pool-1-thread-4---53
+pool-1-thread-12---22
+pool-1-thread-12---23
+pool-1-thread-12---24
+pool-1-thread-12---25
+pool-1-thread-12---26
+pool-1-thread-12---27
+pool-1-thread-12---28
+pool-1-thread-12---29
+pool-1-thread-12---30
+pool-1-thread-12---31
+pool-1-thread-12---32
+pool-1-thread-7---21
+pool-1-thread-7---22
+pool-1-thread-7---23
+pool-1-thread-7---24
+pool-1-thread-7---25
+pool-1-thread-7---26
+pool-1-thread-7---27
+pool-1-thread-7---28
+pool-1-thread-13---21
+pool-1-thread-13---22
+pool-1-thread-13---23
+pool-1-thread-13---24
+pool-1-thread-13---25
+pool-1-thread-13---26
+pool-1-thread-13---27
+pool-1-thread-13---28
+pool-1-thread-13---29
+pool-1-thread-13---30
+pool-1-thread-13---31
+pool-1-thread-14---17
+pool-1-thread-14---18
+pool-1-thread-5---20
+pool-1-thread-5---21
+pool-1-thread-5---22
+pool-1-thread-5---23
+pool-1-thread-5---24
+pool-1-thread-5---25
+pool-1-thread-5---26
+pool-1-thread-5---27
+pool-1-thread-5---28
+pool-1-thread-5---29
+pool-1-thread-5---30
+pool-1-thread-5---31
+pool-1-thread-5---32
+pool-1-thread-5---33
+pool-1-thread-3---15
+pool-1-thread-5---34
+pool-1-thread-5---35
+pool-1-thread-5---36
+pool-1-thread-14---19
+pool-1-thread-14---20
+pool-1-thread-14---21
+pool-1-thread-14---22
+pool-1-thread-14---23
+pool-1-thread-14---24
+pool-1-thread-14---25
+pool-1-thread-14---26
+pool-1-thread-13---32
+pool-1-thread-7---29
+pool-1-thread-12---33
+pool-1-thread-12---34
+pool-1-thread-12---35
+pool-1-thread-12---36
+pool-1-thread-12---37
+pool-1-thread-12---38
+pool-1-thread-12---39
+pool-1-thread-12---40
+pool-1-thread-12---41
+pool-1-thread-12---42
+pool-1-thread-12---43
+pool-1-thread-12---44
+pool-1-thread-12---45
+pool-1-thread-12---46
+pool-1-thread-12---47
+pool-1-thread-12---48
+pool-1-thread-12---49
+pool-1-thread-12---50
+pool-1-thread-12---51
+pool-1-thread-12---52
+pool-1-thread-12---53
+pool-1-thread-12---54
+pool-1-thread-12---55
+pool-1-thread-12---56
+pool-1-thread-12---57
+pool-1-thread-12---58
+pool-1-thread-12---59
+pool-1-thread-12---60
+pool-1-thread-12---61
+pool-1-thread-12---62
+pool-1-thread-12---63
+pool-1-thread-12---64
+pool-1-thread-12---65
+pool-1-thread-12---66
+pool-1-thread-12---67
+pool-1-thread-12---68
+pool-1-thread-12---69
+pool-1-thread-12---70
+pool-1-thread-12---71
+pool-1-thread-12---72
+pool-1-thread-12---73
+pool-1-thread-12---74
+pool-1-thread-12---75
+pool-1-thread-12---76
+pool-1-thread-12---77
+pool-1-thread-12---78
+pool-1-thread-12---79
+pool-1-thread-12---80
+pool-1-thread-12---81
+pool-1-thread-12---82
+pool-1-thread-12---83
+pool-1-thread-12---84
+pool-1-thread-12---85
+pool-1-thread-12---86
+pool-1-thread-12---87
+pool-1-thread-12---88
+pool-1-thread-12---89
+pool-1-thread-12---90
+pool-1-thread-12---91
+pool-1-thread-12---92
+pool-1-thread-12---93
+pool-1-thread-12---94
+pool-1-thread-12---95
+pool-1-thread-12---96
+pool-1-thread-12---97
+pool-1-thread-12---98
+pool-1-thread-12---99
+pool-1-thread-4---54
+pool-1-thread-4---55
+pool-1-thread-15---27
+pool-1-thread-16---0
+pool-1-thread-8---22
+pool-1-thread-8---23
+pool-1-thread-8---24
+pool-1-thread-8---25
+pool-1-thread-8---26
+pool-1-thread-8---27
+pool-1-thread-8---28
+pool-1-thread-8---29
+pool-1-thread-8---30
+pool-1-thread-8---31
+pool-1-thread-8---32
+pool-1-thread-8---33
+pool-1-thread-8---34
+pool-1-thread-8---35
+pool-1-thread-8---36
+pool-1-thread-8---37
+pool-1-thread-8---38
+pool-1-thread-8---39
+pool-1-thread-8---40
+pool-1-thread-8---41
+pool-1-thread-8---42
+pool-1-thread-8---43
+pool-1-thread-8---44
+pool-1-thread-8---45
+pool-1-thread-8---46
+pool-1-thread-8---47
+pool-1-thread-8---48
+pool-1-thread-8---49
+pool-1-thread-8---50
+pool-1-thread-8---51
+pool-1-thread-8---52
+pool-1-thread-8---53
+pool-1-thread-8---54
+pool-1-thread-8---55
+pool-1-thread-8---56
+pool-1-thread-8---57
+pool-1-thread-8---58
+pool-1-thread-8---59
+pool-1-thread-8---60
+pool-1-thread-8---61
+pool-1-thread-8---62
+pool-1-thread-8---63
+pool-1-thread-8---64
+pool-1-thread-8---65
+pool-1-thread-8---66
+pool-1-thread-8---67
+pool-1-thread-8---68
+pool-1-thread-8---69
+pool-1-thread-8---70
+pool-1-thread-8---71
+pool-1-thread-8---72
+pool-1-thread-8---73
+pool-1-thread-8---74
+pool-1-thread-8---75
+pool-1-thread-8---76
+pool-1-thread-8---77
+pool-1-thread-8---78
+pool-1-thread-8---79
+pool-1-thread-8---80
+pool-1-thread-8---81
+pool-1-thread-8---82
+pool-1-thread-8---83
+pool-1-thread-8---84
+pool-1-thread-8---85
+pool-1-thread-8---86
+pool-1-thread-8---87
+pool-1-thread-8---88
+pool-1-thread-8---89
+pool-1-thread-8---90
+pool-1-thread-8---91
+pool-1-thread-8---92
+pool-1-thread-8---93
+pool-1-thread-8---94
+pool-1-thread-8---95
+pool-1-thread-8---96
+pool-1-thread-8---97
+pool-1-thread-8---98
+pool-1-thread-8---99
+pool-1-thread-2---43
+pool-1-thread-2---44
+pool-1-thread-2---45
+pool-1-thread-2---46
+pool-1-thread-2---47
+pool-1-thread-6---32
+pool-1-thread-6---33
+pool-1-thread-11---46
+pool-1-thread-9---88
+pool-1-thread-9---89
+pool-1-thread-9---90
+pool-1-thread-9---91
+pool-1-thread-10---48
+pool-1-thread-10---49
+pool-1-thread-10---50
+pool-1-thread-10---51
+pool-1-thread-10---52
+pool-1-thread-10---53
+pool-1-thread-10---54
+pool-1-thread-10---55
+pool-1-thread-10---56
+pool-1-thread-10---57
+pool-1-thread-10---58
+pool-1-thread-10---59
+pool-1-thread-10---60
+pool-1-thread-10---61
+pool-1-thread-10---62
+pool-1-thread-10---63
+pool-1-thread-10---64
+pool-1-thread-10---65
+pool-1-thread-10---66
+pool-1-thread-10---67
+pool-1-thread-10---68
+pool-1-thread-10---69
+pool-1-thread-10---70
+pool-1-thread-10---71
+pool-1-thread-10---72
+pool-1-thread-10---73
+pool-1-thread-10---74
+pool-1-thread-10---75
+pool-1-thread-10---76
+pool-1-thread-10---77
+pool-1-thread-10---78
+pool-1-thread-10---79
+pool-1-thread-10---80
+pool-1-thread-10---81
+pool-1-thread-10---82
+pool-1-thread-10---83
+pool-1-thread-10---84
+pool-1-thread-10---85
+pool-1-thread-10---86
+pool-1-thread-10---87
+pool-1-thread-10---88
+pool-1-thread-10---89
+pool-1-thread-10---90
+pool-1-thread-10---91
+pool-1-thread-1---17
+pool-1-thread-10---92
+pool-1-thread-10---93
+pool-1-thread-10---94
+pool-1-thread-10---95
+pool-1-thread-10---96
+pool-1-thread-10---97
+pool-1-thread-10---98
+pool-1-thread-9---92
+pool-1-thread-9---93
+pool-1-thread-9---94
+pool-1-thread-9---95
+pool-1-thread-9---96
+pool-1-thread-9---97
+pool-1-thread-9---98
+pool-1-thread-9---99
+pool-1-thread-11---47
+pool-1-thread-6---34
+pool-1-thread-6---35
+pool-1-thread-6---36
+pool-1-thread-2---48
+pool-1-thread-2---49
+pool-1-thread-2---50
+pool-1-thread-2---51
+pool-1-thread-2---52
+pool-1-thread-16---1
+pool-1-thread-15---28
+pool-1-thread-15---29
+pool-1-thread-15---30
+pool-1-thread-15---31
+pool-1-thread-15---32
+pool-1-thread-15---33
+pool-1-thread-15---34
+pool-1-thread-15---35
+pool-1-thread-15---36
+pool-1-thread-15---37
+pool-1-thread-15---38
+pool-1-thread-15---39
+pool-1-thread-15---40
+pool-1-thread-15---41
+pool-1-thread-15---42
+pool-1-thread-15---43
+pool-1-thread-15---44
+pool-1-thread-15---45
+pool-1-thread-15---46
+pool-1-thread-15---47
+pool-1-thread-15---48
+pool-1-thread-15---49
+pool-1-thread-15---50
+pool-1-thread-15---51
+pool-1-thread-15---52
+pool-1-thread-15---53
+pool-1-thread-15---54
+pool-1-thread-15---55
+pool-1-thread-15---56
+pool-1-thread-15---57
+pool-1-thread-15---58
+pool-1-thread-15---59
+pool-1-thread-15---60
+pool-1-thread-15---61
+pool-1-thread-15---62
+pool-1-thread-15---63
+pool-1-thread-15---64
+pool-1-thread-15---65
+pool-1-thread-15---66
+pool-1-thread-15---67
+pool-1-thread-15---68
+pool-1-thread-15---69
+pool-1-thread-15---70
+pool-1-thread-15---71
+pool-1-thread-15---72
+pool-1-thread-15---73
+pool-1-thread-15---74
+pool-1-thread-15---75
+pool-1-thread-15---76
+pool-1-thread-15---77
+pool-1-thread-15---78
+pool-1-thread-4---56
+pool-1-thread-7---30
+pool-1-thread-7---31
+pool-1-thread-7---32
+pool-1-thread-7---33
+pool-1-thread-7---34
+pool-1-thread-7---35
+pool-1-thread-7---36
+pool-1-thread-7---37
+pool-1-thread-7---38
+pool-1-thread-7---39
+pool-1-thread-7---40
+pool-1-thread-7---41
+pool-1-thread-7---42
+pool-1-thread-13---33
+pool-1-thread-14---27
+pool-1-thread-5---37
+pool-1-thread-5---38
+pool-1-thread-5---39
+pool-1-thread-5---40
+pool-1-thread-5---41
+pool-1-thread-5---42
+pool-1-thread-5---43
+pool-1-thread-5---44
+pool-1-thread-5---45
+pool-1-thread-5---46
+pool-1-thread-5---47
+pool-1-thread-5---48
+pool-1-thread-5---49
+pool-1-thread-5---50
+pool-1-thread-5---51
+pool-1-thread-5---52
+pool-1-thread-5---53
+pool-1-thread-5---54
+pool-1-thread-5---55
+pool-1-thread-5---56
+pool-1-thread-3---16
+pool-1-thread-5---57
+pool-1-thread-5---58
+pool-1-thread-5---59
+pool-1-thread-5---60
+pool-1-thread-5---61
+pool-1-thread-5---62
+pool-1-thread-5---63
+pool-1-thread-5---64
+pool-1-thread-5---65
+pool-1-thread-14---28
+pool-1-thread-13---34
+pool-1-thread-7---43
+pool-1-thread-7---44
+pool-1-thread-7---45
+pool-1-thread-4---57
+pool-1-thread-15---79
+pool-1-thread-15---80
+pool-1-thread-15---81
+pool-1-thread-15---82
+pool-1-thread-15---83
+pool-1-thread-15---84
+pool-1-thread-15---85
+pool-1-thread-15---86
+pool-1-thread-15---87
+pool-1-thread-15---88
+pool-1-thread-15---89
+pool-1-thread-15---90
+pool-1-thread-15---91
+pool-1-thread-15---92
+pool-1-thread-15---93
+pool-1-thread-15---94
+pool-1-thread-15---95
+pool-1-thread-15---96
+pool-1-thread-15---97
+pool-1-thread-15---98
+pool-1-thread-15---99
+pool-1-thread-16---2
+pool-1-thread-16---3
+pool-1-thread-16---4
+pool-1-thread-2---53
+pool-1-thread-6---37
+pool-1-thread-11---48
+pool-1-thread-11---49
+pool-1-thread-11---50
+pool-1-thread-11---51
+pool-1-thread-11---52
+pool-1-thread-11---53
+pool-1-thread-11---54
+pool-1-thread-11---55
+pool-1-thread-10---99
+pool-1-thread-1---18
+pool-1-thread-1---19
+pool-1-thread-1---20
+pool-1-thread-1---21
+pool-1-thread-11---56
+pool-1-thread-11---57
+pool-1-thread-11---58
+pool-1-thread-11---59
+pool-1-thread-11---60
+pool-1-thread-6---38
+pool-1-thread-2---54
+pool-1-thread-16---5
+pool-1-thread-16---6
+pool-1-thread-16---7
+pool-1-thread-16---8
+pool-1-thread-16---9
+pool-1-thread-16---10
+pool-1-thread-16---11
+pool-1-thread-16---12
+pool-1-thread-16---13
+pool-1-thread-16---14
+pool-1-thread-16---15
+pool-1-thread-16---16
+pool-1-thread-16---17
+pool-1-thread-4---58
+pool-1-thread-4---59
+pool-1-thread-4---60
+pool-1-thread-4---61
+pool-1-thread-4---62
+pool-1-thread-4---63
+pool-1-thread-4---64
+pool-1-thread-4---65
+pool-1-thread-4---66
+pool-1-thread-4---67
+pool-1-thread-4---68
+pool-1-thread-4---69
+pool-1-thread-4---70
+pool-1-thread-4---71
+pool-1-thread-4---72
+pool-1-thread-4---73
+pool-1-thread-4---74
+pool-1-thread-4---75
+pool-1-thread-4---76
+pool-1-thread-4---77
+pool-1-thread-4---78
+pool-1-thread-7---46
+pool-1-thread-13---35
+pool-1-thread-14---29
+pool-1-thread-14---30
+pool-1-thread-14---31
+pool-1-thread-14---32
+pool-1-thread-14---33
+pool-1-thread-14---34
+pool-1-thread-14---35
+pool-1-thread-14---36
+pool-1-thread-14---37
+pool-1-thread-5---66
+pool-1-thread-5---67
+pool-1-thread-5---68
+pool-1-thread-5---69
+pool-1-thread-5---70
+pool-1-thread-5---71
+pool-1-thread-5---72
+pool-1-thread-5---73
+pool-1-thread-5---74
+pool-1-thread-5---75
+pool-1-thread-5---76
+pool-1-thread-5---77
+pool-1-thread-5---78
+pool-1-thread-5---79
+pool-1-thread-3---17
+pool-1-thread-5---80
+pool-1-thread-14---38
+pool-1-thread-14---39
+pool-1-thread-14---40
+pool-1-thread-14---41
+pool-1-thread-14---42
+pool-1-thread-14---43
+pool-1-thread-14---44
+pool-1-thread-14---45
+pool-1-thread-14---46
+pool-1-thread-14---47
+pool-1-thread-14---48
+pool-1-thread-14---49
+pool-1-thread-13---36
+pool-1-thread-7---47
+pool-1-thread-7---48
+pool-1-thread-7---49
+pool-1-thread-7---50
+pool-1-thread-7---51
+pool-1-thread-7---52
+pool-1-thread-7---53
+pool-1-thread-7---54
+pool-1-thread-7---55
+pool-1-thread-7---56
+pool-1-thread-4---79
+pool-1-thread-4---80
+pool-1-thread-16---18
+pool-1-thread-2---55
+pool-1-thread-2---56
+pool-1-thread-2---57
+pool-1-thread-2---58
+pool-1-thread-2---59
+pool-1-thread-2---60
+pool-1-thread-2---61
+pool-1-thread-2---62
+pool-1-thread-2---63
+pool-1-thread-6---39
+pool-1-thread-6---40
+pool-1-thread-6---41
+pool-1-thread-11---61
+pool-1-thread-11---62
+pool-1-thread-11---63
+pool-1-thread-11---64
+pool-1-thread-11---65
+pool-1-thread-11---66
+pool-1-thread-11---67
+pool-1-thread-11---68
+pool-1-thread-11---69
+pool-1-thread-11---70
+pool-1-thread-11---71
+pool-1-thread-11---72
+pool-1-thread-11---73
+pool-1-thread-11---74
+pool-1-thread-11---75
+pool-1-thread-11---76
+pool-1-thread-11---77
+pool-1-thread-1---22
+pool-1-thread-1---23
+pool-1-thread-1---24
+pool-1-thread-1---25
+pool-1-thread-1---26
+pool-1-thread-1---27
+pool-1-thread-1---28
+pool-1-thread-1---29
+pool-1-thread-1---30
+pool-1-thread-1---31
+pool-1-thread-1---32
+pool-1-thread-1---33
+pool-1-thread-11---78
+pool-1-thread-6---42
+pool-1-thread-6---43
+pool-1-thread-6---44
+pool-1-thread-6---45
+pool-1-thread-6---46
+pool-1-thread-6---47
+pool-1-thread-6---48
+pool-1-thread-6---49
+pool-1-thread-6---50
+pool-1-thread-6---51
+pool-1-thread-6---52
+pool-1-thread-6---53
+pool-1-thread-6---54
+pool-1-thread-6---55
+pool-1-thread-6---56
+pool-1-thread-6---57
+pool-1-thread-6---58
+pool-1-thread-6---59
+pool-1-thread-6---60
+pool-1-thread-6---61
+pool-1-thread-6---62
+pool-1-thread-6---63
+pool-1-thread-6---64
+pool-1-thread-6---65
+pool-1-thread-6---66
+pool-1-thread-6---67
+pool-1-thread-6---68
+pool-1-thread-6---69
+pool-1-thread-6---70
+pool-1-thread-6---71
+pool-1-thread-2---64
+pool-1-thread-16---19
+pool-1-thread-16---20
+pool-1-thread-16---21
+pool-1-thread-16---22
+pool-1-thread-16---23
+pool-1-thread-16---24
+pool-1-thread-16---25
+pool-1-thread-16---26
+pool-1-thread-16---27
+pool-1-thread-16---28
+pool-1-thread-16---29
+pool-1-thread-16---30
+pool-1-thread-16---31
+pool-1-thread-16---32
+pool-1-thread-16---33
+pool-1-thread-16---34
+pool-1-thread-4---81
+pool-1-thread-4---82
+pool-1-thread-4---83
+pool-1-thread-4---84
+pool-1-thread-4---85
+pool-1-thread-4---86
+pool-1-thread-4---87
+pool-1-thread-4---88
+pool-1-thread-4---89
+pool-1-thread-4---90
+pool-1-thread-7---57
+pool-1-thread-7---58
+pool-1-thread-7---59
+pool-1-thread-7---60
+pool-1-thread-7---61
+pool-1-thread-7---62
+pool-1-thread-13---37
+pool-1-thread-14---50
+pool-1-thread-14---51
+pool-1-thread-14---52
+pool-1-thread-5---81
+pool-1-thread-3---18
+pool-1-thread-3---19
+pool-1-thread-3---20
+pool-1-thread-3---21
+pool-1-thread-3---22
+pool-1-thread-3---23
+pool-1-thread-3---24
+pool-1-thread-3---25
+pool-1-thread-3---26
+pool-1-thread-3---27
+pool-1-thread-5---82
+pool-1-thread-14---53
+pool-1-thread-14---54
+pool-1-thread-14---55
+pool-1-thread-13---38
+pool-1-thread-7---63
+pool-1-thread-7---64
+pool-1-thread-7---65
+pool-1-thread-7---66
+pool-1-thread-7---67
+pool-1-thread-4---91
+pool-1-thread-16---35
+pool-1-thread-16---36
+pool-1-thread-16---37
+pool-1-thread-16---38
+pool-1-thread-2---65
+pool-1-thread-6---72
+pool-1-thread-6---73
+pool-1-thread-6---74
+pool-1-thread-6---75
+pool-1-thread-11---79
+pool-1-thread-11---80
+pool-1-thread-11---81
+pool-1-thread-11---82
+pool-1-thread-11---83
+pool-1-thread-11---84
+pool-1-thread-11---85
+pool-1-thread-11---86
+pool-1-thread-11---87
+pool-1-thread-11---88
+pool-1-thread-1---34
+pool-1-thread-1---35
+pool-1-thread-1---36
+pool-1-thread-1---37
+pool-1-thread-1---38
+pool-1-thread-11---89
+pool-1-thread-6---76
+pool-1-thread-6---77
+pool-1-thread-6---78
+pool-1-thread-6---79
+pool-1-thread-6---80
+pool-1-thread-6---81
+pool-1-thread-6---82
+pool-1-thread-6---83
+pool-1-thread-6---84
+pool-1-thread-6---85
+pool-1-thread-6---86
+pool-1-thread-6---87
+pool-1-thread-6---88
+pool-1-thread-6---89
+pool-1-thread-6---90
+pool-1-thread-6---91
+pool-1-thread-6---92
+pool-1-thread-6---93
+pool-1-thread-6---94
+pool-1-thread-2---66
+pool-1-thread-16---39
+pool-1-thread-16---40
+pool-1-thread-16---41
+pool-1-thread-16---42
+pool-1-thread-16---43
+pool-1-thread-16---44
+pool-1-thread-16---45
+pool-1-thread-16---46
+pool-1-thread-16---47
+pool-1-thread-16---48
+pool-1-thread-16---49
+pool-1-thread-16---50
+pool-1-thread-16---51
+pool-1-thread-4---92
+pool-1-thread-4---93
+pool-1-thread-4---94
+pool-1-thread-4---95
+pool-1-thread-4---96
+pool-1-thread-4---97
+pool-1-thread-4---98
+pool-1-thread-4---99
+pool-1-thread-7---68
+pool-1-thread-7---69
+pool-1-thread-7---70
+pool-1-thread-7---71
+pool-1-thread-7---72
+pool-1-thread-7---73
+pool-1-thread-13---39
+pool-1-thread-13---40
+pool-1-thread-13---41
+pool-1-thread-13---42
+pool-1-thread-13---43
+pool-1-thread-13---44
+pool-1-thread-13---45
+pool-1-thread-13---46
+pool-1-thread-13---47
+pool-1-thread-13---48
+pool-1-thread-13---49
+pool-1-thread-13---50
+pool-1-thread-13---51
+pool-1-thread-13---52
+pool-1-thread-13---53
+pool-1-thread-13---54
+pool-1-thread-13---55
+pool-1-thread-13---56
+pool-1-thread-13---57
+pool-1-thread-13---58
+pool-1-thread-13---59
+pool-1-thread-13---60
+pool-1-thread-13---61
+pool-1-thread-13---62
+pool-1-thread-13---63
+pool-1-thread-13---64
+pool-1-thread-13---65
+pool-1-thread-13---66
+pool-1-thread-13---67
+pool-1-thread-13---68
+pool-1-thread-13---69
+pool-1-thread-13---70
+pool-1-thread-13---71
+pool-1-thread-13---72
+pool-1-thread-13---73
+pool-1-thread-13---74
+pool-1-thread-13---75
+pool-1-thread-13---76
+pool-1-thread-13---77
+pool-1-thread-13---78
+pool-1-thread-13---79
+pool-1-thread-13---80
+pool-1-thread-13---81
+pool-1-thread-13---82
+pool-1-thread-13---83
+pool-1-thread-13---84
+pool-1-thread-13---85
+pool-1-thread-13---86
+pool-1-thread-14---56
+pool-1-thread-14---57
+pool-1-thread-14---58
+pool-1-thread-14---59
+pool-1-thread-14---60
+pool-1-thread-14---61
+pool-1-thread-5---83
+pool-1-thread-5---84
+pool-1-thread-5---85
+pool-1-thread-5---86
+pool-1-thread-5---87
+pool-1-thread-5---88
+pool-1-thread-5---89
+pool-1-thread-5---90
+pool-1-thread-5---91
+pool-1-thread-5---92
+pool-1-thread-5---93
+pool-1-thread-5---94
+pool-1-thread-5---95
+pool-1-thread-5---96
+pool-1-thread-5---97
+pool-1-thread-5---98
+pool-1-thread-5---99
+pool-1-thread-3---28
+pool-1-thread-3---29
+pool-1-thread-3---30
+pool-1-thread-3---31
+pool-1-thread-3---32
+pool-1-thread-14---62
+pool-1-thread-13---87
+pool-1-thread-13---88
+pool-1-thread-13---89
+pool-1-thread-13---90
+pool-1-thread-13---91
+pool-1-thread-13---92
+pool-1-thread-7---74
+pool-1-thread-7---75
+pool-1-thread-16---52
+pool-1-thread-16---53
+pool-1-thread-16---54
+pool-1-thread-16---55
+pool-1-thread-16---56
+pool-1-thread-16---57
+pool-1-thread-16---58
+pool-1-thread-16---59
+pool-1-thread-16---60
+pool-1-thread-16---61
+pool-1-thread-16---62
+pool-1-thread-16---63
+pool-1-thread-16---64
+pool-1-thread-16---65
+pool-1-thread-16---66
+pool-1-thread-16---67
+pool-1-thread-16---68
+pool-1-thread-2---67
+pool-1-thread-2---68
+pool-1-thread-2---69
+pool-1-thread-2---70
+pool-1-thread-2---71
+pool-1-thread-2---72
+pool-1-thread-2---73
+pool-1-thread-2---74
+pool-1-thread-2---75
+pool-1-thread-2---76
+pool-1-thread-2---77
+pool-1-thread-2---78
+pool-1-thread-2---79
+pool-1-thread-2---80
+pool-1-thread-2---81
+pool-1-thread-2---82
+pool-1-thread-2---83
+pool-1-thread-2---84
+pool-1-thread-2---85
+pool-1-thread-2---86
+pool-1-thread-2---87
+pool-1-thread-2---88
+pool-1-thread-2---89
+pool-1-thread-2---90
+pool-1-thread-2---91
+pool-1-thread-2---92
+pool-1-thread-2---93
+pool-1-thread-2---94
+pool-1-thread-2---95
+pool-1-thread-2---96
+pool-1-thread-2---97
+pool-1-thread-2---98
+pool-1-thread-2---99
+pool-1-thread-6---95
+pool-1-thread-6---96
+pool-1-thread-6---97
+pool-1-thread-11---90
+pool-1-thread-11---91
+pool-1-thread-1---39
+pool-1-thread-11---92
+pool-1-thread-11---93
+pool-1-thread-11---94
+pool-1-thread-11---95
+pool-1-thread-11---96
+pool-1-thread-11---97
+pool-1-thread-6---98
+pool-1-thread-16---69
+pool-1-thread-6---99
+pool-1-thread-7---76
+pool-1-thread-7---77
+pool-1-thread-7---78
+pool-1-thread-7---79
+pool-1-thread-13---93
+pool-1-thread-13---94
+pool-1-thread-13---95
+pool-1-thread-14---63
+pool-1-thread-14---64
+pool-1-thread-14---65
+pool-1-thread-3---33
+pool-1-thread-14---66
+pool-1-thread-13---96
+pool-1-thread-13---97
+pool-1-thread-13---98
+pool-1-thread-13---99
+pool-1-thread-7---80
+pool-1-thread-7---81
+pool-1-thread-7---82
+pool-1-thread-7---83
+pool-1-thread-7---84
+pool-1-thread-7---85
+pool-1-thread-7---86
+pool-1-thread-7---87
+pool-1-thread-7---88
+pool-1-thread-7---89
+pool-1-thread-7---90
+pool-1-thread-7---91
+pool-1-thread-7---92
+pool-1-thread-7---93
+pool-1-thread-7---94
+pool-1-thread-7---95
+pool-1-thread-7---96
+pool-1-thread-7---97
+pool-1-thread-16---70
+pool-1-thread-11---98
+pool-1-thread-11---99
+pool-1-thread-1---40
+pool-1-thread-1---41
+pool-1-thread-1---42
+pool-1-thread-1---43
+pool-1-thread-1---44
+pool-1-thread-1---45
+pool-1-thread-1---46
+pool-1-thread-1---47
+pool-1-thread-1---48
+pool-1-thread-1---49
+pool-1-thread-1---50
+pool-1-thread-16---71
+pool-1-thread-16---72
+pool-1-thread-16---73
+pool-1-thread-16---74
+pool-1-thread-16---75
+pool-1-thread-16---76
+pool-1-thread-16---77
+pool-1-thread-16---78
+pool-1-thread-16---79
+pool-1-thread-16---80
+pool-1-thread-16---81
+pool-1-thread-16---82
+pool-1-thread-16---83
+pool-1-thread-16---84
+pool-1-thread-16---85
+pool-1-thread-16---86
+pool-1-thread-16---87
+pool-1-thread-16---88
+pool-1-thread-16---89
+pool-1-thread-16---90
+pool-1-thread-16---91
+pool-1-thread-16---92
+pool-1-thread-16---93
+pool-1-thread-16---94
+pool-1-thread-16---95
+pool-1-thread-16---96
+pool-1-thread-16---97
+pool-1-thread-16---98
+pool-1-thread-16---99
+pool-1-thread-7---98
+pool-1-thread-14---67
+pool-1-thread-14---68
+pool-1-thread-3---34
+pool-1-thread-3---35
+pool-1-thread-3---36
+pool-1-thread-3---37
+pool-1-thread-3---38
+pool-1-thread-3---39
+pool-1-thread-3---40
+pool-1-thread-3---41
+pool-1-thread-3---42
+pool-1-thread-3---43
+pool-1-thread-14---69
+pool-1-thread-14---70
+pool-1-thread-14---71
+pool-1-thread-14---72
+pool-1-thread-14---73
+pool-1-thread-14---74
+pool-1-thread-14---75
+pool-1-thread-14---76
+pool-1-thread-14---77
+pool-1-thread-14---78
+pool-1-thread-14---79
+pool-1-thread-7---99
+pool-1-thread-1---51
+pool-1-thread-14---80
+pool-1-thread-14---81
+pool-1-thread-14---82
+pool-1-thread-14---83
+pool-1-thread-14---84
+pool-1-thread-14---85
+pool-1-thread-14---86
+pool-1-thread-14---87
+pool-1-thread-14---88
+pool-1-thread-14---89
+pool-1-thread-14---90
+pool-1-thread-14---91
+pool-1-thread-14---92
+pool-1-thread-14---93
+pool-1-thread-14---94
+pool-1-thread-14---95
+pool-1-thread-14---96
+pool-1-thread-14---97
+pool-1-thread-14---98
+pool-1-thread-14---99
+pool-1-thread-3---44
+pool-1-thread-3---45
+pool-1-thread-3---46
+pool-1-thread-3---47
+pool-1-thread-1---52
+pool-1-thread-3---48
+pool-1-thread-3---49
+pool-1-thread-3---50
+pool-1-thread-3---51
+pool-1-thread-3---52
+pool-1-thread-3---53
+pool-1-thread-3---54
+pool-1-thread-3---55
+pool-1-thread-3---56
+pool-1-thread-3---57
+pool-1-thread-3---58
+pool-1-thread-3---59
+pool-1-thread-3---60
+pool-1-thread-3---61
+pool-1-thread-1---53
+pool-1-thread-1---54
+pool-1-thread-1---55
+pool-1-thread-1---56
+pool-1-thread-1---57
+pool-1-thread-1---58
+pool-1-thread-1---59
+pool-1-thread-1---60
+pool-1-thread-1---61
+pool-1-thread-1---62
+pool-1-thread-1---63
+pool-1-thread-1---64
+pool-1-thread-1---65
+pool-1-thread-1---66
+pool-1-thread-1---67
+pool-1-thread-3---62
+pool-1-thread-1---68
+pool-1-thread-1---69
+pool-1-thread-1---70
+pool-1-thread-1---71
+pool-1-thread-1---72
+pool-1-thread-1---73
+pool-1-thread-1---74
+pool-1-thread-1---75
+pool-1-thread-1---76
+pool-1-thread-1---77
+pool-1-thread-1---78
+pool-1-thread-3---63
+pool-1-thread-1---79
+pool-1-thread-1---80
+pool-1-thread-1---81
+pool-1-thread-1---82
+pool-1-thread-1---83
+pool-1-thread-1---84
+pool-1-thread-3---64
+pool-1-thread-1---85
+pool-1-thread-3---65
+pool-1-thread-3---66
+pool-1-thread-3---67
+pool-1-thread-3---68
+pool-1-thread-3---69
+pool-1-thread-3---70
+pool-1-thread-3---71
+pool-1-thread-3---72
+pool-1-thread-3---73
+pool-1-thread-3---74
+pool-1-thread-3---75
+pool-1-thread-1---86
+pool-1-thread-1---87
+pool-1-thread-1---88
+pool-1-thread-1---89
+pool-1-thread-1---90
+pool-1-thread-1---91
+pool-1-thread-1---92
+pool-1-thread-1---93
+pool-1-thread-1---94
+pool-1-thread-1---95
+pool-1-thread-1---96
+pool-1-thread-1---97
+pool-1-thread-1---98
+pool-1-thread-1---99
+pool-1-thread-3---76
+pool-1-thread-3---77
+pool-1-thread-3---78
+pool-1-thread-3---79
+pool-1-thread-3---80
+pool-1-thread-3---81
+pool-1-thread-3---82
+pool-1-thread-3---83
+pool-1-thread-3---84
+pool-1-thread-3---85
+pool-1-thread-3---86
+pool-1-thread-3---87
+pool-1-thread-3---88
+pool-1-thread-3---89
+pool-1-thread-3---90
+pool-1-thread-3---91
+pool-1-thread-3---92
+pool-1-thread-3---93
+pool-1-thread-3---94
+pool-1-thread-3---95
+pool-1-thread-3---96
+pool-1-thread-3---97
+pool-1-thread-3---98
+pool-1-thread-3---99
+*******************************************************
+Method 2: using Callable
+Callable is generic interface
+generic is the return value type of call() method
+if we don't specify generic, return Object
+
+Note: Callable is the third method to create thread, 
+but it is only used in ThreadPool instead of Thread()
+********************************************************************************
+package cn.itcast.thread.pool.callable;
+
+import java.util.concurrent.Callable;
+
+public class MyCallable implements Callable {
+
+	public Object call() throws Exception {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+		return null;
+	}
+
+}
+
+package cn.itcast.thread.pool;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import cn.itcast.thread.pool.callable.MyCallable;
+
+public class ExecutorsTest {
+
+	public static void main(String[] args) {
+		ExecutorService  pool = Executors.newFixedThreadPool(16);
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.submit(new MyCallable());
+		pool.shutdown();
+	}
+}
+
+result:
+the same as above
+**********************************************************
+Req: thread sum
+	different threads will compute the sum from 1 to any number passed
+	For example.
+		thread 1: compute: 1 to 100
+		thread 2: compute 1 to 10
+*********************************************************
+package cn.itcast.thread.pool.callable.sum;
+
+import java.util.concurrent.Callable;
+
+public class MyCallable implements Callable<Integer> {
+	private int number;
+	
+	public MyCallable(int number) {
+		this.number = number;
+	}
+	public Integer call() throws Exception {
+		int sum = 0;
+		for (int i = 1; i <= number; ++i) {
+			sum += i;
+		}
+
+		return sum;
+	}
+
+}
+
+package cn.itcast.thread.pool.callable.sum;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+//import java.util.concurrent.Future;
+
+public class ExecutorsTest {
+
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
+		ExecutorService  pool = Executors.newFixedThreadPool(16);
+//		Future<Integer> f1 = pool.submit(new MyCallable(100));
+//		Future<Integer> f2 = pool.submit(new MyCallable(10));
+//		Integer i1 = f1.get();
+//		Integer i2 = f2.get();
+//		System.out.println(i1);
+//		System.out.println(i2);
+		
+		System.out.println(pool.submit(new MyCallable(100)).get());
+		System.out.println(pool.submit(new MyCallable(10)).get());
+		pool.shutdown();
+	}
+}
+
+
+result:
+5050
+55
+******************************************************************************
+Anonymous internal class uses multithreaded:
+******************************************************************************
+new Thread() {
+//rewrite run()
+}.start();
+
+new Thread(new Runnable() {
+//rewrite run()
+}) {}.start();
+
+new Thread(new Runnable() { // not generated in real dev, but it will be a good interview question
+//rewrite run()
+}) {
+//rewrite run()
+}.start();
+
+************************************************************
+package cn.itcast.anonymous.internal.Class;
+
+public class ThreadTest {
+	public static void main(String[] args) {
+		// thread 1: run() in {}
+		// it will run Thread subclass
+		new Thread() {
+			public void run() {
+				for (int i = 0; i < 100; ++i) {
+					System.out.println(Thread.currentThread().getName()+":"+i);
+				}
+			}
+		}.start();
+		
+		// thread 2: run() in ()
+		// it will run Runnable subclass
+		new Thread(new Runnable() {
+
+			public void run() {
+				for (int i = 0; i < 100; ++i) {
+					System.out.println(Thread.currentThread().getName()+":"+i);
+				}
+			}
+			
+		}) {}.start();
+		
+		// thread 3: run() in () and {}
+		// it will run {}, that is to say,
+		// it will run Thread subClass instead of Runnable subclass
+		new Thread(new Runnable() {
+
+			public void run() {
+				for (int i = 0; i < 100; ++i) {
+					System.out.println("hello"+i);
+				}
+			}
+			
+		}) {
+			public void run() {
+				for (int i = 0; i < 100; ++i) {
+					System.out.println("world"+i);
+				}
+			}
+			
+		}.start();
+	}
+}
+
+result:
+Thread-0:0
+Thread-0:1
+Thread-0:2
+Thread-0:3
+Thread-0:4
+Thread-0:5
+Thread-0:6
+Thread-0:7
+Thread-0:8
+Thread-0:9
+Thread-0:10
+Thread-0:11
+Thread-0:12
+Thread-0:13
+Thread-0:14
+Thread-0:15
+Thread-0:16
+Thread-0:17
+Thread-0:18
+Thread-0:19
+Thread-0:20
+Thread-0:21
+Thread-0:22
+Thread-0:23
+Thread-0:24
+Thread-0:25
+Thread-0:26
+Thread-0:27
+Thread-0:28
+Thread-0:29
+Thread-0:30
+Thread-0:31
+Thread-0:32
+Thread-0:33
+Thread-0:34
+Thread-0:35
+Thread-0:36
+Thread-0:37
+Thread-0:38
+Thread-0:39
+Thread-0:40
+Thread-0:41
+Thread-0:42
+Thread-0:43
+Thread-0:44
+Thread-0:45
+Thread-0:46
+Thread-0:47
+Thread-0:48
+Thread-0:49
+Thread-0:50
+Thread-0:51
+Thread-0:52
+Thread-0:53
+Thread-0:54
+Thread-0:55
+Thread-0:56
+Thread-0:57
+Thread-0:58
+Thread-0:59
+Thread-0:60
+Thread-0:61
+Thread-0:62
+Thread-0:63
+Thread-0:64
+Thread-0:65
+Thread-0:66
+Thread-0:67
+Thread-0:68
+Thread-0:69
+Thread-0:70
+Thread-0:71
+Thread-0:72
+Thread-0:73
+Thread-0:74
+Thread-0:75
+Thread-0:76
+Thread-0:77
+Thread-0:78
+Thread-0:79
+Thread-0:80
+Thread-0:81
+Thread-0:82
+Thread-0:83
+Thread-0:84
+Thread-0:85
+Thread-0:86
+Thread-0:87
+Thread-0:88
+Thread-0:89
+Thread-0:90
+Thread-0:91
+Thread-0:92
+Thread-0:93
+Thread-0:94
+Thread-0:95
+Thread-0:96
+Thread-0:97
+Thread-0:98
+Thread-0:99
+Thread-1:0
+Thread-1:1
+Thread-1:2
+Thread-1:3
+Thread-1:4
+Thread-1:5
+Thread-1:6
+Thread-1:7
+Thread-1:8
+Thread-1:9
+Thread-1:10
+Thread-1:11
+Thread-1:12
+Thread-1:13
+Thread-1:14
+Thread-1:15
+Thread-1:16
+Thread-1:17
+Thread-1:18
+Thread-1:19
+Thread-1:20
+Thread-1:21
+Thread-1:22
+Thread-1:23
+Thread-1:24
+Thread-1:25
+Thread-1:26
+Thread-1:27
+Thread-1:28
+Thread-1:29
+Thread-1:30
+Thread-1:31
+Thread-1:32
+Thread-1:33
+Thread-1:34
+Thread-1:35
+Thread-1:36
+Thread-1:37
+Thread-1:38
+Thread-1:39
+Thread-1:40
+Thread-1:41
+Thread-1:42
+Thread-1:43
+Thread-1:44
+Thread-1:45
+world0
+Thread-1:46
+world1
+Thread-1:47
+world2
+Thread-1:48
+world3
+Thread-1:49
+world4
+Thread-1:50
+world5
+Thread-1:51
+world6
+Thread-1:52
+world7
+Thread-1:53
+world8
+Thread-1:54
+world9
+Thread-1:55
+world10
+Thread-1:56
+world11
+Thread-1:57
+world12
+Thread-1:58
+world13
+Thread-1:59
+world14
+Thread-1:60
+world15
+Thread-1:61
+world16
+Thread-1:62
+world17
+Thread-1:63
+world18
+Thread-1:64
+world19
+Thread-1:65
+world20
+Thread-1:66
+world21
+Thread-1:67
+world22
+Thread-1:68
+world23
+Thread-1:69
+world24
+Thread-1:70
+world25
+Thread-1:71
+world26
+Thread-1:72
+world27
+Thread-1:73
+world28
+Thread-1:74
+world29
+Thread-1:75
+world30
+Thread-1:76
+world31
+Thread-1:77
+world32
+Thread-1:78
+world33
+Thread-1:79
+world34
+Thread-1:80
+world35
+Thread-1:81
+world36
+Thread-1:82
+world37
+Thread-1:83
+world38
+Thread-1:84
+world39
+Thread-1:85
+world40
+Thread-1:86
+world41
+world42
+Thread-1:87
+Thread-1:88
+Thread-1:89
+world43
+Thread-1:90
+world44
+Thread-1:91
+world45
+Thread-1:92
+world46
+world47
+Thread-1:93
+world48
+Thread-1:94
+world49
+Thread-1:95
+world50
+Thread-1:96
+Thread-1:97
+world51
+Thread-1:98
+world52
+Thread-1:99
+world53
+world54
+world55
+world56
+world57
+world58
+world59
+world60
+world61
+world62
+world63
+world64
+world65
+world66
+world67
+world68
+world69
+world70
+world71
+world72
+world73
+world74
+world75
+world76
+world77
+world78
+world79
+world80
+world81
+world82
+world83
+world84
+world85
+world86
+world87
+world88
+world89
+world90
+world91
+world92
+world93
+world94
+world95
+world96
+world97
+world98
+world99
+****************************************************************************************
+Timer
+Timer is a very widely used threading tool that can be used to schedule multiple timed tasks
+in the way that the station thread is executed.
+	Timer
+		A facility for threads to schedule tasks for future execution in a background thread. 
+		Tasks may be scheduled for one-time execution, or for repeated execution at regular intervals.
+		
+		public Timer()
+		public void schedule​(TimerTask task,
+                     long delay)
+		public void schedule​(TimerTask task,
+                     long delay,
+                     long period)
+		public void cancel()
+	TimerTask
+		public abstract void run()
+		public boolean cancel()
+	
+	Quartz: open source schedule framework by Java
+	
+	Steps:
+		
+***************************************************************
+package cn.itcast.timer;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MyTask extends TimerTask {
+	private Timer t;
+	
+	public MyTask() {}
+	
+	public MyTask(Timer t) {
+		this.t = t;
+	}
+
+	@Override
+	public void run() {
+		System.out.println("beng, it exploded. ");
+		t.cancel();
+	}
+}
+
+package cn.itcast.timer;
+
+import java.util.Timer;
+
+public class TimerTest {
+
+	public static void main(String[] args) {
+		Timer timer = new Timer();
+		timer.schedule(new MyTask(timer), 3000);
+	}
+}
+
+result:
+beng, it exploded. 
+*****************************************************************
+Req:
+3s for the first time, after that, once 1s
+********************************************************************
+package cn.itcast.timer.repeated;
+
+import java.util.TimerTask;
+
+public class MyTask extends TimerTask {
+	public MyTask() {}
+	
+	@Override
+	public void run() {
+		System.out.println("beng, it exploded. ");
+	}
+}
+
+package cn.itcast.timer.repeated;
+
+import java.util.Timer;
+
+public class TimerTest {
+
+	public static void main(String[] args) {
+		Timer timer = new Timer();
+		// 3s for the first time, after that, once 1s
+		timer.schedule(new MyTask(), 3000, 1000);
+	}
+}
+
+result:
+beng, it exploded. 
+beng, it exploded. 
+beng, it exploded. 
+beng, it exploded. 
+beng, it exploded. 
+beng, it exploded. 
+beng, it exploded. 
+...
+*************************************************************************
+Req:
+Timer to delete specified dir with some contents
+create dir in current package
+demo
+	aaa
+		files
+	bbb
+		files
+*************************************************************************
+package cn.itcast.timer.delete.dir;
+
+import java.io.File;
+import java.util.TimerTask;
+
+public class DeleteFolder extends TimerTask {
+	
+	@Override
+	public void run() {
+		File srcFolder = new File("demo");
+		deleteFolder(srcFolder);
+		
+	}
+
+	// recursion to delete dir
+	// delete root dir after all subdir has been deleted
+	private void deleteFolder(File srcFolder) {
+		File[] fileArray = srcFolder.listFiles();
+		if (fileArray != null) {
+			for (File file : fileArray) {
+				if (file.isDirectory()) {
+					deleteFolder(file);
+				} else {
+					System.out.println(file.getName()+":"+file.delete());
+				}
+			}
+			System.out.println(srcFolder.getName()+":"+srcFolder.delete());
+		}
+
+	}
+}
+
+package cn.itcast.timer.delete.dir;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+
+public class DeleteFolderTest {
+
+	public static void main(String[] args) throws ParseException {
+		Timer timer = new Timer();
+		String string = "2019-07-29 17:36:10";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date d = sdf.parse(string);
+		timer.schedule(new DeleteFolder(), d);// run it start with special time
+	}
+}
+
+result:
+ExecutorsTest.java:true
+aaa:true
+GetThread.java:true
+SetThread.java:true
+Student.java:true
+StudentTest.java:true
+bbb:true
+demo:true
+*********************************************************************
+multithread interview questions:
+1. How many ways are there to implement multithread?
+	Two.
+	A-inherit Thread
+	B-implement Runnable
+	
+	Extended:
+		implement Callable, but must combined with thread pool
+	
+2. How many ways of synchronized are there?
+	Two
+	A-synchronized code block
+	B-synchronized method
+
+
+3. start one process, use run() or start(), the difference
+start()
+	run(): wrap the code run by thread, calling it just is calling common method
+	start(): start thread, and call run() by JVM
+	
+4.sleep() and wait()
+	sleep(): must give time; not release Lock
+	wait(): can give time or not; release Lock
+
+5.wait(), notify(), notifyAll() are defined in Object()?why?
+	Because calling these methods are based on Lock instance, 
+	and synchronized code block lock instance is any instance,
+	Object is any instance
+6. the lifetime picture of thread?
+	
+	new-ready-running-dead
+	new-ready-runnning-ready-dead
+	new-ready-running-blocking-ready-running-dead
