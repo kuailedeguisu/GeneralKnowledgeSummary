@@ -917,5 +917,586 @@ public class EventTest {
 result:
 Click on me->Click on it->Click on me->Click on it->...
 ***************************************************************************************************
+Day25_2.txt
+MouseListener
+	Note:	
+		A-MouseListener can implement mouse function
+		B-need rewrite all methods in MouseListener
+		C- if we only want to rewrite some methods not all, we can use MouseAdapter, which empty implements MouseListener
+		D-XxxListener and XxxAdapter
+		E-double click
+*********************************************************************************
+Req: MouseListener
+*********************************************************************************
+package cn.itcast_01;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class MouseListenerTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		final JButton button = new JButton("Click on me");
+		button.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("Mouse released");
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("Mouse pressed");
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				System.out.println("Mouse exited");
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				System.out.println("Mouse entered");
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Mouse clicked");
+			}
+		});
+		
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+		
+
+	}
+}
+
+*************************************************************************
+Req: click mouse
+*************************************************************************
+package cn.itcast_01;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class MouseListenerTest3 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		final JButton button = new JButton("Click on me");
+		
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Mouse clicked");
+			}
+		});
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+		
+
+	}
+}
+
+Result:
+Mouse clicked.
+…
+*************************************************************************
+Req: double click mouse
+***************************************************
+package cn.itcast_01;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class MouseListenerTest2 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		final JButton button = new JButton("Click on me");
+		
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					System.out.println("Mouse double clicked");
+				}
+			}
+		});
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+		
+
+	}
+}
+
+Result:
+Mouse double clicked
+..
+**********************************************************************
+KeyListener
+KeyAdapter
+*********************************************************************
+package cn.itcast_02;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class KeyBoardListenerTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Button");
+		frame.add(button);
+		
+		button.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				System.out.println("KeyTyped");
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				System.out.println("KeyReleased");
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("KeyPressed");
+			}
+		});
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+***************************************************************************
+package cn.itcast_02;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class KeyBoardListenerTest2 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Button");
+		frame.add(button);
+		
+		button.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				System.out.println("KeyTyped");
+			}
+		});
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+Result:
+KeyTyped
+KeyTyped
+KeyTyped
+KeyTyped
+KeyTyped
+KeyTyped
+………
+******************************************************
+package cn.itcast_02;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class KeyBoardListenerTest3 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Button");
+		frame.add(button);
+		
+		button.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("Pressed:"+e.getKeyChar());
+			}
+		});
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+Result:
+Pressed:r
+Pressed:r
+Pressed:r
+Pressed:y
+Pressed:y
+…….
+*****************************************************************************
+package cn.itcast_02;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class KeyBoardListenerTest4 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Button");
+		frame.add(button);
+		
+		button.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("Pressed:"+e.getKeyCode());
+			}
+		});
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+Result:
+Pressed:38
+Pressed:38
+Pressed:40
+Pressed:80
+Pressed:65
+Pressed:16
+Pressed:65
+Pressed:157
+…
+*******************************************************************************************
+package cn.itcast_02;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class KeyBoardListenerTest5 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Button");
+		frame.add(button);
+		
+		button.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int code = e.getKeyCode();
+				switch (code) {
+				case 37:
+					System.out.println("Left");
+					break;
+				case 38:
+					System.out.println("Up");
+					break;
+				case 39:
+					System.out.println("Right");
+					break;
+				case 40:
+					System.out.println("Down");
+					break;
+
+				default:
+					break;
+				}
+			}
+		});
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+Result:
+Up
+Down
+Right
+Left
+Up
+
+…
+**************************************************************
+FileSearch and show all files in specified dir
+******************************************************************
+package cn.itcast_03;
+
+import java.awt.BorderLayout;
+import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import cn.itcast.util.FrameUtil;
+
+public class FileSearch {
+	JFrame frame = new JFrame("FileSearch");
+	JPanel panel = new JPanel();
+	JTextField field = new JTextField("Please enter the dir...");
+	JButton button = new JButton("Search");
+	JTextArea area = new JTextArea(15, 15);
+	
+	ScrollPane bar = new ScrollPane();
+	
+	
+	public void init() {
+		panel.add(field);
+		panel.add(button);
+		bar.add(area);
+		
+		field.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JTextField field = (JTextField)e.getSource();
+				if (field.getText().equals("Please enter the dir...")) {
+						field.setText("");
+				}
+			}
+		});
+		
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String path = field.getText();
+				File dir = new File(path);
+				File[] files = dir.listFiles();
+				for (File file : files) {
+					field.setText(area.getText()+file.getName());
+				}
+			}
+		});
+		
+		frame.add(panel, BorderLayout.NORTH);
+		frame.add(bar);
+		FrameUtil.initFrame(frame, 300, 400);
+		
+	}
+}
+
+
+package cn.itcast_03;
+
+public class FileSearchTest {
+
+	public static void main(String[] args) {
+		new FileSearch().init();
+
+	}
+
+}
+
+
+
+*******************************************************
+TextArea: only \n
+JTextArea: \r\n
+*****************************************************
+package cn.itcast_04;
+
+import java.awt.BorderLayout;
+import java.awt.FileDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import cn.itcast.util.FrameUtil;
+
+public class Notepad {
+	JFrame frame = new JFrame("Notepad");
+	JTextArea area = new JTextArea(20, 30);
+	
+	JMenuBar menuBar = new JMenuBar();
+	JMenu fileMenu = new JMenu("File");
+	JMenu editMenu = new JMenu("Edit");
+	JMenu switchMenu = new JMenu("SwitchWork");
+	
+	public void init() {
+		// File MenuItem
+		JMenuItem openMenuItem = new JMenuItem("Open");
+		JMenuItem newMenuItem = new JMenuItem("New");
+		JMenuItem saveMenuItem = new JMenuItem("Save");
+		JMenuItem saveAsMenuItem = new JMenuItem("Save as");
+		JMenuItem closeMenuItem = new JMenuItem("Close");
+		
+		openMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JTextField field = (JTextField)e.getSource();
+				String string = field.getText();
+				field.setText("");
+			}
+		});
+
+
+		
+		saveAsMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fileDialog = new FileDialog(frame, "Please enter saved dir", FileDialog.SAVE);
+				fileDialog.setVisible(true);
+				
+				String path = fileDialog.getDirectory();
+				String file = fileDialog.getFile();
+				
+				BufferedOutputStream bosBufferedOutputStream = null;
+				try {
+					bosBufferedOutputStream = new BufferedOutputStream(new FileOutputStream(new File(path, file)));
+				} catch (FileNotFoundException e2) {
+					e2.printStackTrace();
+				}
+				
+				String contentString = area.getText();
+				contentString.replaceAll("\n", "\r\n");
+				
+				try {
+					bosBufferedOutputStream.write(contentString.getBytes());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} finally {
+					try {
+						bosBufferedOutputStream.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		
+		// Switch MenuItem
+		JMenuItem workMenuItem1 = new JMenuItem("0730Project");
+		JMenuItem workMenuItem2 = new JMenuItem("0930Project");
+		JMenuItem workMenuItem3 = new JMenuItem("0830Project");
+		JMenuItem closeMenuItemSwitch = new JMenuItem("Close");
+		switchMenu.add(workMenuItem1);
+		switchMenu.add(workMenuItem2);
+		switchMenu.add(workMenuItem3);
+		switchMenu.add(closeMenuItemSwitch);
+		
+		// Compound menu: SwitchMenu included in FileMenu
+		fileMenu.add(switchMenu);
+		fileMenu.add(openMenuItem);
+		fileMenu.add(newMenuItem);
+		fileMenu.add(saveMenuItem);
+		fileMenu.add(saveAsMenuItem);
+		fileMenu.add(closeMenuItem);
+		
+		// Edit MenuItem
+		JMenuItem undoMenuItem = new JMenuItem("Undo");
+		JMenuItem redoMenuItem = new JMenuItem("Redo");
+		JMenuItem cutMenuItem = new JMenuItem("Cut");
+		JMenuItem pasteMenuItem = new JMenuItem("Paste");
+		JMenuItem copyMenuItem = new JMenuItem("Copy");
+
+		editMenu.add(undoMenuItem);
+		editMenu.add(redoMenuItem);
+		editMenu.add(cutMenuItem);
+		editMenu.add(pasteMenuItem);
+		editMenu.add(copyMenuItem);
+		
+		// MenuBar includes Menu
+		// Menu includes MenuItems
+		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
+		
+		frame.add(area);
+		frame.add(menuBar, BorderLayout.NORTH);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+	}
+
+}
+
+
+package cn.itcast_04;
+
+public class NotepadTest {
+
+	public static void main(String[] args) {
+		new Notepad().init();
+	}
+
+}
+*********************************************************
 		
