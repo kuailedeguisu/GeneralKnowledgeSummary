@@ -1,0 +1,921 @@
+How the software interacts
+	How the console interacts
+	How the graphical interface interacts 
+
+not important because nobody uses java to do GUI software(not good)
+in the real development, we don't use java for GUI
+something has the same thoughts as Andriod, just for reference
+
+Eclipse GUI is developed by IBM not using java
+
+Package for Java GUI:
+	java.awt Xxx, 
+	javax.swing JXxx
+
+java.awt uses graphics classes that rely on the system's graphics library
+javax.swing uses graphics classes that sun does itself and do not need to rely on the system's graphics library
+ 
+java.awt includes GUI classes and event classes
+javax.swing has no event classes
+
+
+component type:
+	container
+	non-container
+	
+	
+Component
+	|-Container
+		|-Window
+			|-Frame
+			|-Dialog
+				|-FileDialog
+		|-Panel
+
+	|-Button
+	|-Label
+	|-Checkbox
+	|-TextComponent
+		|-TextArea
+		|-TextField
+
+
+
+**********************************************************
+container components
+**********************************************************
+ 
+Window:
+	
+	Module java.desktop
+	Package java.awt
+	Class Window
+
+		java.lang.Object
+			java.awt.Component
+				java.awt.Container
+					java.awt.Window
+
+	A Window object is a top-level window with no borders and no menubar.
+	The default layout for a window is BorderLayout. 
+	We will not use Window
+	We use JFrame
+	java.swing.JFrame
+		public JFrame​(String title)
+		   throws HeadlessException
+		   
+		public void setVisible​(boolean b)  // Window method, set window Visibility
+		public void setSize​(int width,
+                    int height)            // Window method, set Window size
+	
+		public void setBounds​(int x,
+                      int y,
+                      int width,
+                      int height)         // Window method, set Window location, don't need setSize() method
+		public void setDefaultCloseOperation​(int operation) // close Window and terminate program
+			DO_NOTHING_ON_CLOSE (defined in WindowConstants): Don't do anything; require the program to handle the operation in the windowClosing method of a registered WindowListener object.
+			HIDE_ON_CLOSE (defined in WindowConstants): Automatically hide the frame after invoking any registered WindowListener objects.
+			DISPOSE_ON_CLOSE (defined in WindowConstants): Automatically hide and dispose the frame after invoking any registered WindowListener objects.
+			EXIT_ON_CLOSE (defined in WindowConstants): Exit the application using the System exit method. Use this only in applications. 
+			
+	java.awt.ToolKit
+		public static Toolkit getDefaultToolkit()
+		public abstract Dimension getScreenSize()
+                                 throws HeadlessException
+		
+		
+*********************************************************************************
+Req: show one Window in the middle of the computer GUI
+*********************************************************************************
+package cn.itcast_01;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+
+public class JFrameTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("My First GUI");
+//		frame.setSize(300, 400);
+//		frame.setBounds(533, 184, 300, 400);// (1366-300)/2, (768-400)/2
+		frame.setVisible(true);
+		initFrame(frame, 300, 400);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static void initFrame(JFrame jf, int width, int height) {
+		Toolkit t = Toolkit.getDefaultToolkit();
+		Dimension d = t.getScreenSize();
+		int x = (int) d.getWidth();
+		int y = (int) d.getHeight();
+		System.out.println(x);
+		System.out.println(y);
+		jf.setBounds((x-width)/2, (y-height)/2, width, height);
+	}
+}
+
+result:
+1920
+1080
+click on "x" in the GUI
+then the Window is closed and program is terminated
+***************************************************************************************
+
+Tool Class to init Frame
+package cn.itcast.util;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+
+public class FrameUtil {
+	public static void initFrame(JFrame jf, int width, int height) {
+		Toolkit t = Toolkit.getDefaultToolkit();
+		Dimension d = t.getScreenSize();
+		int x = (int) d.getWidth();
+		int y = (int) d.getHeight();
+		jf.setBounds((x-width)/2, (y-height)/2, width, height);
+		jf.setVisible(true);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+}
+
+package cn.itcast_01;
+
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class FrameUtilTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("My First GUI");
+		FrameUtil.initFrame(frame, 300, 400);
+	}
+
+}
+
+******************************************	
+JDialog
+	Class JDialog
+
+		java.lang.Object
+			java.awt.Component
+				java.awt.Container
+					java.awt.Window
+						java.awt.Dialog
+							javax.swing.JDialog 
+							
+	
+	public JDialog​(Dialog owner,
+               String title,
+               boolean modal)
+			   
+
+*************************************************
+package cn.itcast_02;
+
+import java.awt.Dialog;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class DialogTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JDialog jd = new JDialog(new Dialog(frame), "Dialog", true);
+		FrameUtil.initFrame(frame, 300, 400);
+		jd.setBounds(500, 300, 100, 200);
+		jd.setVisible(true);
+		jd.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	}
+}
+**********************************************************************************
+JOptionPane (Dialog, too)
+	Module java.desktop
+	Package javax.swing
+	Class JOptionPane
+
+		java.lang.Object
+			java.awt.Component
+				java.awt.Container
+					javax.swing.JComponent
+						javax.swing.JOptionPane
+
+	types:
+		message Dialog
+		alarm Dialog
+		error Dialog
+		input Dialog
+		confirmation Dialog
+		
+	methods:
+		public static void showMessageDialog​(Component parentComponent,
+                                     Object message,
+                                     String title,
+                                     int messageType) // show dialog
+                              throws HeadlessException
+			messageType:
+				ERROR_MESSAGE
+				INFORMATION_MESSAGE
+				WARNING_MESSAGE
+				QUESTION_MESSAGE
+				PLAIN_MESSAGE
+		
+
+		public static String showInputDialog​(Object message) // input dialog
+                              throws HeadlessException
+		
+	
+	
+		public static int showConfirmDialog​(Component parentComponent,
+                                    Object message,
+                                    String title,
+                                    int optionType)   // confirm dialog
+                             throws HeadlessException
+		    optionType - an int designating the options available on the dialog: YES_NO_OPTION, YES_NO_CANCEL_OPTION, or OK_CANCEL_OPTION
+		
+		public static int showConfirmDialog​(Component parentComponent,
+                                    Object message)
+                             throws HeadlessException
+			return value
+				Yes: 0
+				No: 1
+				Cancel: 2
+***********************************************************************************************
+package cn.itcast_03;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.itcast.util.FrameUtil;
+
+public class JOptionPaneTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+//		JOptionPane.showMessageDialog(frame, "It has no classes tomorrow", "Notice", JOptionPane.INFORMATION_MESSAGE);
+//		JOptionPane.showMessageDialog(frame, "It will rain tonight", "Alarm", JOptionPane.WARNING_MESSAGE);
+//		JOptionPane.showMessageDialog(frame, "We can't phone tomorrow", "Error", JOptionPane.ERROR_MESSAGE);
+//		String moneyString = JOptionPane.showInputDialog("Please enter the cash($)");
+//		System.out.println("money:"+moneyString);
+//		JOptionPane.showConfirmDialog(frame, "Are you sure to uninstall it?", "Uninstall software", JOptionPane.YES_NO_CANCEL_OPTION);
+		int num = JOptionPane.showConfirmDialog(frame, "Are you sure to uninstall it?");
+		System.out.println(num);
+		FrameUtil.initFrame(frame, 300, 400);
+	}
+}
+
+result
+Yes: 0
+No: 1
+Cancel: 2
+**********************************************************************************************************
+JPanel
+	
+	Module java.desktop
+	Package javax.swing
+	Class JPanel
+
+		java.lang.Object
+			java.awt.Component
+				java.awt.Container
+					javax.swing.JComponent
+						javax.swing.JPanel 
+	
+	public JPanel()
+	public void setBackground​(Color bg) //  Component method
+	
+	public Component add​(Component comp) // Container method
+*************************************************************************************************
+
+package cn.itcast_04;
+
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import cn.itcast.util.FrameUtil;
+
+public class PanelTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		panel.setBackground(Color.BLUE);
+		
+		FrameUtil.initFrame(frame, 500, 700);
+
+	}
+}
+*********************************************************************
+FileDialog
+	
+	Module java.desktop
+	Package java.awt
+	Class FileDialog
+
+		java.lang.Object
+			java.awt.Component
+				java.awt.Container
+					java.awt.Window
+						java.awt.Dialog
+							java.awt.FileDialog
+							
+	public FileDialog​(Dialog parent,
+					  String title)
+	public String getDirectory()
+	public String getFile()
+*****************************************************
+package cn.itcast_05;
+
+import java.awt.FileDialog;
+
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class FileDialogTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		FileDialog fileDialog = new FileDialog(frame,"Please choose the saved dir",FileDialog.SAVE);
+		FrameUtil.initFrame(frame, 300,400);
+		fileDialog.setVisible(true);
+		System.out.println("dir："+ fileDialog.getDirectory());
+		System.out.println("file name："+ fileDialog.getFile());
+	}
+
+}
+
+result:
+dir：C:\Users\xx\Desktop\
+file name：test.txt
+*******************************************************
+ Layout Manager： specify the location of Component
+ 
+ Each layout manager has its special style
+ ***************************************************************
+ BorderLayout( Border Layout Manager )
+	location style: top north, bottom south, right east, left west, and center
+	
+	Note:
+		A-When adding Component by BorderLayout, if not specifing Component location, add to Center location by default
+		B-When using BorderLayout, if north, south, east, west have no Component, center Component will occupy vacancy locations
+		C-Frame default layout manager is BorderLayout， so setLayout(borderLayout) can be ignored
+		
+******************************************************************************************
+package cn.itcast_06;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class BorderLayoutTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		BorderLayout borderLayout = new BorderLayout();
+		// let borderLayout manage frame Window
+		frame.setLayout(borderLayout); // commented is ok
+		
+		frame.add(new JButton("North"), BorderLayout.NORTH);
+		frame.add(new JButton("South"), BorderLayout.SOUTH);
+		frame.add(new JButton("West"), BorderLayout.WEST);
+		frame.add(new JButton("East"), BorderLayout.EAST);
+		frame.add(new JButton("Center"), BorderLayout.CENTER);
+		
+		// init Window
+		FrameUtil.initFrame(frame, 1200, 1000);
+
+	}
+}
+******************************************************************
+FlowLayout(flow layout manager)
+	A-location: put them in one line, if one line is full, put them in another line, line by line
+	B-how to align： center by default, we can specify it, at the same time we can specify compoments gap
+		public FlowLayout​(int align,
+                  int hgap,
+                  int vgap)
+	C-Panel default layout manager is FlowLayout
+********************************************************************************
+package cn.itcast_07;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import cn.itcast.util.FrameUtil;
+
+public class FlowLayoutTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		
+		// add panel
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		
+		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 100, 80); //  Specify how to align  
+		// let flowLayout manage frame
+		panel.setLayout(flowLayout);
+		
+		panel.add(new JButton("Button 1"));
+		panel.add(new JButton("Button 2"));
+		panel.add(new JButton("Button 3"));
+		panel.add(new JButton("Button 4"));
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+*************************************************************************
+ Table Layout Manager 
+ GridLayout
+	The GridLayout class is a layout manager that lays out a container's components in a rectangular grid. 
+	The container is divided into equal-sized rectangles, and one component is placed in each rectangle. 
+	For example, the following is an applet that lays out six buttons into three rows and two columns
+	
+	public GridLayout​(int rows,
+                  int cols)
+	public GridLayout​(int rows,
+                  int cols,
+                  int hgap,
+                  int vgap)
+	Note:
+		if table is not enough, it will add one row and one column automatically
+	
+*******************************************************************************************************
+package cn.itcast_08;
+
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class GridLayoutTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Calculator");
+		GridLayout gridLayout = new GridLayout(4, 4, 1, 2);
+		frame.setLayout(gridLayout);
+		
+		for (int i = 0; i < 10; ++i) {
+			frame.add(new JButton(i+""));
+		}
+		
+		frame.add(new JButton("+"));
+		frame.add(new JButton("-"));
+		frame.add(new JButton("*"));
+		frame.add(new JButton("/"));
+		frame.add(new JButton("="));
+		frame.add(new JButton("."));
+		frame.add(new JButton("C"));
+		frame.add(new JButton("CE"));
+		frame.add(new JButton("%"));
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+}
+**********************************************************
+CardLayout
+***********************************************************
+package CarLayoutTest;
+
+import java.awt.CardLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import cn.itcast.util.FrameUtil;
+
+public class CarLayoutTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Card Layout Manager");
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		
+		CardLayout cardLayout = new CardLayout();
+		panel.setLayout(cardLayout);
+		
+		panel.add(new JButton("♠A"));
+		panel.add(new JButton("♥2"));
+		panel.add(new JButton("♣3"));
+		panel.add(new JButton("♦4"));
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+
+result:
+only the first card is showed on the panel
+**************************************************************
+Req: get next card
+package CarLayoutTest;
+
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import cn.itcast.util.FrameUtil;
+
+public class CarLayoutTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Card Layout Manager");
+		final JPanel panel = new JPanel();
+		frame.add(panel);
+		
+		final CardLayout cardLayout = new CardLayout();
+		panel.setLayout(cardLayout);
+		
+		JButton button = new JButton("♠A");
+		panel.add(button);
+//		panel.add(new JButton("♠A"));
+		panel.add(new JButton("♥2"));
+		panel.add(new JButton("♣3"));
+		panel.add(new JButton("♦4"));
+		
+		// event
+		button.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.next(panel); // next card
+				//cardLayout.previous(parent);); // previous card
+			}
+		});
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+}
+
+result:
+the first card
+the second card after clicking on it
+********************************************************************************
+
+
+
+**********************************************************************************
+non-container compoments:
+**********************************************************************************
+Req: register system
+	common
+		JLabel
+	username
+		JTextField
+	password
+		JPasswordField
+	Sex (single choice)
+		JRadioButton
+		ButtonGroup
+	city (Drop-down box)
+		JComboBox
+	hobby(multiple choice)
+		JCheckBox
+	self-introduction
+		JTextArea(setLineWrap)
+***************************************************************************************	
+package cn.itcat_09;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import cn.itcast.util.FrameUtil;
+
+public class RegisterTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Register");
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		// username
+		JLabel nameLabel = new JLabel("Username");
+		// username enter box: JTextField
+		JTextField nameField = new JTextField(15);
+		panel.add(nameLabel);
+		panel.add(nameField);
+		
+		// password
+		JLabel pwdLabel = new JLabel("Password");
+		//  Password box : JPasswordField
+		JPasswordField pwdField = new JPasswordField(12);
+		panel.add(pwdLabel);
+		panel.add(pwdField);
+		
+		// Sex
+		JLabel sexLabel = new JLabel("Sex");
+		// choice box:  JRadioButton, Male by default
+		JRadioButton male = new JRadioButton("Male", true);
+		JRadioButton female = new JRadioButton("Female");
+		// single choice, add into ButtonGroup
+		ButtonGroup group = new ButtonGroup();
+		group.add(male);// this decides which true is selected
+		group.add(female);
+		
+		panel.add(sexLabel);
+		panel.add(male);
+		panel.add(female);
+		
+		// City
+		JLabel cityLabel = new JLabel("Where are you from?");
+		//  Drop-down box 
+		Object[] arr = {"Beijing", "Shanghai", "Tianjin", "Guangzhou", "Shenzhen"};
+		JComboBox cities = new JComboBox(arr);
+		panel.add(cityLabel);
+		panel.add(cities);
+		
+		// Hobbies
+		JLabel hobbyLabel = new JLabel("Hobby");
+		// Compound options: JCheckBox
+		JCheckBox checkbox1 = new JCheckBox("basketball");
+		JCheckBox checkbox2 = new JCheckBox("football");
+		JCheckBox checkbox3 = new JCheckBox("badminton");
+		JCheckBox checkbox4 = new JCheckBox("table tennis");
+		JCheckBox checkbox5 = new JCheckBox("tennis");
+		JCheckBox checkbox6 = new JCheckBox("swimming");
+		panel.add(hobbyLabel);
+		panel.add(checkbox1);
+		panel.add(checkbox2);
+		panel.add(checkbox3);
+		panel.add(checkbox4);
+		panel.add(checkbox5);
+		panel.add(checkbox6);
+		
+		// self-introduction
+		JLabel introLabel = new JLabel("Self-introduction");
+		// rows and columns: JTextArea
+		JTextArea introArea = new JTextArea(20, 15);
+		introArea.setLineWrap(true);// \n
+		panel.add(introLabel);
+		panel.add(introArea);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+
+}
+*********************************************************************************************	
+ 
+ 
+ **************************************************************************************
+ menu compoments
+ ****************************************************************************************
+ MenuBar
+ Menu
+ MenuItem
+ 
+	 MenuBar can add Menu
+	 Menu can add MenuItem
+	
+	compound menu:
+		A-Menu add Menu, menu add menuItem
+*******************************************************************************************
+package cn.itcast_10;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+
+import cn.itcast.util.FrameUtil;
+
+public class MenuTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Notepad++");
+		JTextArea area = new JTextArea(20, 30);
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenu editMenu = new JMenu("Edit");
+		JMenu switchMenu = new JMenu("SwitchWork");
+		
+		// File MenuItem
+		JMenuItem openMenuItem = new JMenuItem("Open");
+		JMenuItem newMenuItem = new JMenuItem("New");
+		JMenuItem saveMenuItem = new JMenuItem("Save");
+		JMenuItem saveAsMenuItem = new JMenuItem("Save as");
+		JMenuItem closeMenuItem = new JMenuItem("Close");
+		
+		// Switch MenuItem
+		JMenuItem workMenuItem1 = new JMenuItem("0730Project");
+		JMenuItem workMenuItem2 = new JMenuItem("0930Project");
+		JMenuItem workMenuItem3 = new JMenuItem("0830Project");
+		JMenuItem closeMenuItemSwitch = new JMenuItem("Close");
+		switchMenu.add(workMenuItem1);
+		switchMenu.add(workMenuItem2);
+		switchMenu.add(workMenuItem3);
+		switchMenu.add(closeMenuItemSwitch);
+		
+		// Compound menu: SwitchMenu included in FileMenu
+		fileMenu.add(switchMenu);
+		fileMenu.add(openMenuItem);
+		fileMenu.add(newMenuItem);
+		fileMenu.add(saveMenuItem);
+		fileMenu.add(saveAsMenuItem);
+		fileMenu.add(closeMenuItem);
+		
+		// Edit MenuItem
+		JMenuItem undoMenuItem = new JMenuItem("Undo");
+		JMenuItem redoMenuItem = new JMenuItem("Redo");
+		JMenuItem cutMenuItem = new JMenuItem("Cut");
+		JMenuItem pasteMenuItem = new JMenuItem("Paste");
+		JMenuItem copyMenuItem = new JMenuItem("Copy");
+
+		editMenu.add(undoMenuItem);
+		editMenu.add(redoMenuItem);
+		editMenu.add(cutMenuItem);
+		editMenu.add(pasteMenuItem);
+		editMenu.add(copyMenuItem);
+		
+		// MenuBar includes Menu
+		// Menu includes MenuItems
+		menuBar.add(fileMenu);
+		menuBar.add(editMenu);
+		
+		frame.add(area);
+		frame.add(menuBar, BorderLayout.NORTH);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+	}
+
+}
+
+result:
+File
+	|-Open
+	|-New
+	|-Save
+	|-Save as
+	|-Close
+	|-SwitchWork
+		|-0730Project
+		|-0930Project
+		|-0830Project
+		|-Close
+Edit
+	|-Undo
+	|-Redo
+	|-Cut
+	|-Paste
+	|-Copy
+************************************************
+Event
+	When an event happens, there's a treatment scenario.
+	
+	 (Event Source)           (Listener)                       (Event)                      (Handling Scenario)
+**************************************************************************************
+package cn.itcast_11;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class EventTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		JButton button = new JButton("Click on me");
+		// add listener for button
+		button.addActionListener(new ActionListener() {
+			// When clicking on button, 
+			// jvm will pass related time to ActionEvent,
+			// and call actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Hi, clicked!");
+			}
+		});
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+}
+
+result:
+Hi, clicked!
+Hi, clicked!
+Hi, clicked!
+Hi, clicked!
+Hi, clicked!
+...
+*********************************************************************************
+package cn.itcast_11;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class EventTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		final JButton button = new JButton("Click on me");
+		// add listener for button
+		button.addActionListener(new ActionListener() {
+			// When clicking on button, 
+			// jvm will pass related time to ActionEvent,
+			// and call actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+//				System.out.println("Hi, clicked!");
+				button.setText("Big World!");
+			}
+		});
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+}
+
+result:
+GUI: Click on me ->Big World!
+************************************************************************************
+package cn.itcast_11;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
+
+public class EventTest {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Window");
+		final JButton button = new JButton("Click on me");
+		// add listener for button
+		button.addActionListener(new ActionListener() {
+			// When clicking on button, 
+			// jvm will pass related time to ActionEvent,
+			// and call actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+//				System.out.println("Hi, clicked!");
+//				button.setText("Big World!");
+				JButton button = (JButton)e.getSource();
+				if (button.getText().equals("Click on me")) {
+					button.setText("Click on it");
+				} else {
+					button.setText("Click on me");
+				}
+			}
+		});
+		frame.add(button);
+		
+		FrameUtil.initFrame(frame, 300, 400);
+
+	}
+}
+
+result:
+Click on me->Click on it->Click on me->Click on it->...
+***************************************************************************************************
+
+		
