@@ -124,11 +124,20 @@ moveRight
 	(x,y)->(x+1, y)
 ***********************************************************************************
 Issue: Snake head is moving reversely
- package cn.itcast_01;
+***********************************************************************************
+package cn.itcast_01;
 
+import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import cn.itcast.util.FrameUtil;
 
 public class SnakeGame {
 	public static final int WIDTH = 30;
@@ -148,31 +157,9 @@ public class SnakeGame {
 	
 	// snake current direction, default right direction
 	int currentDirection = RIGHT_DIRECTION;
-
-//	public void moveUp() {
-//		Point head = snake.getFirst();
-//		snake.addFirst(new Point(head.x, head.y - 1));
-//		snake.removeLast();
-//
-//	}
-//	
-//	public void moveDown() {
-//		Point head = snake.getFirst();
-//		snake.addFirst(new Point(head.x, head.y + 1));
-//		snake.removeLast();
-//	}
-//	
-//	public void moveLeft() {
-//		Point head = snake.getFirst();
-//		snake.addFirst(new Point(head.x - 1, head.y));
-//		snake.removeLast();
-//	}
-//	
-//	public void moveRight() {
-//		Point head = snake.getFirst();
-//		snake.addFirst(new Point(head.x + 1, head.y));
-//		snake.removeLast();
-//	}
+	
+	static boolean isGameOver = false;
+	
 	public void move() {
 		Point head = snake.getFirst();
 		
@@ -184,16 +171,27 @@ public class SnakeGame {
 			snake.addFirst(new Point(head.x, head.y + 1));
 			break;
 		case LEFT_DIRECTION:
-			snake.addFirst(new Point(head.x - 1, head.y));
+			if (head.x == 0) {
+				snake.addFirst(new Point(WIDTH - 1, head.y));
+			} else {
+				snake.addFirst(new Point(head.x - 1, head.y));
+			}
 			break;
 		case RIGHT_DIRECTION:
-			snake.addFirst(new Point(head.x + 1, head.y));
+			if (head.x == WIDTH - 1) {
+				snake.addFirst(new Point(0, head.y));
+			} else {
+				snake.addFirst(new Point(head.x + 1, head.y));
+			}
 			break;
 		default:
 			break;
 		}
-
-		snake.removeLast();
+		if (eatFood()) {
+			createFood();
+		} else {
+			snake.removeLast();
+		}
 	}
 
 	public void changeDirection(int newDirection) {
@@ -250,7 +248,7 @@ public class SnakeGame {
 	public void initBackGround() {
 		for (int rows = 0; rows < backGround.length; ++rows) {
 			for (int cols = 0; cols < backGround[rows].length; ++cols) {
-				if (rows == 0 || rows == backGround.length - 1 || cols == 0 || cols == backGround[rows].length - 1) {
+				if (rows == 0 || rows == backGround.length - 1/*|| cols == 0 || cols == backGround[rows].length - 1*/) {
 					backGround[rows][cols] = '*';
 				} else {
 					backGround[rows][cols] = ' ';
@@ -276,7 +274,94 @@ public class SnakeGame {
 		showFood();
 		showBackGround();
 	}
+	
+	public void isGameOver() {
+		// hit the Wall
+		Point head = snake.getFirst();
+		if (backGround[head.y][head.x] == '*') {
+			isGameOver = true;
+		}
+		// bite himself
+		for (int i = 1; i < snake.size(); ++i) {
+			Point body = snake.get(i);
+			if (head.equals(body)) {
+				isGameOver = true;
+			}
+		}
+
+	}
+	public boolean eatFood() {
+		Point head = snake.getFirst();
+		if (head.equals(food)) {
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		SnakeGame snake = new SnakeGame();
+		// init map
+		snake.initBackGround();
+		
+		// init snake
+		snake.initSnake();
+		
+		// show snake on map
+		snake.showSnake();
+		
+		// init food
+		snake.createFood();
+		
+		// show food
+		snake.showFood();
+		
+		// show map
+		snake.showBackGround();
+		
+		JFrame frame = new JFrame("GreedySnakeGame");
+		frame.add(new JButton("⬆️"), BorderLayout.NORTH);
+		frame.add(new JButton("⬇️"), BorderLayout.SOUTH);
+		frame.add(new JButton("⬅️"), BorderLayout.WEST);
+		frame.add(new JButton("➡️️"), BorderLayout.EAST);
+		JButton button = new JButton("Click and control direction");
+		frame.add(button);
+		FrameUtil.initFrame(frame, 300, 400);
+		
+		button.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int code = e.getKeyCode();
+				switch (code) {
+				case KeyEvent.VK_UP:
+					snake.changeDirection(SnakeGame.UP_DIRECTION);
+					break;
+				case KeyEvent.VK_DOWN:
+					snake.changeDirection(SnakeGame.DOWN_DIRECTION);
+					break;
+				case KeyEvent.VK_LEFT:
+					snake.changeDirection(SnakeGame.LEFT_DIRECTION);
+					break;
+				case KeyEvent.VK_RIGHT:
+					snake.changeDirection(SnakeGame.RIGHT_DIRECTION);
+					break;
+				default:
+					break;
+				}
+				snake.move();
+				snake.isGameOver();
+				snake.refresh();
+				if (isGameOver) {
+					System.out.println("Game Over");
+					System.exit(0);
+				}
+				
+			}
+		});
+	}
 }
+
+
 
 
 
