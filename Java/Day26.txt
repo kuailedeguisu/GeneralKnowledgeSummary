@@ -1,0 +1,283 @@
+ Greedy Snake Game：
+ The core part of a game is the business logic of the game. ui to the artman。
+ 
+ The things on the game:
+	map
+	snake
+	food
+
+The rules for the game:
+	1. When the snake initializes, it has three nodes, and at first, the snake appears in the middle of the map 
+	2. After Snakes eat things, they will become longer 
+	3. Snakes will die when they bite their tails 
+	4. Snakes hit the wall and die 
+	5. Food is randomly generated 
+	6. Food can't grow on stones 
+	7. Food can grow on snakes
+
+Suggestions: 
+	Because we are currently inexperienced, so when doing projects will often appear relatively large modifications,
+	generally because the first design code, only consider the current problems, not consider future expansion. 
+Solution:
+	Create your own code libraries. Collect good code implements for common functions.
+	It can improve your code efficiency.
+	
+***********************************************************************************************
+Req: print the following structure
+***************************************************
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+*                                                 *
+***************************************************
+*************************************************************************************
+package cn.itcast_01;
+
+public class Snake {
+	public static final int WIDTH = 30;
+	public static final int HEIGHT = 10;
+
+	private char[][] backGround = new char[HEIGHT][WIDTH];
+
+	public void initBackGround() {
+		for (int rows = 0; rows < backGround.length; ++rows) {
+			for (int cols = 0; cols < backGround[rows].length; ++cols) {
+				if (rows == 0 || rows == backGround.length - 1 || cols == 0 || cols == backGround[rows].length - 1) {
+					backGround[rows][cols] = '*';
+				} else {
+					backGround[rows][cols] = ' ';
+				}
+
+			}
+		}
+	}
+
+	public void showBackGround() {
+		for (int rows = 0; rows < backGround.length; ++rows) {
+			for (int cols = 0; cols < backGround[rows].length; ++cols) {
+				System.out.print(backGround[rows][cols]);
+			}
+			System.out.println();
+		}
+	}
+}
+
+package cn.itcast_01;
+
+public class MapTest {
+
+	public static void main(String[] args) {
+		Snake snake = new Snake();
+		snake.initBackGround();
+		snake.showBackGround();
+//		char[][] charArr = new char[5][10];
+//		System.out.println(charArr.length); // 5
+//		for (int i = 0; i < charArr.length; ++i) {
+//			System.out.println(i+":"+charArr[i].length);// 0:10, 1:10, 2:10, 3:10, 4:10
+//		}
+		
+		
+//// summary about 2D array
+//		char[][] charArr = new char[M][N];
+//		charArr.length: the length of rows
+//		charArr[0].length: the length of columns
+	}
+}
+
+result:
+******************************
+*                            *
+*                            *
+*                            *
+*                            *
+*                            *
+*                            *
+*                            *
+*                            *
+******************************
+*************************************************************************************
+Summary for 2D Array:
+Height is the length of rows
+	char[][] charArr = new char[HEIGHT][WIDTH];
+	charArr.length: the length of rows: HEIGHT
+	charArr[0].length: the length of columns: WIDTH
+************************************************************************************
+ The snake's movement is actually to add a new snake head and remove a snake tail
+moveUp:
+	(x,y)->(x, y-1)
+moveDown
+	(x,y)->(x, y+1)
+moveLeft
+	(x,y)->(x-1, y)
+moveRight
+	(x,y)->(x+1, y)
+***********************************************************************************
+Issue: Snake head is moving reversely
+ package cn.itcast_01;
+
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.Random;
+
+public class SnakeGame {
+	public static final int WIDTH = 30;
+	public static final int HEIGHT = 10;
+
+	private char[][] backGround = new char[HEIGHT][WIDTH];
+
+	LinkedList<Point> snake = new LinkedList<Point>();
+
+	Point food;
+	
+	public static final int UP_DIRECTION = 1;
+	public static final int DOWN_DIRECTION = -1;
+	public static final int LEFT_DIRECTION = 2;
+	public static final int RIGHT_DIRECTION = -2;
+	
+	
+	// snake current direction, default right direction
+	int currentDirection = RIGHT_DIRECTION;
+
+//	public void moveUp() {
+//		Point head = snake.getFirst();
+//		snake.addFirst(new Point(head.x, head.y - 1));
+//		snake.removeLast();
+//
+//	}
+//	
+//	public void moveDown() {
+//		Point head = snake.getFirst();
+//		snake.addFirst(new Point(head.x, head.y + 1));
+//		snake.removeLast();
+//	}
+//	
+//	public void moveLeft() {
+//		Point head = snake.getFirst();
+//		snake.addFirst(new Point(head.x - 1, head.y));
+//		snake.removeLast();
+//	}
+//	
+//	public void moveRight() {
+//		Point head = snake.getFirst();
+//		snake.addFirst(new Point(head.x + 1, head.y));
+//		snake.removeLast();
+//	}
+	public void move() {
+		Point head = snake.getFirst();
+		
+		switch (currentDirection) {
+		case UP_DIRECTION:
+			snake.addFirst(new Point(head.x, head.y - 1));
+			break;
+		case DOWN_DIRECTION:
+			snake.addFirst(new Point(head.x, head.y + 1));
+			break;
+		case LEFT_DIRECTION:
+			snake.addFirst(new Point(head.x - 1, head.y));
+			break;
+		case RIGHT_DIRECTION:
+			snake.addFirst(new Point(head.x + 1, head.y));
+			break;
+		default:
+			break;
+		}
+
+		snake.removeLast();
+	}
+
+	public void changeDirection(int newDirection) {
+		// judge if newDirection is reversing currentDirection
+		if (newDirection + currentDirection != 0) {
+			this.currentDirection = newDirection;
+		}
+	}
+	
+	public void createFood() {
+		Random random = new Random();
+		while (true) {
+				int x = random.nextInt(WIDTH); 
+				int y = random.nextInt(HEIGHT);
+				
+				if (backGround[y][x] != '*' || backGround[y][x] != '$') {
+					food = new Point(x, y);
+					break;
+				}
+		}
+	}
+
+	public void showFood() {
+		backGround[food.y][food.x] = '@';
+	}
+
+	// init snake: put Coordinate into Collector
+	// Because we need add or delete Point,
+	// we use LinkedList
+	public void initSnake() {
+		int x = WIDTH / 2;
+		int y = HEIGHT / 2;
+		snake.addFirst(new Point(x - 1, y));
+		snake.addFirst(new Point(x, y));
+		snake.addFirst(new Point(x + 1, y));
+
+	}
+
+	// show snake
+	// make the Point coordinate reflect on background,
+	// draw snake on the background
+	public void showSnake() {
+		// get snake head
+		Point head = snake.getFirst();
+		backGround[head.y][head.x] = '$';
+
+		// draw snake body
+		for (int i = 1; i < snake.size(); ++i) {
+			Point body = snake.get(i);
+			backGround[body.y][body.x] = '#';
+		}
+	}
+
+	public void initBackGround() {
+		for (int rows = 0; rows < backGround.length; ++rows) {
+			for (int cols = 0; cols < backGround[rows].length; ++cols) {
+				if (rows == 0 || rows == backGround.length - 1 || cols == 0 || cols == backGround[rows].length - 1) {
+					backGround[rows][cols] = '*';
+				} else {
+					backGround[rows][cols] = ' ';
+				}
+
+			}
+		}
+	}
+
+	public void showBackGround() {
+		for (int rows = 0; rows < backGround.length; ++rows) {
+			for (int cols = 0; cols < backGround[rows].length; ++cols) {
+				System.out.print(backGround[rows][cols]);
+			}
+			System.out.println();
+		}
+	}
+
+	// refresh game status
+	public void refresh() {
+		initBackGround();
+		showSnake();
+		showFood();
+		showBackGround();
+	}
+}
+
+
+
+	
