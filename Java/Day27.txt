@@ -1,0 +1,636 @@
+bat batch file：
+	we can run multiple commands once
+***********************************************************************************
+Package the software into a jar bag 
+	javac -d . FrameUtil.java
+	javac -d . Notepad.java
+	jar cvf notepad.jar cn
+
+	Precondition: FrameUtil.java and Notepad.java are in the same dir
+	Then open the jar with 7-zip or other compressed tools
+	edit MANIFEST.MF
+	add the following contents at the tail of the file
+	Main-Class: cn.itcast_01.Notepad
+	
+	Then open the jar file and we can start the program
+
+	jar can be started by double click, but it works only for GUI but console(command line) not.
+	For console, we can use bat batch file to start it quickly
+**************************************************************************************	
+steps to write bat batch file
+	A-write a text file with all commands and modify the suffix name into bat
+	bat file is runnable file in windows operation system, we can double click on it to start it
+	******************************************************
+	javac ScannerDemo.java
+	java ScannerDemo
+	pause
+	******************************************************
+
+	
+common commands for bat batch file:
+	pause: let current console hold
+	echo:  output the specified content to the console
+	echo off: hide the commands run in bat file, but with echo off
+	@: hide current line running command
+	title: change current console window title
+	color: specify console background color
+		   Color attributes are specified by TWO hex digits -- the first
+			corresponds to the background; the second the foreground.  Each digit
+			can be any of the following values:
+
+				0 = Black       8 = Gray
+				1 = Blue        9 = Light Blue
+				2 = Green       A = Light Green
+				3 = Aqua        B = Light Aqua
+				4 = Red         C = Light Red
+				5 = Purple      D = Light Purple
+				6 = Yellow      E = Light Yellow
+				7 = White       F = Bright White
+	
+	%comments%: comment contents
+	%1~%9 pass parameters to bat batch file
+
+	
+	
+How to publish many java files
+	A-zip all files you want into bat.zip
+	B- cd the dir which bat.zip is in
+	C-set classpath=c:\develop\bat\bat.zip (take effect always)
+	D-java ScannerDemo
+	
+	take effect once:
+	command line:
+	*****************************************************
+	>java -classpath .\bat.zip; ScannerDemo
+	*****************************************************
+	
+	bat batch file:
+	runzip.bat
+	*****************************************************
+	java -classpath .\bat.zip; ScannerDemo
+	pause
+	*****************************************************
+	result:
+	***********************************************************************
+	C:\develop\bat>java -classpath .\bat.zip; ScannerDemo
+	Please enter an integer:
+	10
+	10
+	C:\develop\bat>pause
+	Press any key to continue . . .
+	************************************************************************
+	
+	runjar.bat
+	**********************************************************************************
+	java -classpath .\Scanner.jar; ScannerDemo
+	pause
+	**********************************************************************************
+	result:
+	C:\develop\bat>java -classpath .\Scanner.jar ScannerDemo
+	Please enter an integer:
+	10
+	10
+
+	C:\develop\bat>pause
+	Press any key to continue . . .
+	**********************************************************************************
+	
+	
+	If it is console command, we need add pause; if it is GUI, we don't need add pause
+
+java
+	-classpath <class search path of directories and zip/jar files>
+**************************************************************************************
+echo Welcome to learn bat batch file
+
+
+run.bat
+**********************************************************
+echo off
+echo Welcome to learn bat batch file
+java -classpath .\bat.zip ScannerDemo
+pause
+***********************************************************
+result:
+C:\develop\bat>echo off
+Welcome to learn bat batch file
+Please enter an integer:
+10
+10
+Press any key to continue
+**************************************************************
+
+
+run.bat
+**************************************************************
+@echo off
+echo Welcome to learn bat batch file
+java -classpath .\bat.zip ScannerDemo
+pause
+**************************************************************
+result:
+Welcome to learn bat batch file
+Please enter an integer:
+10
+10
+Press any key to continue . . .
+***************************************************************
+
+
+run.bat
+*****************************************************************
+@echo off
+%This is the last class%
+title bat learning
+title %1
+color 71
+echo Welcome to learn bat batch file
+java -classpath .\bat.zip ScannerDemo
+pause
+****************************************************************
+
+
+run.bat
+******************************************************************
+@echo off
+%This is the last class%
+title %1
+color %2
+echo Welcome to learn bat batch file
+java -classpath .\bat.zip ScannerDemo
+pause
+*******************************************************************
+console running:
+cd develop\bat
+run "bat learning" 72
+*******************************************************************
+
+
+
+
+Book Management System bat file
+java -classpath .\Library.zip cn.itcast.main.LibraryTest.java
+
+**************************************************************************
+ Clone of an object: 
+	 Deep Clone:     
+	 Shallow clone:
+
+Note:
+	A-If one Object need call clone() method to clone, the Object must implement Cloneable interface
+	B-Cloneable interface is a label interface and has no any method
+	C-Shallow clone of Object is to clone the memory address of another Object not clone another Object
+	D-Shallow clone of Object is not to call constructor method
+	E:
+ 
+*************************************************************************
+package cn.itcast_03;
+
+public class Person implements Cloneable {
+	int id;
+	String nameString;
+	
+	public Person(int id, String nameString) {
+		super();
+		this.id = id;
+		this.nameString = nameString;
+	}
+
+	public String toString() {
+		return "Person [id=" + id + ", nameString=" + nameString + "]";
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (id != other.id)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	// Object clone is protected
+	// we can change it into public
+	// object shallow clone
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+}
+
+package cn.itcast_03;
+
+public class Demo1 {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		// p2 is not clone of p1
+		// p1 and p2 both point to the same heap memory
+		Person p1 = new Person(100, "Dog");
+		Person p2 = p1; 
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p1 == p2);
+		System.out.println(p1.equals(p2));
+		System.out.println("--------------------");
+		
+		Person p3 = new Person(200, "Cat");
+		Person p4 = (Person) p3.clone();
+		System.out.println(p3);
+		System.out.println(p4);
+		System.out.println(p3 == p4);
+		System.out.println(p3.equals(p4));
+	}
+}
+
+result:
+Person [id=100, nameString=Dog]
+Person [id=100, nameString=Dog]
+true
+true
+--------------------
+Person [id=200, nameString=Cat]
+Person [id=200, nameString=Cat]
+false
+true
+*************************************************************************
+Memory diagrams:
+p1 0x97 -----------------> 0x97 id = 100
+								nameString="Dog"
+p2 0x97------------------->0x97 id = 100
+								nameString="Dog"
+
+p3 0x97 -----------------> 0x97 id = 200
+								nameString="Cat"
+p4 0x98------------------->0x98 id = 200
+								nameString="Cat"
+**************************************************************************
+
+package cn.itcast_03;
+
+class Address {
+	String country;
+	String city;
+	String street;
+	String house;
+	
+	public Address(String country, String city, String street, String house) {
+		super();
+		this.country = country;
+		this.city = city;
+		this.street = street;
+		this.house = house;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (house == null) {
+			if (other.house != null)
+				return false;
+		} else if (!house.equals(other.house))
+			return false;
+		if (street == null) {
+			if (other.street != null)
+				return false;
+		} else if (!street.equals(other.street))
+			return false;
+		return true;
+	}
+	
+	
+	
+}
+public class Person implements Cloneable {
+	int id;
+	String nameString;
+	Address address;
+	
+	public Person(int id, String nameString, Address address) {
+		super();
+		this.id = id;
+		this.nameString = nameString;
+		this.address = address;
+	}
+
+	public String toString() {
+		return "id=" + id + ", nameString=" + nameString + ", "
+				+ "address=" + (address.country+" "+address.city+" "+address.street+" "+address.house);
+	}
+
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	// Object clone is protected
+	// we can change it into public
+	// object shallow clone
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+}
+
+package cn.itcast_03;
+
+public class Demo1 {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		// p2 is not clone of p1
+		// p1 and p2 both point to the same heap memory
+		Address address1 = new Address("China", "Beijing", "Wangjingbeilu", "No.2");
+		Person p1 = new Person(100, "Dog", address1);
+		Person p2 = p1; 
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p1 == p2);
+		System.out.println(p1.equals(p2));
+		System.out.println("--------------------");
+		
+		Address address2 = new Address("China", "Beijing", "dawanglu", "No.1");
+		Person p3 = new Person(200, "Cat", address2);
+		Person p4 = (Person) p3.clone();
+		System.out.println(p3);
+		System.out.println(p4);
+		System.out.println(p3 == p4);
+		System.out.println(p3.equals(p4));
+	}
+}
+
+
+result:
+id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
+id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
+true
+true
+--------------------
+id=200, nameString=Cat, address=China Beijing dawanglu No.1
+id=200, nameString=Cat, address=China Beijing dawanglu No.1
+false
+true
+****************************************************************************
+package cn.itcast_03;
+
+class Address {
+	String country;
+	String city;
+	String street;
+	String house;
+	
+	public Address(String country, String city, String street, String house) {
+		super();
+		this.country = country;
+		this.city = city;
+		this.street = street;
+		this.house = house;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (house == null) {
+			if (other.house != null)
+				return false;
+		} else if (!house.equals(other.house))
+			return false;
+		if (street == null) {
+			if (other.street != null)
+				return false;
+		} else if (!street.equals(other.street))
+			return false;
+		return true;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getHouse() {
+		return house;
+	}
+
+	public void setHouse(String house) {
+		this.house = house;
+	}
+	
+	
+	
+}
+public class Person implements Cloneable {
+	int id;
+	String nameString;
+	Address address;
+	
+	public Person(int id, String nameString, Address address) {
+		super();
+		this.id = id;
+		this.nameString = nameString;
+		this.address = address;
+	}
+
+	public String toString() {
+		return "id=" + id + ", nameString=" + nameString + ", "
+				+ "address=" + (address.country+" "+address.city+" "+address.street+" "+address.house);
+	}
+
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	// Object clone is protected
+	// we can change it into public
+	// object shallow clone
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+}
+
+package cn.itcast_03;
+
+public class Demo1 {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		// p2 is not clone of p1
+		// p1 and p2 both point to the same heap memory
+		Address address1 = new Address("China", "Beijing", "Wangjingbeilu", "No.2");
+		Person p1 = new Person(100, "Dog", address1);
+		Person p2 = p1; 
+		System.out.println(p1);
+		System.out.println(p2);
+		System.out.println(p1 == p2);
+		System.out.println(p1.equals(p2));
+		System.out.println("--------------------");
+		
+		Address address2 = new Address("China", "Beijing", "dawanglu", "No.1");
+		Person p3 = new Person(200, "Cat", address2);
+		Person p4 = (Person) p3.clone();
+		System.out.println(p3);
+		System.out.println(p4);
+		System.out.println(p3 == p4);
+		System.out.println(p3.equals(p4));
+		System.out.println("----------------------");
+		
+		Address address3 = new Address("China", "Beijing", "guangshunbeidajie", "No.1");
+		Person p5 = new Person(400, "Pig", address3);
+		Person p6 = (Person) p5.clone();
+		System.out.println(p5);
+		System.out.println(p6);
+		System.out.println(p5 == p6);
+		System.out.println(p5.equals(p6));
+		
+		System.out.println("---------------------------");
+		Address address4 = new Address("China", "Hangzhou", "xihu", "No.1");
+		p6.setAddress(address4);
+		System.out.println(p5);
+		System.out.println(p6);
+		System.out.println(p5 == p6);
+		System.out.println(p5.equals(p6));
+		
+	}
+}
+
+
+result:
+id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
+id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
+true
+true
+--------------------
+id=200, nameString=Cat, address=China Beijing dawanglu No.1
+id=200, nameString=Cat, address=China Beijing dawanglu No.1
+false
+true
+----------------------
+id=400, nameString=Pig, address=China Beijing guangshunbeidajie No.1
+id=400, nameString=Pig, address=China Beijing guangshunbeidajie No.1
+false
+true
+---------------------------
+id=400, nameString=Pig, address=China Beijing guangshunbeidajie No.1
+id=400, nameString=Pig, address=China Hangzhou xihu No.1
+false
+false
+*************************************************************************
+
+	
+	
