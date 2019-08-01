@@ -845,3 +845,80 @@ p1:id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
 p2:id=100, nameString=Dog, address=China Shanghai nanjinglu No.1
 ****************************************************************************
 	
+/*
+ * Requirement:
+ * Use array to simulate Stack
+ * Stack: first in last out, last out first in
+ *
+ */
+package cn.itcast_02;
+
+import java.util.Arrays;
+
+public class StackList {
+	int index; // current index
+	Object[] elements;
+	
+	public StackList(Object[] objects) {
+		this.elements = objects;
+	}
+	
+	public StackList() {
+		elements = new Object[3];// default size is 3
+	}
+
+	public void add(Object object) {
+		ensureCapability();
+		elements[index++] = object;
+		
+	}
+	
+	public Object pop() {
+		int tempIndex = --index;
+		Object object = elements[tempIndex];
+		elements[tempIndex] = null; // let GC to do it
+		return object;
+	}
+
+	private void ensureCapability() {
+		if (index == elements.length) {
+			int newLength = elements.length * 2;
+			elements = Arrays.copyOf(elements, newLength);
+		}
+	}
+	
+	public int size() {
+		return index;
+	}
+
+}
+
+package cn.itcast_02;
+
+public class StackListTest {
+
+	public static void main(String[] args) {
+		StackList sList = new StackList();
+		sList.add("Lin Qingxia");
+		sList.add("Sun Li");
+		sList.add("Jiang Wenli");
+		sList.add("Gao Yuanyuan");
+		
+		int size = sList.size();
+		System.out.println("The number of elements:"+size);
+		for (int i = 0; i < size; ++i) {
+			System.out.println(sList.pop());
+		}
+		
+
+	}
+
+}
+
+result:
+The number of elements:4
+Gao Yuanyuan
+Jiang Wenli
+Sun Li
+Lin Qingxia
+*************************************************************************
