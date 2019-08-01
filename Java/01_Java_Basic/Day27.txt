@@ -177,11 +177,17 @@ java -classpath .\Library.zip cn.itcast.main.LibraryTest.java
 	 Shallow clone:
 
 Note:
+clonse and shallow clone:
 	A-If one Object need call clone() method to clone, the Object must implement Cloneable interface
 	B-Cloneable interface is a label interface and has no any method
 	C-Shallow clone of Object is to clone the memory address of another Object not clone another Object
 	D-Shallow clone of Object is not to call constructor method
-	E:
+	
+Deep clone of Object:
+	A-Deep clone is to use IO stream of Object to write content into file, then read Object information
+	B-
+
+	
  
 *************************************************************************
 package cn.itcast_03;
@@ -632,5 +638,210 @@ false
 false
 *************************************************************************
 
+package cn.itcast_01;
+
+import java.io.Serializable;
+
+class Address implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	String country;
+	String city;
+	String street;
+	String house;
 	
+	public Address(String country, String city, String street, String house) {
+		super();
+		this.country = country;
+		this.city = city;
+		this.street = street;
+		this.house = house;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (house == null) {
+			if (other.house != null)
+				return false;
+		} else if (!house.equals(other.house))
+			return false;
+		if (street == null) {
+			if (other.street != null)
+				return false;
+		} else if (!street.equals(other.street))
+			return false;
+		return true;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getHouse() {
+		return house;
+	}
+
+	public void setHouse(String house) {
+		this.house = house;
+	}
+	
+	
+	
+}
+public class Person implements Cloneable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	int id;
+	String nameString;
+	Address address;
+	
+	public Person(int id, String nameString, Address address) {
+		super();
+		this.id = id;
+		this.nameString = nameString;
+		this.address = address;
+	}
+
+	public String toString() {
+		return "id=" + id + ", nameString=" + nameString + ", "
+				+ "address=" + (address.country+" "+address.city+" "+address.street+" "+address.house);
+	}
+
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nameString == null) {
+			if (other.nameString != null)
+				return false;
+		} else if (!nameString.equals(other.nameString))
+			return false;
+		return true;
+	}
+
+	// Object clone is protected
+	// we can change it into public
+	// object shallow clone
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNameString() {
+		return nameString;
+	}
+
+	public void setNameString(String nameString) {
+		this.nameString = nameString;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+}
+
+package cn.itcast_01;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+public class Demo2 {
+
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		Address address1 = new Address("China", "Beijing", "Wangjingbeilu", "No.2");
+		Person p1 = new Person(100, "Dog", address1);
+		writeObj(p1);
+		Person p2 = readObj();
+		Address address2 = new Address("China", "Shanghai", "nanjinglu", "No.1");
+		p2.setAddress(address2);
+		System.out.println("p1:"+p1);
+		System.out.println("p2:"+p2);
+
+	}
+	
+	private static Person readObj() throws ClassNotFoundException, IOException {
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.txt"));
+		return (Person)ois.readObject();
+		
+	}
+
+	public static void writeObj(Person person) throws IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("person.txt")));
+		oos.writeObject(person);
+		oos.close();
+	}
+}
+
+
+result:
+p1:id=100, nameString=Dog, address=China Beijing Wangjingbeilu No.2
+p2:id=100, nameString=Dog, address=China Shanghai nanjinglu No.1
+****************************************************************************
 	
