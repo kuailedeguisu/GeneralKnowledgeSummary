@@ -1,0 +1,22 @@
+Single column:
+Collection: Single column collection root interface
+----| List: ordered, repeated
+  --------| ArrayList: based on Object instance array, find fast(memory address is continuous), add and delete slow(copy all)
+  --------| Vector: based on Object instance array, but thread-safe
+  --------| LinkedList: based on linked list, find slow, add and delete fast
+----| Set: unordered, unrepeated
+  --------| HashSet: based on hash table, store and get fast
+              hashCode() and equals()
+              When adding elements into HashSet, call hashCode() at first to get the hash code value,
+              then compute the location of elements according to hash code value;
+              If the location computed has not existed any elements, add it into hash table directly
+              If the location computed has existed one element, call equals() to compare the new element and the element on the location
+                If equals() return true, it is considered repeated element, and not add it into hash table
+                If equals() return false, add it into hash table directly
+               
+              default hashCode() means the address of instance
+              default equals() means two instances has the same address
+              
+  --------| TreeSet:
+
+Double column:
