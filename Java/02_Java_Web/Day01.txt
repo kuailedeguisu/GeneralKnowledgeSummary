@@ -17,7 +17,23 @@ Collection: Single column collection root interface
               default hashCode() means the address of instance
               default equals() means two instances has the same address
               
-  --------| TreeSet:
+  --------| TreeSet: based on red-black tree(binary tree), elements stored ordered
+  	Note:
+	  1. When adding elements into TreeSet, if elements has natural order, TreeSet stores elements by natural order
+	  2. When adding elements into TreeSet, if element has no natural order, the class owning elements must implement 
+	     Comparable, then rewrite compareTo method
+	  3. When adding elements into TreeSet, if element has no natural order, the class owning elements don't implement
+	     Comparable, then when creating TreeSet instance, we must pass Comparator instance
+	 Comparable format:
+	 class className implements Comparable {
+	 @Overide
+	 ...compareTo(...) {
+	 ...
+	 }
+	 }
+	 
+	 TreeSet<Person> ts = new TreeSet<Person>(new Comparator() {
+	 })
 
 Double column:
 
