@@ -27,12 +27,16 @@ Collection: Single column collection root interface
 	 Comparable format:
 	 class className implements Comparable {
 	 @Overide
-	 ...compareTo(...) {
+	 public int compareTo(className o) {
 	 ...
 	 }
 	 }
 	 
 	 TreeSet<Person> ts = new TreeSet<Person>(new Comparator() {
+	 @Override
+	 public int compare(className o1, className o2) {
+	 ...
+	 }
 	 })
 
 Double column:
@@ -139,3 +143,157 @@ public class HashSetTest {
 result:
 [Person [id=100, name=Lily]]
 **************************************************************
+
+
+****************************************************************
+TreeSet practice
+*****************************************************************
+method 1: Comparable
+*****************************************************************
+package cn.itcast_03;
+
+public class Person implements Comparable<Person> {
+	int id;
+	String name;
+	
+	public Person(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(Person p) {
+		int num = this.id - p.id;
+		int num2 = num == 0 ? this.name.compareTo(p.name) : num;
+		return num2;
+	}
+}
+
+package cn.itcast_03;
+
+import java.util.TreeSet;
+
+public class TreeSetTest {
+
+	public static void main(String[] args) {
+		TreeSet<Person> hs = new TreeSet<Person>();
+		hs.add(new Person(100, "Lily"));
+		hs.add(new Person(101, "Andy"));
+		hs.add(new Person(100, "David"));
+		System.out.println(hs);
+	}
+}
+
+result:
+[Person [id=100, name=David], Person [id=100, name=Lily], Person [id=101, name=Andy]]
+
+**********************************************************************************
+method 2: Comparator
+*********************************************************************************
+package cn.itcast_04;
+
+public class Person {
+	int id;
+	String name;
+	
+	public Person(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+
+}
+
+package cn.itcast_04;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class TreeSetTest {
+
+	public static void main(String[] args) {
+		TreeSet<Person> hs = new TreeSet<Person>(new Comparator<Person>() {
+
+			@Override
+			public int compare(Person p1, Person p2) {
+				int num = p1.id - p2.id;
+				int num2 = num == 0 ? p1.name.compareTo(p2.name) : num;
+				return num2;
+			}});
+		hs.add(new Person(100, "Lily"));
+		hs.add(new Person(101, "Andy"));
+		hs.add(new Person(100, "David"));
+
+		System.out.println(hs);
+	}
+}
+
+result:
+[Person [id=100, name=David], Person [id=100, name=Lily], Person [id=101, name=Andy]]
+********************************************************************************************
