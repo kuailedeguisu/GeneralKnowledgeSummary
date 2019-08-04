@@ -962,3 +962,889 @@ public class SingletonTest {
 result:
 true
 *******************************************************************************
+observer design pattern:
+The problem that the observer design pattern solves is that 
+when one object takes a specified action, it is handled accordingly by another object
+
+steps to do it:
+	A-When current object takes action, it will inform other object to handle it; we should let
+		other object method defined in interface
+	B-current object implements interface, when current object takes action, it will call interface
+	
+**************************************************************************************************
+package cn.itcast_05;
+
+public interface Weather {
+	public void notifyWeather(String weather);
+}
+
+package cn.itcast_05;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+/*
+ * Requirements:
+ * 		1.Write Class WeatherStation, Person
+ * 		2.When WeatherStation weather is updated, inform Person to handle it
+ * 		3.Weather is updated each 1~1.5seconds
+ */
+
+public class WeatherStation {
+	private String[] weathers = {"Sunny", "Rainy", "Snowy", "Windy", "foggy", "hailed"};
+	private String currentWeather;
+	private ArrayList<Weather> weatherList = new ArrayList<Weather>();
+	
+	public void addListener(Weather weather) {
+		weatherList.add(weather);
+	}
+	
+	public void startWork() throws InterruptedException {
+		final Random random = new Random();
+		new Thread() {
+			public void run() {
+				while (true) {
+					updateWeather();
+					for (Weather weather : weatherList) {
+						weather.notifyWeather(currentWeather);
+					}
+
+					int seconds = random.nextInt(501)+1000;//[1000, 1500]
+					try {
+						Thread.sleep(seconds);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+		}.start();
+	}
+	
+	private void updateWeather() {
+		Random random = new Random();
+		int index = random.nextInt(weathers.length);
+		currentWeather = weathers[index];
+		System.out.println("The current weather is "+currentWeather);
+	}
+}
+
+package cn.itcast_05;
+
+public class Employee implements Weather {
+	private String name;
+	
+	public Employee(String name) {
+		this.name = name;
+	}
+	
+	//{"Sunny", "Rainy", "Snowy", "Windy", "Foggy", "Hailed"};
+	public void notifyWeather(String weather) {
+		if ("Sunny".equals(weather)) {
+			System.out.println("It is sunny for work");
+		} else if ("Rainy".equals(weather)) {
+			System.out.println("It is rainy for work");
+		} else if ("Snowy".equals(weather)) {
+			System.out.println("It is snowy for work");
+		} else if ("Windy".equals(weather)) {
+			System.out.println("It is windy for work");
+		} else if ("Foggy".equals(weather)) {
+			System.out.println("It is foggy for work");
+		} else if ("Hailed".equals(weather)) {
+			System.out.println("It is hailed for work");
+		}
+ 	}
+
+}
+
+package cn.itcast_05;
+
+public class Student implements Weather {
+	private String name;
+	
+	public Student(String name) {
+		this.name = name;
+	}
+
+	//{"Sunny", "Rainy", "Snowy", "Windy", "Foggy", "Hailed"};
+	public void notifyWeather(String weather) {
+		if ("Sunny".equals(weather)) {
+			System.out.println("It is sunny for school");
+		} else if ("Rainy".equals(weather)) {
+		 	System.out.println("It is rainy for school");
+		} else if ("Snowy".equals(weather)) {
+			System.out.println("It is snowy for school");
+		} else if ("Windy".equals(weather)) {
+			System.out.println("It is windy for school");
+		} else if ("Foggy".equals(weather)) {
+			System.out.println("It is foggy for school");
+		} else if ("Hailed".equals(weather)) {
+			System.out.println("It is hailed for school");
+		}
+ 	}
+}
+
+package cn.itcast_05;
+
+public class WeatherTest {
+
+	public static void main(String[] args) throws InterruptedException {
+		Employee employee1 = new Employee("Lin Qingxia");
+		Employee employee2 = new Employee("Sun Li");
+		Student student1 = new Student("Jiang Wenli");
+		Student student2 = new Student("Celine Dion");
+		
+		WeatherStation ws = new WeatherStation();
+		ws.addListener(employee1);
+		ws.addListener(employee2);
+		ws.addListener(student1);
+		ws.addListener(student2);
+		ws.startWork();
+	}
+}
+
+
+result:
+The current weather is Rainy
+It is rainy for work
+It is rainy for work
+It is rainy for school
+It is rainy for school
+The current weather is Windy
+It is windy for work
+It is windy for work
+It is windy for school
+It is windy for school
+The current weather is Snowy
+It is snowy for work
+It is snowy for work
+It is snowy for school
+It is snowy for school
+The current weather is Rainy
+It is rainy for work
+It is rainy for work
+It is rainy for school
+It is rainy for school
+...
+*********************************************************************
+When to use interface, when to use inheritation?
+Inheritance in simple terms is to acquire the properties / behaviours of an other class. In order to achieve Inheritance we have to use a keyword extends in JAVA.
+
+Class B extends Class A means Class B will act just like class A and all the methods and Variables in class A can be referred using class B also. ie. Whatever class A possesses it is shared by class B too.
+
+Whereas Interface is a Type Definition Block (User-Defined). An abstract (incomplete) class can be called Interface. An Interface allows only Incomplete methods. In order to Inherit an Interface we have a keyword implements in JAVA. If a Class implements an Interface it is bound to contract.
+
+That is: Either the class implementing the Interface should be declared abstract OR the class should over-ride the method in Interface and Complete it.( ie. provide method body).
+
+*********************************************************************************************
+
+
+*****************************************************************
+reflection:
+*****************************************************************
+package cn.itcast_06;
+
+public class Person {
+	int id;
+	String name;
+	
+	
+	public Person() {
+		super();
+	}
+
+
+	public Person(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + "]";
+	}
+	
+	void eat() {
+		System.out.println("Person need eat");
+	}
+}
+
+package cn.itcast_06;
+
+public class PersonTest {
+
+	public static void main(String[] args) {
+		Person person = new Person(100, "Lin Qingxia");
+		System.out.println(person);
+	}
+
+}
+
+
+memory:
+stack:
+Person person 0x001
+
+heap:
+new Person(100, "Lin Qingxia") 0x001
+
+method area:
+Person.class              
+	id
+	name
+	eat()
+	toString()
+	
+all contents in Person.class will be saved into new Class()
+new Class() instance has already include all byte code contents
+
+reflection is to get all contents of one Class by instance new Class()
+
+When a bytecode file is loaded into memory, jvm dissects the bytecode, 
+and then creates an object's Class object, storing all the information about the bytecode file
+in that Class object, as long as we get the Class object, We can use bytecode objects to 
+set the properties of objects and call object methods and other operations。
+ 
+In reflection technology, any member of a class has a corresponding class to describe, 
+say, a member variable (Field), a member method (Method) 
+
+reflection is used in writing tool to others
+
+
+test.xml 
+*************************************************************************
+<?xml version="1.0" encoding="UTF-8">
+<class>cn.itcast_06.Person</class>
+<id>110</id>
+<name>"Lin Qingxia"</name>
+**************************************************************************
+Having xml defination, we don't new instance, it will find Person class by xml class value
+Person p;// not Person p = new Person();
+*************************************************************************
+get Class
+*************************************************************************
+package cn.itcast_06;
+
+public class PersonTest {
+
+	public static void main(String[] args) throws ClassNotFoundException {
+		// get Class methods
+		// (recommended) method 1: forName
+		Class class1 = Class.forName("cn.itcast_06.Person");
+		System.out.println("class1:"+class1);
+		
+		//method 2: class name
+		Class class2 = Person.class;
+		System.out.println("class2:"+class2);
+		
+		System.out.println("class1 == class2? "+(class1 == class2));
+		
+		// method 3: instance
+		Person person = new Person(100, "Lin Qingxia");
+		Class class3 = person.getClass();
+		
+		System.out.println("class2 == class3? "+(class2 == class3));
+	}
+}
+
+result:
+class1:class cn.itcast_06.Person
+class2:class cn.itcast_06.Person
+class1 == class2? true
+class3:class cn.itcast_06.Person
+class2 == class3? true
+**********************************************************************************************
+
+
+**********************************************************************************************
+get constructors for Class
+**********************************************************************************************
+package cn.itcast_07;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import cn.itcast_06.Person;
+
+public class ClassObjectGetConstructorTest {
+
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Class class1 = Class.forName("cn.itcast_06.Person");
+		
+		// method 1: getConstructors for public constructors
+		// getConstructors() only gets all public constructor method of one Class
+		Constructor[] constructors = class1.getConstructors();
+		for (Constructor constructor : constructors) {
+			System.out.println(constructor);
+		}
+		System.out.println("-----------------------------------");
+		
+		// method2: getDeclaredConstructors for all constructors
+		Constructor[] constructors2 = class1.getDeclaredConstructors();
+		for (Constructor constructor : constructors2) {
+			System.out.println(constructor);
+		}
+		System.out.println("---------------------");
+		
+		// method3 : get special constructor
+		Constructor constructor = class1.getConstructor(int.class, String.class);
+		System.out.println(constructor);
+		Person p = (Person)constructor.newInstance(100, "Lin Qingxia");
+		System.out.println(p);
+		System.out.println("----------------");
+		
+		// get private constructor
+		Constructor constructor2 = class1.getDeclaredConstructor(null);
+		System.out.println(constructor2);
+		
+		// can't create instance with private constructor normally
+//		Person p2 = (Person)constructor2.newInstance();// java.lang.IllegalAccessException
+//		System.out.println(p2);
+		
+		//force reflection can do it
+		// but for singleton pattern, we shouldn't use force reflection
+		constructor2.setAccessible(true);
+		Person p2 = (Person)constructor2.newInstance();// java.lang.IllegalAccessException
+		System.out.println(p2);
+		System.out.println("----------------");
+	}
+}
+
+
+result:
+public cn.itcast_06.Person(int,java.lang.String)
+-----------------------------------
+private cn.itcast_06.Person()
+public cn.itcast_06.Person(int,java.lang.String)
+---------------------
+public cn.itcast_06.Person(int,java.lang.String)
+Person [id=100, name=Lin Qingxia]
+----------------
+private cn.itcast_06.Person()
+Person [id=0, name=null]
+----------------
+
+*********************************************************************************************
+
+
+
+**********************************************************************************************
+get all methods
+get special method and run it
+*********************************************************************************************
+
+package cn.itcast_06;
+
+public class Person {
+	int id;
+	String name;
+	
+	
+	private Person() {}
+
+
+	public Person(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + "]";
+	}
+	
+	public void eat(int number) {
+		System.out.println("Person need eat "+number+" times");
+	}
+	
+	private void sleep() {
+		System.out.println("Person need sleep");
+	}
+}
+
+package cn.itcast_08;
+
+import java.lang.reflect.Method;
+
+import cn.itcast_06.Person;
+
+public class ClassObjectGetMethodTest {
+
+	public static void main(String[] args) throws Exception {
+		Class class1 = Class.forName("cn.itcast_06.Person");
+		
+		// getMethods(): include parent methods and its own public methods
+		Method[] methods = class1.getMethods();
+		for (Method method : methods) {
+			System.out.println(method);
+		}
+		System.out.println("-----------------------------");
+		
+		// getDeclaredMethods() : get own methods not including parent methods
+		Method[] methods2 = class1.getDeclaredMethods();
+		for (Method method : methods2) {
+			System.out.println(method);
+		}
+		System.out.println("-----------------------------");
+		
+		// getMethod()
+		Method method1 = class1.getMethod("eat", int.class);
+		System.out.println(method1);
+		Person p = new Person(100, "Lin Qingxia");
+		method1.invoke(p, 3);
+		System.out.println("------------------------------");
+		
+		// getDeclaredMethod()
+		Method method2 = class1.getDeclaredMethod("sleep", null);
+		System.out.println(method2);
+//		method2.invoke(p, null);//  java.lang.IllegalAccessException
+		method2.setAccessible(true);
+		method2.invoke(p,  null);
+	}
+}
+
+
+result:
+public java.lang.String cn.itcast_06.Person.toString()
+public void cn.itcast_06.Person.eat(int)
+public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+public final void java.lang.Object.wait() throws java.lang.InterruptedException
+public boolean java.lang.Object.equals(java.lang.Object)
+public native int java.lang.Object.hashCode()
+public final native java.lang.Class java.lang.Object.getClass()
+public final native void java.lang.Object.notify()
+public final native void java.lang.Object.notifyAll()
+-----------------------------
+public java.lang.String cn.itcast_06.Person.toString()
+private void cn.itcast_06.Person.sleep()
+public void cn.itcast_06.Person.eat(int)
+-----------------------------
+public void cn.itcast_06.Person.eat(int)
+Person need eat 3 times
+------------------------------
+private void cn.itcast_06.Person.sleep()
+Person need sleep
+*****************************************************************************************
+
+For arr parameter method:
+package cn.itcast_06;
+
+public class Person {
+	int id;
+	String name;
+	
+	
+	private Person() {}
+
+
+	public Person(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + "]";
+	}
+	
+	public void eat(int number) {
+		System.out.println("Person need eat "+number+" times");
+	}
+	
+	private void sleep() {
+		System.out.println("Person need sleep");
+	}
+	
+	public int sum(int[] arr) {
+		System.out.println("length is "+arr.length);
+		int sum = 0;
+		for (int i = 0; i < arr.length; ++i) {
+			sum += arr[i];
+		}
+		return sum;
+	}
+}
+
+package cn.itcast_08;
+
+import java.lang.reflect.Method;
+
+import cn.itcast_06.Person;
+
+public class ClassObjectGetMethodTest {
+
+	public static void main(String[] args) throws Exception {
+		Class class1 = Class.forName("cn.itcast_06.Person");
+		
+		// getMethods(): include parent methods and its own public methods
+		Method[] methods = class1.getMethods();
+		for (Method method : methods) {
+			System.out.println(method);
+		}
+		System.out.println("-----------------------------");
+		
+		// getDeclaredMethods() : get own methods not including parent methods
+		Method[] methods2 = class1.getDeclaredMethods();
+		for (Method method : methods2) {
+			System.out.println(method);
+		}
+		System.out.println("-----------------------------");
+		
+		// getMethod()
+		Method method1 = class1.getMethod("eat", int.class);
+		System.out.println(method1);
+		Person p = new Person(100, "Lin Qingxia");
+		method1.invoke(p, 3);
+		System.out.println("------------------------------");
+		
+		// getDeclaredMethod()
+		Method method2 = class1.getDeclaredMethod("sleep", null);
+		System.out.println(method2);
+//		method2.invoke(p, null);//  java.lang.IllegalAccessException
+		method2.setAccessible(true);
+		method2.invoke(p,  null);
+		
+		// return value
+		Method method3 = class1.getMethod("sum", int[].class);
+		System.out.println(method3);
+		int sum = (Integer) method3.invoke(p,  new int[] {1, 2, 3, 4});
+		System.out.println("sum: "+sum);
+	}
+}
+
+
+result：
+public java.lang.String cn.itcast_06.Person.toString()
+public int cn.itcast_06.Person.sum(int[])
+public void cn.itcast_06.Person.eat(int)
+public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
+public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
+public final void java.lang.Object.wait() throws java.lang.InterruptedException
+public boolean java.lang.Object.equals(java.lang.Object)
+public native int java.lang.Object.hashCode()
+public final native java.lang.Class java.lang.Object.getClass()
+public final native void java.lang.Object.notify()
+public final native void java.lang.Object.notifyAll()
+-----------------------------
+public java.lang.String cn.itcast_06.Person.toString()
+private void cn.itcast_06.Person.sleep()
+public int cn.itcast_06.Person.sum(int[])
+public void cn.itcast_06.Person.eat(int)
+-----------------------------
+public void cn.itcast_06.Person.eat(int)
+Person need eat 3 times
+------------------------------
+private void cn.itcast_06.Person.sleep()
+Person need sleep
+public int cn.itcast_06.Person.sum(int[])
+length is 4
+sum: 10
+*******************************************************************
+by reflection, we can get related member variable
+
+In reflection technology, we use Field class to describle member variable
+
+
+**************************************************************************************
+package cn.itcast_06;
+
+public class Person {
+	private int id;
+	private String name;
+	public String sex;
+	
+	
+	public Person() {}
+
+
+	public Person(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
+	public Person(int id, String name, String sex) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.sex = sex;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + ", sex="+sex+"]";
+	}
+	
+	public void eat(int number) {
+		System.out.println("Person need eat "+number+" times");
+	}
+	
+	private void sleep() {
+		System.out.println("Person need sleep");
+	}
+	
+	public int sum(int[] arr) {
+		System.out.println("length is "+arr.length);
+		int sum = 0;
+		for (int i = 0; i < arr.length; ++i) {
+			sum += arr[i];
+		}
+		return sum;
+	}
+}
+
+package cn.itcast_09;
+
+import java.lang.reflect.Field;
+
+import cn.itcast_06.Person;
+
+public class ClassObjectGetMemberVariableTest {
+
+	public static void main(String[] args) throws Exception {
+		Class class1 = Class.forName("cn.itcast_06.Person");
+		// getFields()
+		Field[] fields = class1.getFields();
+		
+		for (Field field : fields) {
+			System.out.println(field);
+		}
+		System.out.println("---------------------------------------");
+		
+		// getDeclaredFields()
+		Field[] fields2 = class1.getDeclaredFields();
+		
+		for (Field field : fields2) {
+			System.out.println(field);
+		}
+		System.out.println("----------------------------------------");
+		
+		//getField()
+		Field field1 = class1.getField("sex");
+		System.out.println(field1);
+		Person person = new Person();
+		field1.set(person, "Female");
+		System.out.println(person);
+		System.out.println("----------------------------------------");
+		
+		// getDeclaredField()
+		Field field2 = class1.getDeclaredField("id");
+		System.out.println(field2);
+		field2.setAccessible(true);
+		field2.set(person, 100);
+		System.out.println(person);
+		System.out.println("-----------------------------------------");
+		Field field3 = class1.getDeclaredField("name");
+		System.out.println(field3);
+		field3.setAccessible(true);
+		field3.set(person, "Lin Qingxia");
+		System.out.println(person);
+		System.out.println("------------------------------------------");
+
+	}
+}
+
+result:
+public java.lang.String cn.itcast_06.Person.sex
+---------------------------------------
+private int cn.itcast_06.Person.id
+private java.lang.String cn.itcast_06.Person.name
+public java.lang.String cn.itcast_06.Person.sex
+----------------------------------------
+public java.lang.String cn.itcast_06.Person.sex
+Person [id=0, name=null, sex=Female]
+----------------------------------------
+private int cn.itcast_06.Person.id
+Person [id=100, name=null, sex=Female]
+-----------------------------------------
+private java.lang.String cn.itcast_06.Person.name
+Person [id=100, name=Lin Qingxia, sex=Female]
+****************************************************************************************
+
+
+
+*****************************************************************************************
+Factory design pattern
+used to produce instance
+*****************************************************************************************
+package cn.itcast_10;
+
+public class Car {
+	private String color;
+
+	public Car(String color) {
+		super();
+		this.color = color;
+	}
+	
+	@Override
+	public String toString() {
+		return "Color:"+color;
+	}
+}
+
+package cn.itcast_10;
+
+public class BWM extends Car {
+
+	public BWM(String color) {
+		super(color);
+	}
+
+}
+
+package cn.itcast_10;
+
+public class BSJ extends Car {
+
+	public BSJ(String color) {
+		super(color);
+	}
+
+}
+
+package cn.itcast_10;
+
+public class FactoryDesignPatternTest {
+
+	public static void main(String[] args) {
+		Car car = getInstance(10);
+		System.out.println(car);
+
+	}
+	
+	public static Car getInstance(int num) {
+		if (num == 0) {
+			return new BWM("White");
+		} else {
+			return new BSJ("Golden");
+		}
+	}
+
+}
+
+result:
+Color: Golden
+***************************************************************
+
+
+
+Use reflection to implement factory design pattern
+****************************************************************************
+package cn.itcast_06;
+
+public class Person {
+	private int id;
+	private String name;
+	public String sex;
+	
+	
+	public Person() {}
+
+
+	public Person(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+
+	public Person(int id, String name, String sex) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.sex = sex;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + ", sex="+sex+"]";
+	}
+	
+	public void eat(int number) {
+		System.out.println("Person need eat "+number+" times");
+	}
+	
+	private void sleep() {
+		System.out.println("Person need sleep");
+	}
+	
+	public int sum(int[] arr) {
+		System.out.println("length is "+arr.length);
+		int sum = 0;
+		for (int i = 0; i < arr.length; ++i) {
+			sum += arr[i];
+		}
+		return sum;
+	}
+}
+
+
+package cn.itcast_11;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+
+/*
+ * info.txt
+  	cn.itcast_06.Person
+	id=100
+	name="Lin Qingxia'
+	sex="Female"
+	
+	write a factory method to return related instance
+	according to configure file info.txt
+ */
+
+public class FactoryTest {
+
+	public static void main(String[] args) throws Exception {
+		Object object = getInstance();
+		System.out.println(object);
+
+	}
+	
+	public static Object getInstance() throws Exception {
+		// read configure file
+		BufferedReader br = new BufferedReader(new FileReader("info.txt"));
+		
+		// read the first line
+		String className = br.readLine();
+		Class class1 = Class.forName(className);
+		Constructor constructor = class1.getDeclaredConstructor(null);
+		constructor.setAccessible(true);
+		Object object = constructor.newInstance(null);
+		
+		
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			String[] strs = line.split("=");
+			Field field = class1.getDeclaredField(strs[0]);
+			field.setAccessible(true);
+			if (field.getType() == int.class) {
+				field.set(object, Integer.parseInt(strs[1]));
+			} else {
+				field.set(object, strs[1]);
+			}
+		}
+		
+		return object;
+	}
+
+}
+
+
+result:
+Person [id=100, name="Lin Qingxia', sex="Female"]
+******************************************************************************************
