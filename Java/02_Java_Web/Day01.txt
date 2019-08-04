@@ -301,3 +301,120 @@ public class TreeSetTest {
 result:
 [Person [id=100, name=David], Person [id=100, name=Lily], Person [id=101, name=Andy]]
 ********************************************************************************************
+
+Note: for iterator, when iterator, we can't use Collection instance to modify Collection size, if we need do it, we should
+use iterator to modify it.
+**********************************************************************************************
+package cn.itcast_05;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class CollectionTest {
+
+	public static void main(String[] args) {
+		// ArrayList
+		ArrayList<String> strArrayList = new ArrayList<String>();
+		strArrayList.add("Josh");
+		strArrayList.add("Andy");
+		strArrayList.add("Anele");
+		
+		System.out.println("ArrayList get()");
+		for (int i = 0; i < strArrayList.size(); ++i) {
+			System.out.println(strArrayList.get(i));
+		}
+		System.out.println("----------------------");
+		
+		System.out.println("ArrayList enhance for");
+		for (String string : strArrayList) {
+			System.out.println(string);
+		}
+		
+		System.out.println("--------------------");
+		
+		
+		// HashSet
+		HashSet<String> hsHashSet = new HashSet<String>();;
+		hsHashSet.add("Josh");
+		hsHashSet.add("Andy");
+		hsHashSet.add("Anele");
+		hsHashSet.add("Anele");
+		
+		System.out.println("HashSet enhance for");
+		for (String string : hsHashSet) {
+			System.out.println(string);
+		}
+		System.out.println("-----------------------");
+		
+		System.out.println("HashSet iterator");
+		Iterator<String> iter = hsHashSet.iterator();
+		while (iter.hasNext()) {
+			System.out.println(iter.next());
+		}
+		
+		System.out.println("------------------");
+		// HashMap		
+		HashMap<String, String> hm = new HashMap<String, String>();
+		hm.put("Josh", "USA");
+		hm.put("Andy", "England");
+		hm.put("Anele", "South Africa");
+		hm.put("Andy", "Chinese");
+		
+		System.out.println("HashMap keySet() and get()");
+		Set<String> keys = hm.keySet();
+		for (String key : keys) {
+			String value = hm.get(key);
+			System.out.println(key+"="+value);
+		}
+		System.out.println("---------------------------");
+		
+		System.out.println("HashMap entrySet(), getKey() and getValue()");
+		Set<Entry<String, String>> entrys = hm.entrySet();
+		for (Entry<String, String> entry : entrys) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			System.out.println(key+"="+value);
+		}
+		
+		System.out.println("-----------------------");	  		
+				
+	}
+
+}
+
+
+result:
+ArrayList get()
+Josh
+Andy
+Anele
+----------------------
+ArrayList enhance for
+Josh
+Andy
+Anele
+--------------------
+HashSet enhance for
+Anele
+Josh
+Andy
+-----------------------
+HashSet iterator
+Anele
+Josh
+Andy
+------------------
+HashMap keySet() and get()
+Anele=South Africa
+Josh=USA
+Andy=Chinese
+---------------------------
+HashMap entrySet(), getKey() and getValue()
+Anele=South Africa
+Josh=USA
+Andy=Chinese
+-----------------------
