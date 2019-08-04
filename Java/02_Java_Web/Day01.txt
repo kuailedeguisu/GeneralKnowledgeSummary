@@ -39,7 +39,11 @@ Collection: Single column collection root interface
 	 }
 	 })
 
-Double column:
+Double columns:
+---------| Map (key, value) pairs, key is unrepeated, value is repeated
+	--------| HashMap: based on hash table
+	--------| TreeMap: based on red black tree
+	
 
 ************************************************
 HashSet practice
