@@ -1304,3 +1304,7 @@ Apache BeanUtils
 Download BeanUtils on the internet
 copy it to lib folder
 Add build path
+**********************************************************
+BeanUtils: 把对象的属性值封装到对象中，
+但是更简单
+
