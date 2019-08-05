@@ -967,6 +967,10 @@ C: right click on the jar->Build Path->Add Build Path->
 Notice:
 	A: If we test one method by junit, green junit bar shows test case passes
 	B: If we test one method by junit, red junit bar shows test case fails
+	C: If you click on method name, class name, package name, project name, then run JUnit Test, it will run
+	   all classes's test method, class, package, project and project all test method
+	D: @Test method should not be static and shouldn't has formal parameter lists
+	
 
 junit using rules:
 	A: If one class need be tested, the class is related to one test class
@@ -1001,8 +1005,11 @@ public class SortTest {
 result:
 [2, 3, 5, 10, 20]
 **************************************************************************************************
-Whatever method you want to test, you can choose the method name then click on Run as->JUnit Test,
+1-Whatever method you want to test, you can choose the method name then click on Run as->JUnit Test,
 only the chosen method is tested
+2-If you want to test whole class, you can choose the test class name 
+3-If you want to test whole package, you should choose the tested package
+4-If you want to test whole project, you should choose the tested project
 **************************************************************************************************
 package cn.itcast_06;
 
