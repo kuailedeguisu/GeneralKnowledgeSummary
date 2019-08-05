@@ -1247,3 +1247,54 @@ Introspector: 内省--一种变态的反射
 内省主要解决的问题是：把对象的属性值封装到对象中
 **************************************************************8
 
+package cn.itcast_08;
+
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.junit.Test;
+
+
+public class IntrospectorTest {
+	@Test
+	// get all get method name
+	public void getAllProperties() throws IntrospectionException {
+		BeanInfo info = Introspector.getBeanInfo(Person.class);
+		PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
+		for (PropertyDescriptor descriptor : descriptors) {
+			System.out.println(descriptor.getReadMethod());
+		}
+		
+		
+	}
+	
+
+	@Test
+	// for class with many data members, it is not suitable
+	public void testProperty() throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Person person = new Person();
+		PropertyDescriptor descriptorId = new PropertyDescriptor("id", Person.class);
+		Method setId = descriptorId.getWriteMethod();
+		setId.invoke(person, 100);
+		Method getId = descriptorId.getReadMethod();
+		System.out.println(getId.invoke(person, null));
+		
+		PropertyDescriptor descriptorName = new PropertyDescriptor("name", Person.class);
+		Method setName = descriptorName.getWriteMethod();
+		setName.invoke(person, "Andy");
+		Method getName = descriptorName.getReadMethod();
+		System.out.println(getName.invoke(person, null));
+	}
+}
+
+result：
+100
+Andy
+public final native java.lang.Class java.lang.Object.getClass()
+public int cn.itcast_08.Person.getId()
+public java.lang.String cn.itcast_08.Person.getName()
+***************************************************************************
