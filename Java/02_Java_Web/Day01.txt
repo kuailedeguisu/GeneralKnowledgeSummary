@@ -1145,3 +1145,101 @@ public class ToolTest {
 	}
 }
 **********************************************************************
+@Before: before each tested method, many times
+@After: after each tested method, many times
+@BeforeClass: before all tested methods, once
+@AfterClass: after all tested methods, once
+***********************************************************************
+package cn.itcast_07;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class ReadFile {
+	@Before
+	public void prepareEnvironment() {
+		System.out.println("Environment is ready...");
+	}
+	
+	@Test
+	public void FileRead() throws IOException {
+		FileInputStream fis = new FileInputStream("a.txt");
+		int content = 0;
+		while ((content = fis.read()) != -1) {
+			System.out.println((char)content);
+		}
+		fis.close();
+	}
+	
+	@Test
+	public void sort() {
+		System.out.println("Sort");
+	}
+	
+	@After
+	public void clearEnvironment() {
+		System.out.println("Environment is clear...");
+	}
+
+}
+
+
+result:
+Environment is ready...
+a
+b
+c
+Environment is clear...
+Environment is ready...
+Sort
+Environment is clear...
+
+******************************************
+package cn.itcast_07;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class ReadFile {
+	@BeforeClass
+	public static void prepareEnvironment() {
+		System.out.println("Environment is ready...");
+	}
+	
+	@Test
+	public void FileRead() throws IOException {
+		FileInputStream fis = new FileInputStream("a.txt");
+		int content = 0;
+		while ((content = fis.read()) != -1) {
+			System.out.println((char)content);
+		}
+		fis.close();
+	}
+	
+	@Test
+	public void sort() {
+		System.out.println("Sort");
+	}
+	
+	@AfterClass
+	public static void clearEnvironment() {
+		System.out.println("Environment is clear...");
+	}
+
+}
+
+Environment is ready...
+a
+b
+c
+Sort
+Environment is clear...
+****************************************************
