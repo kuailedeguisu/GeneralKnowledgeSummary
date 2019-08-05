@@ -1243,3 +1243,4 @@ c
 Sort
 Environment is clear...
 ****************************************************
+Introspector: 内省
