@@ -1089,3 +1089,59 @@ result:
 max value:5
 min value:3
 ***************************************************************************
+Assert.assertSame
+Assert.assertNotSame
+Assert.assertEquals
+Assert.assertNull
+Assert.assertNotNull
+Assert.assertTrue
+Assert.assertFalse
+******************************************************************************
+package cn.itcast_06;
+
+public class Tool {
+	public int getMax(int a, int b) {
+		return a > b ? a : b;
+	}
+	
+	public int getMin(int a, int b) {
+		return a < b ? a : b;
+	}
+
+}
+
+package cn.itcast_06;
+
+import org.junit.jupiter.api.Test;
+
+import junit.framework.Assert;
+
+
+public class ToolTest {
+	@Test
+	public void testGetMax() {
+		int a = 3;
+		int b = 5;
+		int actual = new Tool().getMax(a, b);
+		Assert.assertSame(5, actual);// ==: address
+		Assert.assertNotSame("abc", new String("abc"));
+//		Assert.assertSame(new String("abc"), "abc"); // ==, red
+		Assert.assertEquals(new String("abc"), "abc"); // String equals, green
+	}
+	
+	@Test
+	public void testGetMin() {
+		int a = 3;
+		int b = 5;
+		int actual = new Tool().getMin(a, b);
+		int expected = 3;
+		Assert.assertSame(expected, actual);
+		
+		Assert.assertNull(null);
+		Assert.assertNotNull("abc");
+		
+		Assert.assertFalse( 5 == 6);
+		Assert.assertTrue(2 == 2);
+	}
+}
+**********************************************************************
