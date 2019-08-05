@@ -418,3 +418,667 @@ Anele=South Africa
 Josh=USA
 Andy=Chinese
 -----------------------
+genecity:
+	benefits:
+		A-exposure of issues during compiling instead of running period
+		B-avoid some Cast type conversion
+	genecity used in Collection:
+		ArrayList<String> list = new ArrayList<String>(); // true
+		ArrayList<Object> list = new ArrayList<String>(); // false
+		ArrayList<String> list = new ArrayList<Object>(); // false
+		ArrayList list = new ArrayList<String>();         // true
+		ArrayList<String> list = new ArrayList();         // true
+	
+	Note:
+		A-Genecity has no polymorphic concept, the types of two side should be the same
+		B-Only specify one side type, which is ok
+		C-recommend to specify the types of two sides, considering the Compatibility of old systems and new systems
+
+	self-defined genecity: Placeholders for data types, or Variables of the data type
+	
+	genecity method:
+		A: format
+		(Modifier) <declare self-defined genecity>(return type) (method name)(List of formal parameters) {
+			...
+		}
+		B:defined genecity's specified data type is decided when calling the method with specified data type in real parameter
+		C: self-defined genecity name should be any one which obey name rules for identifiers 
+		
+	genecity class:
+		A: format
+		class className<declare self-defined genecity> {
+		}
+		B: when creating the instance of class, self-defined genecity will get specified data type 
+		C: If we don't specify data type of class, its default data type is Object
+	
+	genecity interface:
+		A: format
+			interface interfaceName<declare self-defined genecity> {
+			}
+		
+		B: Notice
+			a: specify self-defined genecity data type when implementing its method
+			b: if we don't do a step, default is Object
+			c: if you want to specify self-defined genecity data type when creating one implement class instance
+				implement class must add <T>
+				Impl impl = new Impl<String>()
+		
+**************************************************************************************************
+genecity method to implement method with the same data type for both return  and formal parameter
+**************************************************************************************************
+package cn.itcast_02;
+
+public class GenecityTest {
+
+	public static void main(String[] args) {
+		System.out.println(print("hello"));
+		System.out.println(print(123));
+		System.out.println(print('a'));
+	}
+	
+	// <T>: declare <T> as self-defined genecity
+	public static<T> T print(T t) {
+		return t;
+	}
+
+}
+
+result:
+hello
+123
+a
+***********************************************************************************
+
+
+
+***********************************************************************************
+genecity class
+***********************************************************************************
+package cn.itcast_02;
+
+public class MyList<T> {
+	Object[] arr = new Object[10];
+	int index = 0;
+	
+	public MyList() {}
+	
+	public void add(T o) {
+		arr[index++] = o;
+	}
+}
+
+package cn.itcast_02;
+
+public class MyListTest {
+
+	public static void main(String[] args) {
+		MyList<Integer> intList = new MyList<Integer>();
+		intList.add(100);
+		intList.add(200);
+		
+		MyList<String> strList = new MyList<String>();
+		strList.add("hello");
+		strList.add("world");
+		
+		MyList objList = new MyList();
+		objList.add("hello");
+		objList.add(123);
+	}
+}
+************************************************************************************************
+
+
+
+*************************************************************************************************
+genecity interface
+*************************************************************************************************
+package cn.itcast_02;
+
+public interface Dao<T> {
+	public void add(T t);
+	public void remove(T t);
+}
+
+
+package cn.itcast_02;
+
+public class ObjectDaoImpl implements Dao {
+
+	@Override
+	public void add(Object t) {
+	}
+
+	@Override
+	public void remove(Object t) {
+	}
+
+}
+
+package cn.itcast_02;
+
+public class StringDaoImpl implements Dao<String> {
+
+	@Override
+	public void add(String t) {
+	}
+
+	@Override
+	public void remove(String t) {
+	}
+
+}
+
+*****************************************************************************
+examples for genecity:
+ArrayList
+Comparator
+*****************************************************************************
+
+
+
+IO： used in transfering data between two equipments
+	hard disk ---> memory
+	memory ---> hard disk
+
+IO stream:
+	1-byte stream
+		1.1-input stream
+			-------| InputStream: all input equipments' base class, abstract class
+				------| FileInputStream: read file input byte stream
+				------| BufferedInputStream: buffer input byte stream,
+											 the class is maintaining a 8kb byte array,
+											 The class is uesed to improve the efficiency of reading file data
+				
+		1.2-output stream
+			-------| OutputStream: all output equipments's base class, abstract class
+				------| FileOutputStream: output data into file
+				------| BufferedOutputStream: buffer output byte stream,
+											  the class is used to improve the efficiency of writing data,
+											  The class is maintaining a 8kb byte array
+
+		The situation to use byte stream:
+			After reading data, you don't need encode or decode it,
+			For example, pictures
+
+		char stream = byte stream + encode or decode
+
+	2-char stream
+		2.1 Input char stream
+			----------| Reader: all input char stream's base class, abstract class
+				---------| FileReader: read char data from file, input char stream
+					----------| BufferedReader: buffer input char stream, 
+												used to improve the efficiency of reading file char(extended function: readLine),
+												maintain a char array with the length of 8192 
+			
+		2.2 Output char stream
+			----------| Writer: all output char stream's base class, abstract class
+				---------| FileWriter: output char data into file, output char stream
+					----------| BufferedWriter: buffer output char stream, 
+												used to improve the efficiency of writing char into file(extended function: newLine),
+												maintain a char array with the length of 8192 			
+		
+		The situation to use char stream:
+			if read and write are char data, we have to use char stream
+	
+	3-Conversion stream
+		----------| InputStreamReader: input byte stream's conversion stream 
+						
+		----------| OutputStreamWriter: output byte stream's conversion stream
+		
+		used:
+			A: convert byte stream into char stream
+			B: specify encode and decode table type InputStreamReader(InputStream, String charset)
+		
+		FileWriter: GBK by default, we can't specify special encode and decode table, but OutputStreamWriter can
+		FileReader: GBK by default, we can't specify special encode and decode table, but InputStreamReader can
+
+********************************************************************
+Coversion stream example
+********************************************************************
+package cn.itcast_03;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
+public class IOTest {
+
+	public static void main(String[] args) throws IOException {
+		InputStream in = System.in;
+		InputStreamReader isr = new InputStreamReader(in);
+		BufferedReader br = new BufferedReader(isr);
+		System.out.println(br.readLine());
+	}
+}
+
+
+result
+hello world java
+hello world java
+*****************************************************************************
+package cn.itcast_03;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+
+public class IOTest {
+
+	public static void main(String[] args) throws IOException {
+		testInput();
+	}
+	
+	static void testInput() throws IOException {
+		// readLine() is commonly used
+		// but only BufferedReader has readLine()
+		InputStream in = System.in;
+		InputStreamReader isr = new InputStreamReader(in);
+		BufferedReader br = new BufferedReader(isr);
+		System.out.println(br.readLine());
+	}
+	
+	private void testOutput() throws UnknownHostException, IOException {
+		// Write byte: not convenient
+		// write char: convenient
+		// newLine() is commonly used
+		// BufferedWriter has newLine()
+		Socket socket = new Socket(InetAddress.getLocalHost(), 9090);
+		OutputStream os = socket.getOutputStream();
+//		os.write("hello".getBytes());
+		OutputStreamWriter osw = new OutputStreamWriter(os);
+		BufferedWriter bw = new BufferedWriter(osw);
+		bw.write("hello");
+		bw.newLine();
+		
+	}
+}
+
+************************************************************************
+one chinese word is taking up 3 bytes
+****************************************************************************
+package cn.itcast_03;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class FileWriterTest {
+
+	public static void main(String[] args) throws IOException {
+		writeFile();
+		readFile();
+
+	}
+
+	private static void readFile() throws IOException {
+		// method 1:
+		FileReader fr = new FileReader("a.txt");
+		int content = 0;
+		while ((content = fr.read()) != -1) {
+			System.out.print((char)content);
+		}
+		fr.close();
+		System.out.println();
+		System.out.println("-----------------");
+		// method 2:
+		FileInputStream fis = new FileInputStream("a.txt");
+		InputStreamReader isr = new InputStreamReader(fis, "gbk");
+		int content2 = 0;
+		while ((content2 = isr.read()) != -1) {
+			System.out.print((char)content2);
+		}
+		fr.close();
+	}
+	
+
+	private static void writeFile() throws IOException {
+		FileOutputStream fos = new FileOutputStream("a.txt");
+		OutputStreamWriter osw = new OutputStreamWriter(fos, "gbk");
+		osw.write("我爱你中国");
+		osw.close();
+	}
+}
+
+result:
+�Ұ����й�
+-----------------
+我爱你中国
+*****************************************************************************
+package cn.itcast_03;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class FileWriterTest {
+
+	public static void main(String[] args) throws IOException {
+		writeFile();
+		readFile();
+
+	}
+
+	private static void readFile() throws IOException {
+		// method 1:
+		FileReader fr = new FileReader("a.txt");
+		int content = 0;
+		while ((content = fr.read()) != -1) {
+			System.out.print((char)content);
+		}
+		fr.close();
+		System.out.println();
+		System.out.println("-----------------");
+		// method 2:
+		FileInputStream fis = new FileInputStream("a.txt");
+		InputStreamReader isr = new InputStreamReader(fis, "utf-8");
+		int content2 = 0;
+		while ((content2 = isr.read()) != -1) {
+			System.out.print((char)content2);
+		}
+		fr.close();
+	}
+	
+
+	private static void writeFile() throws IOException {
+		FileOutputStream fos = new FileOutputStream("a.txt");
+		OutputStreamWriter osw = new OutputStreamWriter(fos, "utf-8");
+		osw.write("我爱你中国");
+		osw.close();
+	}
+}
+
+result：
+我爱你中国
+-----------------
+我爱你中国
+*****************************************************************************
+Sumarize: we can specify encode or decode type by InputStreamReader and OutputStreamWriter, 
+then its reader reads the same content as writer
+********************************************************************************
+
+
+**************************************************
+Thread:
+	The benefits of multithread:
+		one process has many threads, each thread handles one task
+	self-defined thread
+		A: inherit Thread
+			a: self-defined one class inheriting Thread
+			b: rewrite Thread run() method, self-defined task is self-defined on run() method
+			c: create Thread subclass instance, call start() method to start one thread and call run() method
+		B: implement Runnable interface
+			a: self-define one class implement Runnable
+			b: implement run() method
+			c: create Runnable implement class instance
+			d: create Thread instance, pass Runnable implement class instance to Thread constructor
+			e: call Thread start() method
+			
+	thread safe issues root cause:
+		a: exist two threads or more to share the same resource
+		b: operation on shared resource's must be two statements or more 
+	
+	thread safe issues solutions:
+		a: synchonized code block
+			synchonized(Lock) {
+				the codes needed to be synchonized
+			} 
+		b: synchonized method
+			Modifier synchonized (return type) (method name) (formal parameters list) {}
+		
+		Note:
+			a: the lock used in synchonized is any lock instance;
+				the lock on synchonized method is fixed
+				non-static method's lock instance is this instance
+				static method's lock is Class instance
+			b:lock instance must be multithread shared instance, otherwise lock is invalid
+			c: in synchonized clock block or synchonized method, when calling sleep(), it won't release lock instance,
+			if calling wait(), it will release lock instance
+		
+******************************************************
+package cn.itcast_05;
+
+public class MyThread extends Thread {
+//	public MyThread(String name) {
+//		super(name);
+//	}
+	@Override
+	public  void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+	}
+}
+
+package cn.itcast_05;
+
+public class MyThreadTest {
+
+	public static void main(String[] args) {
+		MyThread myThread1 = new MyThread();
+		MyThread myThread2 = new MyThread();
+		MyThread myThread3 = new MyThread();
+		
+		myThread1.setName("Lin Qingxia");
+		myThread2.setName("Sun Li");
+		myThread3.setName("Jiang Wenli");
+		
+		myThread1.start();
+		myThread2.start();
+		myThread3.start();
+	}
+}
+
+
+***************************************************************************
+package cn.itcast_05;
+
+public class MyThread extends Thread {
+	
+	public MyThread(String name) {
+		super(name);
+	}
+	@Override
+	public  void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+	}
+}
+
+package cn.itcast_05;
+
+public class MyThreadTest {
+
+	public static void main(String[] args) {
+		MyThread myThread1 = new MyThread("Lin Qingxia");
+		MyThread myThread2 = new MyThread("Sun Li");
+		MyThread myThread3 = new MyThread("Jiang Wenli");
+//		
+//		myThread1.setName("Lin Qingxia");
+//		myThread2.setName("Sun Li");
+//		myThread3.setName("Jiang Wenli");
+		
+		myThread1.start();
+		myThread2.start();
+		myThread3.start();
+	}
+}
+
+*****************************************************************************
+package cn.itcast_05;
+
+public class MyRunnable implements Runnable {
+
+	@Override
+	public void run() {
+		for (int i = 0; i < 100; ++i) {
+			System.out.println(Thread.currentThread().getName()+":"+i);
+		}
+	}
+}
+
+package cn.itcast_05;
+
+public class MyRunnableTest {
+
+	public static void main(String[] args) {
+		MyRunnable myRunnable = new MyRunnable();
+		Thread t1 = new Thread(myRunnable, "Lin Qingxia");
+		Thread t2 = new Thread(myRunnable, "Sun Li");
+		Thread t3 = new Thread(myRunnable, "Jiang Wenli");
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+}
+
+*****************************************************************************
+junit(unit test framework)
+
+Current issue:
+	a: all methods should be called in main()
+	b: Results should be checked manually
+	
+https://junit.org/junit5/docs/current/api/
+https://junit.org/junit5/docs/current/user-guide/index.pdf
+https://github.com/junit-team/junit5/
+
+A: download junit-*.*.jar on the internet
+B: create Folder lib in the current project
+C: right click on the jar->Build Path->Add Build Path->
+   Then Referenced Libraries generated automatically
+
+Notice:
+	A: If we test one method by junit, green junit bar shows test case passes
+	B: If we test one method by junit, red junit bar shows test case fails
+
+junit using rules:
+	A: If one class need be tested, the class is related to one test class
+		test case name: (class name tested) +Test.
+	B: one tested method is related to one test method
+		test method name: test+(tested method name)
+**********************************************************************************************
+package cn.itcast_06;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
+public class SortTest {
+	@Test
+	public void sort() {
+		int[] arr = {10, 2, 20, 3, 5};
+		
+		for (int i = 0; i < arr.length - 1; ++i) {
+			for (int j = i + 1; j < arr.length; ++j) {
+				if (arr[i] > arr[j]) {
+					int temp = arr[i];
+					arr[i] = arr[j];
+					arr[j] = temp;
+				}
+			}
+		}
+		System.out.println(Arrays.toString(arr));
+	}
+}
+
+result:
+[2, 3, 5, 10, 20]
+**************************************************************************************************
+Whatever method you want to test, you can choose the method name then click on Run as->JUnit Test,
+only the chosen method is tested
+**************************************************************************************************
+package cn.itcast_06;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
+public class SortTest {
+	@Test
+	public void sort() {
+		int[] arr = {10, 2, 20, 3, 5};
+		
+		for (int i = 0; i < arr.length - 1; ++i) {
+			for (int j = i + 1; j < arr.length; ++j) {
+				if (arr[i] > arr[j]) {
+					int temp = arr[i];
+					arr[i] = arr[j];
+					arr[j] = temp;
+				}
+			}
+		}
+		System.out.println(Arrays.toString(arr));
+	}
+	
+	@Test
+	public void getMax() {
+		int a = 10;
+		int b = 20;
+		int max =  (a > b) ? a : b;
+		System.out.println("max value is "+max);
+	}
+}
+
+result:
+max value is 20 for getMax
+[2, 3, 5, 10, 20] for sort
+************************************************************************
+
+However, we should divide product code and test code into two different files
+
+************************************************************************
+package cn.itcast_07;
+
+public class Tool {
+	public int getMax(int a, int b) {
+		return a > b ? a : b;
+	}
+
+	public int getMin(int a, int b) {
+		return a < b ? a : b;
+	}
+}
+
+package cn.itcast_07;
+
+import org.junit.Test;
+
+public class ToolTest {
+	@Test
+	public void testGetMax() {
+		int a = 3;
+		int b = 5;
+		int max = new Tool().getMax(a, b);
+		System.out.println("max value:"+max);
+	}
+	
+	@Test
+	public void testGetMin() {
+		int a = 3;
+		int b = 5;
+		int min = new Tool().getMin(a, b);
+		System.out.println("min value:"+min);
+	}
+}
+
+result:
+max value:5
+min value:3
+***************************************************************************
