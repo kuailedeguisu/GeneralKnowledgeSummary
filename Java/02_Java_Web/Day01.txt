@@ -1298,3 +1298,9 @@ public final native java.lang.Class java.lang.Object.getClass()
 public int cn.itcast_08.Person.getId()
 public java.lang.String cn.itcast_08.Person.getName()
 ***************************************************************************
+
+Apache BeanUtils
+*************************************************
+Download BeanUtils on the internet
+copy it to lib folder
+Add build path
