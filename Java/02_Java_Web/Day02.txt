@@ -1,0 +1,94 @@
+html:
+software structure:
+	C/S(Client/Server)
+		examples: QQ,  Excellent Flying Car
+		disadvandages: 
+			When software is updated, customers need download and update software, then install
+			programmer need design client and server
+		advantages:
+			deduce the pressure of server side
+			save a lot of data in client side
+	B/S(Browser/Server)
+		examples: weibo, webQQ
+		advantages:
+			When software is updated, customers don't need download update package,
+			only directly update server program;
+			programmer only need design server 
+		disadvandages:
+			A: network width is limited, but some program need big network width
+			B: improve the pressure of server side
+			C: not save a lot of data in user side
+		
+websites types:
+	静态网站:静态网页中的数据都是写死的，如果需要修改网页的内容是需要直接修改网页的代码，是没有数据库提供数据给它
+	动态网站：动态网站的数据来自于数据库，背后是有一个后台程序管理页面中的数据的
+	
+html语言就是开发网页的基础语言
+html超文本标识语言：
+	标识：该门语言是由标签来构成的。不用怎么理解，只需要记住标签的作用即可
+	
+html语言的特点：
+	A:与平台无关，任何平台只要安装了浏览器都可以运行
+	B:html是不区分大小写的
+
+html语言的结构：（网页上查看元素）
+	<html> html语言的跟标签
+		<head></head> 网页的头信息
+		<body> 网页的体部分
+			<font size="30" color="red">这是我的第一个网页</font>
+			<img src="file:\\\c:\demo\test\sunli.jpg" />
+		</body>
+	</html>
+
+*************************************************
+1.html
+*************************************************
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<FONT size="30" color="red">这是我的第一个网页</FONT>
+<img src="file:\\\c:\demo\test\sunli.jpg" />
+************************************************
+DreamWeaver 网页制作软件
+
+html的注释： <!-- contents -->
+头信息的作用：
+	A:可以设置一个网页的标题
+	B:可以通知浏览器使用指定的码表解释html页面
+	C:网页推广中使用，即让网页尽可能被搜索引擎搜到
+
+Note:
+	一个网页的关键字最好是3-4个，不要太多，越多网站越难搜到，
+	因为有权重的问题（网站的推广内容，seo（search engine optimization））
+
+****************************************************************************
+head.html
+****************************************************************************
+<html>
+	<head>
+	    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>这是我的第一个网页</title>
+		<meta name="keyword" content="java training, php training, C# training" />
+	</head>
+	<body>
+	今天天气不错。。。
+	</body>
+</html>
+**********************************************************************************
+html标签的作用： 用于描述一个网页的结构
+
+html常用的标签：
+w3school可以下载html的帮助文档
+HTML help->HTML标签列表
+ 
+基本的 HTML 标签
+标签               描述 
+<html>            定义 HTML 文档。 
+<body>            定义文档的主体。 
+<h1> to <h6>      定义标题 1 至标题 6。 
+<p>               定义段落。 
+<br>              插入折行。 
+<hr>              定义水平线。 
+<!-->             定义注释。 
+
+
+
+		
