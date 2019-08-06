@@ -1308,3 +1308,329 @@ Add build path
 BeanUtils: 把对象的属性值封装到对象中，
 但是更简单
 
+内省的前提：
+	类必须定义了setXxx和getXxx方法才可以
+****************************************************
+JUnit can be added by eclipse own software
+Click on the project name
+	Build Path
+		Add Libraries
+			JUnit
+				Choose JUnit library version
+					Finish
+
+*****************************************************************************				
+BeanUtils: 一种变态的反射
+目的是： 将对象的属性值封装到对象中
+API
+http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.3/apidocs/index.html
+
+Issue: java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory
+solution: need add library commons.logging.jar
+
+
+BeanUtils steps:
+	import package: commons-logging.jar, commons-beanutils-1.8.0.jar
+
+Benefits:
+	A-BeanUtils设置属性值时，如果属性值是基本数据类型时，BeanUtils会帮我们自动转换数据类型
+	B-BeanUtils设置属性值时，底层也是依据get或者set来获取或者设置属性值的
+	C-BeanUtils设置属性值，如果设置的属性是其他引用类型时，需要注册一个类型转换器（ConvertUtils.register）
+	
+Issue: Converter.convert method has no right type and value formal parameter
+soulution: Click on "ConvertUtils"->
+			click on "Attach Source"->
+				choose BeanUtils source code jar package
+
+******************************************************************************
+convert: 
+	type: 目前遇到的数据类型
+	value：目前参数的值
+******************************************************************************
+BeanUtils.setProperty
+BeanUtils.getProperty
+public static String getProperty(Object bean,
+                                 String name)
+                          throws IllegalAccessException,
+                                 InvocationTargetException,
+                                 NoSuchMethodException
+public static void setProperty(Object bean,
+                               String name,
+                               Object value)
+                        throws IllegalAccessException,
+                               InvocationTargetException
+******************************************************************************
+CovertUtil
+Converter
+******************************************************************************
+public static void register(Converter converter,
+                            Class<?> clazz)
+
+org.apache.commons.beanutils
+	Interface Converter
+public <T> T convert(Class<T> type, Object value);
+******************************************************************************
+							
+package cn.itcast_08;
+
+public class Person {
+	int id;
+	String name;
+	
+	public Person(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public Person() {
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		
+		return "number:"+this.id+", name:"+this.name;
+	}
+}
+
+package cn.itcast_08;
+
+import org.apache.commons.beanutils.BeanUtils;
+
+public class PersonTest {
+	public static void main(String[] args) throws Exception {
+		Person person = new Person();
+		BeanUtils.setProperty(person, "id", "100");
+		System.out.println(BeanUtils.getProperty(person, "id"));
+		BeanUtils.setProperty(person, "name", "Andy");
+		System.out.println(BeanUtils.getProperty(person, "name"));
+		System.out.println(person);
+	}
+}
+
+result:
+100
+Andy
+number:100, name:Andy
+********************************************************************************
+package cn.itcast_08;
+
+import java.util.Date;
+
+public class Employee {
+	private int id;
+	private String name;
+	private double salary;
+	private Date birthday;
+	public Employee() {
+		super();
+		
+	}
+	public Employee(int id, String name, double salary, Date birthday) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+		this.birthday = birthday;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	public Date getBirthday() {
+		return birthday;
+	}
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+	
+	@Override
+	public String toString() {
+		
+		return "id:"+this.id+
+				", name:"+this.name+
+				", salary:"+this.salary+
+				",birthday:"+this.birthday;
+	}
+	
+
+}
+
+package cn.itcast_08;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
+
+public class EmployeeTest {
+
+	public static void main(String[] args) throws Exception {
+		ConvertUtils.register(new Converter() {
+			
+			@Override
+			public Object convert(Class type, Object value) {
+				Date date = null;
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					date = sdf.parse((String)value);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				return date;
+			}
+		}, Date.class);
+		Employee employee = new Employee();
+		BeanUtils.setProperty(employee, "id", "100");
+		BeanUtils.setProperty(employee, "name", "Andy");
+		BeanUtils.setProperty(employee, "salary", "50000");
+		BeanUtils.setProperty(employee, "birthday", "1960-09-01");
+		System.out.println(employee);
+
+	}
+}
+
+result:
+id:100, name:Andy, salary:50000.0,birthday:Thu Sep 01 00:00:00 CST 1960
+**************************************************************************************
+以后的数据库的用户名和密码一般都会保存到properties（配置文件）
+**************************************************************************************
+package cn.itcast_09;
+
+public class Demo1 {
+	static String name = "Andy";
+	static String password = "123456";
+	public static void main(String[] args) {
+		System.out.println("username="+name+", password="+password);
+	}
+
+}
+
+***************************************************************************************
+javac -d . Demo1.java // it will generate all dirs and class file, then remove java file
+java cn.itcast_09.Demo1 // result: username=Andy, password=123456
+***************************************************************************************
+If we want to change username and password, we need do the above opetions again
+******************************************************************************************
+db.properties
+username=root
+password=12345678
+*******************************************************************************************
+package cn.itcast_11;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
+public class DBUtil {
+	static Properties properties;
+	
+	static {
+		properties = new Properties();
+		try {
+			properties.load(new FileReader("db.properties"));
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("username:"+properties.getProperty("username")
+		+", password:"+properties.getProperty("password"));
+	}
+}
+
+cpoy db.properties and DBUtil.java to C:\\demo2
+cd C:\\demo2
+javac -d . DBUtil.java
+java cn.itcast_11.DBUtil
+result:
+username:root, password:12345678
+
+Then remove DBUtil.java
+modify db.properties(password=7890)
+java cn.itcast_11.DBUtil
+result:
+username:root, password:7890
+**********************************************************************************
+如果经常发生变化的数据我们可以定义在配置文件上，比如说，数据库的用户名和密码
+配置文件的路径如何写呢？
+	绝对路径： 包含盘符的完整路径，不能做到在所有操作系统上通用（某些系统没有盘符）
+	相对路径： 相对于当前程序的所在的路径。程序当前的路径，就是执行java命令时控制台所在的路径。当切换控制台路径时，不安全
+	类文件路径： 类文件路径就是使用了classpath的路径找对应的源文件
+		如果需要使用类文件路径，首先要获取到一个Class对象
+			（Class getResourceAsStream该方法里面使用的路径就是类文件路径）
+		如何没有set classpath, 使用当前控制台的路径
+*********************************************************************************
+package cn.itcast_11;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class DBUtil {
+	static Properties properties;
+	
+	static {
+		properties = new Properties();
+		try {
+			Class clazz = DBUtil.class;
+			InputStream is = clazz.getResourceAsStream("/db.properties");// "/"  代表了classpath的路径
+			properties.load(is);
+			//			properties.load(new FileReader("db.properties"));
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+//		System.out.println("Current path:"+new File(".").getAbsolutePath());
+		System.out.println("username:"+properties.getProperty("username")
+		+", password:"+properties.getProperty("password"));
+	}
+}
+
+cd C:\\demo2(db.properties)
+javac -d . DBUtil.java
+set classpath=“C:\\demo2”
+cd C:\\demo1(no db.properties)
+java cn.itcast_11.DBUtil
+******************************************************************************************
+	
