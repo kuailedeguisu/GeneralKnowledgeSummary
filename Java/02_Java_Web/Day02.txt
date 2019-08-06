@@ -214,3 +214,19 @@ result：
 <marquee> 飘动标签
 	direction:指定飘动的方向
 	scrollamount: 指定飘动的速度
+***********************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>媒体标签</title>
+    </head>
+    <body>
+        <embed src="Celine_Dion_-_My_Heart_Will_Go_On_Qoret.com.mp3" hidden="false"></embed>
+        <marquee direction="right" scrollamount="30"><font size="+6" color="red">Celine Dion-My Heart will go on</font></marquee>>
+    </body>
+</html>
+</html>
+************************************************************
+注意：这个mp3文件需要放在html文件所在的目录
+
+
