@@ -97,9 +97,69 @@ HTML help->HTML标签列表
 <pre>             原样标签，保留空格和换行符，不能有Tab符号的输入
 <ol> <li>             有序列表
 <ul> <li>             无序列表
-<dl> <dt> <dd>        项目列表标签；dt是dd的直属管理者
+<dl> <dt> <dd>        项目列表标签；dd比dt缩进一个Tab键
+<span>                行内标签，目前看不出有啥明显的效果，CSS中可以看到效果
+<div>                 块内标签，独立占一行，其实<br/>可以代替它，但是CSS中有用
+
 
 https://www.w3school.com.cn/tags/index.asp
 
-
+****************************************************************
+CommonMakeup.html
+*****************************************************************
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>常用的标签</title>
+	</head>
+	<body>
+		<!-- html体部分 -->
+		<h1 align="center">标题1</h1>
+		<h2>标题2</h2>
+		<h3>标题3</h3>
+		<h4>标题4</h4>
+		<h5>标题5</h5>
+		<h6>标题6</h6>
+		<p>&nbsp;&nbsp;我爱你中国<br>我爱你祖国我爱你中国人</p>
+		<code>System.out.println("Hello world!");</code>
+		<hr/>
+		水的化学式：H<sub>2</sub>O
+		<br/>
+		2的16次方：2<sup>16</sup>
+		<hr/>
+		<pre>
+                                    静夜思
+                              窗前明月光，疑是地上霜。
+                              举头望明月，低头思故乡。
+		</pre>
+		<hr/>
+		今天晚上吃啥呢？有序列表
+		<ol type="a">
+			<li>烤鸭</li>
+			<li>火锅</li>
+			<li>烧烤</li>
+		</ol>
+		<hr/>
+		今天晚上吃啥呢？无序列表
+		<ul type="square"> 
+			<li>烤鸭</li>
+			<li>火锅</li>
+			<li>烧烤</li>
+		</ul>
+		<hr/>
+		公司的组织架构：
+		<dl>
+			<dt>技术总监</dt>
+			<dd>码农1号</dd>
+			<dd>码农2号</dd>
+			<dd>码农3号</dd>
+			<dt>人事总监</dt>
+			<dd>妹子1号</dd>
+			<dd>妹子2号</dd>
+		</dl>
+		<hr/>
+		<span>我今天学习html，</span><div>明天学习css+javascript</div>
+	</body>
+</html>
+*****************************************************************************
 		
