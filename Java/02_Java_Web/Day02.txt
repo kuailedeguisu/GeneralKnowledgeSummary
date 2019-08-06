@@ -94,7 +94,10 @@ HTML help->HTML标签列表
 <b>               加粗字体
 <sub>             下标
 <sup>             上标
-<pre>             原样标签
+<pre>             原样标签，保留空格和换行符，不能有Tab符号的输入
+<ol> <li>             有序列表
+<ul> <li>             无序列表
+<dl> <dt> <dd>        项目列表标签；dt是dd的直属管理者
 
 https://www.w3school.com.cn/tags/index.asp
 
