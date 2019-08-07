@@ -231,3 +231,31 @@ Stylehtml.html
     </body>
 </html>
 **********************************************************************
+伪类选择器：
+<html>
+    <head>
+        <style type="text/css">
+        /*
+            伪类选择器：就是对元素处于某种状态下进行样式化
+                a:link {color: #FF0000}		未访问的链接 
+                a:visited {color: #00FF00}	 已访问的链接 
+                a:hover {color: #FF00FF}	 鼠标移动到链接上 
+                a:active {color: #0000FF}	 选定的链接,按下没有松手的状态
+
+                格式：
+
+        */
+        a:link{color:red}
+        a:visited{color:green}
+        a:hover{color:yellow;font-size:24px}
+        a:active{color:darkorchid}
+
+        </style>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a href="http://www.baidu.com">百度</a>
+    </body>
+</html>
+*****************************************************
