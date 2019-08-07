@@ -49,24 +49,21 @@ css： 层叠样式表，在一个网页中负责一个页面的数据样式
             }      
             
     第二种：可以引入外部的CSS文件
-    
-
-	第二种：可以引入外部的css文件
-		方式一： 使用link标签
-			格式： <link href=“css文件的路径” rel=“stylesheet” />
-			例子：<link href="新闻标题的颜色.css" rel="stylesheet" >
-		方式二：使用style
-			格式：
-					<style type=“text/css”>
-						@import url(“css文件的路径”);
-					</style>
-			例子：
+	方式一： 使用link标签
+		格式： <link href=“css文件的路径” rel=“stylesheet” />
+		例子：<link href="新闻标题的颜色.css" rel="stylesheet" >
+	方式二：使用style
+		格式：
+			<style type=“text/css”>
+				@import url(“css文件的路径”);
+			</style>
+		例子：
         		<style type="text/css"> 
-            		@import url("新闻标题的颜色.css");
+            			@import url("新闻标题的颜色.css");
         		</style>		
-	第三种：直接在html标签使用style属性编写
-			例子：
-				<a style="color:red; text-decoration:none" href="#">新闻的标题1</a><br/>
+   第三种：直接在html标签使用style属性编写
+	例子：
+		<a style="color:red; text-decoration:none" href="#">新闻的标题1</a><br/>
 ********************************************************
 方式二第一种：link
 ******************************************************
