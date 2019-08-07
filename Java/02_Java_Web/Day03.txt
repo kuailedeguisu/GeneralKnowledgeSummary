@@ -1,0 +1,36 @@
+***************************************************************************************
+需求：新浪上有多个新闻标题，如果我想把很多的新闻标题设置为红色，原来的实现是每一个标题都要设置font
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a href="#"><font size="30" color="red">新闻的标题1</font></a><br/>
+        <a href="#"><font size="30" color="red">新闻的标题2</font></a><br/>
+        <a href="#"><font size="30" color="red">新闻的标题3</font></a><br/>
+        <a href="#"><font size="30" color="red">新闻的标题4</font></a><br/>
+    </body>
+</html>
+如果是很多标题，重复工作比较多，并且后期有变化维护起来很困难，所以引入了css的概念
+*************************************************************************************
+<html>
+    <head>
+        <style type="text/css">
+        <!--去掉下划线-->
+            a {
+                color:red;
+                text-decoration: none;
+            }
+        </style>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a href="#">新闻的标题1</a><br/>
+        <a href="#">新闻的标题2</a><br/>
+        <a href="#">新闻的标题3</a><br/>
+        <a href="#">新闻的标题4</a><br/>
+    </body>
+</html>
+*****************************************************************
