@@ -50,3 +50,79 @@ css： 层叠样式表，在一个网页中负责一个页面的数据样式
             
     第二种：可以引入外部的CSS文件
     
+
+	第二种：可以引入外部的css文件
+		方式一： 使用link标签
+			格式： <link href=“css文件的路径” rel=“stylesheet” />
+			例子：<link href="新闻标题的颜色.css" rel="stylesheet" >
+		方式二：使用style
+			格式：
+					<style type=“text/css”>
+						@import url(“css文件的路径”);
+					</style>
+			例子：
+        		<style type="text/css"> 
+            		@import url("新闻标题的颜色.css");
+        		</style>		
+	第三种：直接在html标签使用style属性编写
+			例子：
+				<a style="color:red; text-decoration:none" href="#">新闻的标题1</a><br/>
+********************************************************
+方式二第一种：link
+******************************************************
+新闻标题的颜色.css
+@charset "utf-8";
+a{
+    color:red;
+    text-decoration:none;
+}
+
+linkcss.html
+<html>
+    <head>
+        <link href="新闻标题的颜色.css" rel="stylesheet" >
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" >
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a href="#">新闻的标题1</a><br/>
+        <a href="#">新闻的标题2</a><br/>
+        <a href="#">新闻的标题3</a><br/>
+        <a href="#">新闻的标题4</a><br/>
+    </body>
+</html>
+
+
+方式二第二种：style
+stylecss.html
+<html>
+    <head>
+        <style type="text/css"> 
+            @import url("新闻标题的颜色.css");
+        </style>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" >
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a href="#">新闻的标题1</a><br/>
+        <a href="#">新闻的标题2</a><br/>
+        <a href="#">新闻的标题3</a><br/>
+        <a href="#">新闻的标题4</a><br/>
+    </body>
+</html>
+
+方式三：直接在html标签使用style属性编写
+Stylehtml.html
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" >
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <a style="color:red; text-decoration:none" href="#">新闻的标题1</a><br/>
+        <a style="color:red; text-decoration:none" href="#">新闻的标题2</a><br/>
+        <a style="color:red; text-decoration:none" href="#">新闻的标题3</a><br/>
+        <a style="color:red; text-decoration:none" href="#">新闻的标题4</a><br/>
+    </body>
+</html>
+
