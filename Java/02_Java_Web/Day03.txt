@@ -265,3 +265,449 @@ Css的注释：
     </body>
 </html>
 *****************************************************
+常用的CSS样式：
+https://www.w3school.com.cn/css/index.asp
+
+解决Windows VSCode 1.36 不能智能提示CSS或者HTML的办法：
+设置 -> 搜索prevent -> 把Snippets Prevent Quick Suggestions 勾掉即可
+
+****************************************************************
+Auto close tag:
+    "css.remoteStyleSheets": [
+        "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+    ],
+    "auto-close-tag.SublimeText3Mode": true,
+    "auto-close-tag.enableAutoCloseTag": true,
+    "auto-close-tag.enableAutoCloseSelfClosingTag": true,
+    "auto-close-tag.activationOnLanguage": [
+        "xml",
+        "php",
+        "blade",
+        "ejs",
+        "jinja",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "plaintext",
+        "markdown",
+        "vue",
+        "liquid",
+        "erb",
+        "lang-cfml",
+        "cfml",
+        "HTML (Eex)",
+        "c++",
+        "java",
+        "python"
+    ],
+    "auto-close-tag.excludedTags": [
+        "area",
+        "base",
+        "br",
+        "col",
+        "command",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "keygen",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr"
+    ],
+    "auto-close-tag.fullMode":true,
+**************************************************************************
+至此，windows VSCode 1.36 中html中的style仍然不好用
+所以我要通过link方式嵌入css文件
+**********************************************************
+常用的CSS样式.css
+
+body {
+    /* 设置背景颜色 */
+    background-color: grey;
+    /* 设置背景图片 */
+    background-image: url(sunli.jpg);
+    /* 设置背景图片是否重复 */
+    background-repeat: no-repeat;
+    /*设置背景图片的位置，第一个参数是左上角的左边距，第二个参数是左上角的上边距*/
+    background-position: 400px 100px;
+}
+
+
+/*操作文本的样式*/
+
+div {
+    /*设置文本的颜色*/
+    color: red;
+    /*设置文本的方向，居哪边对齐*/
+    direction: rtl;
+    line-height: 40px;
+    font-size: 20px;
+    letter-spacing: 5px;
+    text-align: center;
+    text-decoration: line-through;
+    text-indent: 50px;
+    text-transform: uppercase;
+}
+
+常用的CSS样式.html
+
+<html>
+    <head>
+        <link ref="stylesheet" href="常用的CSS样式.css" type="text/css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div>
+            <pre>
+                   七步诗
+            煮豆燃豆萁，豆在釜中泣。
+            本是同根生，相煎何太急。
+            </pre><br/>
+            hello world
+        </div>
+    </body>
+</html>
+*************************************************************************************
+操作表格的属性.css
+
+table {
+    /*合并表格的边框*/
+    border-collapse: collapse;
+    /*设置单元格的边框与表格的距离*/
+    border-spacing: 10px 5px;
+    /*设置标题的对齐方式*/
+    caption-side: bottom;
+    table-layout: fixed;
+}
+
+操作表格的属性.html
+
+<html>
+    <head>
+        <link type="text/css" href="操作表格的属性.css" ref="stylesheet">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <table align="center" border="lpx" bordercolor="blue" width="400px" height="300px">
+            <caption>人品表</caption>
+            <thead>
+                <tr align="center">
+                    <th>姓名</th>
+                    <th>成绩</th>
+                    <th>人品</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr align="center">
+                <td>孙俪</td>
+                <td>100</td>
+                <td>优秀</td>
+            </tr>
+            <tr align="center">
+                <td>蒋雯丽</td>
+                <td>99</td>
+                <td>良好</td>
+            </tr>
+            <tr align="center">
+                <td rowspan="2">Celine Dion</td>
+                <td>99</td>
+                <td>优秀</td>
+            </tr>
+            <tr align="center">
+                <td>98</td>
+                <td>优秀</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="2">综合测评</td>
+                <td>优秀</td>
+            </tr>
+            </tfoot>
+        </table>
+    </body>
+</html>
+**************************************************************************
+操作边框的属性.css
+
+/*div默认是没有边框的，需要通过border-style来设置才会有*/
+
+div {
+    /*设置边框的颜色*/
+    border-color: red green yellow blue;
+    /*设置边框的样式 上右下左*/
+    border-style: dotted solid double;
+    width: 100px;
+    height: 100px;
+    border-bottom-color: red;
+    border-top-width: 100px;
+}
+
+操作边框的属性.html
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="操作边框的属性.css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div>这个是操作边框属性的例子</div>
+    </body>
+</html>
+*****************************************************************************************
+IE中有一个F12开发工具，也有检查元素
+****************************************************************************************
+盒子模型：
+
+盒子模型.css
+
+/*
+盒子模型： 就是把html的边框比作了一个盒子的边界，
+主要用于操作数据与边框的距离，或者边框与边框的距离
+Maigin: yellow， 0， 外边距，盒子间的距离
+Border:green， 3
+Padding:orange , 0, 内边距， 可以修改
+data area:light blue， 100x100
+
+盒子模型主要用于操作内边距（padding）和外边距（margin）的
+*/
+
+div {
+    border-style: solid;
+    width: 100px;
+    height: 100px;
+    padding-left: 10px;
+    padding-top: 20px;
+    padding-right: 10px;
+}
+
+.one {
+    margin-bottom: 10px;
+}
+
+.two {
+    margin-left: 400px;
+}
+
+盒子模型.html
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="盒子模型.css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div class="one">这个是盒子模型的例子1</div>
+        <div class="two">这个是盒子模型的例子2</div>
+    </body>
+</html>
+**********************************************************************************
+QQ登陆页面
+**********************************************************************************
+/*
+QQ登陆模型
+*/
+
+盒子模型QQ登陆.css
+
+.outer {
+    border-style: solid;
+    width: 350px;
+    height: 200px;
+    margin-top: 100px;
+    margin-left: 200px;
+    background-image: url("qq.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.username {
+    margin-top: 50px;
+    margin-left: 80px;
+}
+
+.password {
+    margin-top: 20px;
+    margin-left: 80px;
+}
+
+input {
+    border-color: blue;
+    border-width: 3px;
+}
+
+#button {
+    margin-left: 120px;
+}
+
+
+盒子模型QQ登陆.html
+
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="盒子模型QQ登陆.css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div class="outer">
+            <div class="username">
+            用户名：<input name="username" type="text"/>
+            </div>
+            <div class="password">
+            密&nbsp;&nbsp;&nbsp;&nbsp;码：<input name="password" type="password"/>
+            </div>
+            <div class="login">
+            <input id="button" type="submit" value="登陆"/>   
+            </div>
+        </div>
+    </body>
+</html>
+************************************************************************************************
+定位
+************************************************************************************************
+定位.css
+
+/*
+css的定位：
+    相对定位：相对定位是相对于元素原来的位置进行移动的
+        使用方式：position: relative;
+        例子：
+            position: relative;
+            top: 10px;
+            left: 10px;
+    绝对定位：绝对定位是相对于整个页面而言
+        使用方式: position: absolute;
+        例子：
+            position: absolute;
+            top: 280px;
+            left: 380px;
+    固定定位：固定定位是相对于整个浏览器而言的
+        使用方式：position: fixed;
+        例子：    
+            position: fixed;
+            top: 500px;
+            left: 1000px;
+*/
+
+div {
+    border-style: solid;
+    width: 100px;
+    height: 100px;
+}
+
+.one {
+    background-color: red;
+}
+
+.two {
+    background-color: blue;
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.three {
+    background-color: green;
+}
+
+#ad {
+    width: 100px;
+    height: 100px;
+    font-size: 20px;
+    color: red;
+    position: absolute;
+    top: 280px;
+    left: 380px;
+}
+
+#sunli {
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    top: 500px;
+    left: 1000px;
+}
+
+定位.html
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="定位.css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div class="one">one</div>
+        <div class="two">two</div>
+        <div class="three">three</div>
+        <div id="ad">
+            <marquee scollamount="30">广告</marquee>
+        </div>
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+                目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+                目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+                目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+                目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+                目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        目前正在学习定位。。。。。。目前正在学习定位。。。。。。
+        <div id="sunli">
+            <img src="sunli.jpg" />
+        </div>
+    </body>
+</html>
+**************************************************************************************
+
+html:负责一个页面的结构
+css：负责一个页面的样式
+javascript：负责与用户进行交互
+	表单中信息填写后会提示错误
+
+javascript的历史：
+网速很慢的时候，没有javascript只有提交表单到服务器后才能反馈填写的信息是否符合要求
+商机：
+	微软:盖茨认为未来是“视窗”的世界
+	网景（Mozilla）：1995年推出了，浏览器（导航者）和livescript（检验功能），非常受欢迎
+		和sun公司合作，使用了java的名字，把livescript改名为javascript，占了70%的浏览器市场份额。一款浏览器45美元
+		一年后上市，并且股价超过了微软
+		盖茨找网景的老大谈合作，不同意合并
+		盖茨一年投了20亿美元去开发JScript（高薪挖网景的工程师），没有什么优势，微软捆绑销售+免费（不正当的商业竞争）
+		1998年，网景的市场份额被IE浏览器打压，被美国在线公司收购。网景开始和微软打官司
+		2003年，网景就宣布破产了。微软最终赔钱7亿左右给网景。网景拿着赔的钱中的2000万美金成立了一个基金会（Mozilla）（谋职），
+		把浏览器的源代码全部公开。如果哪个大牛可以继续开发浏览器对抗微软，就可以从基金会里赚钱。然后firefox出来了。
+		Ie浏览器用JScript, 领航者用javascript，开发者很辛苦，要解决兼容性问题。1997年，欧洲计算机协会ECMA给javascript
+		规定了协议。后两项会导致浏览器之间的不兼容问题，后两项就是浏览器的特色。
+			1.ECMAScript(只是规范了基本了基本的语法)
+			2.BOM:浏览器对象模型
+			2.DOM：文档对象模型
+		
+		
+		
+	
+
+
