@@ -1,0 +1,626 @@
+javascript循环
+**********************************************************************
+循环.js
+*********************************************************************
+/*
+
+循环：
+    while (condition) {
+        statements;
+    }
+    do {
+        statements;
+    }
+    while (condition) {
+        statements;
+    }
+    for(initial;end conditions;change) {
+        statements;
+    }
+
+*/
+/*需求1：
+hello world0
+hello world1
+hello world2
+hello world3
+hello world4
+*/
+var count = 0;
+while (count < 5) {
+    document.write("hello world" + count + "<br/>");
+    count++;
+}
+
+/*需求2：求1到100的和 */
+var sum = 0;
+for (var i = 1; i <= 100; ++i) {
+    sum += i;
+}
+document.write("1到100的和是：" + sum + "<br/>");
+
+/*
+ *需求3 ：计算1~100基数的总和
+ */
+var result = 0;
+var num = 1;
+do {
+    if (num % 2) {
+        result += num;
+    }
+    num++;
+} while (num <= 100);
+document.write("1到100之间的基数之和：" + result + "<br/>");
+
+/*
+ *需求4 ：计算1~100偶数的总和
+ */
+var num2 = 1;
+var result2 = 0;
+while (num2 <= 100) {
+    if (num2 % 2 == 0)
+        result2 += num2;
+    num2++;
+}
+document.write("1到100之间偶数的和：" + result2);
+
+**********************************************************************
+循环.html
+*********************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="循环.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+*********************************************************************************
+result:
+hello world0
+hello world1
+hello world2
+hello world3
+hello world4
+1到100的和是：5050
+1到100之间的基数之和：2500
+1到100之间偶数的和：2550 
+*********************************************************************************
+firebug软件+xr：debug issue in firefox 浏览器
+*********************************************************************************
+循环练习
+*********************************************************************************
+循环练习.js
+*********************************************************************************
+/*
+需求1：打印五行五列的正方形，以*显示
+*/
+for (var row = 0; row < 5; ++row) {
+    for (var col = 0; col < 5; ++col) {
+        document.write("*&nbsp;");
+    }
+    document.write("<br/>");
+}
+document.write("<hr/>");
+/*
+需求2：打印直角三角形，以*显示
+*/
+for (var row = 0; row < 5; ++row) {
+    for (var col = 0; col <= row; ++col) {
+        document.write("*&nbsp;");
+    }
+    document.write("<br/>");
+}
+document.write("<hr/>");
+/*
+需求3：打印九九乘法表
+*/
+for (var row = 1; row < 10; ++row) {
+    for (var col = 1; col <= row; ++col) {
+        document.write(col + "x" + row + "=" + (row * col) + "&nbsp;");
+    }
+    document.write("<br/>");
+}
+document.write("<hr/>");
+*********************************************************************************
+循环练习.html
+*********************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="循环练习.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+*********************************************************************************
+result:
+* * * * * 
+* * * * * 
+* * * * * 
+* * * * * 
+* * * * * 
+* 
+* * 
+* * * 
+* * * * 
+* * * * * 
+1x1=1 
+1x2=2 2x2=4 
+1x3=3 2x3=6 3x3=9 
+1x4=4 2x4=8 3x4=12 4x4=16 
+1x5=5 2x5=10 3x5=15 4x5=20 5x5=25 
+1x6=6 2x6=12 3x6=18 4x6=24 5x6=30 6x6=36 
+1x7=7 2x7=14 3x7=21 4x7=28 5x7=35 6x7=42 7x7=49 
+1x8=8 2x8=16 3x8=24 4x8=32 5x8=40 6x8=48 7x8=56 8x8=64 
+1x9=9 2x9=18 3x9=27 4x9=36 5x9=45 6x9=54 7x9=63 8x9=72 9x9=81 
+
+*********************************************************************************
+for-in语句：
+*********************************************************************************
+循环_for_in.js
+*********************************************************************************
+/*
+for-in语句：
+    格式：
+        增强for: for (数据类型 变量名 : 遍历的目标)
+        for (var 变量名 in 遍历的目标)
+    作用：
+        遍历数组的元素。
+            注意使用for-in语句遍历数组元素的时候遍历出来的是数组的下标
+        遍历对象的所有属性数据
+            注意使用for-in语句遍历对象属性的时候遍历出来的是对象的属性名字
+ */
+document.write("for-in遍历数组元素<br/>");
+var arr = [12, 13, 18, 19];
+for (var index in arr) {
+    document.write(arr[index] + "&nbsp");
+}
+document.write("<br/>");
+document.write("普通for循环遍历数组元素<br/>");
+for (var index = 0; index < arr.length; ++index) {
+    document.write(arr[index] + "&nbsp");
+}
+document.write("<br/>");
+
+document.write("创建一个对象<br/>");
+
+function Person(id, name) {
+    this.id = id;
+    this.name = name;
+}
+
+var p = new Person(100, "孙俪");
+for (var property in p) {
+    document.write(p[property] + ",");
+}
+document.write("<br/>");
+
+*********************************************************************************
+循环_for_in.html
+*********************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="循环_for_in.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+**************************************************************************************************
+result:
+for-in遍历数组元素
+12 13 18 19 
+普通for循环遍历数组元素
+12 13 18 19 
+创建一个对象
+100,孙俪,
+**************************************************************************************************
+with语句
+**************************************************************************************************
+with语句.js
+**************************************************************************************************
+/*
+with语句：
+    作用：有了with语句，在存取对象属性和调用方法时不用重复指定参考对象
+    格式:
+        with(对象) {
+            使用该对象的任何属性和调用方法；
+        }
+ */
+
+/*
+需求1：打印直角三角形，以*显示
+*/
+with(document) {
+    for (var row = 0; row < 5; ++row) {
+        for (var col = 0; col <= row; ++col) {
+            write("*&nbsp;");
+        }
+        write("<br/>");
+    }
+    write("<hr/>");
+}
+
+/*
+需求2：省略自定义对象的名字来获取属性值
+*/
+function Person(id, name) {
+    this.id = id;
+    this.name = name;
+}
+
+var p = new Person(100, "孙俪");
+
+with(p) {
+    document.write(id + "," + name);
+}
+****************************************************************************************************
+
+
+*****************************************************************************************************
+with语句.html
+*****************************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="with语句.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+***********************************************************************************************
+result:
+* 
+* * 
+* * * 
+* * * * 
+* * * * * 
+100,孙俪 
+***************************************************************************************************
+函数
+***************************************************************************************************
+函数.js
+***************************************************************************************************
+/*
+javascript函数：
+    格式：
+        function 函数名(形参列表) {
+            函数体；
+        }
+    javascript注意：
+        1.在定义形参时，不用加var关键字
+        2.函数没有返回值类型，如果函数需要返回数据给调用者，
+            直接返回即可；如果不需要返回就不返回就可以，如果函数不返回，
+            在调用时用变量接收时，变量为undefined
+        3.没有函数重载，后定义的同名函数会直接覆盖之前定义的同名函数
+        4.在javascript中任何函数内部都隐式地维护了一个arguments（数组）的对象，
+        给函数传递数据的时候，是会先产地到arguments对象中，然后由arguments
+        对象分配数据给形参的。
+ */
+/*需求1：定义一个函数做两个数的加法*/
+
+
+function add(a, b) {
+    var sum = a + b;
+    return sum;
+}
+
+function add(a, b, c) {
+    // document.write(arguments.length + "<br/>");
+    // for (var inex = 0; index < arguments.length; ++index) {
+    //     document.write(arguments[index]);
+    // }
+    document.write("<br/>");
+    var sum = a + b + c;
+    return sum;
+}
+
+var a1 = 1;
+var b1 = 2;
+var result = add(a1, b1);
+document.write(a1 + "+" + b1 + "=" + result + "<br/>");
+
+var a2 = 1;
+var b2 = 2;
+var c2 = 3;
+var result2 = add(a2, b2, c2);
+document.write(a2 + "+" + b2 + "+" + c2 + "=" + result2 + "<br/>");
+
+function Person(id, age) { // 最好加这两个形参，否则误导用户不需要参数
+    this.id = arguments[0];
+    this.age = arguments[1];
+}
+var p = new Person(100, "Andy");
+document.write(p.id + "," + p.age);
+
+****************************************************************************************
+函数.html
+****************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="函数.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+result:
+1+2=NaN
+
+1+2+3=6
+100,Andy 
+**************************************************************************************
+函数练习
+**************************************************************************************
+函数练习.js
+**************************************************************************************
+function showDay() {
+    // 找到对应的标签对象
+    var inputObj = document.getElementById("month");
+    var month = inputObj.value; // 字符串
+    // == 运算符，字符串和数字进行比较时
+    // 会把字符串先转化为数字，然后再和数字进行比较
+    /*if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+        alert("这个月有31天");
+    } else if (month == 4 ||
+        month == 6 ||
+        month == 9 ||
+        month == 11) {
+        alert("这个月有30天");
+    } else if (month == 2) {
+        alert("这个月有28天或29天");
+    } else {
+        alert("月份不存在");
+    }*/
+    month = parseInt(month); //字符串转换为数字
+    switch (month) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            alert("这个月有31天");
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            alert("这个月有30天");
+            break;
+        case 2:
+            alert("这个月有28或者29天");
+            break;
+        default:
+            alert("月份不存在");
+            break;
+    }
+}
+
+**********************************************************************************
+函数练习.html
+**********************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="函数练习.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    月份：<input id="month" type="text" /><input  type="button" value="查询" onclick="showDay()"/>
+    </body>
+</html>
+
+************************************************************************************************
+内置对象String,Date
+参考javascript文档和DHTML文档
+************************************************************************************************
+String对象.js
+************************************************************************************************
+/*
+String对象:
+    创建一个字符串的方式：
+        方式一：
+            var str = new String("字符串的内容");
+        方式二：
+            var str = "字符串的内容";
+    ==和===区别：
+        ==： 值相等返回true
+        ===： 类型和值同时相等返回true
+    
+    字符串对象的常用方法：
+        方法 	描述
+        anchor() 	创建 HTML 锚。 （*）
+        big() 	用大号字体显示字符串。
+        blink() 	显示闪动字符串。 （*）
+        bold() 	使用粗体显示字符串。
+        charAt() 	返回在指定位置的字符。 （*）
+        charCodeAt() 	返回在指定的位置的字符的 Unicode 编码。（*）
+        concat() 	连接字符串。              （*）
+        fixed() 	以打字机文本显示字符串。
+        fontcolor() 	使用指定的颜色来显示字符串。 （*）
+        fontsize() 	使用指定的尺寸来显示字符串。
+        fromCharCode() 	从字符编码创建一个字符串。
+        indexOf() 	检索字符串。                    （*）
+        italics() 	使用斜体显示字符串。             （*）
+        lastIndexOf() 	从后向前搜索字符串。
+        link() 	将字符串显示为链接。                 （*）
+        localeCompare() 	用本地特定的顺序来比较两个字符串。
+        match() 	找到一个或多个正则表达式的匹配。
+        replace() 	替换与正则表达式匹配的子串。      （*）
+        search() 	检索与正则表达式相匹配的值。
+        slice() 	提取字符串的片断，并在新的字符串中返回被提取的部分。
+        small() 	使用小字号来显示字符串。
+        split() 	把字符串分割为字符串数组。        （*）
+        strike() 	使用删除线来显示字符串。
+        sub() 	把字符串显示为下标。
+        substr() 	从起始索引号提取字符串中指定数目的字符。  （*）
+        substring() 	提取字符串中两个指定的索引号之间的字符。
+        sup() 	把字符串显示为上标。
+        toLocaleLowerCase() 	把字符串转换为小写。
+        toLocaleUpperCase() 	把字符串转换为大写。
+        toLowerCase() 	把字符串转换为小写。 （*）
+        toUpperCase() 	把字符串转换为大写。  （*）
+        toSource() 	代表对象的源代码。
+        toString() 	返回字符串。
+        valueOf() 	返回某个字符串对象的原始值。
+        
+*/
+with(document) {
+    write("--------------------------------------<br/>");
+    write("==和===<br/>");
+    var str1 = new String("hello");
+    var str2 = "hello";
+    var str3 = new String("hello");
+    write("str1 == str2？" + (str1 == str2) + "<br/>");
+    write("str1 === str2？" + (str1 === str2) + "<br/>");
+
+    write("str1 == str3？" + (str1 == str3) + "<br/>");
+    write("str1 === str3？" + (str1 === str3) + "<br/>");
+    write("str1.toString() == str2.toString()？" +
+        (str1.toString() == str2.toString()) + "<br/>");
+    write("--------------------------------------<br/>");
+    write("String对象常用方法练习<br/>");
+    write("第五章".anchor("five") + "<br/>");
+    write("第五章".blink() + "<br/>");
+    write("abc".charAt(1) + "<br/>");
+    write("abc".charCodeAt(1) + "<br/>"); //charCodeAt()返回的时指定index处的字符的unicode值
+    write("abc".charCodeAt(1) + "<br/>");
+    write("abc".fontcolor("blue") + "<br/>"); //给字符串添加font标签
+    write("abchellohehehello".indexOf("hello") + "<br/>");
+    write("abchellohehehello".italics() + "<br/>");
+    write("abchellohehehello".link("函数.html") + "<br/>"); // 给字符串添加a标签，具有href值
+    //write("明天我们讲xml".replace("xnl”, "ssh") + "<br/>");// 有一些问题
+
+    var str = "我们,大家,好";
+    var arr = str.split(",");
+    for (var index = 0; index < arr.length; ++index) {
+        write(arr[index] + "&nbsp");
+    }
+    write("<br/>");
+    write("abchellohehehello".toUpperCase() + "<br/>");
+    write("ABCHELLOHEHEHELLO".toLowerCase() + "<br/>");
+}
+
+******************************************************************************************************
+String对象.html
+******************************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="String对象.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+result:
+--------------------------------------
+==和===
+str1 == str2？true
+str1 === str2？false
+str1 == str3？false
+str1 === str3？false
+str1.toString() == str2.toString()？true
+--------------------------------------
+String对象常用方法练习
+第五章
+第五章
+b
+98
+98
+abc
+3
+abchellohehehello
+abchellohehehello
+我们 大家 好 
+ABCHELLOHEHEHELLO
+abchellohehehello
+**********************************************************************************************
+Date对象
+**********************************************************************************************
+
+*********************************************************************************************
+Date对象.js
+*********************************************************************************************
+/*
+日期对象Date:
+    
+ */
+with(document) {
+    var date1 = new Date();
+    write("年：" + date1.getFullYear() + "<br/>");
+    write("月：" + (date1.getMonth() + 1) + "<br/>");
+    write("日：" + date1.getDate() + "<br/>");
+    write("时：" + date1.getHours() + "<br/>");
+    write("分：" + date1.getMinutes() + "<br/>");
+    write("秒：" + date1.getSeconds() + "<br/>");
+
+    // xxxx年yy月dd日 hh:mm:ss
+    // method 1
+    write("当前时间：" + date1.toLocaleString() + "<br/>");
+    // method 2
+    write("当前时间：" + date1.getFullYear() + "年" +
+        date1.getMonth() + "月" +
+        date1.getDate() + "日" +
+        "&nbsp;" + date1.getHours() + ":" +
+        date1.getMinutes() + ":" +
+        date1.getSeconds() + "<br/>");
+}
+
+*********************************************************************************************
+Date对象.html
+*********************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="Date对象.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+result:
+年：2019
+月：8
+日：9
+时：17
+分：30
+秒：44
+当前时间：2019/8/9 下午5:30:44
+当前时间：2019年7月9日 17:30:44
+*************************************************************************
