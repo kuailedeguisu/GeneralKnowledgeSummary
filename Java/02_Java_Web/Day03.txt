@@ -837,53 +837,70 @@ f数据类型是undefined
 </html>
 **********************************************************************************************
 字符串转换为数字
-**********************************************************************************************
+*************************************************************************************
 字符串转换为数字.js
-**********************************************************************************************
+*************************************************************************************
 /*
 我们从网上拿的一般是字符串（表单或者抓取的），如果需要元素，需要转化为数字才可以
 字符串转数字：
-    parseInt()
-    parseFloat()
+    parseInt() 可以把一个字符串转换为整数
+    parseFloat() 可以把一个字符串转换为小数
 
-parseInt方法如果接收的字符串含有非数字的字符，那么parseInt方法会从字符串的首个字符开始查找，
+parseInt
+方法如果接收的字符串含有非数字的字符，那么parseInt方法会从字符串的首个字符开始查找，
 一直知道非数字字符为止，然后使用前面的数字字符转换为数字
 如果首位是0，先去除0，在进行转化
 如果首位是0x，会把字符串当成16进制的数进行转换
+
+parseFloat:如果字符串是整数，结果还是整数
+
+不是左右的字符串都能转换为数字，需要在转换前做判断
+    isNaN()来判断该字符串是否是一个数字
+    is not a number 不是一个数字
+    return true;// 不是一个数字
+    return false;// 是一个数字
+
 */
-var a = "12";
-var result1 = parseInt(a);
-document.write(result1+1+"<br/>");//如果是字符串结果是121，如果是数字就是13
-document.write(result1+"<br/>");//12
-document.write((typeof result1)+"<br/>");//number
 
-var b = "12.34";
-var result2 = parseInt(b);
-document.write(result2+"<br/>");// 12，舍弃了小数点和小数点后面的数字
-document.write((typeof result2)+"<br/>");// number
+var result1 = parseInt("12");
+document.write(result1 + 1 + "<br/>"); //如果是字符串结果是121，如果是数字就是13
+document.write("12 parseInt:" + result1 + ",数据类型是" + (typeof result1) + "<br/>");
 
-var c = "1234abc1234";
-var result3 = parseInt(c);
-document.write(result3+"<br/>");// 1234，舍弃了非数字字符串和非数字字符串后面的数字
-document.write((typeof result3)+"<br/>");// number
+var result2 = parseInt("12.34");
+document.write("12.34 parseInt:" + result2 + ",数据类型是" + (typeof result2) + "<br/>");
 
-var d = "abc1234";
-var result4 = parseInt(d);
-document.write(result4+"<br/>");// NaN，not a nuber
-document.write((typeof result4)+"<br/>");// number
 
-var e = "012";
-var result5 = parseInt(e);
-document.write(result5+"<br/>");// 12
-document.write((typeof result5)+"<br/>");// number
+var result3 = parseInt("1234abc1234");
+document.write("1234abc1234 parseInt:" + result3 + ",数据类型是" + (typeof result3) + "<br/>");
 
-var f = "0x12";
-var result6 = parseInt(f);
-document.write(result6+"<br/>");// 18
-document.write((typeof result6)+"<br/>");// number
-**********************************************************************************************
+var result4 = parseInt("abc1234");
+document.write("abc1234 parseInt:" + result4 + ",数据类型是" + (typeof result4) + "<br/>");
+
+var result5 = parseInt("012");
+document.write("012 parseInt:" + result5 + ",数据类型是" + (typeof result5) + "<br/>");
+
+var result6 = parseInt("0x12"); //十六进制数
+document.write("0x12 parseInt:" + result6 + ",数据类型是" + (typeof result6) + "<br/>");
+
+var result7 = parseFloat("3.14");
+document.write("3.14 parseFloat:" + result7 + ",数据类型是" + (typeof result7) + "<br/>");
+
+var result8 = parseFloat("10");
+document.write("10 parseFloat:" + result8 + ",数据类型是" + (typeof result8) + "<br/>");
+
+var result9 = parseFloat("10a");
+document.write("10a parseFloat:" + result9 + ",数据类型是" + (typeof result9) + "<br/>");
+
+var result10 = parseFloat("abc123");
+document.write("abc123 parseFloat:" + result10 + ",数据类型是" + (typeof result10) + "<br/>");
+
+var result11 = isNaN("1234abc1234");
+document.write("1234abc1234 isNaN?:" + result11 + ",数据类型是" + (typeof result11) + "<br/>");
+var result12 = isNaN("1234");
+document.write("1234 isNaN?:" + result12 + ",数据类型是" + (typeof result12) + "<br/>");
+*************************************************************************************
 字符串转换为数字.html
-**********************************************************************************************
+*************************************************************************************
 <html>
     <head>
         <!---->
@@ -895,8 +912,260 @@ document.write((typeof result6)+"<br/>");// number
     <body>
     </body>
 </html>
-**********************************************************************************************
+****************************************************************************************
+result：
+13
+12 parseInt:12,数据类型是number
+12.34 parseInt:12,数据类型是number
+1234abc1234 parseInt:1234,数据类型是number
+abc1234 parseInt:NaN,数据类型是number
+012 parseInt:12,数据类型是number
+0x12 parseInt:18,数据类型是number
+3.14 parseFloat:3.14,数据类型是number
+10 parseFloat:10,数据类型是number
+10a parseFloat:10,数据类型是number
+abc123 parseFloat:NaN,数据类型是number
+1234abc1234 isNaN?:true,数据类型是boolean
+1234 isNaN?:false,数据类型是boolean
+****************************************************************************************
 
-	
+javascript中的运算符：
+****************************************************************************************
+运算符
+****************************************************************************************
+运算符.js
+****************************************************************************************
+/*
+运算符：
+    +:加法或者正数，或者连接符
+        true: 1
+        false: 0
+    除法：如果两个整数相除不能整除，结果还是小数
 
+    比较运算符：
+        字符串的比较规则：
+            1-能找到对应位置上的不同字符，就比较第一个不同字符的大小
+            2-不能找到对应位置上的不同字符，这时候比较两个字符串的长度
+        字符串和数字比较规则：
+            凡是数字与字符串比较，会先把字符串转换为数字，
+            再进行比较
+    
+    逻辑运算符：没有单与&，单或|
+        &&
+        ||
+        !
 
+*/
+document.write("+运算符" + "<br/>");
+var a = 1;
+document.write("1+1:" + (a + 1) + "<br/>"); // 2
+document.write("1+true:" + (a + true) + "<br/>"); // 2
+document.write("1+false" + (a + false) + "<br/>"); // 1
+document.write("hello+1:" + "hello" + 1 + "<br/>"); // hello1
+
+document.write("/运算符" + "<br/>");
+var b = 10;
+var c = 2;
+document.write("10/2：" + (b / c) + "<br/>"); // 5
+document.write("10/2.0:" + (b / 2.0) + "<br/>"); // 5
+document.write("10/3:" + (b / 3) + "<br/>"); // 3.3333333333333335
+
+document.write("比较运算符<br/>");
+document.write("10 < 2:" + (10 < 2) + "<br/>"); // false
+document.write("10 == 10:" + (10 == 10) + "<br/>"); // true
+document.write("10 > 2:" + (10 > 2) + "<br/>"); // true
+document.write("10字符串 > 2字符串:" + ("10" > "2") + "<br/>"); // false
+document.write("abc字符串 > ab字符串:" + ("abc" > "ab") + "<br/>"); // true
+document.write("10字符串 > 20:" + ("10" > 20) + "<br/>"); // false
+
+document.write("逻辑运算符<br/>");
+document.write("true && true:" + (true && true) + "<br/>");
+document.write("true && false:" + (true && false) + "<br/>");
+document.write("false && true:" + (false && true) + "<br/>");
+document.write("false && false:" + (false && false) + "<br/>");
+
+document.write("true || true:" + (true || true) + "<br/>");
+document.write("true || false:" + (true || false) + "<br/>");
+document.write("false || true:" + (false || true) + "<br/>");
+document.write("false || false:" + (false || false) + "<br/>");
+
+document.write("!true:" + (!true) + "<br/>");
+document.write("!false:" + (!false) + "<br/>");
+
+****************************************************************************************
+运算符.html
+****************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="运算符.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+
+****************************************************************************************
+控制流程语句
+****************************************************************************************
+控制流程语句.js
+****************************************************************************************
+/*
+控制流程语句：
+    if语句：
+        语法：完全与原来相同
+
+        if语句的特殊之处：
+            if中的语句不仅可以是boolean类型的，也可以是其他类型
+                number：非0为true，0为false
+                string: 内容不为空为true，内容空为false
+                undefined: false （如果是undefined，需要先声明它，然后再用，要不会没反应）
+                NaN: false
+                对象类型：飞空为true，空为false
+    switch语句：
+        语法：
+            switch(变量名) {
+                case 值1：
+                    语句1；
+                    break；
+                case 值2：
+                    语句2；
+                    break；
+                case 值3：
+                    语句3；
+                    break；
+                    ......
+                default:
+                    break;
+            }
+        特殊之处：
+            不仅是常量，变量，还可以是表达式
+*/
+
+document.write("-----------if begins-----------------<br/>");
+var workAge = 2;
+if (workAge >= 2) {
+    document.write("明天过来面试<br/>");
+} else {
+    document.write("不要再投我们公司了<br/>")
+}
+
+if (2) {
+    document.write("2 true<br/>");
+} else {
+    document.write("2 false<br/>");
+}
+
+if (0) {
+    document.write("0 true<br/>");
+} else {
+    document.write("0 false<br/>");
+}
+
+if (-2) {
+    document.write("-2 true<br/>");
+} else {
+    document.write("-2 false<br/>");
+}
+
+if ("abc") {
+    document.write("非空字符串 true<br/>");
+} else {
+    document.write("非空字符串 false<br/>");
+}
+
+if ("") {
+    document.write("空字符串 true<br/>");
+} else {
+    document.write("空字符串 false<br/>");
+}
+
+if (parseInt("abc123")) {
+    document.write("NaN true<br/>");
+} else {
+    document.write("NaN false<br/>");
+}
+
+var x;
+if (x) {
+    document.write("undefined true<br/>");
+} else {
+    document.write("undefined false<br/>");
+}
+document.write("-------------if ends-----------------<br/>");
+document.write("---------switch星期begins------------<br/>");
+var day = "Friday";
+switch (day) {
+    case "Monday":
+        document.write("It's Monday today.<br/>");
+        break;
+    case "Tuesday":
+        document.write("It's Tuesday today.<br/>");
+        break;
+    case "Wednesday":
+        document.write("It's Wednesday today.<br/>");
+        break;
+    case "Thursday":
+        document.write("It's Thursday today.<br/>");
+        break;
+    case "Friday":
+        document.write("It's Friday today.<br/>");
+        break;
+    case "Saturday":
+        document.write("It's Saturday today.<br/>");
+        break;
+    case "Sunday":
+        document.write("It's Sunday today.<br/>");
+        break;
+    default:
+        break;
+}
+document.write("---------switch星期ends------------<br/>");
+document.write("---------switch成绩begins------------<br/>");
+document.write("除了优秀好用，其他不好用,只是一个演示switch的value是表达式形式<br/>");
+var score = 95;
+var option = "A";
+
+var AB = (score >= 90 && score <= 100) ? "A" : "B";
+var BC = (score >= 80 && score < 90) ? "B" : "C";
+var CD = (score >= 70 && score < 80) ? "C" : "D";
+var DE = (score >= 60 && score < 70) ? "D" : "E";
+var EF = (score < 60) ? "E" : "F";
+
+switch (option) {
+    case AB:
+        document.write("优秀<br/>");
+        break;
+    case BC:
+        document.write("良好<br/>");
+        break;
+    case CD:
+        document.write("中等<br/>");
+        break;
+    case DE:
+        document.write("及格<br/>");
+        break;
+    case EF:
+        document.write("不及格");
+        break;
+    default:
+        break;
+}
+document.write("---------switch成绩ends------------<br/>");
+****************************************************************************************
+控制流程语句.html
+****************************************************************************************
+<html>
+    <head>
+        <!---->
+        <script src="控制流程语句.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+****************************************************************************************
