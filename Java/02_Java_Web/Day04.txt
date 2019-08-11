@@ -652,7 +652,7 @@ getCurrentTime();
 setInterval定时方法，
 第一个参数要指定调用的代码，第二个参数是隔指定的毫秒数调用指定的代码
 */
-window.setInterval(getCurrentTime(), 1000);
+window.setInterval("getCurrentTime()", 1000);
 /*这个程序显示有点问题，需要到别的浏览器上再试试*/
 
 
