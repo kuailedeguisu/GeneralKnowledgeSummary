@@ -1634,3 +1634,149 @@ cd C:\\demo1(no db.properties)
 java cn.itcast_11.DBUtil
 ******************************************************************************************
 	
+prototype：
+可以对内置的对象追加一些方法，比如Array对象
+
+***********************************************************************
+prototype.js
+***************************************************************************
+
+/*function Array() {
+    this.prototype = new Object();
+}*/
+/*
+    Array.prototype.getMax = function(arr) {
+        var max = arr[0];
+        for (var index = 0; index < arr.length; ++index) {
+            if (arr[index] > max) {
+                max = arr[index];
+            }
+        }
+        return max;
+    }
+
+    Array.prototype.getIndex = function(arr, target) {
+        var result = -1;
+        for (var index = 0; index < arr.length; ++index) {
+            if (arr[index] == target) {
+                result = index;
+            }
+        }
+
+        return result;
+    }
+    new Array();
+    */
+Array.prototype.getMax = function() {
+    var max = this[0];
+    for (var index = 0; index < this.length; ++index) {
+        if (this[index] > max) {
+            max = this[index];
+        }
+    }
+    return max;
+}
+
+Array.prototype.getIndex = function(target) {
+    var result = -1;
+    for (var index = 0; index < this.length; ++index) {
+        if (this[index] == target) {
+            result = index;
+        }
+    }
+
+    return result;
+}
+
+var arr1 = new Array(12, 4, 17, 9);
+document.write("最大值：" + arr1.getMax() + "<br/>");
+document.write("索引值：" + arr1.getIndex(17) + "<br/>");
+var arr2 = [120, 40, 70, 9, 80, 50];
+document.write("最大值：" + arr2.getMax() + "<br/>");
+document.write("索引值：" + arr2.getIndex(80) + "<br/>");
+/*
+    var arr = new Array(12, 4, 17, 9);
+    因为创建Array对象时，我们会给数组添加值，所以getMax不用添加形参arr
+    arr.getMax();
+    arr.getIndex(17);
+ */
+ 
+ ***********************************************************************
+ prototype.html
+  ***********************************************************************
+ <html>
+    <head>
+        <script src="prototype.js" type="text/javascript">
+        </script>
+        <!--需求：把getMax和getIndex方法添加到数组对象中
+            function Array() {
+                this.getMax = function() {}
+                this.getIndex = function() {}
+            }
+        prototype:原型，任何一个函数都有这个属性
+            细节：
+                1.函数function都有prototype属性
+                2.prototype的值是一个对象
+                3.可以随意修改prototype的属性值
+                4.一个对象自动拥有这个对象的构造函数的prototype的成员属性和方法
+        
+        -->
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+************************************************************************************
+result:
+最大值：17
+索引值：2
+最大值：120
+索引值：4
+************************************************************************************
+String toCharArray and reverse
+************************************************************************************
+prototype_String.js
+************************************************************************************
+/*
+需求：
+    给String对象添加toCharArray和reverse两个方法
+*/
+String.prototype.toCharArray = function() {
+    var arr = new Array();
+    for (var index = 0; index < this.length; ++index) {
+        arr[index] = this.charAt(index);
+    }
+    return arr;
+}
+
+String.prototype.reverse = function() {
+    var charArr = this.toCharArray();
+    charArr.reverse();
+    return charArr.join("");
+}
+
+var str = "hello world";
+var charArr = str.toCharArray();
+document.write("数组的元素：" + charArr.join(",") + "<br/>");
+document.write("反转后的字符串是:" + str.reverse() + "<br/>");
+
+
+************************************************************************************
+prototype_String.html
+************************************************************************************
+<html>
+    <head>
+        <script src="prototype_String.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+</html>
+************************************************************************************
+result:
+数组的元素：h,e,l,l,o, ,w,o,r,l,d
+反转后的字符串是:dlrow olleh
+************************************************************************************
