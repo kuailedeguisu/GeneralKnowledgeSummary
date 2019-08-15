@@ -1,0 +1,465 @@
+XML: Extend Makeup language可扩展标签语言
+xml文件以xml后缀结束
+xml文件需要使用xml解析器去解析，浏览器内置了xml的解析器
+	解析正确：有颜色标记
+	解析错误：没有当成xml文件去解析
+
+1.xml语法：	
+1.1 标签
+语法： <student></student> 开始标签 结束标签 标签体内容
+	1) <student/>或<student></student> 空标签，没有标签体内容
+	2） xml标签名称区分大小写
+	3) xml标签一定要正确配对
+	4） xml标签名中间不能有空格
+	5） xml标签不能以数字开头
+	6） 一个xml应该只有且仅有一个跟标签
+	
+1.2 属性
+	语法： <student name='eric'>
+			student
+		  </student>
+	注意：
+		1）属性值必须以引号包含，不能省略，也不能单双引号混用
+		2）一个标签内可以有多个属性，但是不能出现重复的属性名
+1.3 注释
+	同html，<!--注释内容-->
+****************************************************************************
+<students>
+<!--comments-->
+    <student name='eric' id="001" abc="abc">
+        student
+        <teacher name="andy" id="001" >
+            teacher
+        </teacher>
+    </student>
+    <student name='peter' id="002">
+        student
+    </student>
+</students>
+****************************************************************************		
+练习：
+	通讯录系统
+	联系人数据：	编号（唯一）
+				姓名
+				年龄
+				电话
+				邮箱
+				QQ
+	要求：
+		1）设计一个xml文件，用于存储联系人数据
+		2）这个xml文件可以有多个联系人
+
+********************************************************************************
+contact.xml
+
+<contactList>
+    <contact id="001">
+        <name>eric</name>
+        <age>20</age>
+        <phone>12345678901</phone>
+        <email>eric@163.com</email>
+        <qq>eric@qq.com</qq>
+    </contact>
+        <contact id="002">
+        <name>andy</name>
+        <age>30</age>
+        <phone>12345678902</phone>
+        <email>andy@163.com</email>
+        <qq>andy@qq.com</qq>
+    </contact>
+        <contact id="003">
+        <name>anele</name>
+        <age>40</age>
+        <phone>12345678903</phone>
+        <email>anele@163.com</email>
+        <qq>anele@qq.com</qq>
+    </contact>
+        <contact id="004">
+        <name>sophia</name>
+        <age>50</age>
+        <phone>12345678904</phone>
+        <email>sophia@163.com</email>
+        <qq>sophia@qq.com</qq>
+    </contact>
+        <contact id="005">
+        <name>josh</name>
+        <age>60</age>
+        <phone>12345678905</phone>
+        <email>josh@163.com</email>
+        <qq>josh@qq.com</qq>
+    </contact>
+</contactList>
+********************************************************************************	
+看得懂的是字符
+contact.xml	
+当我们保存contact.xml后，将字符保存到硬盘中（编码过程，查码表，默认GBK），
+浏览器从硬盘中读取数据（解码过程，查码表，默认utf-8）
+
+编码过程： 字符=>字节 
+解码过程： 字节=>字符
+查码表
+GBK（ANSI）是windows默认的编码
+
+涉及xml文件编码问题：
+	1） 保存xml文件的时候（编码过程） （内存为xml文档指定）
+	2）打开/解析xml文件的时候（解码过程） （<?xml version="1.0" encoding="GBK"?>）
+	
+如果要使得读取的xml文件按不存在中文乱码问题：
+	1） 保持以上两个地方的编码一致
+	2） 编码要支持中文
+
+1.4文档声明
+语法： <?xml version="1.0 encoding="utf-8"?>
+version: xml的版本号
+encoding： 解析xml文件时查询的码表
+
+我们一般用eclipse来写xml文件，
+因为当你在xml文件中指定解码方式后，
+该工具会自动将该文件的编码方式变为和解码方式一致的方式
+在eclipse中不存在中文乱码的问题。
+
+如果你改了一个从别人来的xml文件，通过记事本保存，会把编码方式变为gbk，需要关注encoding的方式
+eclipse会帮你做修改编码方式，但是记事本不会帮你做
+
+
+1.5 转义字符：
+在xml中内置了一些特殊字符，这些特殊字符不能直接被浏览器原样输出，
+如果希望把这些特殊字符按照原样输出到浏览器，对这些特殊字符进行
+转义，转义之后的字符叫转义字符。
+
+特殊字符       转义字符
+	< 			&lt;
+	> 			&gt;
+	“  			&quot;
+	&  			&amp;
+	空格 		&nsap;
+*****************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<codes>
+<code>&lt;p&gt;段落&lt;/p&gt;</code>
+</codes>
+******************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<codes>
+<code>&lt;p&gt;段落&lt;/p&gt;</code>
+<code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;</code>
+</codes>
+******************************************************************************
+1.6 CDATA块
+作用：可以让一些需要进行包含特殊字符的内容统一进行原样输出
+语法：
+<![CDATA[
+<html><head></head><body></body></html>
+]]>
+
+1.7 处理指令
+简称PI（processing instruction）,处理指令用来指挥解析引擎如何解析xml文档内容
+作用：告诉xml如何解析xml文档
+
+案例：
+<?xml-stylesheet type="text/css" href="1.css"?>
+告诉xml解析该xml文档引用了哪个css文件
+
+需要提取xml内容可以使用xml-stylesheet指令
+
+xml也可以用于网页的布局，但是目前用的比较少。
+
+html和xml的区别：
+html：语法不严谨，
+xml：语法严谨，目的是替换html，还没有替换掉；目前不负责网页结构；最后作为配置文件
+
+*************************************************************************
+1.css
+code {
+    background-color: red;
+    font-size: 30px;
+}
+**************************************************************************
+处理指令.xml
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="1.css"?>
+<codes>
+<code>
+<![CDATA[
+<html><head></head><body></body></html>
+]]>
+</code>
+</codes>
+***************************************************************************
+contact.css
+
+contact {
+    background-color: gray;
+    font-size: 30px;
+    color: red;
+    width: 200px;
+    height: 150px;
+    display: block;
+    margin-top: 40px;
+}
+***************************************************************************
+contact.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="contact.css"?>
+<contactList>
+    <contact id="001">
+        <name>eric</name>
+        <age>20</age>
+        <phone>12345678901</phone>
+        <email>eric@163.com</email>
+        <qq>eric@qq.com</qq>
+    </contact>
+        <contact id="002">
+        <name>andy</name>
+        <age>30</age>
+        <phone>12345678902</phone>
+        <email>andy@163.com</email>
+        <qq>andy@qq.com</qq>
+    </contact>
+        <contact id="003">
+        <name>anele</name>
+        <age>40</age>
+        <phone>12345678903</phone>
+        <email>anele@163.com</email>
+        <qq>anele@qq.com</qq>
+    </contact>
+        <contact id="004">
+        <name>sophia</name>
+        <age>50</age>
+        <phone>12345678904</phone>
+        <email>sophia@163.com</email>
+        <qq>sophia@qq.com</qq>
+    </contact>
+        <contact id="005">
+        <name>josh</name>
+        <age>60</age>
+        <phone>12345678905</phone>
+        <email>josh@163.com</email>
+        <qq>josh@qq.com</qq>
+    </contact>
+</contactList>
+********************************************************************************
+
+
+
+2.xml解析
+2.1 引入
+xml除了给程序员看，更多的是程序读取xml文件的内容，这就叫xml解析
+
+2.2 xml解析方式(原理不同)
+	DOM解析：
+	SAX解析：
+
+2.3 xml解析工具
+	DOM解析：
+		1） JAXP（orace-sun）
+		2） JDOM工具（非官方）
+		3）Dom4J工具（非官方）（最好用）
+			三大框架（默认读取xml的工具就是dom4j）：struts hibernate spring
+	SAX解析：
+		1） sax解析工具（oracle-sun）
+
+3.dom4j读取xml
+xml解析器把解析xml文档时，把xml文件的各个部分的内容封装成对象，
+通过这些对象操作xml文档，这种做法叫DOM解析（DOM编程）
+Document树状结构：
+	树只有一个根标签
+	树上的分支，叫节点（Node）
+	节点信息：封装到Node对象中
+		节点名称
+		节点类型（标签节点，属性节点，文本节点，注释节点。。。）
+	标签节点：封装到Element对象中
+		标签名称
+	属性节点：封装到Attribute对象中
+		属性名称
+		属性值
+	文本节点：封装到Text对象中
+		文本内容
+	
+	封装时dom模型来做的，拿到信息，就是和对象要
+
+Dom解析：
+	Document对象，代表一个完整的xml文档
+	通过Document对象可以得到其下面的其他节点对象，通过节点对象我们可以访问xml文档的内容。
+	（标签，属性，文本，注释。。。。。。）
+	
+	Dom解析原理：xml解析器一次性把整个xml文档加载进内存，然后在内存中构建一颗Document的对象树，
+	通过Document对象，得到树上的节点对象，通过节点对象访问（操作）到xml文档的内容
+
+Dom4j工具：
+	非官方，不在jdk中
+	使用步骤：
+		1）导入dom4j的核心jar包 dom4j-1.6.1.jar
+		2) 编写dom4j读取xml文件代码
+ 
+Dom4j读取xml文件：
+	节点：
+		Iterator Element.nodeIterator();//获取当前标签节点下的所有子节点
+	标签：
+		Element Document.getRootElement();//获取xml文档的根标签
+***************************************************************************
+contact.xml
+***************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="contact.css"?>
+<contactList>
+    <contact id="001">
+        <name>eric</name>
+        <age>20</age>
+        <phone>12345678901</phone>
+        <email>eric@163.com</email>
+        <qq>eric@qq.com</qq>
+    </contact>
+    <contact id="002">
+        <name>andy</name>
+        <age>30</age>
+        <phone>12345678902</phone>
+        <email>andy@163.com</email>
+        <qq>andy@qq.com</qq>
+    </contact>
+</contactList>
+********************************************************************************
+Dom4jReadDocument.java
+********************************************************************************
+package cn.dom4j;
+
+import java.io.File;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
+
+public class Dom4jReadDocument {
+	public static void main(String[] args) {
+		try {
+			// 创建一个xml解析器对象
+			SAXReader reader = new SAXReader();
+			// 读取xml文件，返回Document对象
+			// .代表文件默认的路径是project路径，如果想访问包中的文件，需要指定包的路径
+			Document document = reader.read(new File("./src/cn/dom4j/contact.xml"));
+			System.out.println(document);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+}
+
+result:
+org.dom4j.tree.DefaultDocument@7382f612 [Document: name file:///C:/Users/ehlucui/0programming/02_Java_Web/day06_xml/./src/cn/dom4j/contact.xml]
+************************************************************************
+Dom4jReadXmlTest.java
+************************************************************************
+package cn.dom4j;
+import java.io.File;
+import java.util.Iterator;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+import org.junit.Test;
+/*
+ * 读xml文件内容
+ * 	节点
+ * 	标签
+ * 	属性
+ * 	文本
+ */
+public class Dom4jReadXmlTest {
+	/*得到节点信息*/
+	@Test
+	public void test1() throws DocumentException {
+		// 读取xml文档，返回Document对象
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(
+				new File("./src/cn/dom4j/contact.xml"));
+		// nodeIterator得到当前节点下的所有子节点对象(不办好孙以下节点)
+		Iterator<Node> iter = doc.nodeIterator();
+		while(iter.hasNext()) { // 判断是否有下一个元素
+			Node node = iter.next();// 取出元素
+			String name = node.getName();//得到节点的名字
+			System.out.println(name);
+			System.out.println(node.getClass());
+			//继续取出其下面的子节点
+			//只有标签节点才有子节点
+			//判断当前节点是否是标签节点
+			if(node instanceof Element) {
+				Element elem = (Element)node;
+				Iterator<Node> iter2 = elem.nodeIterator();
+				while(iter2.hasNext()) {
+					Node n2 = iter2.next();
+					System.out.println(n2.getName());
+					System.out.println(node.getClass());
+				}
+			}
+		}
+	}
+	
+	/*
+	 * 遍历xml文档的所有节点
+	 * 
+	 */
+	@Test
+	public void test2() throws DocumentException {
+		// 读取xml文档，返回Document对象
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(
+				new File("./src/cn/dom4j/contact.xml"));
+		// 得到根标签
+		Element rootElem = doc.getRootElement();
+		getChildNode(rootElem);
+		
+	}
+	/*
+	 * 获取传入的标签下的所有子节点
+	 */
+	private void getChildNode(Element elem) {
+		System.out.println(elem.getName());
+		
+		// 得到子节点
+		Iterator<Node> iter = elem.nodeIterator();
+		while(iter.hasNext()) {
+			Node node = iter.next();
+			// 判断是否是标签节点
+			if(node instanceof Element) {
+				Element e1 = (Element)node;
+				// 递归
+				getChildNode(e1);
+			}
+		}
+	}
+}
+
+result:
+xml-stylesheet
+class org.dom4j.tree.DefaultProcessingInstruction
+contactList
+class org.dom4j.tree.DefaultElement
+null
+class org.dom4j.tree.DefaultElement
+contact
+class org.dom4j.tree.DefaultElement
+null
+class org.dom4j.tree.DefaultElement
+contact
+class org.dom4j.tree.DefaultElement
+null
+class org.dom4j.tree.DefaultElement
+contactList
+contact
+name
+age
+phone
+email
+qq
+contact
+name
+age
+phone
+email
+qq
+******************************************************************************
+	
