@@ -1,0 +1,925 @@
+Window对象.js
+*************************************************************************************
+/*
+javascript组成成分：
+    EMCAScript（基本语法）
+    BOM(Browser Object Model：浏览器对象模型)
+    DOM
+
+BOM：把浏览器的各个部分都使用了一个对象进行描述，
+    如果我们想对浏览器的一些属性进行操作，
+    我们可以通过浏览器对象模型的对象进行操作
+
+    Window对象：代表了一个新开的窗口
+    Location对象：代表了地址栏对象
+    Screen对象：代表了整个屏幕的对象
+    Document对象  
+
+    使用DHTML文档
+
+    window对象常用的方法：
+        open() 打开新窗口，并且装入给定的URL的文档
+        resizeBy() 更改窗口的当前位置缩放指定的x和y的偏移量，目前浏览器不支持这个方法
+        resizeTo() 将窗口的大小更改为指定的宽度和高度值
+        moveBy() 将窗口的位置移动指定x和y偏移量
+        moveTo() 将窗口左上角的屏幕位置移动到指定的x和y位置
+        setInterval() 每经过指定毫秒数后就会执行指定的代码
+        clearInterval() 根据一个任务ID来取消的定时任务
+        setTimeout() 经过指定毫秒值后计算一个表达式
+    
+    
+*/
+function showAd() {
+    // 如果想打开多个窗口，可以用循环，也可以将各个url放在一个数组中
+    // 然后从数组中取每个url来打开
+    window.open("ad.html",
+        "_blank",
+        "height=500px,width=500px, top=100px, left=200px, toolbar=no, location=no");
+}
+
+var id = window.setInterval("showAd()", 2000);
+// window.setTimeout("showAd()", 2000);
+/*
+function resizeBy() {
+    window.resizeBy(-100, -50); // 相对于原本窗口改变指定大小
+}
+
+function resizeBy() {
+    window.resizeBy(100, 50); // 相对于原本窗口改变指定大小
+}*/
+
+function resizeTo() {
+    window.resizeTo(1000, 500);
+}
+
+function moveBy() {
+    window.moveBy(50, 0);
+    window.moveBy(0, 50);
+    window.moveBy(-50, 0);
+    window.moveBy(0, -50);
+}
+
+function clear() {
+    window.clearInterval(id);
+}
+*******************************************************************************************
+Window对象.html
+*******************************************************************************************
+<html>
+    <head>
+        <script src="Window对象.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <input type="button" onclick="showAd()" value="下载电影" />
+        <input type="button" onclick="resizeBy()" value="resizeBy" />
+        <input type="button" onclick="resizeTo()" value="resizeTo" />
+        <input type="button" onclick="moveBy()" value="moveBy" />
+        <input type="button" onclick="moveTo()" value="moveTo" />
+        <input type="button" onclick="clear()" value="clear" />
+    </body>
+</html>
+*******************************************************************************************\
+ad.html
+********************************************************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div>
+            <img src="sunli.jpg" width ="400px" height="300px"/>
+            <marquee><font color="red" size="30">广告来了。。。</font></marquee>
+        </div>
+    </body>
+</html>
+
+*************************************************************************************************
+window对象常用的事件：
+*************************************************************************************************
+/*
+常用的事件：
+    鼠标点击相关：
+        onclick:在用户用鼠标左键单击对象时触发
+        ondblclick:当用户双击对象时触发
+        onmousedown: 当用户用任何鼠标按钮单击对象时触发
+        onmouseup: 当用户在鼠标位于对象之上时释放鼠标按钮时触发
+        
+    鼠标移动相关：
+        onmouseout 当用户将鼠标指针移出对象边界时触发
+        onmousemove 当用户将鼠标划过对象时触发
+    
+    焦点相关的：
+        onblur 在对象失去输入焦点时触发
+        onfocus 当对象获得焦点时触发
+    其他：
+        onchange 当对象或选中区的内容改变时触发,用于下拉框
+        onload 在浏览器完成对象的装载后立即触发
+        onsubmit 当表单将要被提交时触发
+*/
+
+function clickTest() {
+    alert("单击");
+}
+
+
+function doubleClickTest() {
+    alert("双击");
+}
+
+function mouseDownTest() {
+    alert("任意键点击鼠标");
+}
+
+function mouseUpTest() {
+    alert("释放鼠标");
+}
+
+function showTime() {
+    var timeSpan = document.getElementById("timeSpan");
+    var date = new Date().toLocaleString();
+    timeSpan.innerHTML = date.fontcolor("red");
+}
+
+function hideTime() {
+    var timeSpan = document.getElementById("timeSpan");
+    timeSpan.innerHTML = "";
+}
+
+function showInfo() {
+    var userName = document.getElementById("username");
+    userName.innerHTML = "用户名是由6位的英文与数字组成".fontcolor("green");
+}
+
+function hideInfo() {
+    var userName = document.getElementById("username");
+    userName.innerHTML = "";
+}
+
+function change() {
+    alert("城市改变了");
+}
+
+<html>
+    <head>
+
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <input type="button" onclick="clickTest()" value="单击" />
+        <input type="button" ondblclick="doubleClickTest()" value="双击" />
+        <input type="button" onmousedown="mouseDownTest()" value="任意键" />
+        <span onmousemove="showTime()" onmouseout="hideTime()">查看当前系统事件:</span>
+        <span id="timeSpan"></span>
+        用户名:<input type="text" onfocus="showInfo()" onblur="hideInfo()"/><span id="username"></span>
+        <select onchange="change()">
+            <option>北京</option>
+            <option>上海</option>
+            <option>广州</option>
+        </select>
+    </body>
+    <script src="Window对象常用的事件.js" type="text/javascript">
+    </script>
+
+</html>
+
+******************************************************************************
+location对象
+******************************************************************************
+/*
+地址栏对象：location
+    href: 设置以及获取地址栏的对象
+    reload:刷新当前的页面
+    
+*/
+function showURL() {
+    alert(location.href);
+}
+
+/*
+上面的结果是undefined(firefox)，因为location对象.html只是一个本地文件;
+在chrome中是file的目录
+我们需要把它放到服务器上去（tomcat/apache-tomcat-7.0.52/webapps/, new test folder, then put this html in test）
+然后运行tomcat/apache-tomcat-7.0.52/bin/startup.bat
+最后在localhost:8080/test/location对象.html
+*/
+
+function download() {
+    location.href = "http://www.baidu.com";
+}
+
+function reflesh() {
+    location.reload();
+}
+window.setInterval("reflesh()", 1000);
+
+<html>
+    <head>
+        <script src="location对象.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <input type="button" onclick="showURL()" value="显示地址栏"/>
+        <span onclick="download()">下载电影</span>
+    </body>
+</html>
+
+*************************************************************************************
+screen对象
+*************************************************************************************
+
+*************************************************************************************
+screen对象.js
+*************************************************************************************
+/*
+screen对象：
+    只有属性，没有方法
+    属性：
+
+        screen.width
+        screen.height
+        screen.availWidth 工作区域
+        screen.availHeight 工作区域，排除任务栏
+        screen.colorDepth
+        screen.pixelDepth
+
+*/
+document.write(screen.width + "<br/>");
+document.write(screen.height + "<br/>");
+document.write(screen.availWidth + "<br/>");
+document.write(screen.availHeight + "<br/>");
+document.write(screen.colorDepth + "<br/>");
+document.write(screen.pixelDepth + "<br/>");
+
+*************************************************************************************
+screen对象.html
+*************************************************************************************
+<html>
+    <head>
+        <script src="screen对象.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        
+    </body>
+</html>
+***************************************************************************************
+result:
+1920
+1080
+1920
+1040
+24
+24
+***************************************************************************************
+********************************************************************************************
+根据属性找标签的练习.js
+********************************************************************************************
+
+function getSum() {
+    var items = document.getElementsByName("item");
+    var sum = 0;
+    for (var index = 0; index < items.length; ++index) {
+        if (items[index].checked) {
+            sum += parseInt(items[index].value);
+        }
+    }
+    var span = document.getElementById("sumid");
+    span.innerHTML = ("&nbsp;&nbsp;&nbsp;&yen;" + sum).fontcolor("green");
+}
+
+function checkAll(allNode) {
+    var items = document.getElementsByName("item");
+    for (var index = 0; index < items.length; ++index) {
+        items[index].checked = allNode.checked;
+    }
+}
+***********************************************************************************************
+根据属性找标签的练习.html
+***********************************************************************************************
+<html>
+    <head>
+        <script src="根据属性找标签的练习.js" type="text/javascript">
+        </script>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <div>商品列表</div>
+            <input type="checkbox" name="item" value="2000" /> 笔记本电脑2000元<br/>
+            <input type="checkbox" name="item" value="1000" /> 笔记本电脑1000元<br/>
+            <input type="checkbox" name="item" value="5000" /> 笔记本电脑5000元<br/>
+            <input type="checkbox" name="item" value="3000" /> 笔记本电脑3000元<br/>
+            <input type="checkbox" name="item" value="4000" /> 笔记本电脑4000元<br/>
+            <input type="checkbox" name="item" value="3000" /> 笔记本电脑3000元<br/>
+            <input type="checkbox" name="all" onclick="checkAll(this)" /> 全选<br/>
+            <input type="button" value="总金额: " onclick="getSum()" /><span id=sumid></span>
+    </body>
+</html>
+***********************************************************************************
+通过关系找标签
+************************************************************************************
+
+***********************************************************************************
+通过关系找标签.js
+************************************************************************************
+/*
+一个标签最多只有一个父标签
+一个标签可以有多个子标签
+通过父子或者兄弟关系找标签
+    parentNode 获取当前元素的父节点
+    childNodes 获取当前元素的所有下一级子元素
+    firstChild 获取当前节点的第一个子节点
+    lastChild 获取当前节点的最后一个子节点
+    nextSibling 获取当前节点的下一个节点（兄节点）
+    previousSibling 获取当前节点的上一个节点（弟节点）
+
+注意：
+    script会被浏览器移入body内
+    childNodes获取所有的子节点，返回的是一个数组
+        注意：获取子节点的时候是包括//了空文本或者是注释
+
+我们可以通过标签的类型进行判断筛选：
+    文本节点的类型： 3
+    注释的节点类型： 8
+    标签节点的类型： 1
+    
+*/
+
+/*------------------找父节点---------------------- */
+var bodyNode = document.getElementsByTagName("body")[0];
+var parentNode = bodyNode.parentNode;
+alert("父节点的名称：" + parentNode.nodeName);
+
+/*------------------找子节点---------------------- */
+var childNodes = bodyNode.childNodes; //返回数组
+alert("子节点的个数：" + childNodes.length); // 6,空文本#text,注释#comment
+/*
+result:
+    7
+        #text
+        #comment
+        IMG
+        INPUT
+        INPUT
+        #text
+        SCRIPT
+*/
+for (var index = 0; index < childNodes.length; ++index) {
+    // 方法一： 通过节点名字
+    // if (childNodes[index].nodeName != "#text" &&
+    //     childNodes[index].nodeName != "#comment") {
+    //     alert(childNodes[index].nodeName);
+    // }
+    // alert(childNodes[index].nodeName);
+
+    // 方法二： 通过节点的类型
+    // alert("标签的名字：" + childNodes[index].nodeName +
+    //     " 标签的类型：" + childNodes[index].nodeType);
+    /*
+        #text:3
+        #comment:8
+        INPUT:1
+        SCRIPT: 1
+        IMG: 1
+    */
+    // 我们只想alert有效的标签
+    if (childNodes[index].nodeType == 1) {
+        alert("标签节点：" + childNodes[index].nodeName);
+    }
+}
+
+/*------------------找first子节点和last子节点---------------------- */
+var firstChild = bodyNode.firstChild;
+alert("第一个子节点:" + firstChild.nodeName);
+var lastChild = bodyNode.lastChild;
+alert("最后一个子节点:" + lastChild.nodeName);
+
+/*------------------找兄弟节点---------------------- */
+var inputNode = document.getElementById("username");
+alert("后一个兄弟节点:" + inputNode.nextSibling.nodeName);
+alert("前一个兄弟节点: " + inputNode.previousSibling.nodeName);
+
+***********************************************************************************
+通过关系找标签.html
+************************************************************************************
+
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <!--我是注释--><img src="sunli.jpg"><input type="text" id="username" /><input type="button" value="注册" id="register" />
+    </body>
+    <script src="通过关系找标签.js" type="text/javascript">
+    </script>
+</html>
+
+***********************************************************************************
+创建与插入节点
+************************************************************************************
+
+***********************************************************************************
+创建与插入节点.js
+************************************************************************************
+/*
+创建节点和插入节点，设置节点的属性
+
+    document.createElement("标签名");      创建新元素节点
+    elt.setAttribute("属性名", "属性值");   设置属性
+    elt.appendChild(c);                    添加元素到elt中最后的位置
+    elt.insertBefore(new, child);          添加到elt中，child前
+                                           new是要插入的节点
+    elt.removeChild(eChild);               删除指定的子节点 
+*/
+var num = 1;
+
+function add() {
+    var inputNode = document.createElement("input");
+    inputNode.setAttribute("type", "button");
+    inputNode.setAttribute("value", "按钮" + num);
+    num++;
+    var bodyNode = document.getElementsByTagName("body")[0];
+    bodyNode.appendChild(inputNode);
+}
+
+***********************************************************************************
+创建与插入节点.html
+************************************************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <input type="button" onclick="add()" value="添加元素" />
+    </body>
+    <script src="创建与插入节点.js" type="text/javascript">
+    </script>
+</html>
+
+
+***************************************************************************
+增加和删除附件:
+需求是：当点击添加附件时，会增加一个浏览文件和删除附件的功能
+当点击删除附件时，会减少一个浏览文件和删除附件的功能
+***************************************************************************
+
+
+***************************************************************************
+增加和删除附件.js
+***************************************************************************
+/*
+插入目标元素的位置:
+    elt.insertBefore(newNode, oldNode);    添加到elt中，oldNode之前
+                                           elt必须是oldNode的直接父节点
+    elt.removeChild(eChild);           删除指定的子节点
+                                            elt必须是eChild的直接父节点
+*/
+function addFile() {
+    var trNode = document.createElement("tr");
+    var tdNode1 = document.createElement("td");
+    var tdNode2 = document.createElement("td");
+    tdNode1.innerHTML = "<input type='file' />";
+    tdNode2.innerHTML = "<a href='#' onclick='deleteFile(this)'>删除附件</a>";
+    trNode.appendChild(tdNode1);
+    trNode.appendChild(tdNode2);
+    // table会自动有子节点tbody， 所以tr的直接父节点是tbody
+    var tbodyNode = document.getElementsByTagName("tbody")[0];
+    var lastRow = document.getElementById("lastRow");
+    tbodyNode.insertBefore(trNode, lastRow);
+}
+
+function deleteFile(aNode) {
+    var trNode = aNode.parentNode.parentNode;
+    var tbodyNode = document.getElementsByTagName("tbody")[0];
+    tbodyNode.removeChild(trNode);
+}
+
+***************************************************************************
+增加和删除附件.html
+***************************************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <input type="file" /><a href="#" onclick="deleteFile(this)">删除附件</a>
+                </td>
+            </tr>
+            <tr id="lastRow">
+                <td colspan="2">
+                    <input type="button" onclick="addFile()" value="添加附件"/>
+                </td>
+            </tr>
+
+        </table>
+    
+    </body>
+    <script src="增加和删除附件.js" type="text/javascript">
+    </script>
+</html>
+***************************************************************************
+城市的联动框
+***************************************************************************
+
+***************************************************************************
+城市的联动框.js
+***************************************************************************
+/*
+selectedIndex:
+select options
+*/
+function showCity() {
+    var cities = [
+        [],
+        ["广州", "深圳", "佛山", "湛江"],
+        ["长沙", "衡阳", "岳阳", "郴州"],
+        ["哈尔滨", "牡丹江", "鸡西", "伊春"]
+    ];
+    var provinceNode = document.getElementById("province");
+    // alert(provinceNode.selectedIndex); 0,1,2,3
+    // 获取省份选中的选项
+    var selectedIndex = provinceNode.selectedIndex;
+    // 获取对应的城市
+    var cityDatas = cities[selectedIndex];
+
+    // 找到城市节点
+    var cityNode = document.getElementById("city");
+    // 先清空city框中的所有option
+    //             方法一：select options
+    cityNode.options.length = 1; // 保留城市
+
+    // //          方法二：childNodes
+    // // 先清空city框中的所有option
+    // var children = cityNode.childNodes;
+    // // 永远删除第0个，因为删除第一个后，第二个会到第一个位置
+    // for (var index = 0; index < children.length; /*++index*/ ) {
+    //     cityNode.removeChild(children[index]);
+    // }
+
+    // 遍历对应的所有城市，然后创建对应的option并添加到city上
+    for (var index = 0; index < cityDatas.length; ++index) {
+        var optionNode = document.createElement("option");
+        optionNode.innerHTML = cityDatas[index];
+        cityNode.appendChild(optionNode);
+    }
+}
+
+***************************************************************************
+城市的联动框.html
+***************************************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+        省份<select id="province" onchange="showCity()">
+            <option>省份</option>
+            <option>广东</option>
+            <option>湖南</option>
+            <option>黑龙江</option>
+        </select>
+        城市<select id="city">
+            <option>城市</option>
+        </select>
+    
+    </body>
+    <script src="城市的联动框.js" type="text/javascript">
+    </script>
+</html>
+********************************************************************************
+时间的联动：未完成
+*********************************************************************************
+/*
+年份：1900到今天
+月：1-12
+日：根据每月算出每月的天数
+*/
+*************************************************************************************
+操作CSS样式:
+*************************************************************************************
+
+*************************************************************************************
+操作CSS样式.js
+*************************************************************************************
+/*
+产生一个四位的验证码
+*/
+function createCode() {
+    var datas = ['A', 'B', '何', '敏', '凡', '将', '1', '9'];
+    var code = "";
+    for (var i = 0; i < 4; ++i) {
+        // 随机产生四个索引值
+        // Math.random(): 0.0-1.0, 不包括1.0
+        var index = Math.floor(Math.random() * (datas.length)); // 0-7，长度8
+        code += datas[index];
+    }
+    var span = document.getElementById("code");
+    span.innerHTML = code;
+    // span有style属性，可以设置css属性
+    span.style.fontSize = "24px";
+    span.style.color = "blue";
+    span.style.backgroundColor = "grey";
+    span.style.textDecoration = "line-through";
+}
+
+function ready() {
+    createCode();
+}
+
+*************************************************************************************
+操作CSS样式.html
+*************************************************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body onload="ready()">
+        <span id="code"></span><a href="#" onclick="createCode()">看不清，换一个</a>
+
+    </body>
+    <script src="操作CSS样式.js" type="text/javascript">
+    </script>
+</html>
+
+****************************************************************************************
+正则表达式
+****************************************************************************************
+
+
+****************************************************************************************
+正则表达式.js
+****************************************************************************************
+/*
+RegExp对象是正则表达式的对象
+
+正则表达式的创建方式：
+    ""
+    方式一：
+        /正则表达式/模式
+    方式二：
+        new RegExp("正则表达式", "模式")；
+
+正则表达式对象常用的方法：
+    test 使用正则对象去匹配字符串，如果匹配成功返回true，否则返回false
+    exec 根据正则表达式去查找字符串符合规则的内容
+模式：
+    g （全文查找出现的所有 pattern） 
+    i （忽略大小写） 
+    m （多行查找） 
+-------------------------------------------------------------------------
+字符 描述 
+\ 将下一个字符标记为一个特殊字符、或一个原义字符、或一个 后向引用、或一个八进制转义符。例如，'n' 匹配字符 "n"。'\n' 匹配一个换行符。序列 '\\' 匹配 "\" 而 "\(" 则匹配 "("。 
+^ 匹配输入字符串的开始位置。如果设置了 RegExp 对象的 Multiline 属性，^ 也匹配 '\n' 或 '\r' 之后的位置。 
+$ 匹配输入字符串的结束位置。如果设置了RegExp 对象的 Multiline 属性，$ 也匹配 '\n' 或 '\r' 之前的位置。 
+* 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。 * 等价于{0,}。 
++ 匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配 "z"。+ 等价于 {1,}。 
+? 匹配前面的子表达式零次或一次。例如，"do(es)?" 可以匹配 "do" 或 "does" 中的"do" 。? 等价于 {0,1}。 
+{n} n 是一个非负整数。匹配确定的 n 次。例如，'o{2}' 不能匹配 "Bob" 中的 'o'，但是能匹配 "food" 中的两个 o。 
+{n,} n 是一个非负整数。至少匹配n 次。例如，'o{2,}' 不能匹配 "Bob" 中的 'o'，但能匹配 "foooood" 中的所有 o。'o{1,}' 等价于 'o+'。'o{0,}' 则等价于 'o*'。 
+{n,m} m 和 n 均为非负整数，其中n <= m。最少匹配 n 次且最多匹配 m 次。刘， "o{1,3}" 将匹配 "fooooood" 中的前三个 o。'o{0,1}' 等价于 'o?'。请注意在逗号和两个数之间不能有空格。 
+? 当该字符紧跟在任何一个其他限制符 (*, +, ?, {n}, {n,}, {n,m}) 后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串 "oooo"，'o+?' 将匹配单个 "o"，而 'o+' 将匹配所有 'o'。 
+. 匹配除 "\n" 之外的任何单个字符。要匹配包括 '\n' 在内的任何字符，请使用象 '[.\n]' 的模式。 
+(pattern) 匹配pattern 并获取这一匹配。所获取的匹配可以从产生的 Matches 集合得到，在VBScript 中使用 SubMatches 集合，在JScript 中则使用 $0…$9 属性。要匹配圆括号字符，请使用 '\(' 或 '\)'。 
+(?:pattern) 匹配 pattern 但不获取匹配结果，也就是说这是一个非获取匹配，不进行存储供以后使用。这在使用 "或" 字符 (|) 来组合一个模式的各个部分是很有用。例如， 'industr(?:y|ies) 就是一个比 'industry|industries' 更简略的表达式。 
+(?=pattern) 正向预查，在任何匹配 pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如， 'Windows (?=95|98|NT|2000)' 能匹配 "Windows 2000" 中的 "Windows" ，但不能匹配 "Windows 3.1" 中的 "Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。 
+(?!pattern) 负向预查，在任何不匹配Negative lookahead matches the search string at any point where a string not matching pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如'Windows (?!95|98|NT|2000)' 能匹配 "Windows 3.1" 中的 "Windows"，但不能匹配 "Windows 2000" 中的 "Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始  
+x|y 匹配 x 或 y。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food"。  
+[xyz] 字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a'。  
+[^xyz] 负值字符集合。匹配未包含的任意字符。例如， '[^abc]' 可以匹配 "plain" 中的'p'。  
+[a-z] 字符范围。匹配指定范围内的任意字符。例如，'[a-z]' 可以匹配 'a' 到 'z' 范围内的任意小写字母字符。  
+[^a-z] 负值字符范围。匹配任何不在指定范围内的任意字符。例如，'[^a-z]' 可以匹配任何不在 'a' 到 'z' 范围内的任意字符。  
+\b 匹配一个单词边界，也就是指单词和空格间的位置。例如， 'er\b' 可以匹配"never" 中的 'er'，但不能匹配 "verb" 中的 'er'。  
+\B 匹配非单词边界。'er\B' 能匹配 "verb" 中的 'er'，但不能匹配 "never" 中的 'er'。 
+\cx 匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。 x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 'c' 字符。  
+\d 匹配一个数字字符。等价于 [0-9]。   （*）
+\D 匹配一个非数字字符。等价于 [^0-9]。  
+\f 匹配一个换页符。等价于 \x0c 和 \cL。 
+\n 匹配一个换行符。等价于 \x0a 和 \cJ。 
+\r 匹配一个回车符。等价于 \x0d 和 \cM。 
+\s 匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。 
+\S 匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。 
+\t 匹配一个制表符。等价于 \x09 和 \cI。 
+\v 匹配一个垂直制表符。等价于 \x0b 和 \cK。 
+\w 匹配包括下划线的任何单词字符。等价于'[A-Za-z0-9_]'。  （*） 
+\W 匹配任何非单词字符。等价于 '[^A-Za-z0-9_]'。  
+\xn 匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长。例如， '\x41' 匹配 "A"。'\x041' 则等价于 '\x04' & "1"。正则表达式中可以使用 ASCII 编码。. 
+\num 匹配 num，其中 num 是一个正整数。对所获取的匹配的引用。例如，'(.)\1' 匹配两个连续的相同字符。  
+\n 标识一个八进制转义值或一个后向引用。如果 \n 之前至少 n 个获取的子表达式，则 n 为后向引用。否则，如果 n 为八进制数字 (0-7)，则 n 为一个八进制转义值。 
+\nm 标识一个八进制转义值或一个后向引用。如果 \nm 之前至少有is preceded by at least nm 个获取得子表达式，则 nm 为后向引用。如果 \nm 之前至少有 n 个获取，则 n 为一个后跟文字 m 的后向引用。如果前面的条件都不满足，若  n 和 m 均为八进制数字 (0-7)，则 \nm 将匹配八进制转义值 nm。 
+\nml 如果 n 为八进制数字 (0-3)，且 m 和 l 均为八进制数字 (0-7)，则匹配八进制转义值 nml。 
+\un 匹配 n，其中 n 是一个用四个十六进制数字表示的 Unicode 字符。例如， \u00A9 匹配版权符号 (?)。 
+----------------------------------------------------------------------------
+ */
+/*
+test练习
+*/
+var str1 = "hello123";
+var reg1 = /^[A-Z]+[0-9]+$/i;
+alert("匹配吗?" + reg1.test(str1));
+
+/*
+查找出三个字符组成的单词
+*/
+var str2 = "da jia hao hao xue xi a";
+// 一定要加g，否则死循环
+var reg2 = /\b[a-z]{3}\b/gi;
+var line = "";
+while ((line = reg2.exec(str2)) != null) {
+    document.write(line + "<br/>");
+}
+
+****************************************************************************************
+正则表达式.html
+****************************************************************************************
+
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>无标题标签</title>
+    </head>
+    <body>
+    </body>
+    <script src="正则表达式.js" type="text/javascript">
+    </script>
+</html>
+**********************************************************************************
+result:
+匹配吗?true
+jia
+hao
+hao
+xue
+
+*********************************************************************************************
+form.html
+*********************************************************************************************
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript">
+
+	//检查用户名
+	function checkName(){
+		var inputNode = document.getElementById("userName");
+		var spanNode = document.getElementById("userId");
+		//获取输入框的内容
+		var content  = inputNode.value;
+		//用户名的规则： 六位的英文与数字组成。数字不能开头
+		var reg = /^[a-z][a-z0-9]{5}$/i;	
+		if(reg.test(content)){
+			//符合规则
+			spanNode.innerHTML = "正确".fontcolor("green");
+			
+			return true;
+		}else{
+			//不符合规则
+			spanNode.innerHTML = "错误".fontcolor("red");
+			
+			return false;
+		}	
+	}
+
+
+	//检查邮箱
+	function checkEmail(){
+		var email = document.getElementById("email").value;
+		var spanNode = document.getElementById("emailspan");
+		
+		//编写邮箱的正则       13456@qq.com  13456@qq.net  13456@qq.com.cn
+		var reg = /^[a-z0-9]\w+@[a-z0-9]+(\.[a-z]{2,3}){1,2}$/i; 
+		if(reg.test(email)){
+			//符合规则
+			spanNode.innerHTML = "正确".fontcolor("green");
+			return true;
+		}else{
+			//不符合规则
+			spanNode.innerHTML = "错误".fontcolor("red");
+			
+			return false;
+		}	
+	}
+	
+	function checkAll(){
+		var userName = checkName();	
+		var email = checkEmail();
+		if(userName&&email){
+			return true;
+		}else{
+		
+			return false;
+		}
+	}
+	
+/*
+ 表单提交的时候是会触发onsubmit事件的，如果onsubmit事件的方法返回是true，那么该表单允许提交，如果返回的是false，该表单不允许提交。
+
+*/
+</script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>正则表达式</title>
+</head>
+<body>								
+<form action="success.html" method="get" onsubmit="return checkAll()" > <!--如果表单提交时候触发的方法返回是false,那么该表单不允许提交，如果返回的是true允许提交 -->
+			<table border="1px" width="50%" align="center" cellspacing="0px" cellpadding="3px">
+				<tr>
+					<td width="25%">姓名:</td>
+					<td>
+						<input type="text" name="userName" id="userName" onblur="checkName()"/>
+                        <span id="userId"></span>
+					</td>
+				</tr>
+				<tr>
+					<td >密码:</td><td>
+						<input type="password"  name="pwd" id="pwd" onblur="checkPass()"/>
+                        <span id="passId"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>确认密码:</td><td>
+						<input type="password" name="ensurepwd" id="ensurepwd" onblur="ensurepass()" /><span id="ensure"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>邮箱</td><td>
+						<input type="text" name="email" id="email" onblur="checkEmail()"/>
+                		<span id="emailspan"></span>
+				        
+					</td>
+				</tr>
+				<tr>
+					<td>性别</td><td>
+						<input type="radio" checked="ture" name="gender" id="male" value="male"/>
+					男
+						<input type="radio" name="gender" value="female"/>
+					女</td>
+				</tr>
+				<tr>
+					<td>爱好:</td><td>
+						<input type="checkbox"  name="like" />
+					eat
+						<input type="checkbox" name="like" />
+					sleep
+						<input type="checkbox" name="like"/>
+					play  
+                    <span id="hobbySpan"></span>
+                    </td>
+				</tr>
+				<tr>
+					<td>城市</td><td>
+					<select name="city" id="city">
+						<option value=""> 请选择</option>
+						<option value="bj"> 北京 </option>
+						<option value="gz"> 广州 </option>
+						<option value="sh"> 上海 </option>
+					</select>
+                    
+                    </td>
+				</tr>
+				<tr>
+					<td>自我介绍</td><td><textarea cols="15" rows="5"  name="myInfo" id="myInfo"></textarea></td>
+				</tr>
+				<tr align="center">
+					<td colspan="2"><!--提交按钮-->
+					<input type="submit"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+</body>
+</html>
+
+*********************************************************************************************
+success.html
+*********************************************************************************************
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+	<h1><font color="#FF0000">恭喜你 ,提交数据成功</font></h1>
+</body>
+</html>
+**********************************************************************************************
