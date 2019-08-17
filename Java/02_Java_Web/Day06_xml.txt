@@ -479,9 +479,24 @@ dom4j 读取xml文件
 	Element Element.element("标签名")；// 指定名称的第一个子标签
 	Iterator<Element> Element.elementIterator("标签名")；// 指定名称的所有子标签
 	List<Iterator> Element.elements();//获取所有子标签
+属性：掌握一种就好
+	String Element.attributeValue(“属性名”);//获取指定名称的属性值
+	Attribute Element.attribute("属性名")；//获取指定名称的属性对象
+		Attribute.getName();//获得属性名称
+		Attribute.getValue();//获得属性值
+
+	List<Attribute> Element.attributes();//获得所有属性对象
+	Iterator<Attribute> Element.attributeIterator();//获得所有属性对象
+
+文本：
+	Element.getText();// 获取当前标签的文本
+	Element.elementText("标签名");//获取当前标签的指定名称的子标签的文本内容
+
+
+
 	
 **********************************************************************
-package cn.dom4j;
+package xml.dom4j;
 
 import java.io.File;
 import java.util.Iterator;
@@ -491,15 +506,20 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.Text;
+import org.dom4j.Attribute;
 import org.dom4j.io.SAXReader;
+import org.dom4j.util.AttributeHelper;
 import org.junit.Test;
+
 
 public class Dom4jGetSubNodeTest {
 	@Test
+	// contactList and contact
 	public void getElement() throws Exception {
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(
-				new File("./src/cn/dom4j/contact.xml"));
+				new File("./src/xml/dom4j/contact.xml"));
 		Element rootElem = doc.getRootElement();
 		String name = rootElem.getName();
 		System.out.println(name);
@@ -542,15 +562,60 @@ public class Dom4jGetSubNodeTest {
 		
 		
 	}
-	
 	@Test
+	// <contact id="001" name="eric">
+	// id and name are attribute
 	public void getAttribute() throws Exception {
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(
-				new File("./src/cn/dom4j/contact.xml"));
+				new File("./src/xml/dom4j/contact.xml"));
+		Element contactElement = doc.getRootElement().element("contact");
+//		// method 1: attributeValue()
+//		String idValue = contactElement.attributeValue("id");
+//		System.out.println(idValue);
+//		
+//		// method 2:attribute(),getName() and getValue()
+//		Attribute idAttr = contactElement.attribute("id");
+//		System.out.println(idAttr.getName()+"="+idAttr.getValue());
+		
+		// method 3: attributes(), getName() and getValue()
+//		List<Attribute> attrsList = contactElement.attributes();
+//		for (Attribute attribute : attrsList) {
+//			System.out.println(attribute.getName()+"="+attribute.getValue());
+//		}
+		
+		// method 4:attributeIterator(), getName() and getValue()
+		Iterator<Attribute> iterator = contactElement.attributeIterator();
+		while(iterator.hasNext()) {
+			Attribute attr = iterator.next();
+			System.out.println(attr.getName()+"="+attr.getValue());
+		}
 		
 	}
-
+	
+	
+	@Test
+//    <name>eric</name>
+//    <age>20</age>
+//    <phone>12345678901</phone>
+//    <email>eric@163.com</email>
+//    <qq>eric@qq.com</qq>
+	public void getText() throws Exception {
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(
+				new File("./src/xml/dom4j/contact.xml"));
+		
+		// method 1: element() and getText()
+		Element nameElement = doc.getRootElement().element("contact").element("name");
+		String nameText = nameElement.getText();
+		System.out.println(nameText);
+		
+		// method 2: 
+		String nameString = doc.getRootElement().element("contact").elementText("phone");
+		System.out.println(nameString);
+		
+		
+	}
 }
 ******************************************************************************
 	
