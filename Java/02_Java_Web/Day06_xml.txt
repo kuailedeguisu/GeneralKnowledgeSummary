@@ -463,3 +463,95 @@ email
 qq
 ******************************************************************************
 	
+Interface Node
+Implement classes:
+	Element
+	Comment
+	Text
+	Document
+	Attribute
+
+dom4j 读取xml文件
+节点：
+	Iterator Element.nodeIterator;// 获取当前标签节点下的所有子节点
+标签：
+	Element Document.getRootElement();// 获取xml文档的根标签
+	Element Element.element("标签名")；// 指定名称的第一个子标签
+	Iterator<Element> Element.elementIterator("标签名")；// 指定名称的所有子标签
+	List<Iterator> Element.elements();//获取所有子标签
+	
+**********************************************************************
+package cn.dom4j;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+import org.junit.Test;
+
+public class Dom4jGetSubNodeTest {
+	@Test
+	public void getElement() throws Exception {
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(
+				new File("./src/cn/dom4j/contact.xml"));
+		Element rootElem = doc.getRootElement();
+		String name = rootElem.getName();
+		System.out.println(name);
+		
+		// method 1: only get the first element
+//		Element contactElem = rootElem.element("contact");
+//		String contactName = contactElem.getName();
+//		System.out.println(contactName);
+		
+		// method 2: elementIterator
+//		Iterator<Element> iter = rootElem.elementIterator("contact");
+//		while(iter.hasNext()) {
+//			Element element = iter.next();
+//			System.out.println(element.getName());
+//		}
+		
+		// method 3: elements to get all elements
+		List<Element> list = rootElem.elements();
+		
+		// tranverse all elements
+		// 1. common for loop
+//		for (int i=0; i<list.size(); ++i) {
+//			Element element = list.get(i);
+//			System.out.println(element.getName());
+//		}
+		// 2. enhancement for loop
+		for (Element element : list) {
+			System.out.println(element.getName());
+		}
+		// 3. iterator
+//		Iterator<Element> iter2 = list.iterator();
+//		while(iter2.hasNext()) {
+//			Element element = iter2.next();
+//			System.out.println(element.getName());
+//		}
+		
+		// get deeper layer element
+		Element nameElement = doc.getRootElement().element("contact").element("name");
+		System.out.println(nameElement.getName());
+		
+		
+	}
+	
+	@Test
+	public void getAttribute() throws Exception {
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(
+				new File("./src/cn/dom4j/contact.xml"));
+		
+	}
+
+}
+******************************************************************************
+	
+			
