@@ -1516,7 +1516,7 @@ public class FileGetTest {
 }
 
 result:
-getAbsolutePath: C:\Users\ehlucui\eclipse_new_workspace\day19_File\a.txt
+getAbsolutePath: C:\Users\xx\eclipse_new_workspace\day19_File\a.txt
 getPath: a.txt
 length: 47
 lastModified: 1563353142809
