@@ -347,7 +347,7 @@ public class Dom4jReadDocument {
 }
 
 result:
-org.dom4j.tree.DefaultDocument@7382f612 [Document: name file:///C:/Users/ehlucui/0programming/02_Java_Web/day06_xml/./src/cn/dom4j/contact.xml]
+org.dom4j.tree.DefaultDocument@7382f612 [Document: name file:///C:/Users/xx/0programming/02_Java_Web/day06_xml/./src/cn/dom4j/contact.xml]
 ************************************************************************
 Dom4jReadXmlTest.java
 ************************************************************************
