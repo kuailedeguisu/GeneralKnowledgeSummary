@@ -1,59 +1,58 @@
 1 课程回顾
 XML加强
-		1）Dom4j修改XML文档
-			写出xml文档：
-				XMLWriter writer = new XMLWriter()
-				writer.wrtite(doc);   
+1）Dom4j修改XML文档
+写出xml文档：
+	XMLWriter writer = new XMLWriter()
+	writer.wrtite(doc);   
 
-			增加：
-				  DocumentHelper.createDocument()  增加新文档
-				  Element.addElement("name");  增加子标签
-				  Element.addAtrribute（“name”，“value”） 增加属性
-			修改：
-				   Attribute.setValue("value");  修改属性值
-				   Element.setText("value");  修改文本内容
-			删除：		
-					Element.detach();   删除标签
-				    Attribute.detach();  删除属性
+	增加：
+		DocumentHelper.createDocument()  增加新文档
+		Element.addElement("name");  增加子标签
+		Element.addAtrribute（“name”，“value”） 增加属性
+	修改：
+		Attribute.setValue("value");  修改属性值
+		Element.setText("value");  修改文本内容
+	删除：		
+		Element.detach();   删除标签
+		Attribute.detach();  删除属性
 				
-		2）XPath技术： 快速找到xml元素（标签，属性，文本）
-				2.1 dom4j使用xpath：
-						List<Node> list = Element.selectNodes("xpath表达式")；		 	多个节点对象
-						Node node = Element.selectSingleNode("xpath表达式");         一个节点对象
+2）XPath技术： 快速找到xml元素（标签，属性，文本）
+2.1 dom4j使用xpath：
+	List<Node> list = Document.selectNodes("xpath表达式")；多个节点对象
+	Node node = Document.selectSingleNode("xpath表达式");  一个节点对象
 
-				xpath表达式：
-						/       表示根位置 或者  子标签
-						//      表示后代标签（不分层次结构）
-						*       表示所有元素
-						[ ]      表示条件
-						@      表示选择属性
-						text()    表示选择文本
-						and     表示与条件
-
-		3）SAX解析： 原理： 加载一点，解析一点，处理一点，对内存要求不高！！！（基于事件）
+	xpath表达式：
+		/       表示根位置 或者  子标签
+		//      表示后代标签（不分层次结构）
+		*       表示所有元素
+		[ ]      表示条件
+		@      表示选择属性
+		text()    表示选择文本
+		and     表示与条件
+3）SAX解析： 原理： 加载一点，解析一点，处理一点，对内存要求不高！！！（基于事件）
 				
-				SAXPasser 类：
-						parser（File file， DefaultHandler handler）：该方法使用sax解析方式去解析xml文档
+SAXPasser 类：
+	parse（File file， DefaultHandler handler）：该方法使用sax解析方式去解析xml文档
 					
-					DefaultHandler类：重写该类中的一些方法，用于处理xml文档
-							startElement( ....  String qName): 读到开始标签时调用
-							characterrs(char[] ch,int start,int length);  读到文本内容时调用（包括空格和换行）
-							endElement(.....String qName): 读到结束标签时调用
+	DefaultHandler类：重写该类中的一些方法，用于处理xml文档
+		startElement( ....  String qName): 读到开始标签时调用
+		characterrs(char[] ch,int start,int length);  读到文本内容时调用（包括空格和换行）
+		endElement(.....String qName): 读到结束标签时调用
 						
 今天的目标： xml约束 + web开发入门
 
 2 XML约束
-			XML约束要求：大家能够看懂约束内容，根据约束内容写出符合规则的xml文件。
+	XML约束要求：大家能够看懂约束内容，根据约束内容写出符合规则的xml文件。
 2.1 引入
-			XML语法： 规范的xml文件的基本编写规则。（由w3c组织制定的）
-			XML约束： 规范XML文件数据内容格式的编写规则。（由开发者自行定义）
+	XML语法： 规范的xml文件的基本编写规则。（由w3c组织制定的）
+	XML约束： 规范XML文件数据内容格式的编写规则。（由开发者自行定义）
 2.2 XML约束技术
-			DTD约束：语法相对简单，功能也相对简单。学习成本也低。
-			Schema约束：语法相对复杂，功能也相对强大。学习成本相对高！！！（名称空间）
+	DTD约束：语法相对简单，功能也相对简单。学习成本也低。
+	Schema约束：语法相对复杂，功能也相对强大。学习成本相对高！！！（名称空间）
 2.3 DTD约束
-				1)导入dtd方式
-					内部导入
-							<!DOCTYPE note [
+1)导入dtd方式
+	内部导入
+	      <!DOCTYPE note [
 	              <!ELEMENT note (to, from, heading, body)>
 	              <!ELEMENT to (#PCDATA)>
 	              <!ELEMENT from (#PCDATA)>
@@ -61,16 +60,17 @@ XML加强
 	              <!ELEMENT body (#PCDATA)>
               ]>
 
-					外部导入
-			本地文件系统：			
-						<!DOCTYPE note SYSTEM "./src/xml/dtd/note.dtd">
+	外部导入
+	    本地文件系统：			
+			<!DOCTYPE note SYSTEM "note.dtd">
             note.dtd
             	<!ELEMENT note (to, from, heading, body)>
 	            <!ELEMENT to (#PCDATA)>
 	            <!ELEMENT from (#PCDATA)>
 	            <!ELEMENT heading (#PCDATA)>
 	            <!ELEMENT body (#PCDATA)>
-			公共的外部导入：
+	公共的外部导入：
+		
 *********************************************************************************
 noteNested.xml
 ************************************************************************************
