@@ -1,7 +1,8 @@
-1.写出文件到xml文件
-******************************************************************
+1. xml write to file
+1.1 write xml file to file
+************************************************************************************
 contact.xml
-******************************************************************
+************************************************************************************
 <?xml version="1.0" encoding="utf-8"?>
 <contactList>
 	<contact id="001" name="eric">
@@ -19,42 +20,31 @@ contact.xml
 		<qq>432222222</qq>
 	</contact>
 </contactList>
-********************************************************************
-Demo1.java
-*********************************************************************
-/**
- * 第一个写出内容到xml文档
- * @author APPle
- *
- */
-public class Demo1 {
-	
-	public static void main(String[] args) throws Exception{
-		//一、读取或创建一个Document对象
-		//读取day07项目的xm文件
+******************************************************************************************
+XmlWrittenToFile.java
+******************************************************************************************
+package xml.dom4j.write;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+public class XmlWrittenToFile {
+
+	public static void main(String[] args) throws Exception {
 		Document doc = new SAXReader().read(new File("./src/contact.xml"));
-		
-		
-		//二、修改Document对象内容
-		
-		
-		//三、把修改后的Document对象写出到xml文档中
-		//指定文件输出的位置
-		FileOutputStream out = new FileOutputStream("./src/contactFOSOriginal.xml");
-		//1.创建写出对象
-		XMLWriter writer = new XMLWriter(out);
-		
-		//2.写出对象
+		FileOutputStream fos = new FileOutputStream("./src/contactOriginal.xml");
+		XMLWriter writer = new XMLWriter(fos);
 		writer.write(doc);
-		//3.关闭流
 		writer.close();
 	}
-
 }
-****************************************************************************
-result:
-contactFSOOriginal.xml
-******************************************************************************
+******************************************************************************************
+contactOriginal.xml
+******************************************************************************************
 <?xml version="1.0" encoding="UTF-8"?>
 <contactList>
 	<contact id="001" name="eric">
@@ -72,12 +62,13 @@ contactFSOOriginal.xml
 		<qq>432222222</qq>
 	</contact>
 </contactList>
-***************************************************************************
-2. 写出xml文件为不同的格式
-***************************************************************************
-Demo2.java
-***************************************************************************
-package gz.itcast.a_dom4j_write;
+******************************************************************************************
+
+1.2 write special format xml to file
+******************************************************************************************
+XmlContentWrittenToFile.java
+******************************************************************************************
+package xml.dom4j.write;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,224 +77,34 @@ import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-/**
- * 讨论写出内容到xml文档的细节
- * @author APPle
- *
- */
-public class Demo2 {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception{
+public class XmlContentWrittenToFile {
+
+	public static void main(String[] args) throws Exception {
 		Document doc = new SAXReader().read(new File("./src/contact.xml"));
-		//指定文件输出的位置
-		FileOutputStream out = new FileOutputStream("./src/contactFOSFormat.xml");
-		/**
-		 * 1.指定写出的格式
-		 */
-		OutputFormat format = OutputFormat.createCompactFormat(); //紧凑的格式.去除空格换行.项目上线的时候
-		//OutputFormat format = OutputFormat.createPrettyPrint(); //漂亮的格式.有空格和换行.开发调试的时候
-		/**
-		 * 2.指定生成的xml文档的编码
-		 *    同时影响了xml文档保存时的编码  和  xml文档声明的encoding的编码（xml解析时的编码）
-		 *    结论： 使用该方法生成的xml文档避免中文乱码问题。
-		 */
+		FileOutputStream fos = new FileOutputStream(new File("./src/contactCompactContent.xml"));
+		OutputFormat format = OutputFormat.createCompactFormat();
+//		FileOutputStream fos = new FileOutputStream(new File("./src/contactPrettyContent.xml"));
+//		OutputFormat format = OutputFormat.createPrettyPrint();
 		format.setEncoding("utf-8");
-		
-		
-		//1.创建写出对象
-		XMLWriter writer = new XMLWriter(out,format);
-		
-		//2.写出对象
+		XMLWriter writer = new XMLWriter(fos, format);
 		writer.write(doc);
-		//3.关闭流
 		writer.close();
 	}
-
 }
+******************************************************************************************
+contactCompactContent.xml
+******************************************************************************************
 
-******************************************************************
-result:
-contactFOSFormat.xml
-*****************************************************************
 <?xml version="1.0" encoding="utf-8"?>
 <contactList><contact id="001" name="eric"><name>张三</name><age>20</age><phone>134222223333</phone><email>zhangsan@qq.com</email><qq>432221111</qq></contact><contact id="002" name="jacky"><name>eric</name><age>20</age><phone>134222225555</phone><email>lisi@qq.com</email><qq>432222222</qq></contact></contactList>
-*************************************************************************
-3. 修改xml文件的内容
-*************************************************************************
-Demo3.java
-*************************************************************************
-package gz.itcast.a_dom4j_write;
+******************************************************************************************
 
-import java.io.File;
-import java.io.FileOutputStream;
-
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
-import org.junit.Test;
-
-/**
- * 修改xml内容
- * 增加：文档，标签 ，属性
- * 修改：属性值，文本
- * 删除：标签，属性
- * @author APPle
- *
- */
-public class Demo3 {
-
-	/**
-	 * 增加：文档，标签 ，属性
-	 */
-	@Test
-	public void test1() throws Exception{
-		/**
-		 * 1.创建文档
-		 */
-		Document doc = DocumentHelper.createDocument();
-		/**
-		 * 2.增加标签
-		 */
-		Element rootElem = doc.addElement("contactList");
-		//doc.addElement("contactList");
-		Element contactElem = rootElem.addElement("contact");
-		contactElem.addElement("name");
-		/**
-		 * 3.增加属性
-		 */
-		contactElem.addAttribute("id", "001");
-		contactElem.addAttribute("name", "eric");
-		
-		//把修改后的Document对象写出到xml文档中
-		FileOutputStream out = new FileOutputStream("./src/contactModification.xml");
-		OutputFormat format = OutputFormat.createPrettyPrint();
-		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		writer.write(doc);
-		writer.close();
-	}
-	
-	/**
-	 * 修改：属性值，文本
-	 * @throws Exception
-	 */
-	@Test
-	public void test2()	throws Exception{
-		Document doc = new SAXReader().read(new File("./src/contactModification.xml"));
-		
-		/**
-		 * 方案一： 修改属性值   1.得到标签对象 2.得到属性对象 3.修改属性值
-		 */
-		//1.1  得到标签对象
-		/*
-		Element contactElem = doc.getRootElement().element("contact");
-		//1.2 得到属性对象
-		Attribute idAttr = contactElem.attribute("id");
-		//1.3 修改属性值
-		idAttr.setValue("003");
-		*/
-		/**
-		 * 方案二： 修改属性值
-		 */
-		//1.1  得到标签对象
-		/*
-		Element contactElem = doc.getRootElement().element("contact");
-		//1.2 通过增加同名属性的方法，修改属性值
-		contactElem.addAttribute("id", "004");
-		*/
-		
-		/**
-		 * 修改文本 1.得到标签对象 2.修改文本
-		 */
-		Element nameElem = doc.getRootElement().
-			element("contact").element("name");
-		nameElem.setText("李四");
-		
-		
-		
-		FileOutputStream out = new FileOutputStream("./src/contactModificationLast.xml");
-		OutputFormat format = OutputFormat.createPrettyPrint();
-		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		writer.write(doc);
-		writer.close();
-	}
-	
-	
-	/**
-	 * 删除：标签，属性
-	 * @throws Exception
-	 */
-	@Test
-	public void test3() throws Exception{
-		Document doc = new SAXReader().read(new File("./src/contact.xml"));
-		
-		/**
-		 * 1.删除标签     1.1 得到标签对象  1.2 删除标签对象    
-		 */
-		// 1.1 得到标签对象
-		/*
-		Element ageElem = doc.getRootElement().element("contact")
-					.element("age");
-		
-		//1.2 删除标签对象
-		ageElem.detach();
-		//ageElem.getParent().remove(ageElem);
-		*/
-		/**
-		 * 2.删除属性   2.1得到属性对象  2.2 删除属性
-		 */
-		//2.1得到属性对象
-		//得到第二个contact标签
-		Element contactElem = (Element)doc.getRootElement().
-			elements().get(1);
-		//2.2 得到属性对象
-		Attribute idAttr = contactElem.attribute("id");
-		//2.3 删除属性
-		idAttr.detach();
-		//idAttr.getParent().remove(idAttr);
-		
-		FileOutputStream out = new FileOutputStream("e:/contact.xml");
-		OutputFormat format = OutputFormat.createPrettyPrint();
-		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		writer.write(doc);
-		writer.close();
-	}
-}
-*************************************************************************
-contactModification.xml
-*************************************************************************
-<?xml version="1.0" encoding="utf-8"?>
-
-<contactList>
-  <contact id="001" name="eric">
-    <name/>
-  </contact>
-</contactList>
-*************************************************************************
-contactModificationLast.xml
-*************************************************************************
-<?xml version="1.0" encoding="utf-8"?>
-
-<contactList> 
-  <contact id="001" name="eric"> 
-    <name>李四</name> 
-  </contact> 
-</contactList>
-*************************************************************************
-4. 练习
-************************************************************************
-Demo4.java
-************************************************************************
-package gz.itcast.a_dom4j_write;
+1.3 write modified xml to file
+******************************************************************************************
+XmlModificationWrittenToFile.java
+******************************************************************************************
+package xml.dom4j.write;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -317,198 +118,1149 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.junit.Test;
 
-/**
- *  课堂练习： 
- * 1.使用dom4j的api来生成以下的xml文件
-<Students>
-<Student id="1">
-	<name>张三</name>
-	<gender>男</gender>
-	<grade>计算机1班</grade>
-	<address>广州天河</address>
-</Student>
-<Student id="2">
-	<name>李四</name>
-	<gender>女</gender>
-	<grade>计算机2班</grade>
-	<address>广州越秀</address>
-</Student>
-</Students>
-
-2.修改id为2的学生的姓名，改为“王丽”
-
-3.删除id为2的学生
- * @author APPle
- *
- */
-public class Demo4 {
-
-	/**
-	 * 1.生成指定xml文档
-	 * @throws Exception
-	 */
+public class XmlModificationWrittenToFile {
 	@Test
-	public void test1() throws Exception{
-		//1.内存创建xml文档
+	public void writeDocToFile() throws Exception {
 		Document doc = DocumentHelper.createDocument();
+		Element rootElem = doc.addElement("contactList");
+		Element contactElem = rootElem.addElement("contact");
+		contactElem.addAttribute("id", "001");
+		contactElem.addElement("name").setText("eric");
+		contactElem.addElement("age").setText("20");
+		contactElem.addElement("phone").setText("13512345678");
+		contactElem.addElement("email").setText("eric@qq.com");
+		contactElem.addElement("qq").setText("12345");
 		
-		//2.写入内容
-		Element rootElem = doc.addElement("Students");
+		Element contactElem2 = rootElem.addElement("contact");
+		contactElem2.addAttribute("id", "002");
+		contactElem2.addElement("name").setText("andy");
+		contactElem2.addElement("age").setText("30");
+		contactElem2.addElement("phone").setText("13812345679");
+		contactElem2.addElement("email").setText("andy@qq.com");
+		contactElem2.addElement("qq").setText("67890");
 		
-		//2.1 增加标签
-		Element studentElem1 = rootElem.addElement("Student");
-		//2.2 增加属性
-		studentElem1.addAttribute("id", "1");
-		//2.3 增加标签，同时设置文本
-		studentElem1.addElement("name").setText("张三");
-		studentElem1.addElement("gender").setText("男");
-		studentElem1.addElement("grade").setText("计算机1班");
-		studentElem1.addElement("address").setText("广州天河");
-		
-		//2.1 增加标签
-		Element studentElem2 = rootElem.addElement("Student");
-		//2.2 增加属性
-		studentElem2.addAttribute("id", "2");
-		//2.3 增加标签，同时设置文本
-		studentElem2.addElement("name").setText("李四");
-		studentElem2.addElement("gender").setText("女");
-		studentElem2.addElement("grade").setText("计算机2班");
-		studentElem2.addElement("address").setText("广州越秀");
-		
-		
-		//3.内容写出到xml文件
-		//3.1 输出位置
-		FileOutputStream out = new FileOutputStream("./src/studentOriginal.xml");
-		//3.2 指定格式
+		FileOutputStream fos = new FileOutputStream(new File("./src/contactCreated.xml"));
 		OutputFormat format = OutputFormat.createPrettyPrint();
-		// 设置编码
 		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		//3.3 写出内容
+		XMLWriter writer = new XMLWriter(fos, format);
 		writer.write(doc);
-		//3.4关闭资源
 		writer.close();
 		
 	}
 	
-	/**
-	 * 2.修改id为2的学生姓名
-	 * @throws Exception
-	 */
 	@Test
-	public void test2() throws Exception{
-		//1.查询到id为2的学生
-		Document doc = new SAXReader().read(new File("./src/studentOriginal.xml"));
-		//1.1 找到所有的Student标签
-		Iterator<Element> it = doc.getRootElement().elementIterator("Student");
-		while(it.hasNext()){
-			Element stuElem = it.next();
-			//1.2 查询id为id的学生标签
-			if(stuElem.attributeValue("id").equals("2")){
-				stuElem.element("name").setText("王丽");
-				break;
+	public void modifyXmlToFile() throws Exception {
+		Document document = new SAXReader().read(new File("./src/contactCreated.xml"));
+		Iterator<Element> iterator = document.getRootElement().elementIterator("contact");
+		while(iterator.hasNext()) {
+			Element element = iterator.next();
+			if (element.attributeValue("id").equals("002")) {
+				element.element("name").setText("anele");
+				element.element("email").setText("anele@qq.com");
 			}
 		}
-	
 		
-		//3.1 输出位置
-		FileOutputStream out = new FileOutputStream("./src/studentModification.xml");
-		//3.2 指定格式
-		OutputFormat format = OutputFormat.createPrettyPrint();
-		// 设置编码
-		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		//3.3 写出内容
-		writer.write(doc);
-		//3.4关闭资源
+		FileOutputStream fos = new FileOutputStream(new File("./src/contactModified.xml"));
+		XMLWriter writer = new XMLWriter(fos);
+		writer.write(document);
+		writer.close();
+		
+	}
+	
+	@Test
+	public void deleteElementToFile() throws Exception {
+		Document document = new SAXReader().read(new File("./src/contactCreated.xml"));
+		Element contactElem = (Element) document.getRootElement().elements().get(1);
+		contactElem.detach();
+		
+		FileOutputStream fos = new FileOutputStream(new File("./src/contactDeleted.xml"));
+		XMLWriter writer = new XMLWriter(fos);
+		writer.write(document);
 		writer.close();
 	}
 	
-	/**
-	 * 3.删除id为2的学生
-	 * @throws Exception
-	 */
+
+}
+******************************************************************************************
+******************************************************************************************
+contactCreated.xml
+******************************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+
+<contactList>
+  <contact id="001">
+    <name>eric</name>
+    <age>20</age>
+    <phone>13512345678</phone>
+    <email>eric@qq.com</email>
+    <qq>12345</qq>
+  </contact>
+  <contact id="002">
+    <name>andy</name>
+    <age>30</age>
+    <phone>13812345679</phone>
+    <email>andy@qq.com</email>
+    <qq>67890</qq>
+  </contact>
+</contactList>
+
+
+
+******************************************************************************************
+contactModified.xml
+******************************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<contactList>
+  <contact id="001">
+    <name>eric</name>
+    <age>20</age>
+    <phone>13512345678</phone>
+    <email>eric@qq.com</email>
+    <qq>12345</qq>
+  </contact>
+  <contact id="002">
+    <name>anele</name>
+    <age>30</age>
+    <phone>13812345679</phone>
+    <email>anele@qq.com</email>
+    <qq>67890</qq>
+  </contact>
+</contactList>
+
+******************************************************************************************
+contactDeleted.xml
+******************************************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<contactList>
+  <contact id="001">
+    <name>eric</name>
+    <age>20</age>
+    <phone>13512345678</phone>
+    <email>eric@qq.com</email>
+    <qq>12345</qq>
+  </contact>
+  
+</contactList>
+
+******************************************************************************************
+
+
+1.4 Practice
+******************************************************************************************
+StudentPractice.java
+******************************************************************************************
+package xml.dom4j.write;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Iterator;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+import org.junit.Test;
+
+public class StudentPractice {
 	@Test
-	public void test3() throws Exception{
-		//1.查询到id为2的学生
-		Document doc = new SAXReader().read(new File("./src/studentOriginal.xml"));
-		//1.1 找到所有的Student标签
-		Iterator<Element> it = doc.getRootElement().elementIterator("Student");
-		while(it.hasNext()){
-			Element stuElem = it.next();
-			//1.2 查询id为id的学生标签
-			if(stuElem.attributeValue("id").equals("2")){
-				//1.3 删除该学生标签
-				stuElem.detach();
+	public void createStudentXmlToFile() throws Exception {
+		Document doc = DocumentHelper.createDocument();
+		Element rootElem = doc.addElement("students");
+		Element studentElem = rootElem.addElement("student");
+		studentElem.addAttribute("id", "001");
+		studentElem.addElement("name").setText("Peter");
+		studentElem.addElement("gender").setText("male");
+		studentElem.addElement("grade").setText("No.1");
+		studentElem.addElement("city").setText("Beijing");
+		
+		Element studentElem2 = rootElem.addElement("student");
+		studentElem2.addAttribute("id", "002");
+		studentElem2.addElement("name").setText("Mary");
+		studentElem2.addElement("gender").setText("female");
+		studentElem2.addElement("grade").setText("No.2");
+		studentElem2.addElement("city").setText("Shanghai");
+		
+		FileOutputStream fos = new FileOutputStream(new File("./src/studentCreated.xml"));
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("utf-8");
+		XMLWriter writer = new XMLWriter(fos, format);
+		writer.write(doc);
+		writer.close();
+	}
+	
+	@Test
+	public void modifyStudentXmlToFile() throws Exception {
+		Document document = new SAXReader().read(new File("./src/studentCreated.xml"));
+		Iterator<Element> stuIter = document.getRootElement().elementIterator();
+		while(stuIter.hasNext()) {
+			Element stuElement = stuIter.next();
+			if (stuElement.attributeValue("id").equals("002")) {
+				stuElement.element("name").setText("Susan");
 				break;
 			}
 		}
-	
 		
-		//3.1 输出位置
-		FileOutputStream out = new FileOutputStream("./src/studentRemoved.xml");
-		//3.2 指定格式
+		FileOutputStream fos = new FileOutputStream(new File("./src/studentModified.xml"));
 		OutputFormat format = OutputFormat.createPrettyPrint();
-		// 设置编码
 		format.setEncoding("utf-8");
-		XMLWriter writer = new XMLWriter(out,format);
-		//3.3 写出内容
-		writer.write(doc);
-		//3.4关闭资源
+		XMLWriter writer = new XMLWriter(fos, format);
+		writer.write(document);
+		writer.close();
+	}
+	
+	@Test
+	public void deleteStudentXmlToFile() throws Exception {
+		Document document = new SAXReader().read(new File("./src/studentCreated.xml"));
+		Iterator<Element> stuIter = document.getRootElement().elementIterator();
+		while(stuIter.hasNext()) {
+			Element stuElement = stuIter.next();
+			if (stuElement.attributeValue("id").equals("002")) {
+				stuElement.detach();
+				break;
+			}
+		}
+		
+		FileOutputStream fos = new FileOutputStream(new File("./src/studentDeleted.xml"));
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("utf-8");
+		XMLWriter writer = new XMLWriter(fos, format);
+		writer.write(document);
 		writer.close();
 	}
 }
-************************************************************************
-studentOriginal.xml
-************************************************************************
+
+******************************************************************************************
+StudentCreated.java
+******************************************************************************************
 <?xml version="1.0" encoding="utf-8"?>
 
-<Students>
-  <Student id="1">
-    <name>张三</name>
-    <gender>男</gender>
-    <grade>计算机1班</grade>
-    <address>广州天河</address>
-  </Student>
-  <Student id="2">
-    <name>李四</name>
-    <gender>女</gender>
-    <grade>计算机2班</grade>
-    <address>广州越秀</address>
-  </Student>
-</Students>
+<students>
+  <student id="001">
+    <name>Peter</name>
+    <gender>male</gender>
+    <grade>No.1</grade>
+    <city>Beijing</city>
+  </student>
+  <student id="002">
+    <name>Mary</name>
+    <gender>female</gender>
+    <grade>No.2</grade>
+    <city>Shanghai</city>
+  </student>
+</students>
 
-************************************************************************
-studentModification.xml
-************************************************************************
+******************************************************************************************
+StudentModified.java
+******************************************************************************************
 <?xml version="1.0" encoding="utf-8"?>
 
-<Students> 
-  <Student id="1"> 
-    <name>张三</name>  
-    <gender>男</gender>  
-    <grade>计算机1班</grade>  
-    <address>广州天河</address> 
-  </Student>  
-  <Student id="2"> 
-    <name>王丽</name>  
-    <gender>女</gender>  
-    <grade>计算机2班</grade>  
-    <address>广州越秀</address> 
-  </Student> 
-</Students>
-************************************************************************
-studentRemoved.xml
-************************************************************************
+<students> 
+  <student id="001"> 
+    <name>Peter</name>  
+    <gender>male</gender>  
+    <grade>No.1</grade>  
+    <city>Beijing</city> 
+  </student>  
+  <student id="002"> 
+    <name>Susan</name>  
+    <gender>female</gender>  
+    <grade>No.2</grade>  
+    <city>Shanghai</city> 
+  </student> 
+</students>
+
+******************************************************************************************
+StudentDeleted.java
+******************************************************************************************
 <?xml version="1.0" encoding="utf-8"?>
 
-<Students> 
-  <Student id="1"> 
-    <name>张三</name>  
-    <gender>男</gender>  
-    <grade>计算机1班</grade>  
-    <address>广州天河</address> 
-  </Student> 
-</Students>
+<students> 
+  <student id="001"> 
+    <name>Peter</name>  
+    <gender>male</gender>  
+    <grade>No.1</grade>  
+    <city>Beijing</city> 
+  </student> 
+</students>
+******************************************************************************************
 
-************************************************************************
+2. xpath
+我们需要import package: 
+	dom4j-1.6.1.jar
+	jaxen-1.1-beta-6.jar
+2.1 The first xpath 
+******************************************************************************************
+studentCreated.xml
+******************************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+
+<students>
+  <student id="001">
+    <name>Peter</name>
+    <gender>male</gender>
+    <grade>No.1</grade>
+    <city>Beijing</city>
+  </student>
+  <student id="002">
+    <name>Mary</name>
+    <gender>female</gender>
+    <grade>No.2</grade>
+    <city>Shanghai</city>
+  </student>
+</students>
+******************************************************************************************
+FirstXpath.java
+******************************************************************************************
+package xml.dom4j.xpath;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+public class FirstXpath {
+
+	public static void main(String[] args) throws Exception {
+		Document doc = new SAXReader().read(new File("./src/studentCreated.xml"));
+		Element stuElem = (Element) doc.selectSingleNode("//student[@id='002']");
+		stuElem.detach();
+		
+		FileOutputStream fos = new FileOutputStream(new File("./src/studentXpathDeleted.xml"));
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("utf-8");
+		XMLWriter writer = new XMLWriter(fos, format);
+		writer.write(doc);
+		writer.close();
+	}
+
+}
+******************************************************************************************
+studentXpathDeleted.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<students> 
+  <student id="001"> 
+    <name>Peter</name>  
+    <gender>male</gender>  
+    <grade>No.1</grade>  
+    <city>Beijing</city> 
+  </student> 
+</students>
+******************************************************************************************
+
+2.2 xpath basic syntax
+*******************************************************************************************
+XpathSyntax.java
+*******************************************************************************************
+package xml.dom4j.xpath;
+
+import java.io.File;
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+
+public class XpathSyntax {
+
+	public static void main(String[] args) throws Exception {
+		Document doc = new SAXReader().read(new File("./src/contact.xml"));
+		String xpath = "";
+		
+		// 绝对路径
+		xpath = "/contactList";
+		xpath = "/contactList/contact";
+		
+		// 相对路径
+		xpath = "//contact/name";
+		xpath = "//name";
+		
+		// 通配符
+		xpath = "/contactList/*";// 根标签contactList下的所有子标签
+		xpath = "/contactList//*";// 根标签contactList下的所有标签（不分层次结构）
+		
+		// 条件
+		xpath = "//contact/[@id]";
+		xpath = "//contact[2]";
+		xpath = "//contact[last()]";
+		
+		// 属性
+		xpath = "//@id";
+		xpath = "//contact[not (@id)]";
+		xpath = "//contact[@id='002']";
+		xpath = "//contact[@id='001' and @name = 'eric']";
+		
+		// text()
+		xpath = "//name/text()";
+		xpath = "//contact/name[text()='张三']";
+		
+		List<Node> list = doc.selectNodes(xpath);
+		for (Node node : list) {
+			System.out.println(node.getName()+"="+node.getText());
+		}
+	}
+
+}
+*******************************************************************************************
+result:
+name=张三
+********************************************************************************************
+
+2.3 模拟用户登陆系统
+********************************************************************************************
+user.xml
+********************************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<users>
+	<user id="001" name="eric" password="123456"></user>
+	<user id="002" name="rose" password="123456"></user>
+	<user id="003" name="jack" password="123456"></user>
+</users>
+********************************************************************************************
+package xml.dom4j.xpath;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+public class UserLoginSystem {
+	public static void main(String[] args) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("请输入用户名：");
+		String name = reader.readLine();
+		System.out.println("请输入密码：");
+		String password = reader.readLine();
+		
+		Document doc = new SAXReader().read("./src/user.xml");
+		Element userElem = (Element)doc.selectSingleNode("//user[@name='" +name+"' and @password='"+password+"']");
+		if (userElem != null) {
+			System.out.println("登陆成功");
+		} else {
+			System.out.println("登陆失败");
+		}
+		
+	}
+
+}
+*******************************************************************************
+result:
+请输入用户名：
+eric
+请输入密码：
+123456
+登陆成功
+*********************************************************************************
+
+2.4 读取标准的html文档
+***********************************************************************************
+personList.html
+***********************************************************************************
+<html>
+	<head>
+		<title>传智播客1月18号班通讯录</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	</head>
+	<body>
+		<center><h1>12月16号就业班通讯录</h1></center>
+		<table border="1" align="center" id="contactForm">
+			<thead>	
+				<tr><th>编号</th><th>姓名</th><th>性别</th><th>年龄</th><th>地址</th><th>电话</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>001</td>
+				<td>张三</td>
+				<td>男</td>
+				<td>18</td>
+				<td>广州市天河区</td>
+				<td>134000000000</td>
+				</tr>
+				<tr>
+				<td>002</td>
+				<td>李四</td>
+				<td>女</td>
+				<td>20</td>
+				<td>广州市越秀区</td>
+				<td>13888888888</td>
+				</tr>
+				<tr>
+				<td>002</td>
+				<td>郭靖</td>
+				<td>男</td>
+				<td>30</td>
+				<td>广州市番禺区</td>
+				<td>1342214321</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
+********************************************************************************************
+ReadStandardHtmlFile.java
+********************************************************************************************
+package xml.dom4j.xpath;
+
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+public class ReadStandardHtmlFile {
+
+	public static void main(String[] args) throws Exception {
+		Document doc = new SAXReader().read("./src/personList.html");
+		Element titleElem = (Element)doc.selectSingleNode("//title");
+		String title = titleElem.getText();
+		System.out.println(title);
+		
+		List<Element> trElems = doc.selectNodes("//tbody/tr");
+		for (Element trElem : trElems) {
+			String id = trElem.selectSingleNode("td[1]").getText();
+			String name = ((Element)trElem.elements().get(1)).getText();
+			String gender = ((Element)trElem.elements().get(2)).getText();
+			String age = ((Element)trElem.elements().get(3)).getText();
+			String address = ((Element)trElem.elements().get(4)).getText();
+			String phone = ((Element)trElem.elements().get(5)).getText();
+			
+			System.out.println("编号："+id+"\tname:"+name+"\tgender:"+gender+"\tage:"+age+"\taddress:"+address+"\tphone:"+phone);
+		}
+
+	}
+
+}
+***********************************************************************************************
+result:
+***********************************************************************************************
+传智播客1月18号班通讯录
+编号：001	name:张三	gender:男	age:18	address:广州市天河区	phone:134000000000
+编号：002	name:李四	gender:女	age:20	address:广州市越秀区	phone:13888888888
+编号：002	name:郭靖	gender:男	age:30	address:广州市番禺区	phone:1342214321
+***********************************************************************************************
+
+3. SAX 
+3.1 MyDefaultHandler
+***********************************************************************************************
+contact.xml
+***********************************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<contactList>
+	<contact id="001" name="eric">
+		<name>张三</name>
+		<age>20</age>
+		<phone>134222223333</phone>
+		<email>zhangsan@qq.com</email>
+		<qq>432221111</qq>
+	</contact>
+	<contact id="002" name="jacky">
+		<name>eric</name>
+		<age>20</age>
+		<phone>134222225555</phone>
+		<email>lisi@qq.com</email>
+		<qq>432222222</qq>
+	</contact>
+</contactList>
+************************************************************************************************
+Contact.java
+************************************************************************************************
+package xml.dom4j.sax;
+
+public class Contact {
+	private String id;
+	private String name;
+	private String age;
+	private String phone;
+	private String email;
+	private String qq;
+	
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getAge() {
+		return age;
+	}
+	
+	public void setAge(String age) {
+		this.age = age;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getQq() {
+		return qq;
+	}
+	
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	
+	@Override
+	public String toString() {
+		return "Contact [id=" + id + ", name=" + name + ", age=" + age + ", phone=" + phone + ", email=" + email
+				+ ", qq=" + qq + "]";
+	}
+}
+*********************************************************************************************************************
+MySaxDefaultHandler.java
+*********************************************************************************************************************
+package xml.dom4j.sax;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class MySaxDefaultHandler extends DefaultHandler {
+	@Override
+	public void startDocument() throws SAXException {
+		
+		System.out.println("MySaxDefaultHandler.startDocument()");
+	}
+
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		
+		System.out.println("MySaxDefaultHandler.startElement()--->"+qName);
+	}
+
+	@Override
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		
+		System.out.println("MySaxDefaultHandler.endElement()--->"+qName);
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length) throws SAXException {
+		String content = new String(ch, start, length);
+		System.out.println("MySaxDefaultHandler.characters()--->"+content);
+	}
+
+	@Override
+	public void endDocument() throws SAXException {
+		
+		System.out.println("MySaxDefaultHandler.endDocument()");
+	}
+
+}
+
+
+*****************************************************************************************************************************
+MySaxDefaultHandlerTest.java
+*****************************************************************************************************************************
+package xml.dom4j.sax;
+
+import java.io.File;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+public class MySaxDefaultHandlerTest {
+
+	public static void main(String[] args) throws Exception {
+		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+		parser.parse(new File("./src/contact.xml"), new MySaxDefaultHandler());
+	}
+}
+********************************************************************************************************************************
+result:
+********************************************************************************************************************************
+MySaxDefaultHandler.startDocument()
+MySaxDefaultHandler.startElement()--->contactList
+MySaxDefaultHandler.characters()--->
+	
+MySaxDefaultHandler.startElement()--->contact
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->name
+MySaxDefaultHandler.characters()--->张三
+MySaxDefaultHandler.endElement()--->name
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->age
+MySaxDefaultHandler.characters()--->20
+MySaxDefaultHandler.endElement()--->age
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->phone
+MySaxDefaultHandler.characters()--->134222223333
+MySaxDefaultHandler.endElement()--->phone
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->email
+MySaxDefaultHandler.characters()--->zhangsan@qq.com
+MySaxDefaultHandler.endElement()--->email
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->qq
+MySaxDefaultHandler.characters()--->432221111
+MySaxDefaultHandler.endElement()--->qq
+MySaxDefaultHandler.characters()--->
+	
+MySaxDefaultHandler.endElement()--->contact
+MySaxDefaultHandler.characters()--->
+	
+MySaxDefaultHandler.startElement()--->contact
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->name
+MySaxDefaultHandler.characters()--->eric
+MySaxDefaultHandler.endElement()--->name
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->age
+MySaxDefaultHandler.characters()--->20
+MySaxDefaultHandler.endElement()--->age
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->phone
+MySaxDefaultHandler.characters()--->134222225555
+MySaxDefaultHandler.endElement()--->phone
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->email
+MySaxDefaultHandler.characters()--->lisi@qq.com
+MySaxDefaultHandler.endElement()--->email
+MySaxDefaultHandler.characters()--->
+		
+MySaxDefaultHandler.startElement()--->qq
+MySaxDefaultHandler.characters()--->432222222
+MySaxDefaultHandler.endElement()--->qq
+MySaxDefaultHandler.characters()--->
+	
+MySaxDefaultHandler.endElement()--->contact
+MySaxDefaultHandler.characters()--->
+
+MySaxDefaultHandler.endElement()--->contactList
+MySaxDefaultHandler.endDocument()
+***********************************************************************************************************************************
+
+
+3.2 MySaxDefaultHandler2-StringBuffer
+***********************************************************************************************************************************
+MySaxDefaultHandler2.java
+***********************************************************************************************************************************
+package xml.dom4j.sax;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class MySaxDefaultHandler2 extends DefaultHandler {
+	private StringBuffer sb = new StringBuffer();
+	
+	public String getContent() {
+		return sb.toString();
+	}
+
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		
+		sb.append("<"+qName);
+		if (attributes != null) {
+			for (int i=0; i < attributes.getLength(); ++i) {
+				String attrName = attributes.getQName(i);
+				String attrValue = attributes.getValue(i);
+				sb.append(" "+attrName+"=\""+attrValue+"\"");
+			}
+		}
+		sb.append(">");
+
+	}
+
+	@Override
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		
+		sb.append("</"+qName+">");
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length) throws SAXException {
+		
+		String content = new String(ch, start, length);
+		sb.append(content);
+	}
+
+	
+}
+******************************************************************************************************************************
+MySaxDefaultHandler2Test.java
+******************************************************************************************************************************
+package xml.dom4j.sax;
+
+import java.io.File;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+public class MySaxDefaultHandler2Test {
+
+	public static void main(String[] args) throws Exception {
+		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+		MySaxDefaultHandler2 handler =  new MySaxDefaultHandler2();
+		parser.parse(new File("./src/contact.xml"), handler);
+		String content = handler.getContent();
+		System.out.println(content);		
+	}
+}
+*********************************************************************************************************************************
+result:
+<contactList>
+	<contact id="001" name="eric">
+		<name>张三</name>
+		<age>20</age>
+		<phone>134222223333</phone>
+		<email>zhangsan@qq.com</email>
+		<qq>432221111</qq>
+	</contact>
+	<contact id="002" name="jacky">
+		<name>eric</name>
+		<age>20</age>
+		<phone>134222225555</phone>
+		<email>lisi@qq.com</email>
+		<qq>432222222</qq>
+	</contact>
+</contactList>
+***********************************************************************************************************************************
+
+3.3 MySaxDefaultHandler3-List
+***********************************************************************************************
+contact.xml
+***********************************************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<contactList>
+	<contact id="001">
+		<name>张三</name>
+		<age>20</age>
+		<phone>134222223333</phone>
+		<email>zhangsan@qq.com</email>
+		<qq>432221111</qq>
+	</contact>
+	<contact id="002">
+		<name>eric</name>
+		<age>20</age>
+		<phone>134222225555</phone>
+		<email>lisi@qq.com</email>
+		<qq>432222222</qq>
+	</contact>
+</contactList>
+***********************************************************************************************************************************
+MySaxDefaultHandler3.java
+***********************************************************************************************************************************
+package xml.dom4j.sax;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class MySaxDefaultHandler3 extends DefaultHandler {
+	private List<Contact> list = new ArrayList<Contact>();
+	private Contact contact;
+	private String curTag;
+	
+	public List<Contact> getList() {
+		return list;
+	}
+
+	@Override
+	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		
+		curTag = qName;
+		if("contact".equals(qName)) {
+			contact = new Contact();
+			contact.setId(attributes.getValue("id"));
+		}
+	}
+
+	@Override
+	public void endElement(String uri, String localName, String qName) throws SAXException {
+		curTag = null;
+		if ("contact".equals(qName)) {
+			list.add(contact);
+		}
+	}
+
+	@Override
+	public void characters(char[] ch, int start, int length) throws SAXException {
+		
+		String content = new String(ch, start, length);
+		
+		if ("name".equals(curTag)) {
+			contact.setName(content);
+		}
+		
+		if ("age".equals(curTag)) {
+			contact.setAge(content);
+		}
+		
+		if ("phone".equals(curTag)) {
+			contact.setPhone(content);
+		}
+		
+		if ("email".equals(curTag)) {
+			contact.setEmail(content);
+		}
+		
+		if ("qq".equals(curTag)) {
+			contact.setQq(content);
+		}
+	}
+}
+***********************************************************************************************************************************
+MySaxDefaultHandler3Test.java
+***********************************************************************************************************************************
+package xml.dom4j.sax;
+
+import java.io.File;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+public class MySaxDefaultHandler3Test {
+
+	public static void main(String[] args) throws Exception {
+		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+		MySaxDefaultHandler3 handler =  new MySaxDefaultHandler3();
+		parser.parse(new File("./src/contact.xml"), handler);
+		List<Contact> list = handler.getList();
+		for (Contact contact : list) {
+			System.out.println(contact);
+		}		
+	}
+}
+*************************************************************************************************************************
+result:
+Contact [id=001, name=张三, age=20, phone=134222223333, email=zhangsan@qq.com, qq=432221111]
+Contact [id=002, name=eric, age=20, phone=134222225555, email=lisi@qq.com, qq=432222222]
+***************************************************************************************************************************
+
+
+1 课程回顾
+XML基础
+	1）XML的作用
+		1.1 作为软件配置文件
+		1.2 作为小型的“数据库”
+	2）XML语法（由w3c组织规定的）
+		标签：  
+			标签名不能以数字开头，中间不能有空格，区分大小写。有且仅有一个根标签。
+		属性：		
+			可有多个属性，但属性值必须用引号（单引号或双引号）包含，但不能省略，也不能单双混用。
+		文档声明：
+			<?xml version="1.0" encoding="utf-8"?>	
+			encoding="utf-8"：　打开或解析xml文档时的编码
+			注意：
+				保存xml文档时的编码 和 解析xml文档时的编码要保持一致，才能避免中文乱码问题！
+	3）XML解析
+		程序读取或操作xml文档
+
+		两种解析方式：   DOM解析   vs   SAX解析
+
+		DOM解析原理：一次性把xml文档加载成Document树，通过Document对象得到节点对象，通过节点对象访问xml文档内容（标签，属性，文本，注释）。
+
+		Dom4j工具（基于DOM解析原理）：
+			读取xml文档：
+				Document doc = new SAXReader().read("xml文件"); 
+
+				节点：
+					nodeIterator();  所有节点
+				标签：
+					element("名称")   指定名称的第一个子标签对象
+					elementIterator("名称");  指定名称的所有子标签对象
+					elements();  所有子标签对象
+				属性：
+					attributeValue（“名称”） 指定名称的属性值
+					attribute("名称")   指定名称的属性对象
+					getName()  属性名称
+					getValue（）  属性值
+					atributeIterator()   所有属性对象（Iterator）
+					attributes()       所有属性对象（List）
+				文本：
+					getText（）  得到当前标签的文本
+					elementText("子标签名称")  得到子标签的文本
+		
+				
+今天的目标：     Dom4J修改xml   + xPath技术  + SAX解析 + XML约束
+2 Dom4j修改xml文档
+	2.1 写出内容到xml文档
+		XMLWriter writer = new XMLWriter(OutputStream, OutputForamt)
+		wirter.write(Document);
+
+	2.2 修改xml文档的API
+		增加： 
+			DocumentHelper.createDocument()  增加文档
+			addElement("名称")  增加标签
+			addAttribute("名称"，“值”)  增加属性
+		修改：
+			Attribute.setValue("值")  修改属性值
+			Element.addAtribute("同名的属性名","值")  修改同名的属性值
+			Element.setText("内容")  修改文本内容
+		删除
+			Element.detach();  删除标签  
+			Attribute.detach();  删除属性
+3 xPath技术  
+	3.1 引入
+	问题：当使用dom4j查询比较深的层次结构的节点（标签，属性，文本），比较麻烦！！！
+	3.2 xPath作用
+		主要是用于快速获取所需的节点对象。
+
+	3.3 在dom4j中如何使用xPath技术
+		1）导入xPath支持jar包 。  jaxen-1.1-beta-6.jar
+		2）使用xpath方法
+			List<Node>  selectNodes("xpath表达式");   查询多个节点对象
+			Node       selectSingleNode("xpath表达式");  查询一个节点对象
+				
+	3.4 xPath语法
+		/      绝对路径      表示从xml的根位置开始或子元素（一个层次结构）
+		//     相对路径       表示不分任何层次结构的选择元素。
+		*      通配符         表示匹配所有元素
+		[]      条件          表示选择什么条件下的元素
+		@       属性            表示选择属性节点
+		and     关系          表示条件的与关系（等价于&&）
+		text()    文本           表示选择文本内容
+	3.5 案例
+		用户登录功能：
+			用户输入用户名和密码 -> 到“数据库”查询是否有对应的用户 -> 
+				有： 则表示登录成功
+				没有： 则表示登录失败
+
+			用xml当做数据库
+						user.xml   用来存储用户的数据
+
+4 SAX解析
+	4.1回顾DOM解析
+		DOM解析原理：一次性把xml文档加载进内存，然后在内存中构建Document树。
+				对内存要求比较高。	
+				缺点： 不适合读取大容量的xml文件，容易导致内存溢出。
+					
+		SAX解析原理： 加载一点，读取一点，处理一点。对内存要求比较低。
+
+	4.2 SAX解析工具	
+			SAX解析工具-  Sun公司提供的。内置在jdk中。org.xml.sax.*
+
+			核心的API：
+				SAXParser类： 用于读取和解析xml文件对象
+							parse（File f, DefaultHandler dh）方法： 解析xml文件
+				
+						参数一： File：表示 读取的xml文件。
+					    参数二： DefaultHandler： SAX事件处理程序。使用DefaultHandler的子类
+例如：｛
+     				1.创建SAXParser对象  
+              SAXParser parser=SAXParserFactory.newInstance().newSAXParser();
+                  2.调用parse方法
+			parser.parse(new File("./src/contact.xml"), new MyDefaultHandler());
+｝					[一个类继承class 类名（extends DefaultHandler）  在调用是创建传进去
+
+				DefaultHandler类的API:
+						void startDocument()  :  在读到文档开始时调用
+						void endDocument()  ：在读到文档结束时调用
+						void startElement(String uri, String localName, String qName, Attributes attributes)  ：读到开始标签时调用				
+						void endElement(String uri, String localName, String qName)   ：读到结束标签时调用
+						void characters(char[] ch, int start, int length)  ： 读到文本内容时调用
+
+				
+					============DOM解析    vs   SAX解析		========
+	
+               DOM解析	                                         SAX解析
+原理： 一次性加载xml文档，不适合大容量的文件读取	       原理： 加载一点，读取一点，处理一点。适合大容量文件的读取
+DOM解析可以任意进行增删改成	                                      SAX解析只能读取
+DOM解析任意读取任何位置的数据，甚至往回读	                     SAX解析只能从上往下，按顺序读取，不能往回读
+DOM解析面向对象的编程方法（Node，Element，Attribute）,          SAX解析基于事件的编程方法。java开发编码相对复杂。
+Java开发者编码比较简单。	
+
+总结：
+	1）Dom4j修改xml文档
+		new XMLWrier();
+		......
+	2）xPath技术： 快速查询xml节点
+		selectNodes()
+		selectSinglNode();
+		xpath表达式语言		
+	3)  SAX解析
+		SAXParser parse
+			parser（）
+		DefaultHandler类：
+			startElement();
+			characters();
+			endElement();
+
+作业：
+			
+		设计一个通讯录程序
+				联系人： 编号  姓名  性别  年龄  电话  QQ 邮箱
+				功能要求：
+					添加联系人
+					修改联系人
+					删除联系人
+					查询所有联系人
+				
+			要求： 
+			1）交互使用console（控制台）	
+			2）数据存储到xml文件（作为“数据库”）（使用dom4j）
+
+	提示：
+			启动程序
+					================
+					【1】添加联系人
+					【2】修改联系人
+					【3】删除联系人
+					【4】查询所有联系人
+					【Q】退出程序
+					==================
+			输入 1：
+					请输入编号：
+					请输入姓名：
+					请输入年龄
+				   。。。。
+					添加成功！  -> 数据保存在xml中
+
+		 	输入2
+					。。。。。。
+			输入4
+					编号  姓名   年龄  。。。。
+					001   张三  30
+					002   李四 20 。。。
+					。。。。。
+
+
+			
+
+
+
