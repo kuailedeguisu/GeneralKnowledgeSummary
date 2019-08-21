@@ -111,4 +111,759 @@ note.xml
 </note>
 *****************************************************
 	
+公共的外部导入：（引用别人写好的框架）
+<!DOCTYPE 根元素 PUBLIC “文件名”>
+<!DOCTYPE note PUBLIC “http://gz.itcast.cn/itcast.dtd”>
+可以参考三个框架文件
+*****************************************************************************
+struts.xml
+****************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- struts2.x集成Spring,可以任意从Spring的上下文(BeanFactory)里去取Bean -->
+    <constant name="struts.objectFactory" value="spring"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <!-- 是否启动struts的debug模式 -->
+    <constant name="struts.devMode" value="true" />
+    <!-- 引入国际化资源文件 -->
+    <constant name="struts.custom.i18n.resources" value="messages"></constant>
+    
+    <!-- 通用配置 -->
+    <!-- 默认继承struts-default,如果要加入返回JSON格式的数据，
+    则改为继承json-default(注意：json-default继承自struts-default，因为具有struts-default的所有功能) 
+    -->
+    <package name="common" namespace="/" extends="json-default">
+        <action name="*!*" class="{1}Action" method="{2}">
+            <!-- 通用视图 -->
+            <result name="success">/WEB-INF/jsp/success.jsp</result>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+            
+            <!-- 用户模块视图 -->
+            <result name="index">/WEB-INF/jsp/index.jsp</result>
+            <result name="login">/WEB-INF/jsp/login.jsp</result>
+            <result name="toSearchUser">/WEB-INF/jsp/searchUser.jsp</result>
+            <result name="userList" type="json">
+                
+            </result>
+        </action>
+    </package>
+    
+
+</struts>
+*****************************************************************************
+hibernate.cfg.xml
+****************************************************************************
+
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+    
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC-MySQL连接URL -->
+        <property name="connection.url">jdbc:mysql://localhost:3306/hibernate_db</property>
+        <!-- JDBC-MySQL连接数据库的用户名 -->
+        <property name="connection.username">root</property>
+        <!-- JDBC-MySQL连接数据库的密码 -->
+        <property name="connection.password">123456</property>  
+        <!-- JDBC-MySQL连接数据库的驱动名称 -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!-- 数据库方言 -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- 自动建表配置 -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- 显示Hibernate的调试SQL语句 -->
+        <property name="hibernate.show_sql">true</property>
+        
+        <!-- 加载项目中的映射配置文件 -->
+        <mapping resource="com/toceansoft/pojo/Student.hbm.xml"/>
+        <mapping resource="com/toceansoft/pojo/Product.hbm.xml"/>   
+
+    </session-factory>
+
+</hibernate-configuration>
+*****************************************************************************
+applicationContext.xml
+****************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd·
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    ">
+    
+    <!-- 在Spring上下文中载入property文件信息 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 数据访问层配置 -->
+    <import resource="classpath:/dao.xml" />
+    <!-- 服务层配置 -->
+    <import resource="classpath:/service.xml" />
+    
+    <!-- 自动扫描@Controller标注的类控制器类 -->
+    <context:component-scan base-package="com.toceansoft.web" />
+
+
+</beans>
+  
+*****************************************************************************
+			2）DTD语法
+				约束标签
+					<!ELEMENT 元素名称 类别>  或 <!ELEMENT 元素名称 (元素内容)>
+
+				类别：
+						空标签： EMPTY。 表示元素一定是空元素。
+						普通字符串： (#PCDATA)。表示元素的内容一定是普通字符串（不能含有子标签）。
+						任何内容： ANY。表示元素的内容可以是任意内容（包括子标签） 
+
+				(元素内容):
+						顺序问题：
+							<!ELEMENT 元素名称 (子元素名称 1,子元素名称 2,.....)>： 按顺序出现子标签
+
+						次数问题：
+								标签   ：  必须且只出现1次。
+								标签+  ： 至少出现1次
+							    标签*   ： 0或n次。
+								标签？  ： 0 或1次。
+				约束属性
+						<!ATTLIST 元素名称 属性名称 属性类型 默认值>
+
+					默认值：
+							#REQUIRED 属性值是必需的 
+							#IMPLIED   属性不是必需的 
+							#FIXED value 属性不是必须的，但属性值是固定的
+
+					属性类型：控制属性值的
+						CDATA ：表示普通字符串 
+						(en1|en2|..)： 表示一定是任选其中的一个值
+						ID：表示在一个xml文档中该属性值必须唯一。值不能以数字开头
+***************************************************************************************************
+noteDtdTypes.xml
+***************************************************************************************************
+<?xml version="1.0"?>
+<!DOCTYPE note [
+	<!ELEMENT note (to, from, heading, body)>
+	<!ELEMENT to ANY>
+	<!ELEMENT from EMPTY>
+	<!ELEMENT heading (#PCDATA)>
+	<!ELEMENT body (#PCDATA)>
+]>
+<note>
+	<to>Andy<abc>123456</abc></to>
+	<from></from>
+	<heading>Reminder</heading>
+	<body>Don't forget me this weekend.</body>
+	
+</note>
+**************************************************************************************************
+noteDtdMultipleTimes.xml
+***************************************************************************************************
+<?xml version="1.0"?>
+<!DOCTYPE note [
+	<!ELEMENT note (to, from?, heading*, body+)>
+	<!ELEMENT to ANY>
+	<!ELEMENT from EMPTY>
+	<!ELEMENT heading (#PCDATA)>
+	<!ELEMENT body (#PCDATA)>
+]>
+<!-- 
+? 0 or 1
+* 0 or more
++ 1 or more 
+-->
+<note>
+	<to>Andy<abc>123456</abc></to>
+	<from></from>
+	<body>Don't forget me this weekend.</body>
+	<body>Don't forget me this weekend.</body>
+</note>
+************************************************************************************************
+Note.dtd
+**************************************************************************************************
+	<!ELEMENT note (to, from, heading, body)>
+	<!ELEMENT to (#PCDATA)>
+	<!ELEMENT from (#PCDATA)>
+	<!ELEMENT heading (#PCDATA)>
+	<!ELEMENT body (#PCDATA)>
+	<!ATTLIST to name CDATA #REQUIRED>
+	<!ATTLIST from name CDATA #IMPLIED>
+	<!ATTLIST heading id CDATA #FIXED "001">
+*************************************************************************************************
+Note.xml
+**************************************************************************************************
+<?xml version="1.0"?>
+<!DOCTYPE note SYSTEM "note.dtd">
+<note>
+	<to name="Andy">Tove</to>
+	<from>Jani</from>
+	<heading id="001">Reminder</heading>
+	<body>Don't forget me this weekend.</body>
+</note>
+*************************************************************************************************
+Note.dtd
+**************************************************************************************************
+	<!ELEMENT note (to+, from, heading, body)>
+	<!ELEMENT to (#PCDATA)>
+	<!ELEMENT from (#PCDATA)>
+	<!ELEMENT heading (#PCDATA)>
+	<!ELEMENT body (#PCDATA)>
+	<!ATTLIST to id ID #REQUIRED>
+	<!ATTLIST from name CDATA #IMPLIED>
+	<!ATTLIST heading id CDATA #FIXED "001">
+	<!ATTLIST body id (a|b|c) #REQUIRED>
+*************************************************************************************************
+Note.xml
+**************************************************************************************************
+<?xml version="1.0"?>
+<!DOCTYPE note SYSTEM "note.dtd">
+<note>
+	<to id=“a1">Andy</to>
+	<to id=“a2">Anele</to>
+	<to id=“a3">Sophia</to>
+	<from>Josh</from>
+	<heading id="001">Reminder</heading>
+	<body id="a">Don't forget me this weekend.</body>
+</note>
+***********************************************************************************************
+schema约束：
+三大框架：sprint使用schema
+名称空间：告诉xml为你挡的元素被哪个schema文档约束 
+扩展名.xsd
+schema文件定义名称空间：targetNamespace
+xml文档定义名称空间: xmlns
+xml标签可以引用名称空间: itcast
+名称空间的别名: http://www.itcast.cn
+xml文档中定义名称空间别名的schema地址: schemaLocation(名称空间别名（空格）schema文件的地址)
+结论：书架标签受到了book.xsd文件的约束
+*********************************************************************
+book.xsd
+*********************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.itcast.cn"
+	elementFormDefault="qualified">
+	<xs:element name='书架' >
+		<xs:complexType>
+			<xs:sequence maxOccurs='unbounded' >
+				<xs:element name='书' >
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name='书名' type='xs:string' />
+							<xs:element name='作者' type='xs:string' />
+							<xs:element name='售价'  type='xs:decimal' />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+  			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+
+******************************************************************************
+book.xml
+******************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<itcast:书架 xmlns:itcast="http://www.itcast.cn"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.itcast.cn book.xsd">
+	<itcast:书>
+		<itcast:书名>JavaScript网页开发</itcast:书名>
+		<itcast:作者>张孝祥</itcast:作者>
+		<itcast:售价>28.22</itcast:售价>
+	</itcast:书>
+</itcast:书架>
+****************************************************************************
+schema文件:
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.itcast.cn"
+	elementFormDefault="qualified">
+xml文件:
+<itcast:书架 xmlns:itcast="http://www.itcast.cn"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.itcast.cn book.xsd">
+*************************************************************************
+schema文件 targetNamespace="http://www.itcast.cn"->
+	itcast:书架->
+		xmlns:itcast="http://www.itcast.cn"->
+			xsi:schemaLocation="http://www.itcast.cn book.xsd">
+*************************************************************************
+名称空间： 告诉xml文档的哪个元素被哪个schema文档约束。
+	在一个xml文档中，不同的标签可以受到不同的schema文档的约束。
+	1) 一个名称空间受到一个schema文档约束的情况
+	2） 多个名称空间受到多个schema文档约束的情况
+	3） 默认名称空间的情况
+	4） 没有名称空间的情况
+****************************************************************************
+defaultNamespaceBook.xml
+****************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<书架 xmlns="http://www.it315.org/xmlbook/schema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.it315.org/xmlbook/schema book.xsd">
+	<书>
+		<书名>JavaScript网页开发</书名>
+		<作者>张孝祥</作者>
+		<售价>28.00</售价>
+	</书>
+</书架>
+*****************************************************************************
+xmlbook.xml:多个约束
+*****************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<书架 xmlns="http://www.it315.org/xmlbook/schema"
+	xmlns:demo="http://www.it315.org/demo/schema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.it315.org/xmlbook/schema
+						http://www.it315.org/xmlbook.xsd
+						http://www.it315.org/demo/schema 
+						http://www.it315.org/demo.xsd">
+	<书>
+		<书名>JavaScript网页开发</书名>
+		<作者>张孝祥</作者>
+		<售价 demo:币种=" 人民币 ">28.00元</售价>
+	</书>
+</书架>
+**********************************************************************
+NoNamespaceXmlBook.xml : no namespace
+*********************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<书架 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceschemaLocation="xmlbook.xsd">
+	<书>
+		<书名>JavaScript网页开发</书名>
+		<作者>张孝祥</作者>
+		<售价>28.00元</售价>
+	</书>
+</书架>
+****************************************************************************
+applicationContext.xml
+受到三个schema的约束
+	1-default schema
+	2-spring-beans-3.0.xsd
+	3-sprint-context-3.0.xsd
+property-placeholder: context
+import: default
+component-scan: context
+****************************************************************************
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    ">
+    
+    <!-- 在Spring上下文中载入property文件信息 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 数据访问层配置 -->
+    <import resource="classpath:/dao.xml" />
+    <!-- 服务层配置 -->
+    <import resource="classpath:/service.xml" />
+    
+    <!-- 自动扫描@Controller标注的类控制器类 -->
+	<context:component-scan base-package="com.toceansoft.web" />
+
+
+</beans>
+ ***************************************************************************************
+ tomcat服务器的./apache-tomcat-6.0.39/conf/web.xml 也是用的schema约束
+ 
+ <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    version="2.5">
+	
+两个schema约束：default和web-app_2_5.xsd
+*****************************************************************************************
+
+
+3 Web开发入门
+	3.1 引入
+		之前的程序： java桌面程序，控制台控制，socket gui界面。javase规范
+		现在和以后的程序：java web程序。浏览器控制。javaee规范
+		
+	3.2 软件的结构
+		C/S (Client - Server  客户端-服务器端)
+			典型应用：QQ软件 ，飞秋，红蜘蛛。
+			特点：
+				1）必须下载特定的客户端程序。
+				2）服务器端升级，客户端升级。
+
+		B/S （Browser - Server 浏览器端 - 服务器端）
+			典型应用： 腾讯官方（www.qq.com）  163新闻网站， 传智官网（俗称：网站）
+			特点：
+				1）不需要安装特定的客户端（只需要安装浏览器即可！！）
+				2）服务器端升级，浏览器不需要升级！！！！
+
+			javaweb的程序就是b/s软件结构！！！
+			
+	3.3 服务器
+		从物理上来说，服务器就是一台PC机器。8核，8G以上，T来计算，带宽100M
+
+		本地的文件，只有自己可以访问（不共享给别人）
+		
+		web服务器：PC机器安装一个具有web服务的软件，称之为web服务器
+		数据库服务器：PC机器安装一个具有数据管理件服务的软件，称之为数据库服务器。
+		邮件服务器：PC机器安装一个具有发送邮件服务的软件，称之为邮件服务器。
+		
+		PC机提供什么服务，就是什么服务器
+	3.4 web服务软件
+		web服务软件的作用：把本地的资源共享给外部访问。
+
+		一般来说，我们在本地建立的文件，只有自己本地可以访问（不共享给别人）
+		192.168.14.1（test.html）上的文件如果想让如下机器访问？可以发给如下机器（IP地址和端口（软件监听端口））
+			192.168.14.6
+			192.168.14.10
+			192.168.14.15
+		写一个C/S程序来做这个？
+		 192.168.14.1（socket服务器端程序）
+		 192.168.14.6（socket客户端程序）
+		 192.168.14.10（socket客户端程序）
+		 192.168.14.15（socket客户端程序）
+		 
+		 网络通信基础：
+			通信ip和端口发送/接收二进制数据
+			java语言或者c语言发送，没有区别，都是socket，只是语法不同。最终都会转为二进制数据
+		网络通信的数据和具体的语言无关。
+		java语言开发的服务器程序，我们本地的浏览器就是客户端程序，不用自己写，都有socket通信功能
+*****************************************************************************
+test.html	
+*****************************************************************************
+test.html
+*****************************************************************************
+Server.java		
+*****************************************************************************
+package web.dev;
+/*
+ * socket服务器端程序
+ */
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+	public static void main(String[] args) throws Exception {
+		// 1. 创建ServerSocket
+		ServerSocket server = new ServerSocket(8888);
+		
+		System.out.println("服务器已经启动成功...");
+		while (true) {
+			// 2. 接收客户端连接
+			Socket socket = server.accept();
+			
+			// 3. 读取本地文件
+			FileInputStream fis = new FileInputStream(new File("./src/web/dev/test.html"));
+			
+			// 4. 构建数据输出通道
+			OutputStream os = socket.getOutputStream();
+			
+			// 5.发送数据
+			byte[] buf = new byte[1024];
+			int len = 0;
+			while((len = fis.read(buf)) != -1) {
+				os.write(buf, 0, len);;
+			}
+			
+			// 6.关闭资源
+			os.close();
+			fis.close();
+		}
+
+	}
+}
+*****************************************************************************
+通过浏览器打开
+http://localhost:8888
+http://192.168.14.10:8888
+*****************************************************************************
+result:
+run Server.java(Web服务程序：目前是有多线程问题的程序；只能共享一个本地文件给外部访问)
+服务器已经启动成功...
+
+通过浏览器打开
+http://localhost:8888
+test.html
+*****************************************************************************			
+	3.5 常见的市面上web服务软件
+		javase的规范,包含IO流，线程，集合，socket编程。。。。
+			WebLogic: BEA公司的产品。 收费的。支持JavaEE规范。
+			WebSphere： IBM公司的产品。收费的。支持JavaEE规范
+			JBoss: Redhat公司的产品。收费的。支持JavaEE规范
+			Tomcat： 开源组织Apache的产品。免费的。支持部分的JavaEE规范。（servlet、jsp。jdbc，但分布式的ejb， rmi不支持）
+			
+4 Tomcat基本使用
+	4.1 下载并按照
+		1）到apache官网。www.apache.org     http://jakarta.apache.org(产品的主页)
+		2）
+			安装版：window （exe、msi） linux（rmp）
+			压缩版：window（rar，zip） linux（tar，tar.gz）学习时候使用
+		3）运行和关闭tomcat
+			3.1 启动软件
+				a）找到%tomcat%/bin/startup.bat ，双击这个文件
+				b）弹出窗口，显示信息（不要关闭此窗口）
+				c）打开浏览器，输出以下地址
+					http://localhost:8080
+				d）看到一只猫画面，证明软件启动成功！
+
+			3.2 关闭软件
+						a）找到%tomcat%/bin/shutdown.bat，双击这个文件即可！
+						c）打开浏览器，输出以下地址。看到“无法连接”（最好先清空浏览器缓存）
+						
+		我下载的是apache-tomcat-9.0.24-windows-x64压缩版，解压到本地，启动软件
+		apache有很多免费的软件，通过java开发的jar包
+		
+Mac系统下tomcat的安装：
+https://www.jianshu.com/p/69496fb3495e
+				
+	4.2 tomcat软件使用的常见问题
+		1）闪退问题
+			原因：tomcat软件是java语言开发的。 tomcat软件启动时，会默认到系统的环境变量中查找一个名称叫JAVA_HOME的变量。这个变量的作用找到tomcat启动所需的jvm。
+			解决办法； 到环境变量中设置JAVA_HOME的变量（JDK的根目录）
+				JAVA_HOME= C:\Program Files\Java\jdk1.6.0_30  (注意别配置到bin目录下)
+						
+		2）端口占用的错误
+			原因： tomcat启动所需的端口被其他软件占用了！
+			解决办法： 
+				a）关闭其他软件程序，释放所需端口
+				b）修改tomcat软件所需端口
+					找到并修改%tomcat%/conf/server.xml文件
+						（原来的默认端口是8080，现在修改为8081）
+						<Connector port="8081" protocol="HTTP/1.1" 
+							connectionTimeout="20000" 
+							redirectPort="8443" />
+
+		3）CATALINA环境变量问题
+			原因： tomcat软件启动后，除了查找JAVA_HOME后，还会再查找一个叫CATALINA_HOME变量，这个变量的作用是设置tomcat的根目录。
+			解决办法：建议不要设置CATALINA_HOME变量。检查如果有的话，清除掉！！！
+
+
+
+
+	4.3 体验tomcat软件作用
+		webapps目录： tomcat共享目录。需要共享的本地资源放到此目录中。
+		比如test.html放到webapps目录下新建的目录myweb下
+		http://localhost:8080/myweb/test.html
+
+	
+	4.4 URL
+		URL全名叫统一资源定位符，用于定位互联网的资源。
+
+		问题： http://localhost:8081/myweb/test.html  看到文件？
+
+		http://     协议。http协议。
+		localhost    域名。为了找到IP地址。
+						本地域名： localhost
+						外部域名：www.baidu.com
+		8081       端口。软件监听的
+					8080： tomcat默认的端口
+					3306： mysql数据库的端口
+					1521： orace数据库的端口。
+		/myweb:   web应用的名称。默认情况下，在webapps目录下找
+		/test.html  ： 资源名称。
+
+		
+		http如何找文件？
+			http://localhost:8081/myweb/test.html
+				1）本地hosts文件（域名的映射文件：ip地址和域名）中找域名
+					windows：c：/windows/system32/drivers/etc/hosts
+					Mac or linux： /etc/hosts
+					***********************************************
+					##
+					# Host Database
+					#
+					# localhost is used to configure the loopback interface
+					# when the system is booting.  Do not change this entry.
+					##
+					127.0.0.1	localhost
+					255.255.255.255	broadcasthost
+					::1             localhost
+					****************************************************
+				如果域名匹配，就转换为ip地址，通过ip地址找pc机，这个pc机上有很多服务器监听客户端。
+				在webapps目录下找myweb，然后在myweb中找test.html
+				2）如果本地hosts中找不到域名，到运营商的DNS服务器（ip地址和域名）中找
+				如果找到了域名，就通过域名对应的ip地址去找pc机，这个pc机上有很多服务器监听客户端.
+				在webapps目录下找myweb，然后在myweb中找test.html
+					
+		
+5 Tomcat的目录结构
+	    |-bin: 存放tomcat的命令。
+		catalina.bat 命令：
+		startup.bat  -> catalina.bat start	
+		shutdown.bat - > catalina.bat stop
+	    |- conf: 存放tomcat的配置信息。其中server.xml文件是核心的配置文件。
+	    |-lib：支持tomcat软件运行的jar包。其中还有技术支持包，如servlet，jsp
+	    |-logs：运行过程的日志信息
+	    |-temp: 临时目录
+	    |-webapps： 共享资源目录。web应用目录。（注意不能以单独的文件进行共享）
+	    |-work： tomcat的运行目录。jsp运行时产生的临时文件就存放在这里
+
+
+6 Web应用的目录结构
+	|- WebRoot :   web应用的根目录
+				|- 静态资源（html+css+js+image+video）
+				|- WEB-INF ： 固定写法。(这个目录和子目录都是自己创建的)
+					|-classes： （可选）固定写法。存放class字节码文件
+					|-lib： （可选）固定写法。存放jar包文件。
+					|-web.xml（自己可以配置的）    
+	
+	注意：
+	1）WEB-INF目录里面的资源不能通过浏览器直接访问
+	2）如果希望访问到WEB-INF里面的资源，就必须把资源配置到一个叫web.xml的文件中。
+
+
+练习：
+	1）在webapps下建立一个mybbs目录
+	2）创建两个文件
+		2.1 index.html  里面随便写内容	，有超链接-连接到test.html	
+		2.2 test.html   里面随便写
+	3）通过浏览器访问到。
+*****************************************************
+index.html
+****************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>index.html的结果</title>
+    </head>
+    <body>
+        <a href="test.html">这个是test.html的超链接</a>
+    </body>
+</html>
+***************************************************
+Time.html:虽然时间在变化，但是代码没变，仍然是静态的
+*****************************************************
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8">
+        <title>index.html的结果</title>
+    </head>
+    <body>
+        当前的时间为：<span id="time"></span>
+        <script type="text/javascript">
+            function newDate() {
+                var curDate = new Date();
+                var curDateStr = curDate.getFullYear()+"年"+(curDate.getMonth() + 1)+"月"
+                + curDate.getDate()+"日"+" "+curDate.getHours()+":"+curDate.getMinutes()+":"+curDate.getSeconds();
+                document.getElementById("time").innerHTML = curDateStr;
+            }
+            window.setInterval("newDate()", 1000);
+	    </script>
+    </body>
+</html>
+*************************************************************
+result：
+当前的时间为：2019年8月21日 21:33:22
+**************************************************************
+						
+7 手动开发动态资源
+7.1 静态资源和动态资源的区别
+	静态资源： 当用户多次访问这个资源，资源的源代码永远不会改变的资源。
+	动态资源：当用户多次访问这个资源，资源的源代码可能会发送改变。
+
+7.2 动态资源的开发技术
+Servlet : 用java语言来编写动态资源的开发技术。
+
+Servlet特点：
+	1）普通的java类，继承HttpServlet类，覆盖doGet方法
+	2）Servlet类只能交给tomcat服务器运行！！！！（开发者自己不能运行！！！）
+
+Servlet手动编写步骤：
+1）编写一个servlet程序，继承HttpServlet
+			
+/**
+ * 第一个servlet程序
+ * @author APPle
+ *
+ */
+public class HelloServlet extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		//解决中文乱码问题
+		resp.setContentType("text/html;charset=utf-8");
+		//向浏览器输出内容
+		resp.getWriter().write("这是第一个servlet程序。当前时间为："+new Date());
+	}
+}
+
+2）找到HelloServlet类的class字节码，然后把它拷贝到tomcat的一个web应用中WEB-INF/classes目录下。
+3）在当前web应用下的web.xml文件配置Servlet。
+				
+<!-- 配置一个servlet程序 -->
+**********************************************************
+web.xml
+***********************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+  version="4.0">
+  <!--配置一个servlet程序-->
+    <servlet>
+        <!--servlet的内部名称，可以自定义-->
+        <servlet-name>HelloServlet</servlet-name>
+        <!--servlet类名：包名+简单的类名-->
+        <!--Copy Qualified Name in eclipse-->
+        <servlet-class>web.servlet.HelloServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <!--servlet的内部名称，和上面的保持一致-->
+        <servlet-name>HelloServlet</servlet-name>
+        <!--访问名称：/名称-->
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+</web-app>
+**************************************************
+4）启动tomcat服务器，运行访问
+	访问servlet:  http://localhost:8080/myweb/hello
+***********************************************************
+Result:
+这是第一个servlet程序。当前时间是：Wed Aug 21 22:26:06 CST 2019
+************************************************************
+
+8 工具开发动态资源
+使用myEclipse进行web的开发
+
+1）创建web project （javaweb工程）（不用自己导包）
+2）在WebRoot下建立静态资源文件，index.html
+3）在src下建立动态资源文件
+  3.1 new -> Servlet( servlet的代码生成器)
+  3.2 写pacakge-> class名 -> 修改mapping  url 
+4）关联tomcat服务器
+  4.1 window-> Preferences - > MyEclipse -> servers -> Tomcat 6.x (注意一定要enable)
+
+5）部署web project应用。（拷贝web应用到tomcat的webapps目录下）(myEclipse快捷键)
+6）启动tomcat服务器(myEclipse快捷键)
+7）访问servlet			
+  http://localhost:8081/day08_web/hello
+		
+
+今天作业
+1）手动编写并运行一个servlet程序。
+2）用myecplise建立servlet程序。
+
+明天： http协议   用到servlet程序。（重点）
+后后天： servlet编程 （理解servlet原理）
+
+总结： 
+web开发入门
+1）web服务器作用：共享本地资源给外部访问
+2）tomcat服务器： 基本操作
+3）编写一个规范的web应用
+4）如何编写一个动态资源（手动+工具）
+
+
+
+
+
+
 
