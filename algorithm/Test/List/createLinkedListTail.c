@@ -12,8 +12,8 @@ void createLinkedListTail(LinkedList *L, int n) {
         p = (LinkedList)malloc(sizeof(Node));
         p->data = rand()%100+1;
         
-        r->next = p;
-        r = p;
+        r->next = p;// r->p
+        r = p; // r == p
     }
 
     r->next = NULL;
