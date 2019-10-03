@@ -1,0 +1,5 @@
+day23 stack
+day24 stack
+day25 Bin2Dec
+day26 LinkedStack
+day27 RPN
