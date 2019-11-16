@@ -1,0 +1,22 @@
+1.安装homebrew
+https://jingyan.baidu.com/article/fec7a1e5ec30341190b4e7e5.html
+ruby -e "$(curl --insecure -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+ruby – 安装Homebrew – 找不到Brew命令时出错
+https://codeday.me/bug/20180720/197978.html
+
+ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go/install)"
+Warning: /usr/local/bin is not in your PATH.
+==> Installation successful!
+
+-bash: brew: command not found
+
+2.设置环境变量
+https://www.cnblogs.com/liulipeng/p/3945680.html
+~/.bash_profile add content:
+
+
+
+3. 安装gdb
+https://jingyan.baidu.com/article/15622f241db565fdfcbea515.html
+brew install gdb
