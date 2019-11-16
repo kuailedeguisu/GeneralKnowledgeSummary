@@ -20,3 +20,10 @@ https://www.cnblogs.com/liulipeng/p/3945680.html
 3. 安装gdb
 https://jingyan.baidu.com/article/15622f241db565fdfcbea515.html
 brew install gdb
+
+但是当我使用gdb的时候，
+Unable to find Mach task port for process-id 2843: (os/kern) failure (0x5).
+ (please check gdb is codesigned - see taskgated(8))
+ 
+通过找apple的网页，mac不用gdb，用lldb
+https://forums.developer.apple.com/thread/62440
